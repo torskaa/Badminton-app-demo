@@ -1,0 +1,6 @@
+{
+  "name": "SmashAI - Gamified Badminton Intelligence",
+  "description": "Mobile-first badminton application prototype with AI coaching, real-time courtside scoring, skill radar analytics, court booking with PromptPay, smart community matchmaking, and gamified EXP levels.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Kanit', 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-display: 'Plus Jakarta Sans', 'Kanit', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-electric-lime: #d8ff00;
+  --color-electric-yellow: #fde047;
+  --color-sports-blue: #0284c7;
+  --color-sports-dark: #090c15;
+}
+
+:root {
+  color-scheme: light dark;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #0b0e17;
+  color: #0f172a;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  overflow-x: hidden;
+}
+
+/* Floating pill shadow from reference images */
+.floating-pill-shadow {
+  box-shadow: 0 14px 40px -8px rgba(0, 0, 0, 0.45), 0 4px 12px -2px rgba(0, 0, 0, 0.25);
+}
+
+.card-soft-shadow {
+  box-shadow: 0 10px 30px -6px rgba(0, 0, 0, 0.2), 0 4px 12px -2px rgba(0, 0, 0, 0.1);
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
