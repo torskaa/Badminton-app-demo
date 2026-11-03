@@ -40,7 +40,8 @@ interface ExpGainPayload {
 interface AppContextType {
   // Navigation
   currentScreen: ScreenId;
-  navigateTo: (screen: ScreenId) => void;
+  navigateTo: (screen: ScreenId, direction?: 'forward' | 'backward') => void;
+  navDirection: 'forward' | 'backward';
   activeTab: MainTab;
   setActiveTab: (tab: MainTab) => void;
   isDeviceFrameEnabled: boolean;
@@ -102,6 +103,7 @@ const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('B1');
+  const [navDirection, setNavDirection] = useState<'forward' | 'backward'>('forward');
   const [activeTab, setActiveTabState] = useState<MainTab>('home');
   const [isDeviceFrameEnabled, setIsDeviceFrameEnabled] = useState<boolean>(true);
   const [viewMode, setViewModeState] = useState<AppViewMode>('showcase');
@@ -214,8 +216,19 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Video Analysis State
   const [analyzedVideoResult, setAnalyzedVideoResult] = useState<any>(null);
 
+  const SCREEN_ORDER: Record<ScreenId, number> = {
+    A1: 0, A2: 1,
+    B1: 10, B2: 11, B3: 12, B4: 13,
+    C1: 20, C2: 21, C3: 22, C4: 23,
+    D1: 30, D2: 31, D3: 32,
+    E1: 40, E2: 41, E3: 42, E4: 43,
+    F1: 50, F2: 51,
+  };
+
   // Helpers
-  const navigateTo = (screen: ScreenId) => {
+  const navigateTo = (screen: ScreenId, direction?: 'forward' | 'backward') => {
+    const dir = direction || (SCREEN_ORDER[screen] < SCREEN_ORDER[currentScreen] ? 'backward' : 'forward');
+    setNavDirection(dir);
     setCurrentScreen(screen);
     // sync tab
     if (['A1', 'A2'].includes(screen)) {
@@ -234,27 +247,28 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const setActiveTab = (tab: MainTab) => {
-    setActiveTabState(tab);
+    let targetScreen: ScreenId = 'D1';
     switch (tab) {
       case 'home':
-        setCurrentScreen('D1'); // Dashboard hub
+        targetScreen = 'D1'; // Dashboard hub
         break;
       case 'booking':
-        setCurrentScreen('B1'); // Discovery
+        targetScreen = 'B1'; // Discovery
         break;
       case 'logger':
-        setCurrentScreen('C1'); // Match logger
+        targetScreen = 'C1'; // Match logger
         break;
       case 'coach':
-        setCurrentScreen('D1'); // AI Coach
+        targetScreen = 'D1'; // AI Coach
         break;
       case 'community':
-        setCurrentScreen('E1'); // Guild hub
+        targetScreen = 'E1'; // Guild hub
         break;
       case 'profile':
-        setCurrentScreen('F1'); // Trophy room
+        targetScreen = 'F1'; // Trophy room
         break;
     }
+    navigateTo(targetScreen);
   };
 
   const toggleDeviceFrame = () => {
@@ -489,6 +503,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       value={{
         currentScreen,
         navigateTo,
+        navDirection,
         activeTab,
         setActiveTab,
         isDeviceFrameEnabled,

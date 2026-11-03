@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Compass } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ScreenSwitcherModal } from '../common/ScreenSwitcherModal';
@@ -55,15 +56,22 @@ export const A1_WelcomeScreen: React.FC = () => {
 
       {/* Hero Visual Top Half (Matches Image 1) */}
       <div className="relative w-full h-[52%] shrink-0 overflow-hidden bg-slate-900">
-        <img
-          src={slide.image}
-          alt={slide.title}
-          className="w-full h-full object-cover object-center transition-all duration-700 ease-out"
-          referrerPolicy="no-referrer"
-        />
+        <AnimatePresence mode="wait">
+          <motion.img
+            key={slide.image}
+            src={slide.image}
+            alt={slide.title}
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.98 }}
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className="w-full h-full object-cover object-center absolute inset-0"
+            referrerPolicy="no-referrer"
+          />
+        </AnimatePresence>
         {/* Seamless Smooth Fade Gradient into the white card below */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent pointer-events-none" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
 
         {/* Floating Mini Chip on Image */}
         <div className="absolute bottom-6 left-6 z-10">
@@ -77,13 +85,23 @@ export const A1_WelcomeScreen: React.FC = () => {
       {/* Clean Bottom Card (Matches Image 1 typography & layout) */}
       <div className="flex-1 bg-white px-7 pb-8 pt-2 flex flex-col justify-between relative z-20">
         <div>
-          <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight leading-[1.15] mt-1 font-['Plus_Jakarta_Sans',sans-serif]">
-            {slide.title}
-          </h1>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeSlide}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.25 }}
+            >
+              <h1 className="text-3xl font-extrabold text-neutral-900 tracking-tight leading-[1.15] mt-1 font-['Plus_Jakarta_Sans',sans-serif]">
+                {slide.title}
+              </h1>
 
-          <p className="text-sm text-neutral-500 mt-3 leading-relaxed font-normal max-w-[320px]">
-            {slide.subtitle}
-          </p>
+              <p className="text-sm text-neutral-500 mt-3 leading-relaxed font-normal max-w-[320px]">
+                {slide.subtitle}
+              </p>
+            </motion.div>
+          </AnimatePresence>
 
           {/* Step Dots Indicator (Matches Image 1: [● ━━]) */}
           <div className="flex items-center gap-2 mt-6">

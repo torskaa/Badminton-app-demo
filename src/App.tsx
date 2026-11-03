@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import { DeviceFrame } from './components/common/DeviceFrame';
 import { BottomTabBar } from './components/common/BottomTabBar';
@@ -89,15 +90,65 @@ const ScreenRenderer: React.FC = () => {
   }
 };
 
+const screenVariants: Variants = {
+  enter: (direction: 'forward' | 'backward') => ({
+    x: direction === 'forward' ? '100%' : '-100%',
+    opacity: 0.35,
+    scale: 0.985,
+  }),
+  center: {
+    x: 0,
+    opacity: 1,
+    scale: 1,
+    transition: {
+      x: { type: 'spring', stiffness: 350, damping: 32, mass: 0.8 },
+      opacity: { duration: 0.22, ease: 'easeOut' },
+      scale: { duration: 0.22, ease: 'easeOut' },
+    },
+  },
+  exit: (direction: 'forward' | 'backward') => ({
+    x: direction === 'forward' ? '-28%' : '100%',
+    opacity: 0,
+    scale: 0.985,
+    transition: {
+      x: { type: 'spring', stiffness: 350, damping: 32, mass: 0.8 },
+      opacity: { duration: 0.18, ease: 'easeIn' },
+      scale: { duration: 0.18, ease: 'easeIn' },
+    },
+  }),
+};
+
+function MainViewport() {
+  const { currentScreen, navDirection } = useApp();
+
+  return (
+    <div className="flex-1 flex flex-col justify-between min-h-0 relative overflow-hidden">
+      <div className="flex-1 w-full h-full relative overflow-hidden">
+        <AnimatePresence mode="popLayout" custom={navDirection} initial={false}>
+          <motion.div
+            key={currentScreen}
+            custom={navDirection}
+            variants={screenVariants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            className="absolute inset-0 w-full h-full flex flex-col overflow-hidden will-change-transform"
+          >
+            <ScreenRenderer />
+          </motion.div>
+        </AnimatePresence>
+      </div>
+      <BottomTabBar />
+      <ExpCelebrationModal />
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <AppProvider>
       <DeviceFrame>
-        <div className="flex-1 flex flex-col justify-between min-h-0 relative">
-          <ScreenRenderer />
-          <BottomTabBar />
-          <ExpCelebrationModal />
-        </div>
+        <MainViewport />
       </DeviceFrame>
     </AppProvider>
   );

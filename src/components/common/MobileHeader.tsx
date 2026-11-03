@@ -24,14 +24,14 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
       onBack();
       return;
     }
-    if (['A2'].includes(currentScreen)) navigateTo('A1');
-    else if (['B2', 'B3'].includes(currentScreen)) navigateTo('B1');
-    else if (['B4'].includes(currentScreen)) navigateTo('B1');
-    else if (['C2', 'C3', 'C4'].includes(currentScreen)) navigateTo('C1');
-    else if (['D2', 'D3'].includes(currentScreen)) navigateTo('D1');
-    else if (['E2', 'E3', 'E4'].includes(currentScreen)) navigateTo('E1');
-    else if (['F2'].includes(currentScreen)) navigateTo('F1');
-    else navigateTo('D1');
+    if (['A2'].includes(currentScreen)) navigateTo('A1', 'backward');
+    else if (['B2', 'B3'].includes(currentScreen)) navigateTo('B1', 'backward');
+    else if (['B4'].includes(currentScreen)) navigateTo('B1', 'backward');
+    else if (['C2', 'C3', 'C4'].includes(currentScreen)) navigateTo('C1', 'backward');
+    else if (['D2', 'D3'].includes(currentScreen)) navigateTo('D1', 'backward');
+    else if (['E2', 'E3', 'E4'].includes(currentScreen)) navigateTo('E1', 'backward');
+    else if (['F2'].includes(currentScreen)) navigateTo('F1', 'backward');
+    else navigateTo('D1', 'backward');
   };
 
   if (currentScreen === 'A1') {

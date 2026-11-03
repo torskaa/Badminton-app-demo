@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, ChevronRight, Check, Compass } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ScreenId } from '../../types';
@@ -25,8 +26,6 @@ interface PathCategory {
 
 export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen, onClose }) => {
   const { currentScreen, navigateTo } = useApp();
-
-  if (!isOpen) return null;
 
   const PATH_GROUPS: PathCategory[] = [
     {
@@ -87,76 +86,92 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-white border-t sm:border border-neutral-200 rounded-t-[36px] sm:rounded-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
-        {/* Header */}
-        <div className="p-4 border-b border-neutral-100 flex items-center justify-between shrink-0 bg-neutral-50/80">
-          <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#0066ff]/10 text-[#0066ff] flex items-center justify-center font-bold">
-              <Compass className="w-4 h-4" />
-            </div>
-            <div>
-              <h3 className="text-xs font-black uppercase tracking-wider text-neutral-900">App Navigation Directory</h3>
-              <p className="text-[10px] text-neutral-500 font-medium">เข้าถึงทุกโมดูล (18 Screens) ได้ทันที</p>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={onClose}
-            className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-neutral-200 text-neutral-700 flex items-center justify-center transition-colors cursor-pointer"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.2 }}
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md"
+        >
+          <motion.div
+            initial={{ y: '100%' }}
+            animate={{ y: 0 }}
+            exit={{ y: '100%' }}
+            transition={{ type: 'spring', damping: 28, stiffness: 320 }}
+            className="w-full max-w-md bg-white border-t sm:border border-neutral-200 rounded-t-[36px] sm:rounded-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden"
           >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
-          {PATH_GROUPS.map((group) => (
-            <div key={group.code} className="space-y-1.5">
-              <div className="flex items-center gap-2 px-1">
-                <span className="text-[10px] font-mono text-[#0066ff] font-extrabold tracking-wider">
-                  {group.code}
-                </span>
-                <span className="text-xs font-extrabold text-neutral-700">{group.title}</span>
+            {/* Header */}
+            <div className="p-4 border-b border-neutral-100 flex items-center justify-between shrink-0 bg-neutral-50/80">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-full bg-[#0066ff]/10 text-[#0066ff] flex items-center justify-center font-bold">
+                  <Compass className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-xs font-black uppercase tracking-wider text-neutral-900">App Navigation Directory</h3>
+                  <p className="text-[10px] text-neutral-500 font-medium">เข้าถึงทุกโมดูล (18 Screens) ได้ทันที</p>
+                </div>
               </div>
-
-              <div className="grid grid-cols-1 gap-1.5">
-                {group.screens.map((screen) => {
-                  const isActive = currentScreen === screen.id;
-                  return (
-                    <button
-                      type="button"
-                      key={screen.id}
-                      onClick={() => {
-                        navigateTo(screen.id);
-                        onClose();
-                      }}
-                      className={`w-full text-left p-3 rounded-2xl transition-all flex items-center justify-between border cursor-pointer ${
-                        isActive
-                          ? 'bg-[#d8ff00]/30 border-[#d8ff00] text-neutral-950 font-bold shadow-xs'
-                          : 'bg-neutral-50 hover:bg-neutral-100 border-neutral-200/70 text-neutral-700'
-                      }`}
-                    >
-                      <div className="flex-1 pr-2">
-                        <div className="flex items-center gap-2">
-                          <span className={`text-xs font-extrabold ${isActive ? 'text-neutral-950' : 'text-neutral-900'}`}>
-                            {screen.title}
-                          </span>
-                          {isActive && <Check className="w-3.5 h-3.5 text-black stroke-[3]" />}
-                        </div>
-                        <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-1 font-medium">
-                          {screen.description}
-                        </p>
-                      </div>
-                      <ChevronRight className="w-3.5 h-3.5 shrink-0 text-neutral-400" />
-                    </button>
-                  );
-                })}
-              </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-neutral-200 text-neutral-700 flex items-center justify-center transition-colors cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
-          ))}
-        </div>
-      </div>
-    </div>
+
+            {/* List */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
+              {PATH_GROUPS.map((group) => (
+                <div key={group.code} className="space-y-1.5">
+                  <div className="flex items-center gap-2 px-1">
+                    <span className="text-[10px] font-mono text-[#0066ff] font-extrabold tracking-wider">
+                      {group.code}
+                    </span>
+                    <span className="text-xs font-extrabold text-neutral-700">{group.title}</span>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-1.5">
+                    {group.screens.map((screen) => {
+                      const isActive = currentScreen === screen.id;
+                      return (
+                        <button
+                          type="button"
+                          key={screen.id}
+                          onClick={() => {
+                            navigateTo(screen.id);
+                            onClose();
+                          }}
+                          className={`w-full text-left p-3 rounded-2xl transition-all flex items-center justify-between border cursor-pointer ${
+                            isActive
+                              ? 'bg-[#d8ff00]/30 border-[#d8ff00] text-neutral-950 font-bold shadow-xs'
+                              : 'bg-neutral-50 hover:bg-neutral-100 border-neutral-200/70 text-neutral-700'
+                          }`}
+                        >
+                          <div className="flex-1 pr-2">
+                            <div className="flex items-center gap-2">
+                              <span className={`text-xs font-extrabold ${isActive ? 'text-neutral-950' : 'text-neutral-900'}`}>
+                                {screen.title}
+                              </span>
+                              {isActive && <Check className="w-3.5 h-3.5 text-black stroke-[3]" />}
+                            </div>
+                            <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-1 font-medium">
+                              {screen.description}
+                            </p>
+                          </div>
+                          <ChevronRight className="w-3.5 h-3.5 shrink-0 text-neutral-400" />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

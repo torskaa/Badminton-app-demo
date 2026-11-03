@@ -4,17 +4,29 @@
  */
 
 import React from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, Trophy, Award, Sparkles, CheckCircle2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 
 export const ExpCelebrationModal: React.FC = () => {
   const { expCelebration, dismissExpCelebration, player } = useApp();
 
-  if (!expCelebration) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in zoom-in-95 duration-200">
-      <div className="w-full max-w-xs bg-white border border-neutral-200 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden">
+    <AnimatePresence>
+      {expCelebration && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md"
+        >
+          <motion.div
+            initial={{ scale: 0.85, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 15 }}
+            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            className="w-full max-w-xs bg-white border border-neutral-200 rounded-3xl p-6 text-center shadow-2xl relative overflow-hidden"
+          >
         {/* Floating icon */}
         <div className="w-16 h-16 rounded-3xl bg-[#d8ff00] text-black flex items-center justify-center mx-auto mb-4 shadow-md animate-bounce">
           {expCelebration.newLevel ? (
@@ -69,14 +81,16 @@ export const ExpCelebrationModal: React.FC = () => {
         </div>
 
         {/* Continue button */}
-        <button
-          type="button"
-          onClick={dismissExpCelebration}
-          className="w-full py-3.5 rounded-full bg-[#111318] hover:bg-[#1f2430] text-white text-xs font-black uppercase tracking-wider shadow-sm cursor-pointer transition-all active:scale-98"
-        >
-          ลุยต่อ (Claim & Continue)
-        </button>
-      </div>
-    </div>
-  );
+          <button
+            type="button"
+            onClick={dismissExpCelebration}
+            className="w-full py-3.5 rounded-full bg-[#111318] hover:bg-[#1f2430] text-white text-xs font-black uppercase tracking-wider shadow-sm cursor-pointer transition-all active:scale-98"
+          >
+            ลุยต่อ (Claim & Continue)
+          </button>
+        </motion.div>
+      </motion.div>
+    )}
+  </AnimatePresence>
+);
 };
