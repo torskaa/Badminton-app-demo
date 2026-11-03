@@ -86,7 +86,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
             </div>
 
             {/* Content Viewport */}
-            <div className="flex-1 w-full h-full overflow-hidden flex flex-col relative bg-white text-neutral-900">
+            <div className="flex-1 w-full h-full overflow-hidden flex flex-col relative bg-[#f0f4f9] text-neutral-900">
               {children}
             </div>
 

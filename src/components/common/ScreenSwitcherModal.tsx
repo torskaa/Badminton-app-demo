@@ -87,22 +87,23 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/85 backdrop-blur-md animate-in fade-in duration-200">
-      <div className="w-full max-w-md bg-[#0c0f17] border-t sm:border border-white/[0.1] rounded-t-[32px] sm:rounded-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-200">
+      <div className="w-full max-w-md bg-white border-t sm:border border-neutral-200 rounded-t-[36px] sm:rounded-3xl max-h-[85vh] flex flex-col shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="p-4 border-b border-white/[0.08] flex items-center justify-between shrink-0 bg-[#0e121d]">
+        <div className="p-4 border-b border-neutral-100 flex items-center justify-between shrink-0 bg-neutral-50/80">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-[#d4ff00]/20 text-[#d4ff00] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-full bg-[#0066ff]/10 text-[#0066ff] flex items-center justify-center font-bold">
               <Compass className="w-4 h-4" />
             </div>
             <div>
-              <h3 className="text-xs font-black uppercase tracking-wider text-white">App Navigation Directory</h3>
-              <p className="text-[10px] text-slate-400">เข้าถึงทุกโมดูลของ SmashAI ได้ทันที</p>
+              <h3 className="text-xs font-black uppercase tracking-wider text-neutral-900">App Navigation Directory</h3>
+              <p className="text-[10px] text-neutral-500 font-medium">เข้าถึงทุกโมดูล (18 Screens) ได้ทันที</p>
             </div>
           </div>
           <button
+            type="button"
             onClick={onClose}
-            className="w-7 h-7 rounded-full bg-white/[0.06] hover:bg-white/[0.12] text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer"
+            className="w-8 h-8 rounded-full bg-neutral-200/60 hover:bg-neutral-200 text-neutral-700 flex items-center justify-center transition-colors cursor-pointer"
           >
             <X className="w-4 h-4" />
           </button>
@@ -113,10 +114,10 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
           {PATH_GROUPS.map((group) => (
             <div key={group.code} className="space-y-1.5">
               <div className="flex items-center gap-2 px-1">
-                <span className="text-[9px] font-mono text-[#d4ff00] font-bold tracking-wider">
+                <span className="text-[10px] font-mono text-[#0066ff] font-extrabold tracking-wider">
                   {group.code}
                 </span>
-                <span className="text-xs font-bold text-slate-300">{group.title}</span>
+                <span className="text-xs font-extrabold text-neutral-700">{group.title}</span>
               </div>
 
               <div className="grid grid-cols-1 gap-1.5">
@@ -124,6 +125,7 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
                   const isActive = currentScreen === screen.id;
                   return (
                     <button
+                      type="button"
                       key={screen.id}
                       onClick={() => {
                         navigateTo(screen.id);
@@ -131,22 +133,22 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
                       }}
                       className={`w-full text-left p-3 rounded-2xl transition-all flex items-center justify-between border cursor-pointer ${
                         isActive
-                          ? 'bg-[#d4ff00]/10 border-[#d4ff00]/40 text-white'
-                          : 'bg-white/[0.02] hover:bg-white/[0.06] border-white/[0.05] text-slate-300'
+                          ? 'bg-[#d8ff00]/30 border-[#d8ff00] text-neutral-950 font-bold shadow-xs'
+                          : 'bg-neutral-50 hover:bg-neutral-100 border-neutral-200/70 text-neutral-700'
                       }`}
                     >
                       <div className="flex-1 pr-2">
                         <div className="flex items-center gap-2">
-                          <span className={`text-xs font-bold ${isActive ? 'text-[#d4ff00]' : 'text-slate-100'}`}>
+                          <span className={`text-xs font-extrabold ${isActive ? 'text-neutral-950' : 'text-neutral-900'}`}>
                             {screen.title}
                           </span>
-                          {isActive && <Check className="w-3.5 h-3.5 text-[#d4ff00]" />}
+                          {isActive && <Check className="w-3.5 h-3.5 text-black stroke-[3]" />}
                         </div>
-                        <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
+                        <p className="text-[10px] text-neutral-500 mt-0.5 line-clamp-1 font-medium">
                           {screen.description}
                         </p>
                       </div>
-                      <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${isActive ? 'text-[#d4ff00]' : 'text-slate-500'}`} />
+                      <ChevronRight className="w-3.5 h-3.5 shrink-0 text-neutral-400" />
                     </button>
                   );
                 })}

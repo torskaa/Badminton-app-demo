@@ -28,7 +28,7 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
       teamBOvr: 82.5,
       winProbA: 50,
       winProbB: 50,
-      balanceScore: '100% PERFECT MATCH',
+      balanceScore: '100% PERFECT 50/50 MATCH',
     },
     {
       teamA: [
@@ -54,140 +54,130 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#080b12] pb-6">
-      <MobileHeader title="AI Smart Team Matchmaker" showBack />
+    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
+      <MobileHeader title="AI จัดคู่สูสี (Team Matchmaker)" showBack />
 
       <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
-        {/* Banner */}
-        <div className="p-3.5 rounded-2xl bg-gradient-to-r from-cyan-950/60 via-slate-900 to-slate-900 border border-cyan-500/30 space-y-1">
-          <div className="flex items-center gap-2">
-            <Sparkles className="w-4 h-4 text-cyan-400" />
-            <span className="text-xs font-black text-cyan-400 uppercase tracking-wide">
-              MMR Equalizer Engine
-            </span>
+        {/* Matchmaker Banner */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-1.5">
+              <Sparkles className="w-4 h-4 text-[#0066ff]" />
+              <span className="text-[10px] font-bold text-[#0066ff] uppercase tracking-wider">
+                Fair-Play Balancing Engine
+              </span>
+            </div>
+            <h3 className="text-xs font-extrabold text-neutral-900 mt-0.5">
+              คำนวณจาก Skill Radar & สถิติจริงของผู้เล่น
+            </h3>
           </div>
-          <p className="text-xs text-slate-300 leading-relaxed">
-            AI ประเมิน OVR, Win Rate, และบทบาทตำแหน่ง (หน้าเน็ต/หลังคอร์ท) เพื่อจับคู่แข่งขัน 2v2 ให้ออกมาสูสีและสนุกที่สุด
-          </p>
+          <button
+            type="button"
+            onClick={handleShuffle}
+            className="px-3 py-1.5 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-2xs"
+          >
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>สับคู่ใหม่</span>
+          </button>
         </div>
 
-        {/* Balance Metric Badge */}
-        <div className="flex items-center justify-between px-3 py-2 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono">
-          <span className="text-slate-400">ระดับความสูสี:</span>
-          <span className="text-lime-400 font-bold flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5" />
+        {/* Win Probability & Balance Score Pill */}
+        <div className="p-3.5 rounded-2xl bg-[#111318] text-white flex items-center justify-between shadow-xs">
+          <span className="text-[11px] font-mono font-bold text-[#d8ff00]">
             {currentPairing.balanceScore}
+          </span>
+          <span className="text-xs font-mono font-bold">
+            Win Prob: {currentPairing.winProbA}% vs {currentPairing.winProbB}%
           </span>
         </div>
 
-        {/* The VS Match Arena Box */}
-        <div className="space-y-3">
-          {/* Team A Box */}
-          <div className="p-4 rounded-3xl bg-gradient-to-b from-[#141e2a] to-slate-900 border border-lime-400/40 space-y-2.5 shadow-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black text-lime-400 uppercase tracking-wider">
-                TEAM A (ฝั่งคอร์ท 1)
-              </span>
-              <span className="text-xs font-black font-mono text-white">
-                TEAM OVR: <span className="text-lime-400">{currentPairing.teamAOvr}</span>
-              </span>
-            </div>
-
-            <div className="space-y-1.5">
-              {currentPairing.teamA.map((p, idx) => (
-                <div
-                  key={idx}
-                  className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-lime-400/20 text-lime-400 font-bold flex items-center justify-center font-mono text-[10px]">
-                      {p.name[0]}
-                    </div>
-                    <div>
-                      <span className="font-bold text-white block">{p.name}</span>
-                      <span className="text-[10px] text-slate-400">{p.role}</span>
-                    </div>
-                  </div>
-                  <div className="text-right font-mono">
-                    <span className="text-lime-400 font-bold">{p.ovr} OVR</span>
-                    <span className="text-[10px] text-slate-500 block">{p.tier}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
+        {/* Team A Card */}
+        <div className="p-4 rounded-3xl bg-white border-2 border-[#111318] shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="px-2.5 py-0.5 rounded-full bg-[#111318] text-white text-[10px] font-black uppercase">
+              TEAM A (OVR {currentPairing.teamAOvr})
+            </span>
+            <span className="text-xs font-mono font-bold text-neutral-500">
+              Win Rate Exp: {currentPairing.winProbA}%
+            </span>
           </div>
 
-          {/* VS Divider & Projected Probability */}
-          <div className="relative py-2 flex items-center justify-center">
-            <div className="w-full border-t border-slate-800" />
-            <div className="absolute px-3 py-1 bg-black border border-slate-700 rounded-full text-xs font-black font-mono text-white shadow-lg flex items-center gap-2">
-              <span className="text-lime-400">{currentPairing.winProbA}%</span>
-              <span className="text-slate-500">VS</span>
-              <span className="text-amber-400">{currentPairing.winProbB}%</span>
-            </div>
-          </div>
-
-          {/* Team B Box */}
-          <div className="p-4 rounded-3xl bg-gradient-to-b from-[#201815] to-slate-900 border border-amber-500/40 space-y-2.5 shadow-md">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-black text-amber-400 uppercase tracking-wider">
-                TEAM B (ฝั่งคอร์ท 2)
-              </span>
-              <span className="text-xs font-black font-mono text-white">
-                TEAM OVR: <span className="text-amber-400">{currentPairing.teamBOvr}</span>
-              </span>
-            </div>
-
-            <div className="space-y-1.5">
-              {currentPairing.teamB.map((p, idx) => (
-                <div
-                  key={idx}
-                  className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 flex items-center justify-between text-xs"
-                >
-                  <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-amber-400/20 text-amber-400 font-bold flex items-center justify-center font-mono text-[10px]">
-                      {p.name[0]}
-                    </div>
-                    <div>
-                      <span className="font-bold text-white block">{p.name}</span>
-                      <span className="text-[10px] text-slate-400">{p.role}</span>
-                    </div>
+          <div className="space-y-2">
+            {currentPairing.teamA.map((p, idx) => (
+              <div
+                key={idx}
+                className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/70 flex items-center justify-between"
+              >
+                <div>
+                  <div className="text-xs font-extrabold text-neutral-900">
+                    {p.name}
                   </div>
-                  <div className="text-right font-mono">
-                    <span className="text-amber-400 font-bold">{p.ovr} OVR</span>
-                    <span className="text-[10px] text-slate-500 block">{p.tier}</span>
+                  <div className="text-[10px] text-neutral-500 font-medium">
+                    {p.role} · {p.tier} League
                   </div>
                 </div>
-              ))}
-            </div>
+                <span className="text-base font-black font-mono text-neutral-900">
+                  {p.ovr}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* AI Tactical Match Preview */}
-        <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 text-[11px] text-slate-300 space-y-1">
-          <span className="font-bold text-white">🏸 AI Tactical Forecast:</span>
-          <p className="leading-relaxed text-slate-400">
-            แมตช์นี้จะดวลกันด้วยสปีดเกมเร็ว Team A มีจุดเด่นเกมบุกหลังคอร์ท ส่วน Team B มีเกมรับเหนียวแน่น เหมาะสำหรับเล่น 3 เซตเต็มเพื่อความตื่นเต้น
-          </p>
+        <div className="text-center font-black text-xs text-neutral-400 uppercase tracking-widest">
+          VS
+        </div>
+
+        {/* Team B Card */}
+        <div className="p-4 rounded-3xl bg-white border-2 border-neutral-200 shadow-xs space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="px-2.5 py-0.5 rounded-full bg-neutral-200 text-neutral-900 text-[10px] font-black uppercase">
+              TEAM B (OVR {currentPairing.teamBOvr})
+            </span>
+            <span className="text-xs font-mono font-bold text-neutral-500">
+              Win Rate Exp: {currentPairing.winProbB}%
+            </span>
+          </div>
+
+          <div className="space-y-2">
+            {currentPairing.teamB.map((p, idx) => (
+              <div
+                key={idx}
+                className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/70 flex items-center justify-between"
+              >
+                <div>
+                  <div className="text-xs font-extrabold text-neutral-900">
+                    {p.name}
+                  </div>
+                  <div className="text-[10px] text-neutral-500 font-medium">
+                    {p.role} · {p.tier} League
+                  </div>
+                </div>
+                <span className="text-base font-black font-mono text-neutral-900">
+                  {p.ovr}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
-      {/* Action Footer */}
-      <div className="px-4 space-y-2 pt-2 shrink-0">
+      {/* Bottom Sticky Action Button */}
+      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0">
         <button
-          onClick={handleShuffle}
-          className="w-full min-h-[46px] rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-700 cursor-pointer transition-colors"
-        >
-          <RefreshCw className="w-4 h-4 text-cyan-400" />
-          <span>สุ่มจับคู่ใหม่ (Re-balance / Shuffle)</span>
-        </button>
-
-        <button
+          type="button"
           onClick={() => navigateTo('C1')}
-          className="w-full min-h-[48px] py-3 rounded-2xl bg-gradient-to-r from-lime-400 to-lime-300 text-slate-950 font-black text-sm shadow-[0_4px_16px_rgba(204,255,0,0.35)] hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full h-14 bg-[#111318] hover:bg-[#1f2430] active:scale-[0.98] rounded-full p-2 flex items-center justify-between shadow-lg transition-all cursor-pointer group"
         >
-          <Play className="w-4 h-4 fill-slate-950" />
-          <span>ลงสนาม & เริ่มเปิดหน้าจดแต้มคู่นี้ (Quick Logger)</span>
+          <div className="w-10 h-10 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
+            <Play className="w-5 h-5 fill-current" />
+          </div>
+          <span className="text-white font-extrabold text-xs tracking-wider uppercase">
+            เริ่มแมตช์ด้วยคู่นี้ (Courtside Score Tracker)
+          </span>
+          <div className="w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-4 h-4 stroke-[3]" />
+          </div>
         </button>
       </div>
     </div>

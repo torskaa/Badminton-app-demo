@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Check, Zap, Target, Crosshair, ArrowRight, Sparkles, Shield, User } from 'lucide-react';
+import { Check, Zap, Target, Crosshair, ArrowRight, Shield, User, Sparkles } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 import { PlayerTier } from '../../types';
@@ -24,28 +24,28 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
       title: 'สายตบพิฆาต (Smash Hunter)',
       desc: 'เน้นบุกต่อเนื่อง จัมป์ตบหนักหน่วง ตัดสินแต้มเร็ว',
       icon: Zap,
-      accent: 'border-lime-400 text-lime-400 bg-lime-400/10',
+      color: 'text-amber-500 bg-amber-50',
     },
     {
       id: 'Net Control Wizard' as const,
       title: 'สายหยอดคุมเชิง (Net Wizard)',
       desc: 'ควบคุมจังหวะ วางลูกเลียดเน็ต บีบให้คู่แข่งยกสูง',
       icon: Crosshair,
-      accent: 'border-cyan-400 text-cyan-400 bg-cyan-400/10',
+      color: 'text-cyan-600 bg-cyan-50',
     },
     {
       id: 'Defensive Wall' as const,
       title: 'สายรับกำแพงเหล็ก (Defensive Wall)',
       desc: 'เหนียวแน่น ดักทุกลูก สวนลูกดรายฟ์เปลี่ยนรับเป็นรุก',
       icon: Shield,
-      accent: 'border-amber-400 text-amber-400 bg-amber-400/10',
+      color: 'text-emerald-600 bg-emerald-50',
     },
     {
       id: 'All-Rounder' as const,
       title: 'สายสมดุลรอบด้าน (All-Rounder)',
       desc: 'เล่นได้ทุกตำแหน่ง วางลูกแม่นยำ ปรับเกมตามคู่แข่ง',
       icon: Target,
-      accent: 'border-purple-400 text-purple-400 bg-purple-400/10',
+      color: 'text-purple-600 bg-purple-50',
     },
   ];
 
@@ -71,72 +71,70 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
       primaryGoal: goal,
       tier: selectedTier,
     });
-    // Award 150 EXP for completing profile setup
     gainExp(150, 'สร้างโปรไฟล์และตั้งค่าสไตล์การเล่นสำเร็จ');
     navigateTo('D1');
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#080b12] pb-6">
-      <MobileHeader title="ตั้งค่าตัวละคร & สไตล์การเล่น" showBack />
+    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
+      <MobileHeader title="ตั้งค่าสไตล์การเล่น & DNA" showBack />
 
-      <div className="p-4 space-y-5 flex-1 overflow-y-auto no-scrollbar">
+      <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
         {/* Intro */}
-        <div>
-          <span className="text-[10px] font-mono font-bold tracking-wider text-lime-400 uppercase">
-            PATH A2 · Character Creation
+        <div className="px-1">
+          <span className="text-[10px] font-bold tracking-wider text-[#0066ff] uppercase">
+            CHARACTER CUSTOMIZATION
           </span>
-          <h2 className="text-lg font-black text-white mt-0.5">
-            สร้าง DNA นักกีฬาแบดมินตันของคุณ
+          <h2 className="text-xl font-extrabold text-neutral-900 tracking-tight mt-0.5">
+            สร้าง DNA นักกีฬาของคุณ
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
-            AI Coach จะใช้ข้อมูลนี้ในการปรับจูนคำแนะนำ แบบฝึกซ้อม และการวิเคราะห์จุดอ่อน
+          <p className="text-xs text-neutral-500 mt-1">
+            AI Coach จะใช้สไตล์นี้คำนวณ Skill Radar และแผนฝึกซ้อมรายวัน
           </p>
         </div>
 
-        {/* Player Name & Dominant Hand */}
-        <div className="space-y-3 p-3.5 rounded-2xl bg-slate-900/80 border border-slate-800">
+        {/* Player Name & Hand Card */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-3">
           <div>
-            <label className="text-[11px] font-bold text-slate-300 block mb-1.5">
-              ชื่อนักกีฬา / ฉายาในคอร์ท
+            <label className="text-xs font-bold text-neutral-700 block mb-1.5">
+              ชื่อนักกีฬา (Display Name)
             </label>
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950 border border-slate-700">
-              <User className="w-4 h-4 text-lime-400" />
+            <div className="relative">
+              <User className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                className="bg-transparent text-xs text-white focus:outline-none flex-1 font-semibold"
-                placeholder="ชื่อของคุณ..."
+                placeholder="ระบุชื่อของคุณ..."
+                className="w-full pl-10 pr-4 py-2.5 rounded-2xl bg-neutral-50 border border-neutral-200 text-xs text-neutral-900 font-bold focus:outline-none focus:ring-2 focus:ring-[#0066ff]/20 focus:bg-white transition-all"
               />
             </div>
           </div>
 
           <div>
-            <label className="text-[11px] font-bold text-slate-300 block mb-1.5">
+            <label className="text-xs font-bold text-neutral-700 block mb-1.5">
               มือข้างที่ถนัด (Dominant Hand)
             </label>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"
                 onClick={() => setHand('Right')}
-                className={`py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                className={`py-2.5 px-4 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
                   hand === 'Right'
-                    ? 'bg-lime-400 text-slate-950 border-lime-400 shadow-[0_0_12px_rgba(204,255,0,0.4)]'
-                    : 'bg-slate-950 text-slate-300 border-slate-800 hover:border-slate-700'
+                    ? 'bg-[#111318] text-white shadow-sm'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200/70'
                 }`}
               >
                 <span>ถนัดขวา (Right)</span>
                 {hand === 'Right' && <Check className="w-3.5 h-3.5 stroke-[3]" />}
               </button>
-
               <button
                 type="button"
                 onClick={() => setHand('Left')}
-                className={`py-2 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-all ${
+                className={`py-2.5 px-4 rounded-2xl text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2 ${
                   hand === 'Left'
-                    ? 'bg-lime-400 text-slate-950 border-lime-400 shadow-[0_0_12px_rgba(204,255,0,0.4)]'
-                    : 'bg-slate-950 text-slate-300 border-slate-800 hover:border-slate-700'
+                    ? 'bg-[#111318] text-white shadow-sm'
+                    : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200/70'
                 }`}
               >
                 <span>ถนัดซ้าย (Left)</span>
@@ -146,93 +144,55 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Playstyle Selection */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-white flex items-center justify-between">
-            <span>สไตล์การเล่นหลัก (Primary Playstyle)</span>
-            <span className="text-[10px] text-lime-400 font-mono">ส่งผลต่อ Skill Radar</span>
+        {/* Playstyle Selector */}
+        <div>
+          <label className="text-xs font-bold text-neutral-800 block px-1 mb-2">
+            สไตล์การเล่นหลัก (Primary Playstyle)
           </label>
-
-          <div className="grid grid-cols-1 gap-2">
-            {PLAYSTYLES.map((style) => {
-              const Icon = style.icon;
-              const isSelected = playstyle === style.id;
+          <div className="space-y-2">
+            {PLAYSTYLES.map((ps) => {
+              const Icon = ps.icon;
+              const isSelected = playstyle === ps.id;
               return (
                 <div
-                  key={style.id}
-                  onClick={() => setPlaystyle(style.id)}
-                  className={`p-3 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
+                  key={ps.id}
+                  onClick={() => setPlaystyle(ps.id)}
+                  className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center gap-3 ${
                     isSelected
-                      ? 'bg-slate-900 border-lime-400 ring-1 ring-lime-400/50 shadow-md'
-                      : 'bg-slate-950/80 border-slate-800 hover:border-slate-700'
+                      ? 'bg-white border-[#0066ff] ring-2 ring-[#0066ff]/20 shadow-sm'
+                      : 'bg-white border-neutral-200/80 hover:border-neutral-300'
                   }`}
                 >
                   <div
-                    className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 border ${style.accent}`}
+                    className={`w-10 h-10 rounded-2xl flex items-center justify-center shrink-0 ${ps.color}`}
                   >
                     <Icon className="w-5 h-5" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-white truncate">
-                        {style.title}
-                      </span>
-                      {isSelected && (
-                        <div className="w-4 h-4 rounded-full bg-lime-400 text-slate-950 flex items-center justify-center shrink-0">
-                          <Check className="w-2.5 h-2.5 stroke-[3]" />
-                        </div>
-                      )}
+                    <div className="text-xs font-extrabold text-neutral-900">
+                      {ps.title}
                     </div>
-                    <p className="text-[10px] text-slate-400 mt-0.5 line-clamp-1">
-                      {style.desc}
-                    </p>
+                    <div className="text-[11px] text-neutral-500 truncate mt-0.5">
+                      {ps.desc}
+                    </div>
                   </div>
+                  {isSelected && (
+                    <div className="w-6 h-6 rounded-full bg-[#0066ff] text-white flex items-center justify-center shrink-0">
+                      <Check className="w-3.5 h-3.5 stroke-[3]" />
+                    </div>
+                  )}
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Skill Tier Self-Assessment */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-white block">
-            ประเมินระดับฝีมือเริ่มต้น (Skill Tier League)
+        {/* Goal Selector */}
+        <div>
+          <label className="text-xs font-bold text-neutral-800 block px-1 mb-2">
+            เป้าหมายที่อยากพัฒนาเร็วที่สุด
           </label>
-          <div className="grid grid-cols-2 gap-2">
-            {TIERS.map((item) => {
-              const isSelected = selectedTier === item.tier;
-              return (
-                <button
-                  type="button"
-                  key={item.tier}
-                  onClick={() => setSelectedTier(item.tier)}
-                  className={`p-2.5 text-left rounded-xl border transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-slate-900 border-amber-400/80 ring-1 ring-amber-400/30'
-                      : 'bg-slate-950 border-slate-800'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className={`text-[11px] font-black ${isSelected ? 'text-amber-400' : 'text-white'}`}>
-                      {item.tier}
-                    </span>
-                    {isSelected && <span className="text-[9px] text-amber-400 font-bold">ACTIVE</span>}
-                  </div>
-                  <p className="text-[10px] text-slate-300 font-medium leading-tight">
-                    {item.label}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Primary Goal */}
-        <div className="space-y-2">
-          <label className="text-xs font-bold text-white block">
-            เป้าหมายที่ต้องการพัฒนาอันดับ 1
-          </label>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             {GOALS.map((g) => {
               const isSelected = goal === g.id;
               return (
@@ -240,14 +200,47 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
                   type="button"
                   key={g.id}
                   onClick={() => setGoal(g.id)}
-                  className={`w-full py-2 px-3 rounded-xl text-left border text-xs font-medium cursor-pointer transition-colors flex items-center justify-between ${
+                  className={`w-full p-3 rounded-2xl text-left text-xs font-bold transition-all cursor-pointer flex items-center justify-between border ${
                     isSelected
-                      ? 'bg-lime-400/10 border-lime-400/60 text-white'
-                      : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'
+                      ? 'bg-white border-[#d8ff00] ring-2 ring-[#d8ff00]/40 shadow-xs text-neutral-900'
+                      : 'bg-white border-neutral-200/80 text-neutral-700 hover:border-neutral-300'
                   }`}
                 >
                   <span>{g.label}</span>
-                  {isSelected && <Check className="w-3.5 h-3.5 text-lime-400 shrink-0" />}
+                  {isSelected && (
+                    <div className="w-5 h-5 rounded-full bg-[#d8ff00] text-black flex items-center justify-center">
+                      <Check className="w-3 h-3 stroke-[3]" />
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Tier Selector */}
+        <div>
+          <label className="text-xs font-bold text-neutral-800 block px-1 mb-2">
+            ระดับฝีมือโดยประมาณ (Player Tier)
+          </label>
+          <div className="grid grid-cols-2 gap-2">
+            {TIERS.map((t) => {
+              const isSelected = selectedTier === t.tier;
+              return (
+                <button
+                  type="button"
+                  key={t.tier}
+                  onClick={() => setSelectedTier(t.tier)}
+                  className={`p-3 rounded-2xl text-left border transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-neutral-900 text-white border-neutral-900 shadow-sm'
+                      : 'bg-white border-neutral-200/80 text-neutral-800 hover:border-neutral-300'
+                  }`}
+                >
+                  <div className="text-xs font-black">{t.tier}</div>
+                  <div className={`text-[10px] mt-0.5 font-medium ${isSelected ? 'text-neutral-300' : 'text-neutral-500'}`}>
+                    {t.label}
+                  </div>
                 </button>
               );
             })}
@@ -255,14 +248,21 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky Bottom Save Action */}
-      <div className="px-4 pt-2 shrink-0">
+      {/* Bottom Sticky Action Button */}
+      <div className="px-5 pt-3 border-t border-neutral-200 bg-white">
         <button
           onClick={handleSaveAndContinue}
-          className="w-full min-h-[48px] py-3 rounded-2xl bg-gradient-to-r from-lime-400 to-lime-300 text-slate-950 font-black text-sm shadow-[0_4px_20px_rgba(204,255,0,0.35)] hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full h-14 bg-[#111318] hover:bg-[#1f2430] active:scale-[0.98] rounded-full p-2 flex items-center justify-between shadow-lg transition-all cursor-pointer group"
         >
-          <span>บันทึก & เข้าสู่ AI Dashboard (+150 EXP)</span>
-          <ArrowRight className="w-4 h-4 stroke-[3]" />
+          <div className="w-10 h-10 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
+            <Sparkles className="w-5 h-5" />
+          </div>
+          <span className="text-white font-extrabold text-xs tracking-wider uppercase">
+            บันทึกโปรไฟล์ & เริ่มต้นใช้งาน (+150 EXP)
+          </span>
+          <div className="w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-4 h-4 stroke-[3]" />
+          </div>
         </button>
       </div>
     </div>

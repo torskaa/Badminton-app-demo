@@ -161,7 +161,7 @@ export const MultiScreenShowcase: React.FC = () => {
                 </div>
 
                 {/* Screen Content Viewport */}
-                <div className="flex-1 w-full h-full rounded-[38px] overflow-hidden bg-white text-neutral-900 flex flex-col relative no-scrollbar">
+                <div className="flex-1 w-full h-full rounded-[38px] overflow-hidden bg-[#f0f4f9] text-neutral-900 flex flex-col relative no-scrollbar">
                   <div className="flex-1 flex flex-col overflow-y-auto no-scrollbar relative">
                     {item.component}
                   </div>

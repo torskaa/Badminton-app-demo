@@ -3,8 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
-import { Trophy, Flame, Zap, Award, Sparkles, ChevronRight, BarChart3, Share2, Play } from 'lucide-react';
+import React from 'react';
+import { Trophy, Flame, Zap, Award, Sparkles, ChevronRight, BarChart3, Share2, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
@@ -14,156 +14,129 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
   const isWinner = match.winner === 'A' || match.scoreA >= match.scoreB;
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#080b12] pb-6">
-      <MobileHeader title="สรุปผลการแข่งขัน & แจกรางวัล" />
+    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
+      <MobileHeader title="สรุปผลการแข่งขัน & แจกรางวัล" showBack />
 
       <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
         {/* Victory Header */}
         <div className="text-center pt-2">
           <div
-            className={`w-16 h-16 rounded-2xl mx-auto mb-2 flex items-center justify-center shadow-2xl ${
+            className={`w-16 h-16 rounded-3xl mx-auto mb-2.5 flex items-center justify-center shadow-md ${
               isWinner
-                ? 'bg-gradient-to-tr from-lime-400 to-lime-300 text-slate-950 shadow-[0_0_30px_rgba(204,255,0,0.5)] animate-bounce'
-                : 'bg-gradient-to-tr from-slate-700 to-slate-600 text-slate-200'
+                ? 'bg-[#d8ff00] text-black shadow-[0_0_25px_rgba(216,255,0,0.5)]'
+                : 'bg-neutral-800 text-white'
             }`}
           >
             <Trophy className="w-9 h-9 stroke-[2.3]" />
           </div>
 
-          <div className="text-[11px] font-mono font-bold tracking-widest text-lime-400 uppercase">
+          <div className="text-[11px] font-mono font-bold tracking-widest text-[#0066ff] uppercase">
             {isWinner ? 'MATCH VICTORY!' : 'MATCH COMPLETED'}
           </div>
-          <h2 className="text-2xl font-black text-white mt-0.5">
+          <h2 className="text-2xl font-black text-neutral-900 mt-0.5 tracking-tight">
             {isWinner ? 'ยินดีด้วย! คุณคว้าชัยชนะ' : 'สู้ได้ดีมากในเกมนี้!'}
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-neutral-500 font-medium">
             {match.playerAName} vs {match.playerBName}
           </p>
         </div>
 
-        {/* Sets Score Breakdown */}
-        <div className="p-3.5 rounded-2xl bg-[#0f1422] border border-slate-800 text-center">
-          <div className="text-[10px] text-slate-400 font-mono mb-2">FINAL SCORE SUMMARY</div>
-          <div className="flex items-center justify-center gap-6">
+        {/* Sets Score Breakdown Card */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs text-center">
+          <div className="text-[10px] text-neutral-400 font-mono font-bold mb-3 uppercase tracking-wider">
+            FINAL SCORE SUMMARY
+          </div>
+          <div className="flex items-center justify-center gap-8">
             <div>
-              <div className="text-xs font-bold text-slate-300">ทีมกานต์ (A)</div>
-              <div className="text-3xl font-black text-lime-400 font-mono">
+              <div className="text-xs font-bold text-neutral-600">{match.playerAName}</div>
+              <div className="text-4xl font-black text-[#10b981] font-mono mt-1">
                 {match.setsWonA || 2}
               </div>
             </div>
-            <div className="text-sm font-mono text-slate-500 font-bold">SET RATIO</div>
+            <div className="text-xs font-mono text-neutral-300 font-extrabold uppercase">SETS</div>
             <div>
-              <div className="text-xs font-bold text-slate-300">ทีมคู่แข่ง (B)</div>
-              <div className="text-3xl font-black text-slate-400 font-mono">
+              <div className="text-xs font-bold text-neutral-600">{match.playerBName}</div>
+              <div className="text-4xl font-black text-neutral-400 font-mono mt-1">
                 {match.setsWonB || 0}
               </div>
             </div>
           </div>
-          <div className="mt-2 pt-2 border-t border-slate-800/80 flex items-center justify-center gap-3 text-xs font-mono text-slate-300">
-            <span className="px-2 py-0.5 bg-slate-900 rounded">Set 1: 21-17</span>
-            <span className="px-2 py-0.5 bg-slate-900 rounded">Set 2: 21-19</span>
-          </div>
         </div>
 
-        {/* EXP Payout Breakdown with Animation styling */}
-        <div className="p-4 rounded-3xl bg-gradient-to-b from-slate-900 to-[#0e1320] border border-lime-400/40 space-y-3 shadow-lg">
+        {/* Gamification EXP & Badges Gained */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-black text-white flex items-center gap-1.5">
-              <Zap className="w-4 h-4 text-lime-400 fill-lime-400" />
-              <span>EXP & REWARD RECAP</span>
+            <span className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider">
+              รางวัลที่ได้รับ (Rewards Gained)
             </span>
-            <span className="text-base font-black text-lime-400 font-mono">
-              +400 EXP
+            <span className="px-2.5 py-0.5 rounded-full bg-[#d8ff00] text-black text-[10px] font-black">
+              +250 EXP EARNED
             </span>
           </div>
 
-          <div className="space-y-1.5 text-xs">
-            <div className="flex justify-between text-slate-300">
-              <span>ฐานการเล่นแมตช์เต็ม (Match Completed)</span>
-              <span className="font-mono text-lime-400">+250 EXP</span>
+          <div className="grid grid-cols-2 gap-2.5">
+            <div className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/60 flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
+                <Flame className="w-5 h-5 fill-current" />
+              </div>
+              <div>
+                <div className="text-xs font-extrabold text-neutral-900">3-Week Streak</div>
+                <div className="text-[10px] text-neutral-500 font-medium">รักษาวินัยต่อเนื่อง 🔥</div>
+              </div>
             </div>
-            <div className="flex justify-between text-slate-300">
-              <span>โบนัสตบวินเนอร์ (Smash Winner Bonus x8)</span>
-              <span className="font-mono text-lime-400">+100 EXP</span>
-            </div>
-            <div className="flex justify-between text-slate-300">
-              <span>โบนัส Match MVP ยอดเยี่ยม</span>
-              <span className="font-mono text-lime-400">+50 EXP</span>
-            </div>
-          </div>
 
-          {/* Level Progress Bar */}
-          <div className="pt-2 border-t border-slate-800 space-y-1">
-            <div className="flex justify-between text-[11px] text-slate-400">
-              <span>Player Lv.{player.level} (Court Master)</span>
-              <span className="text-lime-400 font-mono font-bold">
-                {player.currentExp} / {player.nextLevelExp} EXP
-              </span>
-            </div>
-            <div className="w-full h-2.5 bg-slate-800 rounded-full overflow-hidden p-0.5 border border-slate-700">
-              <div
-                className="h-full bg-gradient-to-r from-lime-500 to-lime-300 rounded-full transition-all duration-700 shadow-[0_0_8px_#ccff00]"
-                style={{
-                  width: `${Math.min(100, (player.currentExp / player.nextLevelExp) * 100)}%`,
-                }}
-              />
+            <div className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/60 flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                <Award className="w-5 h-5" />
+              </div>
+              <div>
+                <div className="text-xs font-extrabold text-neutral-900">Smash King</div>
+                <div className="text-[10px] text-neutral-500 font-medium">ตบทำแต้มครบ 50 ครั้ง</div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Streak & Badge Unlock Pill Cards */}
-        <div className="grid grid-cols-2 gap-2.5">
-          {/* Streak Boost */}
-          <div className="p-3 rounded-2xl bg-[#141b2a] border border-amber-500/30 flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center shrink-0">
-              <Flame className="w-6 h-6 fill-amber-400" />
-            </div>
-            <div>
-              <div className="text-[10px] text-amber-400 font-bold uppercase">
-                STREAK ACTIVE!
-              </div>
-              <div className="text-xs font-black text-white">
-                4-Week Streak 🔥
-              </div>
-              <div className="text-[9px] text-slate-400">เล่นต่อเนื่องไม่ขาด</div>
-            </div>
+        {/* Level Progression Bar */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold">
+            <span className="text-neutral-700">Player Level {player.level} (Diamond League)</span>
+            <span className="text-neutral-900 font-mono">{player.currentExp} / {player.nextLevelExp} EXP</span>
           </div>
-
-          {/* Badge Unlocked */}
-          <div className="p-3 rounded-2xl bg-[#141b2a] border border-lime-400/30 flex items-center gap-2.5">
-            <div className="w-10 h-10 rounded-xl bg-lime-400/20 text-lime-400 flex items-center justify-center shrink-0">
-              <Award className="w-6 h-6" />
-            </div>
-            <div>
-              <div className="text-[10px] text-lime-400 font-bold uppercase">
-                BADGE UNLOCKED
-              </div>
-              <div className="text-xs font-black text-white truncate">
-                Smash King II 👑
-              </div>
-              <div className="text-[9px] text-slate-400">ตบชนะสะสม 50 แต้ม</div>
-            </div>
+          <div className="w-full h-2.5 rounded-full bg-neutral-100 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-[#d8ff00] to-[#10b981] rounded-full transition-all duration-700"
+              style={{ width: `${Math.min(100, (player.currentExp / player.nextLevelExp) * 100)}%` }}
+            />
           </div>
         </div>
       </div>
 
-      {/* Navigation to Diagnostics or Social Card */}
-      <div className="px-4 space-y-2 pt-2 shrink-0">
+      {/* Bottom Sticky Action Buttons */}
+      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0 space-y-2">
         <button
+          type="button"
           onClick={() => navigateTo('C3')}
-          className="w-full min-h-[48px] py-3 rounded-2xl bg-gradient-to-r from-lime-400 to-lime-300 text-slate-950 font-black text-sm shadow-[0_4px_16px_rgba(204,255,0,0.35)] hover:brightness-110 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          className="w-full h-14 bg-[#111318] hover:bg-[#1f2430] active:scale-[0.98] rounded-full p-2 flex items-center justify-between shadow-lg transition-all cursor-pointer group"
         >
-          <BarChart3 className="w-4 h-4 stroke-[2.5]" />
-          <span>เจาะลึก AI Match Diagnostics (ดู Weak Zone)</span>
-          <ChevronRight className="w-4 h-4 stroke-[3]" />
+          <div className="w-10 h-10 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
+            <BarChart3 className="w-5 h-5" />
+          </div>
+          <span className="text-white font-extrabold text-xs tracking-wider uppercase">
+            ดู AI วิเคราะห์จุดอ่อนช็อตตบ (AI Diagnostics)
+          </span>
+          <div className="w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-4 h-4 stroke-[3]" />
+          </div>
         </button>
 
         <button
+          type="button"
           onClick={() => navigateTo('C4')}
-          className="w-full min-h-[44px] py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-200 border border-slate-800 font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
+          className="w-full h-11 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
         >
-          <Share2 className="w-3.5 h-3.5 text-lime-400" />
-          <span>ดูการ์ดสรุปผล Match Recap Card (แชร์ IG / TikTok)</span>
+          <Share2 className="w-4 h-4" />
+          <span>สร้างการ์ดแชร์ผลแมตช์ลงโซเชียล (Recap Card)</span>
         </button>
       </div>
     </div>

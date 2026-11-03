@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Video, UploadCloud, Play, Pause, CheckCircle2, Zap, Sparkles, Activity, ShieldCheck, ChevronRight, RefreshCw, Gauge } from 'lucide-react';
+import { Video, UploadCloud, Play, Pause, CheckCircle2, Zap, Sparkles, Activity, ShieldCheck, ChevronRight, Gauge, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
@@ -13,7 +13,6 @@ export const D3_VideoAnalysisScreen: React.FC = () => {
 
   const [isPlaying, setIsPlaying] = useState(true);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [scrubberValue, setScrubberValue] = useState(64); // %
 
   const [analysisResult, setAnalysisResult] = useState<any>({
     analyzed: true,
@@ -46,12 +45,12 @@ export const D3_VideoAnalysisScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#06070a] pb-6">
+    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
       <MobileHeader title="Biomechanical Vision AI" subtitle="Joint Tracking & Smash Velocity" showBack />
 
       <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
         {/* CV Video Player & Skeleton Overlay */}
-        <div className="relative w-full h-64 rounded-3xl overflow-hidden bg-black border border-white/[0.1] shadow-2xl">
+        <div className="relative w-full h-64 rounded-3xl overflow-hidden bg-black shadow-lg">
           <img
             src="/src/assets/images/badminton_smash_action_1793695158261.jpg"
             alt="AI Pose Tracking"
@@ -59,182 +58,104 @@ export const D3_VideoAnalysisScreen: React.FC = () => {
             referrerPolicy="no-referrer"
           />
 
-          {/* Biomechanical Telemetry SVG Overlay */}
-          <svg className="absolute inset-0 w-full h-full pointer-events-none select-none">
-            {/* Skeletal Kinetic Chains */}
-            <line x1="160" y1="95" x2="195" y2="72" stroke="#d4ff00" strokeWidth="2.5" />
-            <line x1="195" y1="72" x2="260" y2="88" stroke="#d4ff00" strokeWidth="2.5" />
-            <line x1="160" y1="95" x2="152" y2="140" stroke="#00f0ff" strokeWidth="2" />
-            <line x1="152" y1="140" x2="128" y2="180" stroke="#00f0ff" strokeWidth="2" />
-            <line x1="152" y1="140" x2="178" y2="175" stroke="#00f0ff" strokeWidth="2" />
-
-            {/* Trajectory vector arc */}
-            <path
-              d="M 285 70 Q 250 85 220 145"
-              fill="none"
-              stroke="#fbbf24"
-              strokeWidth="2.5"
-              strokeDasharray="4 4"
-            />
-
-            {/* Kinetic Nodes */}
-            <circle cx="160" cy="95" r="4.5" fill="#d4ff00" />
-            <circle cx="195" cy="72" r="4.5" fill="#d4ff00" />
-            <circle cx="260" cy="88" r="6" fill="#d4ff00" stroke="#000" strokeWidth="2" />
-            <circle cx="152" cy="140" r="4.5" fill="#00f0ff" />
-            <circle cx="128" cy="180" r="4" fill="#00f0ff" />
-            <circle cx="178" cy="175" r="4" fill="#00f0ff" />
-          </svg>
-
-          {/* Top HUD Badges */}
-          <div className="absolute top-3 left-3 px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-white/[0.1] text-[10px] font-mono text-[#d4ff00] font-bold flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#d4ff00] animate-pulse" />
-            <span>KINETIC FRAME 48/75</span>
+          {/* Skeleton Overlay Lines */}
+          <div className="absolute inset-0 pointer-events-none">
+            <svg className="w-full h-full">
+              {/* Arm & Racket tracking line */}
+              <line x1="160" y1="90" x2="195" y2="45" stroke="#d8ff00" strokeWidth="3" strokeDasharray="4,2" />
+              <line x1="160" y1="90" x2="140" y2="135" stroke="#00ffcc" strokeWidth="2.5" />
+              <circle cx="160" cy="90" r="5" fill="#d8ff00" />
+              <circle cx="195" cy="45" r="7" fill="#ff0055" />
+              <circle cx="140" cy="135" r="5" fill="#00ffcc" />
+            </svg>
           </div>
 
-          <div className="absolute top-3 right-3 px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md border border-white/[0.1] text-[10px] font-mono text-cyan-400 font-bold">
-            VELOCITY: 324 KM/H
+          {/* Top Live Tracking Telemetry */}
+          <div className="absolute top-3 inset-x-3 flex items-center justify-between text-xs">
+            <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md text-[#d8ff00] font-mono text-[10px] font-bold border border-white/10">
+              ● POSE SKELETON v2.4 ACTIVE
+            </span>
+            <span className="px-3 py-1 rounded-full bg-black/70 backdrop-blur-md text-white font-mono text-[10px] font-bold">
+              324 KM/H
+            </span>
           </div>
 
-          <div className="absolute bottom-10 left-3 px-2.5 py-1 rounded-xl bg-black/75 backdrop-blur-md text-[10px] font-mono text-amber-400 font-bold">
-            APEX: 2.78M IMPACT HEIGHT
-          </div>
-
-          {/* Player Scrub Bar Controls */}
-          <div className="absolute bottom-0 inset-x-0 p-3 bg-gradient-to-t from-black via-black/80 to-transparent flex items-center gap-2.5">
+          {/* Bottom Player Overlay Bar */}
+          <div className="absolute bottom-3 inset-x-3 flex items-center justify-between px-3 py-1.5 rounded-2xl bg-black/60 backdrop-blur-md text-white text-xs">
             <button
+              type="button"
               onClick={() => setIsPlaying(!isPlaying)}
-              className="w-6 h-6 rounded-lg bg-white/[0.1] text-white flex items-center justify-center cursor-pointer hover:bg-white/[0.2]"
+              className="flex items-center gap-1.5 text-xs font-bold text-[#d8ff00] cursor-pointer"
             >
-              {isPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-white" />}
+              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              <span>{isPlaying ? 'Pause' : 'Play'}</span>
             </button>
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={scrubberValue}
-              onChange={(e) => setScrubberValue(Number(e.target.value))}
-              className="flex-1 accent-[#d4ff00] h-1 bg-white/[0.2] rounded-lg cursor-pointer"
-            />
-            <span className="text-[10px] font-mono text-slate-300">00:01.42</span>
+            <span className="text-[10px] font-mono text-neutral-300">00:03.24 / 00:05.00</span>
           </div>
-
-          {/* Processing Screen State */}
-          {isAnalyzing && (
-            <div className="absolute inset-0 bg-black/85 backdrop-blur-md flex flex-col items-center justify-center gap-2 z-20">
-              <RefreshCw className="w-8 h-8 text-[#d4ff00] animate-spin" />
-              <div className="text-xs font-black text-white">Running Vision Tensor Pipeline...</div>
-              <div className="text-[10px] font-mono text-slate-400">Pose Estimation · 17 Keypoints Active</div>
-            </div>
-          )}
         </div>
 
-        {/* Video Upload Triggers */}
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            onClick={handleSimulateUpload}
-            disabled={isAnalyzing}
-            className="py-2.5 px-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-bold text-white flex items-center justify-center gap-2 cursor-pointer transition-colors"
-          >
-            <UploadCloud className="w-4 h-4 text-[#d4ff00]" />
-            <span>อัปโหลดคลิปใหม่</span>
-          </button>
+        {/* 4 Biomechanical Key Metrics */}
+        <div className="grid grid-cols-2 gap-2.5">
+          <div className="p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-xs">
+            <span className="text-[10px] text-neutral-400 font-bold uppercase block">Racket Speed</span>
+            <div className="text-xl font-black text-neutral-900 font-mono mt-0.5">324 km/h</div>
+            <span className="text-[10px] text-emerald-600 font-bold">Top 12% Speed</span>
+          </div>
 
-          <button
-            onClick={handleSimulateUpload}
-            disabled={isAnalyzing}
-            className="py-2.5 px-3 rounded-2xl bg-white/[0.03] hover:bg-white/[0.08] border border-white/[0.08] text-xs font-bold text-white flex items-center justify-center gap-2 cursor-pointer transition-colors"
-          >
-            <Gauge className="w-4 h-4 text-cyan-400" />
-            <span>รีเซ็ตวิเคราะห์ใหม่</span>
-          </button>
+          <div className="p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-xs">
+            <span className="text-[10px] text-neutral-400 font-bold uppercase block">Contact Height</span>
+            <div className="text-xl font-black text-neutral-900 font-mono mt-0.5">2.78 m</div>
+            <span className="text-[10px] text-[#0066ff] font-bold">Steep Attack Angle</span>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-xs">
+            <span className="text-[10px] text-neutral-400 font-bold uppercase block">Trunk Rotation</span>
+            <div className="text-xl font-black text-neutral-900 font-mono mt-0.5">44.5°</div>
+            <span className="text-[10px] text-neutral-500 font-bold">Optimal Core Snap</span>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-white border border-neutral-200/80 shadow-xs">
+            <span className="text-[10px] text-neutral-400 font-bold uppercase block">Overall Technique</span>
+            <div className="text-xl font-black text-[#d8ff00] bg-black px-2 py-0.5 rounded-lg inline-block font-mono mt-0.5">88/100</div>
+            <span className="text-[10px] text-neutral-500 font-bold block mt-1">Grade A</span>
+          </div>
         </div>
 
-        {/* Technique Score Card */}
-        <div className="p-4 rounded-3xl bg-[#0b0e16] border border-white/[0.08] space-y-3 shadow-xl">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-[10px] font-mono text-[#d4ff00] font-bold uppercase tracking-wider">
-                COMPOSITE TECHNIQUE SCORE
-              </span>
-              <h3 className="text-lg font-black text-white">
-                คะแนนฟอร์ม: <span className="text-[#d4ff00] font-mono">88</span>/100
-              </h3>
-            </div>
-            <div className="px-3 py-1 rounded-xl bg-[#d4ff00]/15 text-[#d4ff00] font-mono font-black text-xs border border-[#d4ff00]/30">
-              GRADE A+ (PRO)
-            </div>
-          </div>
-
-          {/* Sub Scores Grid */}
-          <div className="grid grid-cols-2 gap-2 text-xs">
-            <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex justify-between text-slate-300 mb-1.5 font-medium">
-                <span>Jump Takeoff</span>
-                <span className="font-mono text-[#d4ff00] font-bold">92%</span>
+        {/* AI Coaching Actionable Advice */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-2.5">
+          <h4 className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider">
+            คำแนะนำปรับท่วงท่า (AI Pose Correction)
+          </h4>
+          <div className="space-y-2">
+            {analysisResult.coachingAdvice.map((adv: string, idx: number) => (
+              <div key={idx} className="flex items-start gap-2.5 text-xs text-neutral-600 font-medium leading-relaxed">
+                <span className="w-5 h-5 rounded-full bg-neutral-100 text-neutral-800 font-bold text-[10px] flex items-center justify-center shrink-0 mt-0.5">
+                  {idx + 1}
+                </span>
+                <span>{adv}</span>
               </div>
-              <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
-                <div className="h-full bg-[#d4ff00] rounded-full" style={{ width: '92%' }} />
-              </div>
-            </div>
-
-            <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex justify-between text-slate-300 mb-1.5 font-medium">
-                <span>Trunk Angle</span>
-                <span className="font-mono text-[#d4ff00] font-bold">85%</span>
-              </div>
-              <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
-                <div className="h-full bg-[#d4ff00] rounded-full" style={{ width: '85%' }} />
-              </div>
-            </div>
-
-            <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex justify-between text-slate-300 mb-1.5 font-medium">
-                <span>Racket Pronation</span>
-                <span className="font-mono text-[#d4ff00] font-bold">89%</span>
-              </div>
-              <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
-                <div className="h-full bg-[#d4ff00] rounded-full" style={{ width: '89%' }} />
-              </div>
-            </div>
-
-            <div className="p-3 rounded-2xl bg-white/[0.02] border border-white/[0.06]">
-              <div className="flex justify-between text-slate-300 mb-1.5 font-medium">
-                <span>Landing Reset</span>
-                <span className="font-mono text-[#d4ff00] font-bold">84%</span>
-              </div>
-              <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden">
-                <div className="h-full bg-[#d4ff00] rounded-full" style={{ width: '84%' }} />
-              </div>
-            </div>
-          </div>
-
-          {/* AI Biomechanical Prescription */}
-          <div className="pt-2 border-t border-white/[0.06] space-y-2">
-            <div className="text-xs font-bold text-white flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#d4ff00]" />
-              <span>คำแนะนำปรับฟอร์มเฉพาะจุด:</span>
-            </div>
-            <div className="space-y-1.5">
-              {analysisResult.coachingAdvice.map((advice: string, idx: number) => (
-                <div key={idx} className="p-2.5 rounded-xl bg-white/[0.02] text-[11px] text-slate-300 leading-relaxed border border-white/[0.05]">
-                  {advice}
-                </div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Action */}
-      <div className="px-4 pt-2 shrink-0">
+      {/* Bottom Sticky Action Button */}
+      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0">
         <button
-          onClick={() => navigateTo('D2')}
-          className="w-full min-h-[48px] py-3 rounded-2xl bg-[#d4ff00] hover:bg-[#bbf000] text-black font-black text-xs uppercase tracking-wider shadow-[0_4px_20px_rgba(212,255,0,0.3)] hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-2 cursor-pointer"
+          type="button"
+          disabled={isAnalyzing}
+          onClick={handleSimulateUpload}
+          className="w-full h-14 bg-[#111318] hover:bg-[#1f2430] active:scale-[0.98] rounded-full p-2 flex items-center justify-between shadow-lg transition-all cursor-pointer group"
         >
-          <Sparkles className="w-4 h-4 fill-black" />
-          <span>ฝึกซ้อม Drill แก้จุดอ่อนนี้ (+250 EXP)</span>
-          <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+          <div className="w-10 h-10 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
+            <UploadCloud className="w-5 h-5" />
+          </div>
+          <span className="text-white font-extrabold text-xs tracking-wider uppercase">
+            {isAnalyzing ? 'กำลังประมวลผลโมเดล AI...' : 'อัปโหลดคลิปใหม่เพื่อวิเคราะห์ (+200 EXP)'}
+          </span>
+          <div className="w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-4 h-4 stroke-[3]" />
+          </div>
         </button>
       </div>
     </div>

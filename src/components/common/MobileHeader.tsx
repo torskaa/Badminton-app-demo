@@ -56,31 +56,31 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
 
   return (
     <>
-      <header className="sticky top-0 z-30 px-4 py-3 bg-[#07080c]/85 backdrop-blur-xl border-b border-white/[0.06] flex items-center justify-between gap-3 shrink-0">
+      <header className="sticky top-0 z-30 px-4 py-3 bg-white/95 backdrop-blur-xl border-b border-neutral-200/80 flex items-center justify-between gap-3 shrink-0 shadow-xs">
         <div className="flex items-center gap-2.5 min-w-0">
           {showBack ? (
             <button
               onClick={handleBack}
-              className="w-8 h-8 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] text-slate-200 flex items-center justify-center shrink-0 cursor-pointer transition-colors border border-white/[0.06]"
+              className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 flex items-center justify-center shrink-0 cursor-pointer transition-colors border border-neutral-200"
               aria-label="Back"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
             </button>
           ) : (
             <div
               onClick={() => navigateTo('D1')}
-              className="cursor-pointer font-black text-sm tracking-tighter text-white flex items-center shrink-0"
+              className="cursor-pointer font-black text-sm tracking-tighter text-neutral-900 flex items-center shrink-0"
             >
-              SMASH<span className="text-[#d4ff00]">AI</span>
+              SMASH<span className="text-[#0066ff]">AI</span>
             </div>
           )}
 
           <div className="min-w-0">
-            <h1 className="text-xs font-bold text-white truncate leading-snug tracking-tight">
+            <h1 className="text-xs font-extrabold text-neutral-900 truncate leading-snug tracking-tight">
               {title || 'SmashAI'}
             </h1>
             {subtitle && (
-              <p className="text-[10px] text-slate-400 truncate leading-none mt-0.5">
+              <p className="text-[10px] text-neutral-500 truncate leading-none mt-0.5 font-medium">
                 {subtitle}
               </p>
             )}
@@ -88,29 +88,29 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
         </div>
 
         {/* Right status: Streak + Level + Directory */}
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-amber-400 text-[10px] font-bold cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-700 text-[10px] font-bold cursor-pointer shadow-2xs hover:bg-amber-100 transition-colors"
           >
-            <Flame className="w-3 h-3 fill-amber-400 text-amber-400" />
+            <Flame className="w-3 h-3 fill-amber-500 text-amber-500" />
             <span>{player.streakWeeks}W</span>
           </div>
 
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2 py-1 rounded-lg bg-white/[0.04] border border-white/[0.06] text-[#d4ff00] text-[10px] font-bold cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d8ff00]/30 border border-[#d8ff00] text-neutral-950 text-[10px] font-extrabold cursor-pointer shadow-2xs hover:bg-[#d8ff00]/50 transition-colors"
           >
-            <Zap className="w-3 h-3 fill-[#d4ff00]" />
+            <Zap className="w-3 h-3 fill-current" />
             <span>Lv.{player.level}</span>
           </div>
 
           <button
             onClick={() => setIsSwitcherOpen(true)}
-            className="w-7 h-7 rounded-lg bg-white/[0.04] hover:bg-white/[0.1] text-slate-300 hover:text-white flex items-center justify-center cursor-pointer border border-white/[0.06] transition-colors"
+            className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 flex items-center justify-center cursor-pointer border border-neutral-200 transition-colors"
             title="App Navigation Directory"
           >
-            <Compass className="w-3.5 h-3.5 text-[#d4ff00]" />
+            <Compass className="w-4 h-4 text-neutral-800" />
           </button>
         </div>
       </header>

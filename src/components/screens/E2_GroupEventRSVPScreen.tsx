@@ -15,195 +15,156 @@ export const E2_GroupEventRSVPScreen: React.FC = () => {
 
   const totalExpense = currentEvent.courtFeeTotal + currentEvent.shuttlecockFeeTotal;
   const confirmedCount = currentEvent.attendees.length;
-  const costPerPerson = confirmedCount > 0 ? (totalExpense / confirmedCount).toFixed(2) : '0';
+  const costPerPerson = confirmedCount > 0 ? (totalExpense / confirmedCount).toFixed(0) : '140';
 
   const [paymentMarked, setPaymentMarked] = useState(false);
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#080b12] pb-6">
-      <MobileHeader title="กิจกรรมนัดตี & ระบบหารค่าคอร์ท" showBack />
+    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
+      <MobileHeader title="นัดตี & ระบบหารค่าคอร์ท" showBack />
 
       <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
         {/* Event Header Banner */}
-        <div className="p-4 rounded-3xl bg-gradient-to-b from-[#131b2e] to-[#0d1320] border border-slate-800 space-y-2.5 shadow-md">
+        <div className="p-5 rounded-3xl bg-white border border-neutral-200/80 space-y-3 shadow-xs">
           <div className="flex items-center justify-between text-xs">
-            <span className="text-[10px] font-mono font-bold text-lime-400 uppercase">
-              RAMA 9 SMASHERS MATCH
+            <span className="text-[10px] font-bold text-[#0066ff] uppercase tracking-wider">
+              WEEKLY SQUAD MATCH
             </span>
-            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 font-bold">
-              เปิดรับ RSVP
+            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-extrabold">
+              RSVP Open
             </span>
           </div>
 
-          <h2 className="text-base font-black text-white">
+          <h2 className="text-base font-extrabold text-neutral-900">
             {currentEvent.title}
           </h2>
 
-          <div className="space-y-1 text-xs text-slate-300">
-            <div className="flex items-center gap-1.5">
-              <Calendar className="w-3.5 h-3.5 text-lime-400" />
+          <div className="space-y-1.5 text-xs text-neutral-600 font-medium">
+            <div className="flex items-center gap-2">
+              <Calendar className="w-3.5 h-3.5 text-[#0066ff]" />
               <span>{currentEvent.date} · {currentEvent.timeRange}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <MapPin className="w-3.5 h-3.5 text-red-400" />
+            <div className="flex items-center gap-2">
+              <MapPin className="w-3.5 h-3.5 text-red-500" />
               <span>{currentEvent.courtName}</span>
             </div>
           </div>
         </div>
 
         {/* Automatic Split-Bill Calculator Card */}
-        <div className="p-4 rounded-3xl bg-[#0f1422] border border-lime-400/40 space-y-3 shadow-lg">
+        <div className="p-5 rounded-3xl bg-white border-2 border-[#d8ff00] shadow-sm space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5">
-              <Calculator className="w-4 h-4 text-lime-400" />
-              <span className="text-xs font-black text-white">
+            <div className="flex items-center gap-2">
+              <Calculator className="w-4 h-4 text-neutral-800" />
+              <span className="text-xs font-extrabold text-neutral-900">
                 ระบบคำนวณยอดหารอัตโนมัติ (Auto-Split Engine)
               </span>
             </div>
-            <span className="text-[10px] text-lime-400 font-mono">คำนวณเรียลไทม์</span>
+            <span className="text-[10px] text-neutral-400 font-mono">Fair-Play Certified</span>
           </div>
 
-          {/* Breakdown */}
-          <div className="space-y-1.5 text-xs">
-            <div className="flex justify-between text-slate-400">
-              <span>ค่าคอร์ท (3 คอร์ท x 3 ชม.)</span>
-              <span className="font-mono text-slate-200">฿{currentEvent.courtFeeTotal.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-slate-400">
-              <span>ค่าลูกแบดมินตัน RSL Classic (2 หลอด)</span>
-              <span className="font-mono text-slate-200">฿{currentEvent.shuttlecockFeeTotal.toLocaleString()}</span>
-            </div>
-            <div className="flex justify-between text-slate-300 font-bold pt-1 border-t border-slate-800">
-              <span>ยอดรวมค่าใช้จ่ายทั้งหมด</span>
-              <span className="font-mono text-white">฿{totalExpense.toLocaleString()}</span>
-            </div>
-          </div>
-
-          {/* Result Per Person */}
-          <div className="p-3 rounded-2xl bg-gradient-to-r from-lime-950/60 to-slate-900 border border-lime-400/30 flex items-center justify-between">
+          <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/70 flex items-center justify-between">
             <div>
-              <div className="text-[10px] text-slate-400">
-                หาร {confirmedCount} คนที่คอนเฟิร์มแล้ว
+              <span className="text-[10px] text-neutral-500 font-bold block uppercase">ยอดหารต่อคน</span>
+              <div className="text-3xl font-black text-neutral-900 font-mono">
+                ฿{costPerPerson}
               </div>
-              <div className="text-xl font-black text-lime-400 font-mono">
-                ฿{costPerPerson} <span className="text-xs font-normal text-slate-300">/ คน</span>
-              </div>
+              <span className="text-[10px] text-neutral-400">
+                จากยอดรวม ฿{totalExpense} (หาร {confirmedCount} คน)
+              </span>
             </div>
 
             <button
+              type="button"
               onClick={() => setPaymentMarked(!paymentMarked)}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+              className={`px-3.5 py-2 rounded-full text-xs font-bold transition-all cursor-pointer shadow-xs ${
                 paymentMarked
-                  ? 'bg-emerald-500 text-slate-950 border-emerald-400'
-                  : 'bg-slate-800 text-slate-200 border-slate-700 hover:border-slate-600'
+                  ? 'bg-emerald-500 text-white'
+                  : 'bg-[#111318] text-[#d8ff00] hover:bg-[#1a1d24]'
               }`}
             >
-              {paymentMarked ? '✓ ชำระแล้ว' : 'แจ้งโอนเงินแล้ว'}
+              {paymentMarked ? '✓ โอนจ่ายแล้ว' : 'สแกนจ่ายพร้อมเพย์'}
             </button>
           </div>
         </div>
 
-        {/* Attendees List & Payment Status */}
-        <div className="space-y-2">
+        {/* Attendees List with Payment Status */}
+        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-white flex items-center gap-1.5">
-              <Users className="w-3.5 h-3.5 text-lime-400" />
-              <span>รายชื่อผู้เข้าร่วม ({confirmedCount}/{currentEvent.maxPlayers})</span>
-            </label>
-            <span className="text-[10px] text-slate-400">
-              ว่าง {currentEvent.maxPlayers - confirmedCount} ที่
+            <h4 className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider">
+              รายชื่อผู้เล่นที่ลงชื่อแล้ว ({confirmedCount}/{currentEvent.maxPlayers})
+            </h4>
+            <span className="text-[10px] text-[#0066ff] font-bold">
+              ว่างอีก {currentEvent.maxPlayers - confirmedCount} ที่
             </span>
           </div>
 
-          <div className="space-y-1.5">
-            {currentEvent.attendees.map((att, idx) => (
+          <div className="space-y-2">
+            {currentEvent.attendees.map((att) => (
               <div
                 key={att.id}
-                className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 flex items-center justify-between text-xs"
+                className="p-2.5 rounded-2xl bg-neutral-50 border border-neutral-200/60 flex items-center justify-between"
               >
                 <div className="flex items-center gap-2.5">
-                  <span className="font-mono text-[10px] text-slate-500 w-3">
-                    {idx + 1}
-                  </span>
-                  <div className="w-7 h-7 rounded-full bg-slate-800 text-lime-400 font-bold font-mono flex items-center justify-center text-[10px] border border-slate-700">
-                    {att.name[0]}
-                  </div>
+                  <img
+                    src={att.avatar}
+                    alt={att.name}
+                    className="w-8 h-8 rounded-full object-cover border border-white"
+                  />
                   <div>
-                    <div className="flex items-center gap-1">
-                      <span className="font-bold text-white">{att.name}</span>
-                      {att.isHost && (
-                        <span className="text-[9px] px-1 bg-amber-500/20 text-amber-400 rounded font-bold">
-                          HOST
-                        </span>
-                      )}
-                    </div>
-                    <span className="text-[10px] text-slate-400 font-mono">
-                      {att.tier} Tier (OVR {att.ovr})
+                    <span className="text-xs font-extrabold text-neutral-900 block">
+                      {att.name}
+                    </span>
+                    <span className="text-[10px] text-neutral-500 font-medium">
+                      OVR {att.ovr} · {att.tier} League
                     </span>
                   </div>
                 </div>
 
-                <div>
-                  {att.paid || (att.id === player.id && paymentMarked) ? (
-                    <span className="text-[10px] font-bold text-emerald-400 flex items-center gap-1">
-                      <CheckCircle2 className="w-3 h-3" /> ชำระแล้ว
-                    </span>
-                  ) : (
-                    <span className="text-[10px] font-bold text-amber-400">
-                      รอชำระ
-                    </span>
-                  )}
-                </div>
+                <span
+                  className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${
+                    att.paid
+                      ? 'bg-emerald-100 text-emerald-700'
+                      : 'bg-amber-100 text-amber-700'
+                  }`}
+                >
+                  {att.paid ? 'ชำระแล้ว' : 'รอชำระ'}
+                </span>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Waitlist info */}
-        {currentEvent.waitlist.length > 0 && (
-          <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800/80 text-[11px] text-slate-400 flex items-center justify-between">
-            <span>Waitlist ต่อคิว: {currentEvent.waitlist.join(', ')}</span>
-            <span className="text-slate-500 font-mono text-[10px]">สำรอง 2 คน</span>
-          </div>
-        )}
       </div>
 
-      {/* Action Footer: Join RSVP / Launch AI Matchmaker */}
-      <div className="px-4 space-y-2 pt-2 shrink-0">
-        <div className="grid grid-cols-2 gap-2">
-          <button
-            onClick={() => toggleEventRsvp(player.id)}
-            className={`min-h-[46px] rounded-xl font-black text-xs flex items-center justify-center gap-1.5 cursor-pointer transition-all ${
-              isUserAttending
-                ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40 hover:bg-rose-500/30'
-                : 'bg-gradient-to-r from-lime-400 to-lime-300 text-slate-950 shadow-md hover:brightness-110'
-            }`}
-          >
-            {isUserAttending ? (
-              <span>ยกเลิกเข้าร่วม (Cancel RSVP)</span>
-            ) : (
-              <>
-                <UserPlus className="w-4 h-4" />
-                <span>กดเข้าร่วม (Join Event)</span>
-              </>
-            )}
-          </button>
-
-          <button
-            onClick={() => navigateTo('E3')}
-            className="min-h-[46px] rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs flex items-center justify-center gap-1.5 border border-slate-700 cursor-pointer"
-          >
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
-            <span>AI จัดคู่ 2v2 สูสี</span>
-          </button>
-        </div>
+      {/* Bottom Sticky Action Buttons */}
+      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0 space-y-2">
+        <button
+          type="button"
+          onClick={() => toggleEventRsvp(player.id)}
+          className={`w-full h-14 rounded-full p-2 flex items-center justify-between shadow-lg transition-all cursor-pointer group ${
+            isUserAttending
+              ? 'bg-rose-500 hover:bg-rose-600 text-white'
+              : 'bg-[#111318] hover:bg-[#1f2430] text-white'
+          }`}
+        >
+          <div className="w-10 h-10 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
+            <Check className="w-5 h-5 stroke-[3]" />
+          </div>
+          <span className="font-extrabold text-xs tracking-wider uppercase">
+            {isUserAttending ? 'ยกเลิกการลงชื่อ (Cancel RSVP)' : 'กดลงชื่อเข้าร่วมก๊วน (RSVP Now)'}
+          </span>
+          <div className="w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
+            <ArrowRight className="w-4 h-4 stroke-[3]" />
+          </div>
+        </button>
 
         <button
-          onClick={() => navigateTo('E4')}
-          className="w-full min-h-[40px] py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-300 font-semibold text-xs flex items-center justify-center gap-1 cursor-pointer border border-slate-800"
+          type="button"
+          onClick={() => navigateTo('E3')}
+          className="w-full h-11 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
         >
-          <span>ดูตารางอันดับแรงก์ประจำเดือน (Group Leaderboard)</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          <Sparkles className="w-4 h-4 text-[#0066ff]" />
+          <span>ส่งรายชื่อให้ AI จัดคู่สายสมดุล (Smart Matchmaker)</span>
         </button>
       </div>
     </div>

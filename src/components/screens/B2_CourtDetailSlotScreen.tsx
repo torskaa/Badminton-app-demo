@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Star, MapPin, Zap, Clock, ShieldCheck, Check, ArrowRight, Info, Users, Sparkles } from 'lucide-react';
+import { Star, MapPin, Zap, Clock, ShieldCheck, Check, ArrowRight, Sparkles } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 import { CourtSlot } from '../../types';
@@ -49,62 +49,62 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#080b12] pb-6">
+    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
       <MobileHeader title={selectedCourt.name} showBack />
 
       <div className="flex-1 overflow-y-auto no-scrollbar space-y-4 pb-4">
-        {/* Gallery Hero */}
-        <div className="relative w-full h-48 bg-slate-900">
+        {/* Gallery Hero Card (Matches Image 3) */}
+        <div className="relative w-full h-52 bg-slate-900">
           <img
             src={selectedCourt.imageUrl}
             alt={selectedCourt.name}
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#080b12] via-transparent to-black/40" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
 
           {/* Badges on hero */}
-          <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-lime-400/40 text-[10px] font-bold text-lime-400 flex items-center gap-1">
-            <Zap className="w-3 h-3 fill-lime-400" />
-            <span>โบนัส EXP {selectedCourt.bonusExpMultiplier}x เมื่อจอง</span>
+          <div className="absolute top-3 left-3 px-3 py-1 rounded-full bg-black/60 backdrop-blur-md border border-white/20 text-[10px] font-bold text-[#d8ff00] flex items-center gap-1.5 shadow-md">
+            <Zap className="w-3.5 h-3.5 fill-current" />
+            <span>2x EXP Bonus Active</span>
           </div>
 
-          <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between">
+          <div className="absolute bottom-3 left-4 right-4 flex items-end justify-between text-white">
             <div>
-              <span className="text-[10px] text-lime-400 font-mono font-bold">
+              <span className="text-[10px] text-[#d8ff00] font-mono font-bold uppercase tracking-wider">
                 {selectedCourt.surfaceType}
               </span>
-              <h2 className="text-base font-extrabold text-white leading-tight">
+              <h2 className="text-lg font-extrabold leading-tight">
                 {selectedCourt.name}
               </h2>
             </div>
             <div className="text-right">
-              <div className="text-sm font-black text-lime-400 font-mono">
+              <div className="text-lg font-black text-[#d8ff00] font-mono">
                 ฿{selectedCourt.pricePerHour}
               </div>
-              <div className="text-[10px] text-slate-400">/ชั่วโมง/คอร์ท</div>
+              <div className="text-[10px] text-neutral-300">/ hour</div>
             </div>
           </div>
         </div>
 
-        {/* Info & Amenities */}
-        <div className="px-4 space-y-3">
-          <div className="p-3 rounded-2xl bg-slate-900/80 border border-slate-800 space-y-2">
+        {/* Info & Amenities Card */}
+        <div className="px-4 space-y-4">
+          <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-2.5">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-slate-300 flex items-center gap-1">
-                <MapPin className="w-3.5 h-3.5 text-red-400" />
+              <span className="text-neutral-600 flex items-center gap-1 font-medium">
+                <MapPin className="w-3.5 h-3.5 text-[#0066ff]" />
                 {selectedCourt.location}
               </span>
-              <span className="text-amber-400 font-bold flex items-center gap-1">
-                <Star className="w-3 h-3 fill-amber-400" /> {selectedCourt.rating}
+              <span className="text-amber-500 font-extrabold flex items-center gap-1">
+                <Star className="w-3.5 h-3.5 fill-current" /> {selectedCourt.rating.toFixed(1)}
               </span>
             </div>
 
-            <div className="pt-2 border-t border-slate-800 flex flex-wrap gap-1.5">
+            <div className="pt-2 border-t border-neutral-100 flex flex-wrap gap-1.5">
               {selectedCourt.amenities.map((item, idx) => (
                 <span
                   key={idx}
-                  className="px-2 py-0.5 rounded-lg bg-slate-800/80 text-[10px] text-slate-300 font-medium"
+                  className="px-2.5 py-1 rounded-full bg-neutral-100 text-[10px] text-neutral-700 font-semibold"
                 >
                   ✓ {item}
                 </span>
@@ -112,30 +112,35 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
             </div>
           </div>
 
-          {/* Date Selector */}
+          {/* Date Selector (Matches Image 3) */}
           <div>
-            <label className="text-xs font-bold text-white block mb-2">
+            <label className="text-xs font-bold text-neutral-800 block mb-2 px-1">
               เลือกวันที่เล่น (Select Date)
             </label>
             <div className="flex gap-2 overflow-x-auto no-scrollbar py-0.5">
               {[
-                { date: '2026-11-07', day: 'ศุกร์', num: '7 พ.ย.', tag: 'วันนี้' },
-                { date: '2026-11-08', day: 'เสาร์', num: '8 พ.ย.', tag: 'ก๊วนใหญ่' },
-                { date: '2026-11-09', day: 'อาทิตย์', num: '9 พ.ย.', tag: 'ว่างเยอะ' },
-                { date: '2026-11-10', day: 'จันทร์', num: '10 พ.ย.', tag: 'รอบค่ำ' },
+                { date: '2026-11-07', day: 'FRI', num: '7 Nov', tag: 'Today' },
+                { date: '2026-11-08', day: 'SAT', num: '8 Nov', tag: 'Weekend' },
+                { date: '2026-11-09', day: 'SUN', num: '9 Nov', tag: 'Prime' },
+                { date: '2026-11-10', day: 'MON', num: '10 Nov', tag: 'Evening' },
               ].map((d) => (
                 <button
+                  type="button"
                   key={d.date}
                   onClick={() => setSelectedDate(d.date)}
-                  className={`min-w-[76px] p-2 rounded-xl text-center border transition-all cursor-pointer ${
+                  className={`min-w-[80px] p-3 rounded-2xl text-center border transition-all cursor-pointer ${
                     selectedDate === d.date
-                      ? 'bg-lime-400 text-slate-950 font-bold border-lime-400 shadow-md'
-                      : 'bg-slate-900 border-slate-800 text-slate-300'
+                      ? 'bg-[#111318] text-white font-bold border-[#111318] shadow-sm'
+                      : 'bg-white border-neutral-200/80 text-neutral-700 hover:border-neutral-300'
                   }`}
                 >
-                  <div className="text-[10px] opacity-80">{d.day}</div>
-                  <div className="text-xs font-extrabold">{d.num}</div>
-                  <div className="text-[9px] mt-0.5 opacity-90">{d.tag}</div>
+                  <div className={`text-[10px] ${selectedDate === d.date ? 'text-neutral-400' : 'text-neutral-500'}`}>
+                    {d.day}
+                  </div>
+                  <div className="text-xs font-black mt-0.5">{d.num}</div>
+                  <div className={`text-[9px] mt-1 font-semibold ${selectedDate === d.date ? 'text-[#d8ff00]' : 'text-[#0066ff]'}`}>
+                    {d.tag}
+                  </div>
                 </button>
               ))}
             </div>
@@ -143,75 +148,78 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
 
           {/* Court Number Selector */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-bold text-white">
+            <div className="flex items-center justify-between mb-2 px-1">
+              <label className="text-xs font-bold text-neutral-800">
                 เลือกช่องคอร์ท (Court Number)
               </label>
-              <span className="text-[10px] text-lime-400 font-mono">
-                กำลังเลือก: คอร์ท {selectedCourtNum}
+              <span className="text-[11px] text-[#0066ff] font-bold">
+                Court {selectedCourtNum} Selected
               </span>
             </div>
             <div className="grid grid-cols-4 gap-2">
               {[1, 2, 3, 4, 5, 6, 7, 8].map((num) => (
                 <button
+                  type="button"
                   key={num}
                   onClick={() => setSelectedCourtNum(num)}
-                  className={`py-2 rounded-xl border text-xs font-bold transition-all cursor-pointer flex flex-col items-center ${
+                  className={`py-2.5 rounded-2xl border text-xs font-bold transition-all cursor-pointer flex flex-col items-center ${
                     selectedCourtNum === num
-                      ? 'bg-slate-900 border-lime-400 text-lime-400 ring-1 ring-lime-400/40 shadow-sm'
-                      : 'bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700'
+                      ? 'bg-[#0066ff] text-white border-[#0066ff] shadow-sm font-black'
+                      : 'bg-white border-neutral-200/80 text-neutral-700 hover:bg-neutral-50'
                   }`}
                 >
-                  <span>คอร์ท {num}</span>
-                  <span className="text-[9px] font-mono text-slate-500 font-normal">
-                    {num === 3 || num === 5 ? 'ไฟดีมาก' : 'ว่าง'}
+                  <span>Court {num}</span>
+                  <span className={`text-[9px] mt-0.5 ${selectedCourtNum === num ? 'text-white/80' : 'text-neutral-400'}`}>
+                    Taraflex
                   </span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Time Slot Selection */}
+          {/* Time Slots Grid (Matches Image 3) */}
           <div>
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-xs font-bold text-white flex items-center gap-1">
-                <Clock className="w-3.5 h-3.5 text-lime-400" />
-                <span>ช่วงเวลาที่ต้องการ (Time Slots)</span>
+            <div className="flex items-center justify-between mb-2 px-1">
+              <label className="text-xs font-bold text-neutral-800">
+                รอบเวลาที่เปิดจอง (Available Time Slots)
               </label>
-              <span className="text-[10px] text-slate-400">เลือกได้มากกว่า 1 ชม.</span>
+              <span className="text-[10px] text-neutral-500">
+                {activeSlotIds.length} slot(s) selected
+              </span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2.5">
               {AVAILABLE_SLOTS.map((slot) => {
                 const isSelected = activeSlotIds.includes(slot.id);
                 return (
                   <button
+                    type="button"
                     key={slot.id}
                     disabled={!slot.isAvailable}
                     onClick={() => toggleSlot(slot)}
-                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                    className={`p-3 rounded-2xl border text-left transition-all cursor-pointer relative ${
                       !slot.isAvailable
-                        ? 'opacity-40 bg-slate-950 border-slate-900 cursor-not-allowed'
+                        ? 'bg-neutral-100 border-neutral-200 text-neutral-400 cursor-not-allowed opacity-60'
                         : isSelected
-                        ? 'bg-lime-400/10 border-lime-400 text-white shadow-sm'
-                        : 'bg-slate-900 border-slate-800 text-slate-300 hover:border-slate-700'
+                        ? 'bg-white border-[#d8ff00] ring-2 ring-[#d8ff00]/60 shadow-sm text-neutral-900'
+                        : 'bg-white border-neutral-200/80 hover:border-neutral-300 text-neutral-800'
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="text-xs font-extrabold font-mono">
+                      <span className="text-xs font-black font-mono">
                         {slot.startTime} - {slot.endTime}
                       </span>
                       {isSelected ? (
-                        <div className="w-3.5 h-3.5 rounded-full bg-lime-400 text-slate-950 flex items-center justify-center">
-                          <Check className="w-2.5 h-2.5 stroke-[3]" />
+                        <div className="w-5 h-5 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
+                          <Check className="w-3 h-3 stroke-[3]" />
                         </div>
                       ) : !slot.isAvailable ? (
-                        <span className="text-[9px] text-red-400">เต็ม</span>
+                        <span className="text-[9px] text-neutral-400 font-bold">Full</span>
                       ) : null}
                     </div>
-                    <div className="flex items-center justify-between text-[10px] text-slate-400">
+                    <div className="flex items-center justify-between text-[11px] font-semibold text-neutral-500">
                       <span>฿{slot.price}</span>
-                      <span className="text-lime-400 font-mono">+100 EXP</span>
+                      <span className="text-[#10b981] font-bold">+100 EXP</span>
                     </div>
                   </button>
                 );
@@ -221,32 +229,33 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* Sticky Bottom Summary & Proceed */}
-      <div className="px-4 pt-3 border-t border-slate-800/80 bg-[#0a0d15] shrink-0">
+      {/* Sticky Bottom Summary & Proceed (Matches Image 3) */}
+      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0">
         <div className="flex items-center justify-between mb-2">
           <div>
-            <div className="text-[10px] text-slate-400">
-              คอร์ท {selectedCourtNum} · {selectedSlots.length} ชั่วโมง
+            <div className="text-[11px] text-neutral-500">
+              Court {selectedCourtNum} · {selectedSlots.length} hour(s)
             </div>
-            <div className="text-lg font-black text-white font-mono">
+            <div className="text-xl font-black text-neutral-900 font-mono">
               ฿{totalPrice}
             </div>
           </div>
           <div className="text-right">
-            <span className="text-[10px] font-bold text-lime-400 flex items-center gap-1">
-              <Zap className="w-3 h-3 fill-lime-400" />
-              รับทันที +{selectedSlots.length * 100} EXP
+            <span className="text-xs font-extrabold text-[#10b981] flex items-center gap-1">
+              <Zap className="w-3.5 h-3.5 fill-current" />
+              <span>+{selectedSlots.length * 100} EXP Instant</span>
             </span>
           </div>
         </div>
 
         <button
+          type="button"
           disabled={selectedSlots.length === 0}
           onClick={handleContinueToCheckout}
           className={`w-full min-h-[50px] py-3.5 px-5 rounded-full font-extrabold text-sm flex items-center justify-between cursor-pointer transition-all ${
             selectedSlots.length > 0
               ? 'bg-[#d8ff00] text-black shadow-[0_6px_25px_rgba(216,255,0,0.4)] hover:bg-[#cbf000] active:scale-98'
-              : 'bg-slate-800 text-slate-500 cursor-not-allowed'
+              : 'bg-neutral-200 text-neutral-400 cursor-not-allowed'
           }`}
         >
           <span className="flex items-center gap-2">
