@@ -27,123 +27,130 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
-      <MobileHeader title="Match Recap Card (Social Share)" showBack />
+    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+      <MobileHeader title="Athlete Recap Card" showBack />
 
       <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar flex flex-col items-center">
-        {/* Instruction label */}
+        {/* Banner Label */}
         <div className="text-center px-2">
-          <span className="text-[10px] font-bold tracking-widest text-[#0066ff] uppercase">
-            FIFA PLAYER CARD · INSTAGRAM STORY READY
+          <span className="px-3 py-1 rounded-full bg-[#ffd731] border border-black text-[10px] font-black uppercase text-black inline-block mb-1">
+            Story Share Ready
           </span>
-          <p className="text-xs text-neutral-500 mt-0.5">
-            การ์ดสรุปฟอร์มการเล่น พร้อมแชร์ลง IG Story, TikTok & Facebook
+          <h2 className="font-['Antonio'] text-3xl font-extrabold text-black uppercase tracking-tight leading-tight">
+            ATHLETE TRADING CARD
+          </h2>
+          <p className="text-xs text-neutral-600 font-medium">
+            Share your match performance directly to Instagram, TikTok, and Line.
           </p>
         </div>
 
-        {/* The Holographic FIFA Card */}
-        <div className="w-full max-w-[320px] rounded-[36px] p-[3px] bg-gradient-to-b from-[#d8ff00] via-cyan-400 to-[#0066ff] shadow-xl hover:scale-102 transition-transform">
-          <div className="w-full bg-[#111318] rounded-[33px] p-5 text-white relative overflow-hidden">
-            {/* Card Ambient Glows */}
-            <div className="absolute -top-10 -right-10 w-36 h-36 bg-[#d8ff00]/20 rounded-full blur-2xl pointer-events-none" />
-            <div className="absolute -bottom-10 -left-10 w-36 h-36 bg-cyan-400/20 rounded-full blur-2xl pointer-events-none" />
-
-            {/* Top row: OVR, Position, Tier */}
-            <div className="flex items-start justify-between">
-              <div>
-                <div className="text-4xl font-black font-mono tracking-tight text-[#d8ff00] leading-none">
-                  85
-                </div>
-                <div className="text-[11px] font-extrabold text-[#d8ff00] tracking-wider mt-1">
-                  OVR · SMASH
-                </div>
-                <div className="text-[9px] font-mono text-neutral-400">
-                  DIAMOND LEAGUE
-                </div>
+        {/* Slush Holographic Athlete Card (Sunburst & Voltage Violet) */}
+        <div className="w-full max-w-[320px] rounded-[36px] bg-[#ffd731] border-2 border-black p-5 relative overflow-hidden shadow-md">
+          {/* Top row: OVR, Position, Tier */}
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="font-['Antonio'] text-6xl font-black text-black leading-none">
+                88
               </div>
-
-              {/* Player Image */}
-              <div className="relative">
-                <img
-                  src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=160&auto=format&fit=crop&q=80"
-                  alt="Player Card"
-                  className="w-20 h-20 rounded-2xl object-cover border-2 border-white/20 shadow-md"
-                />
-                <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-md bg-[#d8ff00] text-black text-[9px] font-black">
-                  MVP
-                </span>
+              <div className="text-[11px] font-extrabold uppercase text-black tracking-wider">
+                OVR · SMASH HUNTER
+              </div>
+              <div className="text-[10px] font-bold text-neutral-700">
+                {player.tier} Tier · Lv.{player.level}
               </div>
             </div>
 
-            {/* Player Name & Playstyle */}
-            <div className="text-center mt-3 pt-2 border-t border-white/10">
-              <h3 className="text-lg font-black tracking-tight text-white uppercase">
-                {player.name}
-              </h3>
-              <p className="text-[10px] text-[#d8ff00] font-bold">
-                {player.playstyle}
-              </p>
+            {/* Shuttlecock Avatar Sticker */}
+            <div className="w-16 h-16 rounded-3xl bg-white border border-black flex items-center justify-center text-3xl rotate-6 shadow-xs">
+              🏸
             </div>
+          </div>
 
-            {/* Match Key Stats Grid */}
-            <div className="grid grid-cols-3 gap-2 mt-4 pt-3 border-t border-white/10 text-center">
-              <div>
-                <div className="text-[10px] text-neutral-400">SMASH MAX</div>
-                <div className="text-sm font-black font-mono text-[#d8ff00]">362 KM/H</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-neutral-400">WIN RATE</div>
-                <div className="text-sm font-black font-mono text-white">68.5%</div>
-              </div>
-              <div>
-                <div className="text-[10px] text-neutral-400">EXP GAIN</div>
-                <div className="text-sm font-black font-mono text-emerald-400">+250</div>
-              </div>
-            </div>
+          {/* Athlete Name */}
+          <div className="mt-4 pb-3 border-b border-black">
+            <h3 className="font-['Antonio'] text-3xl font-black uppercase tracking-tight text-black leading-none">
+              {player.name}
+            </h3>
+            <p className="text-[11px] text-neutral-800 font-bold mt-0.5">
+              Bangkok Smashers Guild · Astrox 99 Pro
+            </p>
+          </div>
 
-            {/* Bottom Card Footer */}
-            <div className="mt-4 pt-2.5 border-t border-white/10 flex items-center justify-between text-[10px] text-neutral-400">
-              <span className="font-mono">SMASHAI ENGINE</span>
-              <span className="text-[#d8ff00] font-bold">VERIFIED CARD</span>
+          {/* 5-Axis Stats Grid */}
+          <div className="grid grid-cols-3 gap-2 my-3 text-center">
+            <div className="p-2 rounded-2xl bg-white border border-black">
+              <span className="text-[10px] font-bold text-neutral-500 uppercase block">PWR</span>
+              <span className="font-['Antonio'] text-2xl font-bold text-black">{player.skillRadar.power}</span>
             </div>
+            <div className="p-2 rounded-2xl bg-white border border-black">
+              <span className="text-[10px] font-bold text-neutral-500 uppercase block">SPD</span>
+              <span className="font-['Antonio'] text-2xl font-bold text-black">{player.skillRadar.speed}</span>
+            </div>
+            <div className="p-2 rounded-2xl bg-white border border-black">
+              <span className="text-[10px] font-bold text-neutral-500 uppercase block">CTL</span>
+              <span className="font-['Antonio'] text-2xl font-bold text-black">{player.skillRadar.control}</span>
+            </div>
+            <div className="p-2 rounded-2xl bg-white border border-black">
+              <span className="text-[10px] font-bold text-neutral-500 uppercase block">STA</span>
+              <span className="font-['Antonio'] text-2xl font-bold text-black">{player.skillRadar.stamina}</span>
+            </div>
+            <div className="p-2 rounded-2xl bg-white border border-black">
+              <span className="text-[10px] font-bold text-neutral-500 uppercase block">TAC</span>
+              <span className="font-['Antonio'] text-2xl font-bold text-black">{player.skillRadar.tactics}</span>
+            </div>
+            <div className="p-2 rounded-2xl bg-[#55db9c] border border-black">
+              <span className="text-[10px] font-bold text-black uppercase block">STREAK</span>
+              <span className="font-['Antonio'] text-2xl font-bold text-black">{player.streakWeeks}W</span>
+            </div>
+          </div>
+
+          {/* Bottom Card Footer */}
+          <div className="flex items-center justify-between text-[10px] font-bold text-black pt-1">
+            <span>SMASH.AI CERTIFIED</span>
+            <span className="px-2 py-0.5 rounded-full bg-black text-white font-mono">
+              VERIFIED #8921
+            </span>
           </div>
         </div>
 
-        {/* Share Action Buttons */}
-        <div className="w-full max-w-[320px] space-y-2 pt-2">
+        {/* Share & Download Pill Buttons */}
+        <div className="w-full max-w-[320px] space-y-2">
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={handleShareStory}
+              className="py-3 px-4 rounded-full bg-black hover:bg-neutral-800 text-white font-bold text-xs border border-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer shadow-xs"
+            >
+              <Share2 className="w-4 h-4" />
+              <span>{copiedLink ? 'Story Copied!' : 'Share to IG'}</span>
+            </button>
+
+            <button
+              onClick={handleDownloadCard}
+              className="py-3 px-4 rounded-full bg-white hover:bg-neutral-100 text-black font-bold text-xs border border-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer shadow-xs"
+            >
+              <Download className="w-4 h-4" />
+              <span>{isDownloading ? 'Saving...' : 'Save Image'}</span>
+            </button>
+          </div>
+
+          {/* Flow Next Buttons */}
           <button
-            type="button"
-            onClick={handleShareStory}
-            className="w-full h-12 rounded-full bg-[#111318] hover:bg-[#1f2430] text-white text-xs font-extrabold flex items-center justify-center gap-2 shadow-sm cursor-pointer transition-all active:scale-98"
+            onClick={() => navigateTo('D1')}
+            className="w-full py-3.5 rounded-full bg-[#55db9c] hover:bg-[#68eab0] text-black font-bold text-xs border border-black flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer shadow-xs"
           >
-            <Share2 className="w-4 h-4 text-[#d8ff00]" />
-            <span>{copiedLink ? 'คัดลอกลิงก์การ์ดเรียบร้อย!' : 'แชร์ลง Instagram Story / TikTok'}</span>
+            <Trophy className="w-4 h-4" />
+            <span>Return to AI Coach Hub</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
 
           <button
-            type="button"
-            onClick={handleDownloadCard}
-            className="w-full h-11 rounded-full bg-white hover:bg-neutral-100 text-neutral-800 text-xs font-bold flex items-center justify-center gap-1.5 border border-neutral-200 cursor-pointer transition-colors"
+            onClick={() => navigateTo('E3')}
+            className="w-full py-2.5 rounded-full bg-white hover:bg-neutral-100 text-black font-bold text-xs border border-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
           >
-            <Download className="w-4 h-4" />
-            <span>{isDownloading ? 'กำลังบันทึกภาพ...' : 'บันทึกลงอัลบั้มรูปภาพ'}</span>
+            <span>Challenge Another Player (Matchmaker)</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>
-      </div>
-
-      {/* Bottom Home CTA */}
-      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0">
-        <button
-          type="button"
-          onClick={() => {
-            startNewMatch();
-            navigateTo('D1');
-          }}
-          className="w-full h-13 rounded-full bg-[#0066ff] hover:bg-[#0055d4] text-white font-extrabold text-xs flex items-center justify-center gap-2 shadow-sm cursor-pointer transition-all"
-        >
-          <span>กลับสู่หน้าหลัก AI Coach Dashboard</span>
-          <ArrowRight className="w-4 h-4 stroke-[3]" />
-        </button>
       </div>
     </div>
   );

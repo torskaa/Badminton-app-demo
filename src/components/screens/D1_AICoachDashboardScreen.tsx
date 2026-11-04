@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Zap, TrendingUp, Sparkles, Video, Award, ChevronRight, Dumbbell, Activity, Shield, ArrowUpRight, Flame } from 'lucide-react';
+import { Zap, TrendingUp, Sparkles, Video, Award, ChevronRight, Dumbbell, Activity, Shield, ArrowRight, Flame, Trophy } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
@@ -53,79 +53,74 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
   }).join(' ');
 
   return (
-    <div className="flex-1 flex flex-col bg-[#f0f4f9] text-neutral-900 select-none pb-24 overflow-y-auto no-scrollbar">
+    <div className="flex-1 flex flex-col bg-[#dceeff] text-black select-none pb-24 overflow-y-auto no-scrollbar font-['Plus_Jakarta_Sans',sans-serif]">
       <MobileHeader title="AI Coach & Skill Radar" />
 
       <div className="p-4 space-y-4">
-        {/* Athlete Banner Profile (Matches Image 2 & 3 Hero Banner) */}
-        <div className="rounded-3xl p-5 bg-[#111318] text-white shadow-md relative overflow-hidden flex items-center justify-between">
-          <div className="z-10">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#d8ff00] text-black text-[10px] font-black uppercase tracking-wider inline-block mb-1.5">
-              Lv.{player.level} {player.tier} League
-            </span>
-            <h2 className="text-xl font-black tracking-tight">
-              {player.name}
-            </h2>
-            <p className="text-xs text-neutral-400 font-medium mt-0.5">
-              {player.playstyle}
-            </p>
-            <div className="flex items-center gap-3 mt-3">
-              <span className="text-xs font-bold text-[#d8ff00] flex items-center gap-1">
-                <Flame className="w-3.5 h-3.5 fill-current" />
-                {player.streakWeeks}-Week Streak
-              </span>
-              <span className="text-neutral-500">·</span>
-              <span className="text-xs font-mono text-neutral-300">
-                {player.stats.totalMatches} Matches
-              </span>
+        {/* Athlete Banner Profile (Slush Style) */}
+        <div className="bg-white border border-black rounded-[32px] p-4 flex items-center justify-between shadow-xs">
+          <div className="flex items-center gap-3">
+            <div className="w-14 h-14 rounded-full bg-[#ffd731] border border-black flex items-center justify-center font-['Antonio'] text-2xl font-black rotate-[-4deg]">
+              JR
+            </div>
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.5 rounded-full bg-black text-white text-[10px] font-extrabold uppercase">
+                  {player.tier} Tier
+                </span>
+                <span className="text-[11px] font-bold text-[#fb4903]">
+                  🔥 {player.streakWeeks}-Week Streak
+                </span>
+              </div>
+              <h2 className="font-['Antonio'] text-2xl font-black text-black uppercase leading-tight">
+                {player.name}
+              </h2>
+              <p className="text-[11px] text-neutral-600 font-medium">
+                {player.playstyle}
+              </p>
             </div>
           </div>
 
-          <div className="relative shrink-0">
-            <img
-              src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=160&auto=format&fit=crop&q=80"
-              alt="Player Avatar"
-              className="w-16 h-16 rounded-full object-cover border-2 border-[#d8ff00] shadow-md"
-            />
+          <div className="text-right">
+            <span className="text-[10px] font-bold text-neutral-500 uppercase">Athlete Lv.</span>
+            <div className="font-['Antonio'] text-3xl font-extrabold text-black leading-none">
+              {player.level}
+            </div>
           </div>
         </div>
 
         {/* 5-Axis Skill Radar Card */}
-        <div className="p-5 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <span className="text-[10px] font-bold text-[#0066ff] uppercase tracking-wider block">
-                Skill Evolution Radar
-              </span>
-              <h3 className="text-sm font-extrabold text-neutral-900 mt-0.5">
-                เรดาร์ค่าพลัง 5 มิติ (FIFA Style)
-              </h3>
-            </div>
+        <div className="bg-white border border-black rounded-[32px] p-4 text-center shadow-xs">
+          <div className="flex items-center justify-between mb-2">
+            <h3 className="font-['Antonio'] text-xl font-bold uppercase tracking-tight text-black">
+              5-Axis Skill Radar
+            </h3>
             <button
-              type="button"
-              onClick={() => setShowPastComparison(!showPastComparison)}
-              className="px-3 py-1 rounded-full bg-neutral-100 hover:bg-neutral-200 text-[11px] font-bold text-neutral-700 cursor-pointer transition-colors"
+              onClick={() => setShowPastComparison((prev) => !prev)}
+              className="px-2.5 py-1 rounded-full bg-[#dceeff] border border-black text-[10px] font-bold cursor-pointer transition-transform active:scale-95"
             >
-              {showPastComparison ? 'ซ่อนกราฟอดีต' : 'เปรียบเทียบก่อนหน้า'}
+              {showPastComparison ? 'Compare: 30D' : 'Current Only'}
             </button>
           </div>
 
           {/* SVG Radar */}
-          <div className="flex justify-center items-center py-2">
-            <svg width="260" height="260" className="overflow-visible">
-              {/* Concentric Grid Circles */}
-              {[0.25, 0.5, 0.75, 1].map((lvl) => {
-                const r = maxR * lvl;
+          <div className="relative w-64 h-64 mx-auto my-2">
+            <svg viewBox="0 0 260 260" className="w-full h-full">
+              {/* Concentric Polygons */}
+              {[0.25, 0.5, 0.75, 1.0].map((level, idx) => {
+                const pts = [0, 1, 2, 3, 4].map((i) => {
+                  const pt = getPoint(level * 100, i);
+                  return `${pt.x},${pt.y}`;
+                }).join(' ');
                 return (
-                  <circle
-                    key={lvl}
-                    cx={cx}
-                    cy={cy}
-                    r={r}
+                  <polygon
+                    key={idx}
+                    points={pts}
                     fill="none"
-                    stroke="#e5e7eb"
+                    stroke="#000000"
                     strokeWidth="1"
-                    strokeDasharray={lvl === 1 ? 'none' : '3,3'}
+                    strokeDasharray={idx < 3 ? '2 2' : 'none'}
+                    opacity="0.3"
                   />
                 );
               })}
@@ -140,43 +135,44 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
                     y1={cy}
                     x2={pt.x}
                     y2={pt.y}
-                    stroke="#e5e7eb"
+                    stroke="#000000"
                     strokeWidth="1"
+                    opacity="0.25"
                   />
                 );
               })}
 
-              {/* Past Polygon (Gray) */}
+              {/* Past Polygon (Lavender) */}
               {showPastComparison && (
                 <polygon
                   points={pastPolygon}
-                  fill="#94a3b8"
-                  fillOpacity="0.2"
-                  stroke="#94a3b8"
+                  fill="#e9ccff"
+                  fillOpacity="0.4"
+                  stroke="#5c4ade"
                   strokeWidth="1.5"
-                  strokeDasharray="4,4"
+                  strokeDasharray="3 3"
                 />
               )}
 
-              {/* Current Polygon (Electric Neon Lime with border) */}
+              {/* Current Polygon (Mint Pop) */}
               <polygon
                 points={currentPolygon}
-                fill="#d8ff00"
-                fillOpacity="0.45"
-                stroke="#10b981"
-                strokeWidth="2.5"
+                fill="#55db9c"
+                fillOpacity="0.6"
+                stroke="#000000"
+                strokeWidth="2"
               />
 
               {/* Axis Labels */}
               {currentStats.map((s, i) => {
-                const pt = getPoint(118, i);
+                const pt = getPoint(114, i);
                 return (
                   <text
-                    key={s.label}
+                    key={i}
                     x={pt.x}
                     y={pt.y + 4}
                     textAnchor="middle"
-                    className="text-[10px] font-black fill-neutral-700 font-mono tracking-tight"
+                    className="font-bold text-[10px] fill-black"
                   >
                     {s.label} ({s.val})
                   </text>
@@ -185,61 +181,65 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
             </svg>
           </div>
 
-          {/* Stats Bar List */}
-          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-neutral-100">
-            {currentStats.map((s) => (
-              <div key={s.label} className="p-2.5 rounded-2xl bg-neutral-50 flex items-center justify-between text-xs">
-                <span className="text-neutral-500 font-medium">{s.label}:</span>
-                <span className="font-extrabold text-neutral-900 font-mono">{s.val} / 100</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* AI Action Hub / Fast Nav Cards */}
-        <div className="grid grid-cols-2 gap-3">
-          <div
-            onClick={() => navigateTo('D2')}
-            className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs cursor-pointer hover:border-[#0066ff] hover:shadow-sm transition-all group"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-[#0066ff]/10 text-[#0066ff] flex items-center justify-center font-bold mb-2">
-              <Dumbbell className="w-5 h-5" />
-            </div>
-            <div className="text-xs font-black text-neutral-900 group-hover:text-[#0066ff] transition-colors">
-              เควสต์ & แบบฝึก AI
-            </div>
-            <div className="text-[10px] text-neutral-500 mt-0.5">
-              3 Daily Quests รออยู่ (+300 EXP)
-            </div>
-          </div>
-
-          <div
-            onClick={() => navigateTo('D3')}
-            className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs cursor-pointer hover:border-[#d8ff00] hover:shadow-sm transition-all group"
-          >
-            <div className="w-10 h-10 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold mb-2">
-              <Video className="w-5 h-5" />
-            </div>
-            <div className="text-xs font-black text-neutral-900 group-hover:text-emerald-700 transition-colors">
-              วิเคราะห์วิดีโอตบ
-            </div>
-            <div className="text-[10px] text-neutral-500 mt-0.5">
-              AI Skeleton Posture Tracking
-            </div>
-          </div>
-        </div>
-
-        {/* AI Coach Weakness Summary */}
-        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider">
-              คำแนะนำประจำสัปดาห์ (AI Recommendation)
+          <div className="flex items-center justify-center gap-4 text-xs font-bold pt-1">
+            <span className="flex items-center gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-[#55db9c] border border-black inline-block" />
+              <span>Current (Overall 84)</span>
             </span>
-            <span className="text-[10px] text-neutral-400">อัปเดตเมื่อ 1 ชั่วโมงที่แล้ว</span>
+            {showPastComparison && (
+              <span className="flex items-center gap-1.5 text-neutral-600">
+                <span className="w-3 h-3 rounded-full bg-[#e9ccff] border border-black inline-block" />
+                <span>Last Month (76)</span>
+              </span>
+            )}
           </div>
-          <p className="text-xs text-neutral-600 leading-relaxed font-medium">
-            พลังตบของคุณอยู่ในระดับท็อป 10% (362 km/h) แต่ความอึดในเซตที่ 3 ตกลงเหลือ 65% แนะนำซ้อม Multi-Shuttle Drills สัปดาห์ละ 2 ครั้งเพื่อเพิ่มความคงเส้นคงวา
+        </div>
+
+        {/* AI Sensei Coach Advice Bubble (Slush Sticker Card) */}
+        <div className="bg-[#ffd731] border border-black rounded-[28px] p-4 space-y-2 shadow-xs">
+          <div className="flex items-center gap-2">
+            <span className="w-7 h-7 rounded-full bg-white border border-black flex items-center justify-center font-bold text-xs">
+              🤖
+            </span>
+            <span className="font-['Antonio'] text-lg font-bold text-black uppercase tracking-tight">
+              AI Coach Weekly Diagnostic
+            </span>
+          </div>
+          <p className="text-xs text-neutral-800 leading-relaxed font-bold">
+            "สปีดลูกตบจัมป์สแมชเพิ่มขึ้น +14 km/h! จุดที่ต้องโฟกัสในสัปดาห์นี้คือการดักลูกหยอดหน้าเน็ตฝั่งซ้าย เพื่อเพิ่มค่า Control ให้แตะ 80"
           </p>
+        </div>
+
+        {/* Navigation Action Buttons (Complete Flow) */}
+        <div className="space-y-2 pt-1">
+          <button
+            onClick={() => navigateTo('D2')}
+            className="w-full py-4 rounded-full bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider border border-black flex items-center justify-between px-5 transition-transform active:scale-98 cursor-pointer shadow-sm"
+          >
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-[#ffd731] fill-current" />
+              <span>Daily Quests & Skill Drills (+120 EXP)</span>
+            </div>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => navigateTo('D3')}
+              className="py-3 rounded-full bg-white hover:bg-neutral-100 border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            >
+              <Video className="w-3.5 h-3.5 text-[#5c4ade]" />
+              <span>Vision Pose Scan</span>
+            </button>
+
+            <button
+              onClick={() => navigateTo('C1')}
+              className="py-3 rounded-full bg-[#55db9c] hover:bg-[#68eab0] border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            >
+              <Activity className="w-3.5 h-3.5" />
+              <span>Start Live Match</span>
+            </button>
+          </div>
         </div>
       </div>
     </div>

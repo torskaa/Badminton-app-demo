@@ -21,17 +21,18 @@ export const BottomTabBar: React.FC = () => {
     label: string;
     icon: React.ElementType;
     isPrimary?: boolean;
+    color: string;
   }[] = [
-    { id: 'home', label: 'Coach', icon: LayoutGrid },
-    { id: 'booking', label: 'Courts', icon: Calendar },
-    { id: 'logger', label: 'Score', icon: Play, isPrimary: true },
-    { id: 'community', label: 'Squad', icon: Users },
-    { id: 'profile', label: 'Profile', icon: User },
+    { id: 'home', label: 'Coach', icon: LayoutGrid, color: '#4da2ff' },
+    { id: 'booking', label: 'Courts', icon: Calendar, color: '#55db9c' },
+    { id: 'logger', label: 'Live Score', icon: Play, isPrimary: true, color: '#ffd731' },
+    { id: 'community', label: 'Guilds', icon: Users, color: '#e9ccff' },
+    { id: 'profile', label: 'Profile', icon: User, color: '#fb4903' },
   ];
 
   return (
     <div className="absolute bottom-4 left-4 right-4 z-40 select-none">
-      <nav className="w-full bg-[#0a0d14]/90 backdrop-blur-2xl border border-white/10 rounded-full px-2 py-2 flex items-center justify-between shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+      <nav className="w-full bg-white border border-black rounded-full px-2 py-1.5 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.1)]">
         {tabs.map((tab) => {
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
@@ -40,22 +41,16 @@ export const BottomTabBar: React.FC = () => {
             return (
               <motion.button
                 key={tab.id}
-                whileTap={{ scale: 0.92 }}
-                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.9 }}
+                whileHover={{ scale: 1.06 }}
                 onClick={() => {
                   setActiveTab(tab.id);
                   navigateTo('C1');
                 }}
-                className="group cursor-pointer relative"
+                className="group cursor-pointer relative -my-1"
                 title="Courtside Score Tracker"
               >
-                <div
-                  className={`w-11 h-11 rounded-full flex items-center justify-center transition-all duration-300 ${
-                    isActive
-                      ? 'bg-[#d4ff00] text-black shadow-[0_0_24px_rgba(212,255,0,0.6)] font-bold'
-                      : 'bg-white/10 text-white hover:bg-white/20'
-                  }`}
-                >
+                <div className="w-12 h-12 rounded-full bg-black text-white border border-black flex items-center justify-center transition-all duration-200 hover:bg-[#4da2ff] hover:text-black shadow-md">
                   <Icon className="w-5 h-5 fill-current stroke-[2.4]" />
                 </div>
               </motion.button>
@@ -69,19 +64,20 @@ export const BottomTabBar: React.FC = () => {
               onClick={() => {
                 setActiveTab(tab.id);
               }}
-              className="relative flex items-center justify-center min-w-[44px] h-11 px-3 rounded-full cursor-pointer"
+              className="relative flex items-center justify-center min-w-[44px] h-11 px-3 rounded-full cursor-pointer transition-colors"
             >
               {isActive && (
                 <motion.div
                   layoutId="activeTabPill"
-                  className="absolute inset-0 rounded-full bg-white/15"
+                  className="absolute inset-0 rounded-full border border-black"
+                  style={{ backgroundColor: tab.color }}
                   transition={{ type: 'spring', stiffness: 450, damping: 32 }}
                 />
               )}
               <div className="relative z-10 flex flex-col items-center">
                 <Icon
                   className={`w-5 h-5 transition-transform duration-200 ${
-                    isActive ? 'scale-110 stroke-[2.4] text-[#d4ff00]' : 'stroke-[1.8] text-slate-400 hover:text-white'
+                    isActive ? 'scale-110 stroke-[2.5] text-black' : 'stroke-[2] text-neutral-500 hover:text-black'
                   }`}
                 />
               </div>

@@ -29,6 +29,13 @@ import {
   CURRENT_GUILD_EVENT,
   LEADERBOARD_DATA,
 } from '../data/mockData';
+import {
+  playSelectSound,
+  playCoinSound,
+  playSmashSound,
+  playLevelUpSound,
+  toggleAudioMute,
+} from '../utils/retroAudio';
 
 interface ExpGainPayload {
   amount: number;
@@ -48,6 +55,12 @@ interface AppContextType {
   toggleDeviceFrame: () => void;
   viewMode: AppViewMode;
   setViewMode: (mode: AppViewMode) => void;
+
+  // Retro Arcade Settings
+  isSoundEnabled: boolean;
+  toggleSound: () => void;
+  isCrtEnabled: boolean;
+  toggleCrt: () => void;
 
   // Player & Gamification
   player: PlayerProfile;
@@ -107,6 +120,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [activeTab, setActiveTabState] = useState<MainTab>('home');
   const [isDeviceFrameEnabled, setIsDeviceFrameEnabled] = useState<boolean>(true);
   const [viewMode, setViewModeState] = useState<AppViewMode>('showcase');
+  const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
+  const [isCrtEnabled, setIsCrtEnabled] = useState<boolean>(false);
+
+  const toggleSound = () => {
+    const muted = toggleAudioMute();
+    setIsSoundEnabled(!muted);
+  };
+
+  const toggleCrt = () => {
+    setIsCrtEnabled((prev) => !prev);
+  };
 
   const setViewMode = (mode: AppViewMode) => {
     setViewModeState(mode);
@@ -227,6 +251,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Helpers
   const navigateTo = (screen: ScreenId, direction?: 'forward' | 'backward') => {
+    playSelectSound();
     const dir = direction || (SCREEN_ORDER[screen] < SCREEN_ORDER[currentScreen] ? 'backward' : 'forward');
     setNavDirection(dir);
     setCurrentScreen(screen);
@@ -289,6 +314,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         newExp = newExp - nextLevelExp;
         newLevel += 1;
         nextLevelExp = Math.round(nextLevelExp * 1.25);
+        playLevelUpSound();
+      } else {
+        playCoinSound();
       }
 
       setExpCelebration({
@@ -308,6 +336,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const dismissExpCelebration = () => {
+    playSelectSound();
     setExpCelebration(null);
   };
 
@@ -329,6 +358,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const addScorePoint = (team: 'A' | 'B', shotType: any = 'Smash', errorReason?: any) => {
+    playSmashSound();
     setMatch((prev) => {
       const nextScoreA = team === 'A' ? prev.scoreA + 1 : prev.scoreA;
       const nextScoreB = team === 'B' ? prev.scoreB + 1 : prev.scoreB;
@@ -540,6 +570,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         convertCaloriesToExp,
         analyzedVideoResult,
         setAnalyzedVideoResult,
+        isSoundEnabled,
+        toggleSound,
+        isCrtEnabled,
+        toggleCrt,
       }}
     >
       {children}

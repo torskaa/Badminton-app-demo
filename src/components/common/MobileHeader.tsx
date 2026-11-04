@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { ChevronLeft, Flame, Zap, Compass } from 'lucide-react';
+import { ArrowLeft, Flame, Zap, Compass, Volume2, VolumeX } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ScreenSwitcherModal } from './ScreenSwitcherModal';
 
@@ -16,7 +16,7 @@ interface MobileHeaderProps {
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onBack, subtitle }) => {
-  const { player, currentScreen, navigateTo } = useApp();
+  const { player, currentScreen, navigateTo, isSoundEnabled, toggleSound } = useApp();
   const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
 
   const handleBack = () => {
@@ -38,17 +38,27 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
     return (
       <header className="px-5 pt-4 pb-2 flex items-center justify-between bg-transparent z-20">
         <div className="flex items-center gap-2">
-          <span className="font-black text-lg tracking-tighter text-white">
-            SMASH<span className="text-[#d4ff00]">AI</span>
+          <span className="font-['Antonio'] text-2xl font-black tracking-tight text-black uppercase">
+            SMASH<span className="text-[#4da2ff]">.AI</span>
           </span>
         </div>
-        <button
-          onClick={() => setIsSwitcherOpen(true)}
-          className="w-8 h-8 rounded-full bg-white/[0.08] hover:bg-white/[0.12] text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer border border-white/[0.06]"
-          title="App Directory"
-        >
-          <Compass className="w-4 h-4 text-[#d4ff00]" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={toggleSound}
+            className="w-8 h-8 rounded-full bg-white border border-black text-black flex items-center justify-center transition-transform active:scale-90 cursor-pointer"
+            title="Audio Sound FX"
+          >
+            {isSoundEnabled ? <Volume2 className="w-3.5 h-3.5 text-[#fb4903]" /> : <VolumeX className="w-3.5 h-3.5 text-neutral-400" />}
+          </button>
+          <button
+            onClick={() => setIsSwitcherOpen(true)}
+            className="px-3 py-1 rounded-full bg-[#ffd731] hover:bg-[#ffe169] text-black font-bold text-xs border border-black flex items-center gap-1 transition-transform active:scale-95 cursor-pointer"
+            title="All 18 Screens Directory"
+          >
+            <Compass className="w-3.5 h-3.5" />
+            <span>Screens</span>
+          </button>
+        </div>
         <ScreenSwitcherModal isOpen={isSwitcherOpen} onClose={() => setIsSwitcherOpen(false)} />
       </header>
     );
@@ -56,31 +66,32 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
 
   return (
     <>
-      <header className="sticky top-0 z-30 px-4 py-3 bg-white/95 backdrop-blur-xl border-b border-neutral-200/80 flex items-center justify-between gap-3 shrink-0 shadow-xs">
-        <div className="flex items-center gap-2.5 min-w-0">
+      <header className="sticky top-0 z-30 px-4 py-2.5 bg-white/95 backdrop-blur-md border-b border-black flex items-center justify-between gap-2.5 shrink-0 select-none">
+        {/* Left: Back Pill or Logo */}
+        <div className="flex items-center gap-2 min-w-0">
           {showBack ? (
             <button
               onClick={handleBack}
-              className="w-9 h-9 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 flex items-center justify-center shrink-0 cursor-pointer transition-colors border border-neutral-200"
+              className="w-8 h-8 rounded-full bg-white hover:bg-neutral-100 text-black border border-black flex items-center justify-center shrink-0 cursor-pointer transition-transform active:scale-90"
               aria-label="Back"
             >
-              <ChevronLeft className="w-4 h-4 stroke-[2.5]" />
+              <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
             </button>
           ) : (
             <div
               onClick={() => navigateTo('D1')}
-              className="cursor-pointer font-black text-sm tracking-tighter text-neutral-900 flex items-center shrink-0"
+              className="cursor-pointer font-['Antonio'] text-xl font-black tracking-tight text-black flex items-center shrink-0 hover:scale-105 transition-transform"
             >
-              SMASH<span className="text-[#0066ff]">AI</span>
+              SMASH<span className="text-[#4da2ff]">.AI</span>
             </div>
           )}
 
           <div className="min-w-0">
-            <h1 className="text-xs font-extrabold text-neutral-900 truncate leading-snug tracking-tight">
+            <h1 className="text-xs font-bold text-black truncate leading-tight tracking-tight uppercase font-['Plus_Jakarta_Sans',sans-serif]">
               {title || 'SmashAI'}
             </h1>
             {subtitle && (
-              <p className="text-[10px] text-neutral-500 truncate leading-none mt-0.5 font-medium">
+              <p className="text-[10px] text-neutral-600 truncate leading-none mt-0.5 font-medium">
                 {subtitle}
               </p>
             )}
@@ -89,28 +100,31 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
 
         {/* Right status: Streak + Level + Directory */}
         <div className="flex items-center gap-1.5 shrink-0">
+          {/* Streak pill (Ember) */}
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 border border-amber-200/80 text-amber-700 text-[10px] font-bold cursor-pointer shadow-2xs hover:bg-amber-100 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#fb4903]/10 border border-black text-[#fb4903] text-[11px] font-bold cursor-pointer hover:scale-105 active:scale-95 transition-transform"
           >
-            <Flame className="w-3 h-3 fill-amber-500 text-amber-500" />
+            <Flame className="w-3 h-3 fill-current" />
             <span>{player.streakWeeks}W</span>
           </div>
 
+          {/* Level pill (Sunburst) */}
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#d8ff00]/30 border border-[#d8ff00] text-neutral-950 text-[10px] font-extrabold cursor-pointer shadow-2xs hover:bg-[#d8ff00]/50 transition-colors"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#ffd731] border border-black text-black text-[11px] font-extrabold cursor-pointer hover:scale-105 active:scale-95 transition-transform"
           >
             <Zap className="w-3 h-3 fill-current" />
             <span>Lv.{player.level}</span>
           </div>
 
+          {/* Directory Pill (Mint Pop) */}
           <button
             onClick={() => setIsSwitcherOpen(true)}
-            className="w-8 h-8 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-700 flex items-center justify-center cursor-pointer border border-neutral-200 transition-colors"
-            title="App Navigation Directory"
+            className="w-8 h-8 rounded-full bg-[#55db9c] hover:bg-[#68eab0] text-black border border-black flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+            title="App Navigation Directory (18 Screens)"
           >
-            <Compass className="w-4 h-4 text-neutral-800" />
+            <Compass className="w-4 h-4 stroke-[2.2]" />
           </button>
         </div>
       </header>

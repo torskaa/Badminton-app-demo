@@ -93,25 +93,25 @@ export const MultiScreenShowcase: React.FC = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center py-6 px-4 select-none">
-      {/* Header Info Banner */}
-      <div className="w-full max-w-6xl mb-6 flex flex-col md:flex-row md:items-end justify-between gap-4 pb-4 border-b border-white/10">
+    <div className="w-full flex flex-col items-center py-6 px-4 select-none bg-[#dceeff] min-h-screen">
+      {/* Header Info Banner - Slush Sticker Card */}
+      <div className="w-full max-w-6xl mb-6 p-5 rounded-[28px] bg-white border-[1.5px] border-black flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <div className="flex items-center gap-2 text-xs font-mono text-[#d8ff00] font-bold tracking-wider uppercase mb-1">
-            <span className="w-2 h-2 rounded-full bg-[#d8ff00] animate-ping" />
-            <span>Interactive Multi-Screen Navigation Overview</span>
+          <div className="flex items-center gap-2 text-xs font-['Antonio',sans-serif] font-black text-[#fb4903] uppercase tracking-wider mb-1">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#fb4903] animate-ping" />
+            <span>INTERACTIVE MULTI-SCREEN SHOWCASE</span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
-            แยกหน้าจอ Navigation ทั้งหมด (Showcase Gallery)
+          <h1 className="text-2xl md:text-3xl font-['Antonio',sans-serif] font-black text-black uppercase tracking-tight">
+            แยกหน้าจอ NAVIGATION ทั้งหมด (5 KEY APP PATHWAYS)
           </h1>
-          <p className="text-xs text-neutral-400 mt-1 max-w-xl">
-            แสดงผลแยกหน้าจอตามภาพต้นแบบ Behance/Dribbble ทั้ง 5 เส้นทางหลัก คุณสามารถกดเล่นบนหน้าจอแต่ละอันได้ทันที หรือกดปุ่ม <strong>[ขยายเต็มจอ]</strong> เพื่อเข้าไปทดสอบระบบใน Single Phone Mode
+          <p className="text-xs text-black/80 font-bold mt-1 max-w-xl">
+            แสดงผลแยกหน้าจอตามธีม Slush คุณสามารถคลิกลองเล่นบนหน้าจอแต่ละอันได้ทันที หรือกดปุ่ม <strong>[ขยาย]</strong> เพื่อทดสอบระบบใน Single Phone Mode
           </p>
         </div>
 
-        <div className="flex items-center gap-2 self-start md:self-auto shrink-0">
-          <span className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs text-neutral-300 font-medium">
-            📱 5 Interactive Screens Active
+        <div className="flex items-center gap-2 shrink-0">
+          <span className="px-3.5 py-1.5 rounded-full bg-[#ffd731] border-[1.5px] border-black text-xs font-['Antonio',sans-serif] font-black uppercase text-black">
+            📱 5 SCREENS ACTIVE
           </span>
         </div>
       </div>
@@ -119,49 +119,50 @@ export const MultiScreenShowcase: React.FC = () => {
       {/* Panoramic Horizontal Showcase Container */}
       <div className="w-full max-w-[1700px] overflow-x-auto no-scrollbar pb-8 pt-2">
         <div className="flex items-start gap-8 min-w-max px-4">
-          {showcaseScreens.map((item, index) => (
+          {showcaseScreens.map((item) => (
             <div key={item.id} className="flex flex-col items-center">
               {/* Screen Top Header Meta */}
               <div className="w-[380px] flex items-center justify-between mb-3 px-2">
                 <div>
                   <div className="flex items-center gap-2">
-                    <span className="font-extrabold text-sm text-white tracking-tight">
+                    <span className="font-['Antonio',sans-serif] font-black uppercase text-sm text-black tracking-wide">
                       {item.title}
                     </span>
                     <span
-                      className={`px-2 py-0.5 rounded-full text-[10px] font-bold border ${item.badgeColor}`}
+                      className="px-2 py-0.5 rounded-full text-[10px] font-['Antonio',sans-serif] font-black uppercase border border-black bg-[#ffd731] text-black"
                     >
                       {item.badge}
                     </span>
                   </div>
-                  <p className="text-[11px] text-neutral-400 truncate max-w-[260px]">
+                  <p className="text-[11px] text-black/70 font-bold truncate max-w-[260px]">
                     {item.subtitle}
                   </p>
                 </div>
 
                 {/* Focus Button */}
                 <button
+                  type="button"
                   onClick={() => handleOpenSingle(item.targetScreen)}
-                  className="px-2.5 py-1.5 rounded-xl bg-white/10 hover:bg-[#d8ff00] hover:text-black text-white text-xs font-bold flex items-center gap-1.5 transition-all cursor-pointer shadow-sm border border-white/10 group"
+                  className="px-3 py-1.5 rounded-full bg-white hover:bg-[#ffd731] text-black text-xs font-['Antonio',sans-serif] font-black uppercase flex items-center gap-1.5 transition-all cursor-pointer border-[1.5px] border-black active:scale-95"
                   title="เปิดทดสอบหน้าจอนี้ในโหมดเดี่ยว"
                 >
-                  <Maximize2 className="w-3.5 h-3.5 group-hover:scale-110" />
-                  <span className="text-[11px]">ขยาย</span>
+                  <Maximize2 className="w-3.5 h-3.5" />
+                  <span>ขยาย</span>
                 </button>
               </div>
 
-              {/* iPhone 16 Device Frame */}
-              <div className="w-[380px] h-[780px] rounded-[48px] p-3 bg-neutral-900 border-[3px] border-neutral-700 shadow-[0_25px_60px_rgba(0,0,0,0.8)] relative flex flex-col overflow-hidden ring-1 ring-white/10">
+              {/* Slush iPhone 16 Device Frame */}
+              <div className="w-[380px] h-[780px] rounded-[48px] p-3 bg-white border-[2.5px] border-black relative flex flex-col overflow-hidden">
                 {/* Dynamic Island Pill */}
                 <div className="absolute top-4 inset-x-0 z-50 flex justify-center pointer-events-none">
-                  <div className="w-24 h-5 bg-black rounded-full shadow-inner flex items-center justify-between px-2 text-[9px] text-white">
-                    <span className="w-2 h-2 rounded-full bg-neutral-800" />
-                    <span className="w-2.5 h-2.5 rounded-full bg-neutral-900" />
+                  <div className="w-24 h-5 bg-black rounded-full border border-black flex items-center justify-between px-2 text-[9px] text-white">
+                    <span className="w-2 h-2 rounded-full bg-white/30" />
+                    <span className="w-2.5 h-2.5 rounded-full bg-white/20" />
                   </div>
                 </div>
 
                 {/* Screen Content Viewport */}
-                <div className="flex-1 w-full h-full rounded-[38px] overflow-hidden bg-[#f0f4f9] text-neutral-900 flex flex-col relative no-scrollbar">
+                <div className="flex-1 w-full h-full rounded-[38px] overflow-hidden bg-[#dceeff] text-black flex flex-col relative no-scrollbar border-[1.5px] border-black">
                   <div className="flex-1 flex flex-col overflow-y-auto no-scrollbar relative">
                     {item.component}
                   </div>
@@ -170,7 +171,7 @@ export const MultiScreenShowcase: React.FC = () => {
 
                 {/* iPhone Bottom Home Bar */}
                 <div className="absolute bottom-2 inset-x-0 flex justify-center pointer-events-none z-50">
-                  <div className="w-28 h-1 bg-neutral-400/60 rounded-full" />
+                  <div className="w-28 h-1 bg-black rounded-full" />
                 </div>
               </div>
             </div>

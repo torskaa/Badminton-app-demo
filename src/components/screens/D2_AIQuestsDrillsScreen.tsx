@@ -15,35 +15,35 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
   const [selectedDrill, setSelectedDrill] = useState<AIDrill | null>(drills[0]);
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
-      <MobileHeader title="AI Quests & Training Drills" showBack />
+    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+      <MobileHeader title="Daily Quests & Drills" showBack />
 
-      {/* Modern Filter Segmented Tabs */}
-      <div className="px-5 py-3 flex items-center gap-2 bg-white border-b border-neutral-200/80 shrink-0">
+      {/* Slush Pill Segmented Tabs */}
+      <div className="px-5 py-3 flex items-center gap-2 bg-white border-b border-black shrink-0">
         <button
           type="button"
           onClick={() => setActiveTab('quests')}
-          className={`flex-1 py-2 rounded-full text-xs font-extrabold cursor-pointer transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 rounded-full text-xs font-extrabold cursor-pointer transition-transform active:scale-95 border border-black flex items-center justify-center gap-1.5 ${
             activeTab === 'quests'
-              ? 'bg-[#111318] text-white shadow-xs'
-              : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200/70'
+              ? 'bg-black text-white'
+              : 'bg-white text-black hover:bg-neutral-100'
           }`}
         >
           <Trophy className="w-3.5 h-3.5" />
-          <span>ภารกิจรับ EXP (Quests)</span>
+          <span>Daily Quests</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('drills')}
-          className={`flex-1 py-2 rounded-full text-xs font-extrabold cursor-pointer transition-all flex items-center justify-center gap-1.5 ${
+          className={`flex-1 py-2 rounded-full text-xs font-extrabold cursor-pointer transition-transform active:scale-95 border border-black flex items-center justify-center gap-1.5 ${
             activeTab === 'drills'
-              ? 'bg-[#111318] text-white shadow-xs'
-              : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200/70'
+              ? 'bg-black text-white'
+              : 'bg-white text-black hover:bg-neutral-100'
           }`}
         >
           <Dumbbell className="w-3.5 h-3.5" />
-          <span>คลิปซ้อมเฉพาะจุด (Drills)</span>
+          <span>AI Drills</span>
         </button>
       </div>
 
@@ -51,84 +51,80 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
         {activeTab === 'quests' ? (
           <>
             {/* Quests Header Info */}
-            <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs flex items-center justify-between">
+            <div className="bg-white border border-black rounded-[28px] p-4 flex items-center justify-between shadow-xs">
               <div>
-                <span className="text-[10px] font-bold text-[#0066ff] uppercase tracking-wider block">
-                  Quest Progression
+                <span className="px-2.5 py-0.5 rounded-full bg-[#ffd731] border border-black text-[10px] font-black uppercase text-black inline-block mb-1">
+                  Active Quests
                 </span>
-                <h3 className="text-xs font-extrabold text-neutral-900 mt-0.5">
-                  ทำภารกิจเพื่อเลเวลอัป & ปลดล็อกเหรียญ
+                <h3 className="font-['Antonio'] text-2xl font-extrabold text-black uppercase leading-tight">
+                  DAILY MISSION BOARD
                 </h3>
+                <p className="text-xs text-neutral-600 font-medium">
+                  Complete missions to earn EXP, unlock badges, and level up.
+                </p>
               </div>
-              <span className="px-2.5 py-1 rounded-full bg-[#d8ff00] text-black text-[10px] font-black">
-                DAILY & WEEKLY
-              </span>
             </div>
 
-            {/* Quests List */}
-            <div className="space-y-3">
-              {quests.map((q) => {
-                const isComplete = q.current >= q.target;
+            {/* Quest Items */}
+            <div className="space-y-2.5">
+              {quests.map((quest) => {
+                const isCompleted = quest.current >= quest.target;
                 return (
                   <div
-                    key={q.id}
-                    className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-2.5"
+                    key={quest.id}
+                    className="bg-white border border-black rounded-[24px] p-3.5 space-y-2 shadow-xs"
                   >
-                    <div className="flex items-start justify-between">
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs font-extrabold text-neutral-900">
-                            {q.title}
-                          </span>
-                          <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700">
-                            +{q.expReward} EXP
-                          </span>
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-10 h-10 rounded-2xl bg-[#ffd731] border border-black flex items-center justify-center text-lg shrink-0">
+                          {quest.icon || '🏸'}
                         </div>
-                        <p className="text-[11px] text-neutral-500 mt-0.5">
-                          {q.thaiTitle}
-                        </p>
+                        <div>
+                          <h4 className="text-xs font-bold text-black">{quest.title}</h4>
+                          <p className="text-[11px] text-neutral-600 font-medium mt-0.5">
+                            {quest.thaiTitle}
+                          </p>
+                        </div>
                       </div>
+
+                      <span className="px-2.5 py-1 rounded-full bg-[#55db9c] border border-black text-black text-[10px] font-black shrink-0">
+                        +{quest.expReward} EXP
+                      </span>
                     </div>
 
                     {/* Progress Bar */}
-                    <div className="space-y-1">
-                      <div className="flex items-center justify-between text-[10px] text-neutral-500 font-bold">
-                        <span>ความคืบหน้า</span>
-                        <span className="font-mono">
-                          {q.current} / {q.target}
-                        </span>
-                      </div>
-                      <div className="w-full h-2 rounded-full bg-neutral-100 overflow-hidden">
-                        <div
-                          className="h-full bg-gradient-to-r from-[#d8ff00] to-[#10b981] rounded-full transition-all"
-                          style={{
-                            width: `${Math.min(100, (q.current / q.target) * 100)}%`,
-                          }}
-                        />
-                      </div>
+                    <div className="w-full bg-[#e9e9e9] border border-black rounded-full h-2.5 overflow-hidden p-0.5">
+                      <div
+                        className="bg-[#5c4ade] h-full rounded-full transition-all duration-300"
+                        style={{ width: `${Math.min(100, (quest.current / quest.target) * 100)}%` }}
+                      />
                     </div>
 
-                    {/* Action Button */}
-                    <div className="pt-2 border-t border-neutral-100 flex items-center justify-between">
-                      <span className="text-[10px] text-neutral-400 font-medium">
-                        หมวดหมู่: {q.type}
+                    <div className="flex items-center justify-between pt-1">
+                      <span className="text-[10px] font-bold text-neutral-500">
+                        Progress: {quest.current} / {quest.target}
                       </span>
-                      {q.claimed ? (
-                        <span className="text-[11px] text-neutral-400 font-bold flex items-center gap-1">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500" /> รับรางวัลแล้ว
+
+                      {quest.claimed ? (
+                        <span className="text-[11px] font-extrabold text-neutral-400">
+                          ✓ Claimed
                         </span>
-                      ) : isComplete ? (
+                      ) : isCompleted ? (
                         <button
                           type="button"
-                          onClick={() => claimQuestReward(q.id)}
-                          className="px-4 py-1.5 rounded-full bg-[#d8ff00] hover:bg-[#cbf000] text-black text-xs font-black shadow-xs cursor-pointer transition-all"
+                          onClick={() => claimQuestReward(quest.id)}
+                          className="px-3.5 py-1 rounded-full bg-black text-white hover:bg-neutral-800 text-[11px] font-bold border border-black cursor-pointer transition-transform active:scale-95 shadow-xs"
                         >
-                          กดรับ +{q.expReward} EXP!
+                          Claim Reward (+{quest.expReward} EXP)
                         </button>
                       ) : (
-                        <span className="text-[11px] text-neutral-400 font-medium">
-                          กำลังดำเนินการ...
-                        </span>
+                        <button
+                          type="button"
+                          onClick={() => claimQuestReward(quest.id)}
+                          className="px-3.5 py-1 rounded-full bg-[#ffd731] hover:bg-[#ffe259] text-black text-[10px] font-bold border border-black cursor-pointer transition-transform active:scale-95"
+                        >
+                          Simulate Progress
+                        </button>
                       )}
                     </div>
                   </div>
@@ -138,50 +134,58 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
           </>
         ) : (
           <>
-            {/* Drills List */}
-            <div className="space-y-3">
+            {/* Drills Section */}
+            <div className="bg-white border border-black rounded-[28px] p-4 flex items-center justify-between shadow-xs">
+              <div>
+                <span className="px-2.5 py-0.5 rounded-full bg-[#5c4ade] text-white border border-black text-[10px] font-black uppercase inline-block mb-1">
+                  AI Drills
+                </span>
+                <h3 className="font-['Antonio'] text-2xl font-extrabold text-black uppercase leading-tight">
+                  PERSONALIZED DRILL REPERTOIRE
+                </h3>
+                <p className="text-xs text-neutral-600 font-medium">
+                  Weak-zone training drills curated by AI vision match diagnostics.
+                </p>
+              </div>
+            </div>
+
+            <div className="space-y-2.5">
               {drills.map((drill) => (
                 <div
                   key={drill.id}
-                  onClick={() => setSelectedDrill(drill)}
-                  className={`p-4 rounded-3xl border transition-all cursor-pointer shadow-xs ${
-                    selectedDrill?.id === drill.id
-                      ? 'bg-white border-[#0066ff] ring-2 ring-[#0066ff]/20'
-                      : 'bg-white border-neutral-200/80 hover:border-neutral-300'
-                  }`}
+                  className="bg-white border border-black rounded-[24px] p-3.5 space-y-2 shadow-xs"
                 >
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-2">
                     <div>
-                      <span className="text-[10px] font-bold text-[#0066ff] uppercase tracking-wider block">
+                      <span className="px-2 py-0.5 rounded-full bg-[#dceeff] border border-black text-[9px] font-bold text-black uppercase inline-block mb-1">
                         {drill.focusArea}
                       </span>
-                      <h4 className="text-sm font-extrabold text-neutral-900 mt-0.5">
+                      <h4 className="font-['Antonio'] text-xl font-bold text-black uppercase leading-tight">
                         {drill.title}
                       </h4>
-                      <p className="text-[11px] text-neutral-500 mt-0.5 font-medium">
-                        {drill.thaiTitle} - {drill.description}
-                      </p>
+                      <p className="text-[11px] text-neutral-600 mt-0.5">{drill.description}</p>
                     </div>
-                    <span className="text-xs font-mono font-bold text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-full">
-                      {drill.durationMin} min
+
+                    <span className="px-2.5 py-1 rounded-full bg-[#ffd731] border border-black text-black text-[10px] font-black shrink-0">
+                      +{drill.expReward} EXP
                     </span>
                   </div>
 
-                  <div className="mt-3 pt-2.5 border-t border-neutral-100 flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#10b981] flex items-center gap-1">
-                      <Zap className="w-3.5 h-3.5 fill-current" />
-                      +{drill.expReward} EXP เมื่อซ้อมจบ
+                  <div className="flex items-center justify-between pt-2 border-t border-neutral-100">
+                    <span className="text-[11px] font-bold text-neutral-500">
+                      Duration: {drill.durationMin} mins · {drill.difficulty}
                     </span>
+
                     <button
                       type="button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        completeDrill(drill.id);
-                      }}
-                      className="px-3.5 py-1.5 rounded-full bg-[#111318] hover:bg-[#1f2430] text-white text-xs font-bold flex items-center gap-1 transition-colors"
+                      onClick={() => completeDrill(drill.id)}
+                      className={`px-3.5 py-1.5 rounded-full text-xs font-bold border border-black cursor-pointer transition-transform active:scale-95 ${
+                        drill.completed
+                          ? 'bg-[#55db9c] text-black font-extrabold'
+                          : 'bg-black text-white hover:bg-neutral-800'
+                      }`}
                     >
-                      <Play className="w-3 h-3 fill-current text-[#d8ff00]" />
-                      <span>ซ้อมจบแล้ว</span>
+                      {drill.completed ? '✓ Drill Complete' : 'Mark Complete (+EXP)'}
                     </button>
                   </div>
                 </div>
@@ -189,6 +193,25 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
             </div>
           </>
         )}
+
+        {/* Quick Navigations */}
+        <div className="grid grid-cols-2 gap-2 pt-2">
+          <button
+            onClick={() => navigateTo('D3')}
+            className="py-3 rounded-full bg-white hover:bg-neutral-100 border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+          >
+            <Video className="w-3.5 h-3.5 text-[#5c4ade]" />
+            <span>Vision Pose Scan</span>
+          </button>
+
+          <button
+            onClick={() => navigateTo('D1')}
+            className="py-3 rounded-full bg-[#55db9c] hover:bg-[#68eab0] border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+          >
+            <Trophy className="w-3.5 h-3.5" />
+            <span>AI Coach Radar</span>
+          </button>
+        </div>
       </div>
     </div>
   );

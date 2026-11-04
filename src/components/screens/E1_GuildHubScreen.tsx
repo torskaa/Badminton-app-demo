@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Users, Shield, Calendar, Trophy, ChevronRight, Sparkles, Plus, Award, UserCheck } from 'lucide-react';
+import { Users, Shield, Calendar, Trophy, ChevronRight, Sparkles, Plus, Award, UserCheck, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
@@ -12,148 +12,131 @@ export const E1_GuildHubScreen: React.FC = () => {
   const { guilds, currentEvent, navigateTo } = useApp();
 
   return (
-    <div className="flex-1 flex flex-col bg-[#f0f4f9] text-neutral-900 select-none pb-24 overflow-y-auto no-scrollbar">
-      <MobileHeader title="คอมมูนิตี้ & ก๊วนแบดมินตัน" />
+    <div className="flex-1 flex flex-col bg-[#dceeff] text-black select-none pb-24 overflow-y-auto no-scrollbar font-['Plus_Jakarta_Sans',sans-serif]">
+      <MobileHeader title="Guilds & Community" />
 
       <div className="p-4 space-y-4">
-        {/* Community Banner */}
-        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs flex items-center justify-between">
+        {/* Community Header Banner */}
+        <div className="bg-white border border-black rounded-[32px] p-4 flex items-center justify-between shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-2xl bg-[#0066ff]/10 text-[#0066ff] flex items-center justify-center font-bold">
-              <Users className="w-6 h-6" />
+            <div className="w-12 h-12 rounded-full bg-[#e9ccff] border border-black flex items-center justify-center font-bold text-black rotate-[-6deg]">
+              <Users className="w-6 h-6 stroke-[2.4]" />
             </div>
             <div>
-              <span className="text-[10px] font-bold text-[#0066ff] uppercase tracking-wider block">
-                Guild & Squad Hub
+              <span className="px-2 py-0.5 rounded-full bg-[#55db9c] border border-black text-[9px] font-black uppercase text-black inline-block mb-0.5">
+                Community HQ
               </span>
-              <h3 className="text-xs font-extrabold text-neutral-900 mt-0.5">
-                รวมกลุ่มตีแบด หารค่าคอร์ท & จัดคู่สูสีด้วย AI
-              </h3>
+              <h2 className="font-['Antonio'] text-2xl font-black text-black uppercase leading-tight">
+                BANGKOK SMASHERS GUILD
+              </h2>
+              <p className="text-xs text-neutral-600 font-medium">
+                Split court fees, party with friends & match fair duels with AI.
+              </p>
             </div>
           </div>
         </div>
 
-        {/* Featured Upcoming Guild Event Banner */}
+        {/* Featured Upcoming Guild Event Banner (Slush Sticker Card) */}
         <div
           onClick={() => navigateTo('E2')}
-          className="p-5 rounded-3xl bg-white border-2 border-[#d8ff00] hover:border-black transition-all cursor-pointer shadow-md space-y-3 group"
+          className="bg-white border border-black rounded-[32px] p-4 cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-transform space-y-3 shadow-xs"
         >
           <div className="flex items-center justify-between text-xs">
-            <span className="px-3 py-1 rounded-full bg-[#d8ff00] text-black font-extrabold text-[10px] flex items-center gap-1">
-              <Calendar className="w-3 h-3" /> กิจกรรมถัดไปประจำสัปดาห์
+            <span className="px-3 py-1 rounded-full bg-[#ffd731] border border-black text-black font-extrabold text-[10px] uppercase flex items-center gap-1">
+              <Calendar className="w-3.5 h-3.5" /> Next Saturday Session
             </span>
-            <span className="text-emerald-700 font-mono text-[11px] font-bold">
-              {currentEvent.attendees.length}/{currentEvent.maxPlayers} คนลงชื่อแล้ว
+            <span className="text-black font-bold text-xs bg-[#55db9c] px-2.5 py-0.5 rounded-full border border-black">
+              {currentEvent.attendees.length}/{currentEvent.maxPlayers} RSVP'd
             </span>
           </div>
 
           <div>
-            <h3 className="text-base font-extrabold text-neutral-900 group-hover:text-[#0066ff] transition-colors">
+            <h3 className="font-['Antonio'] text-3xl font-extrabold text-black uppercase leading-tight tracking-tight">
               {currentEvent.title}
             </h3>
-            <p className="text-xs text-neutral-500 font-medium mt-0.5">
+            <p className="text-xs text-neutral-600 font-medium mt-0.5">
               {currentEvent.courtName} · {currentEvent.date} ({currentEvent.timeRange})
             </p>
           </div>
 
-          {/* Attendees Faces & Split Bill preview */}
-          <div className="pt-3 border-t border-neutral-100 flex items-center justify-between text-xs">
-            <div className="flex items-center gap-2">
-              <div className="flex -space-x-2">
-                {currentEvent.attendees.slice(0, 4).map((att) => (
-                  <img
-                    key={att.id}
-                    src={att.avatar}
-                    alt={att.name}
-                    className="w-7 h-7 rounded-full border-2 border-white object-cover"
-                  />
-                ))}
+          {/* Split Bill preview & Attend button */}
+          <div className="pt-3 border-t border-neutral-200 flex items-center justify-between text-xs">
+            <div>
+              <span className="text-[10px] font-bold text-neutral-500 uppercase">Estimated Split</span>
+              <div className="font-['Antonio'] text-xl font-bold text-black leading-none">
+                ~฿{Math.round((currentEvent.courtFeeTotal + currentEvent.shuttlecockFeeTotal) / currentEvent.maxPlayers)}/person
               </div>
-              <span className="text-[11px] text-neutral-500 font-medium">
-                หารเฉลี่ย <strong>฿{Math.round((currentEvent.courtFeeTotal + currentEvent.shuttlecockFeeTotal) / (currentEvent.attendees.length || 1))} /คน</strong>
-              </span>
             </div>
 
-            <span className="font-extrabold text-[#0066ff] text-xs flex items-center gap-1 group-hover:translate-x-1 transition-transform">
-              <span>ลงชื่อ RSVP</span>
-              <ChevronRight className="w-3.5 h-3.5" />
-            </span>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                navigateTo('E2');
+              }}
+              className="px-4 py-2 rounded-full bg-black text-white hover:bg-neutral-800 text-xs font-bold border border-black flex items-center gap-1.5 transition-transform active:scale-95"
+            >
+              <span>RSVP Party</span>
+              <ArrowRight className="w-3.5 h-3.5" />
+            </button>
           </div>
         </div>
 
         {/* Quick Hub Navigation Cards */}
-        <div className="grid grid-cols-2 gap-3">
-          <div
+        <div className="grid grid-cols-2 gap-2.5">
+          <button
             onClick={() => navigateTo('E3')}
-            className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs cursor-pointer hover:border-[#0066ff] hover:shadow-sm transition-all group"
+            className="bg-[#ffd731] border border-black rounded-[24px] p-3.5 text-left cursor-pointer hover:scale-105 active:scale-95 transition-transform flex flex-col justify-between h-28"
           >
-            <div className="w-10 h-10 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold mb-2">
-              <Sparkles className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-full bg-white border border-black flex items-center justify-center font-bold">
+              ⚡
             </div>
-            <div className="text-xs font-black text-neutral-900 group-hover:text-[#0066ff] transition-colors">
-              AI Smart Matchmaker
+            <div>
+              <h4 className="font-['Antonio'] text-xl font-bold text-black uppercase leading-tight">
+                AI Matchmaker
+              </h4>
+              <p className="text-[10px] text-neutral-800 font-bold">Find 96% Match Opponents →</p>
             </div>
-            <div className="text-[10px] text-neutral-500 mt-0.5">
-              จัดทีมแบ่งสายแต้มสูสี 50/50
-            </div>
-          </div>
+          </button>
 
-          <div
+          <button
             onClick={() => navigateTo('E4')}
-            className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs cursor-pointer hover:border-[#0066ff] hover:shadow-sm transition-all group"
+            className="bg-[#e9ccff] border border-black rounded-[24px] p-3.5 text-left cursor-pointer hover:scale-105 active:scale-95 transition-transform flex flex-col justify-between h-28"
           >
-            <div className="w-10 h-10 rounded-2xl bg-purple-100 text-purple-700 flex items-center justify-center font-bold mb-2">
-              <Trophy className="w-5 h-5" />
+            <div className="w-8 h-8 rounded-full bg-white border border-black flex items-center justify-center font-bold">
+              🏆
             </div>
-            <div className="text-xs font-black text-neutral-900 group-hover:text-purple-700 transition-colors">
-              ตารางลีก & ลีดเดอร์บอร์ด
+            <div>
+              <h4 className="font-['Antonio'] text-xl font-bold text-black uppercase leading-tight">
+                Leaderboards
+              </h4>
+              <p className="text-[10px] text-neutral-800 font-bold">Top Smashers Ranking →</p>
             </div>
-            <div className="text-[10px] text-neutral-500 mt-0.5">
-              ไต่อันดับคะแนนประจำสัปดาห์
-            </div>
-          </div>
+          </button>
         </div>
 
-        {/* My Guilds List */}
-        <div>
-          <div className="flex items-center justify-between mb-2 px-1">
-            <h4 className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider">
-              ก๊วนแบดของคุณ (My Active Squads)
-            </h4>
-            <span className="text-[11px] font-bold text-[#0066ff] cursor-pointer">
-              + สร้างก๊วนใหม่
-            </span>
+        {/* Guild Roster & Active Guilds */}
+        <div className="bg-white border border-black rounded-[28px] p-4 space-y-3 shadow-xs">
+          <div className="flex items-center justify-between">
+            <h3 className="font-['Antonio'] text-xl font-bold uppercase text-black">
+              Featured Bangkok Guilds
+            </h3>
+            <span className="text-xs font-bold text-neutral-600">3 Verified</span>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-2">
             {guilds.map((g) => (
               <div
                 key={g.id}
                 onClick={() => navigateTo('E2')}
-                className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs cursor-pointer hover:border-neutral-300 transition-all flex items-center justify-between"
+                className="p-3 rounded-2xl bg-[#dceeff]/40 border border-black flex items-center justify-between gap-3 cursor-pointer hover:bg-[#dceeff] transition-colors"
               >
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 rounded-2xl bg-neutral-900 text-[#d8ff00] font-black text-sm flex items-center justify-center border border-neutral-100 shadow-xs">
-                    {g.tag}
-                  </div>
-                  <div>
-                    <h5 className="text-xs font-extrabold text-neutral-900">
-                      {g.name}
-                    </h5>
-                    <p className="text-[11px] text-neutral-500 mt-0.5">
-                      {g.memberCount} สมาชิก · {g.homeCourt}
-                    </p>
-                  </div>
+                <div>
+                  <h4 className="text-xs font-bold text-black">{g.name}</h4>
+                  <p className="text-[10px] text-neutral-600">{g.homeCourt} · {g.memberCount} members</p>
                 </div>
-
-                <div className="text-right">
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 text-neutral-700">
-                    Lv.{g.level}
-                  </span>
-                  <div className="text-[10px] text-emerald-600 font-bold mt-1">
-                    {g.regularDays}
-                  </div>
-                </div>
+                <span className="px-2.5 py-1 rounded-full bg-white border border-black text-[10px] font-bold text-black shrink-0">
+                  Join Party
+                </span>
               </div>
             ))}
           </div>

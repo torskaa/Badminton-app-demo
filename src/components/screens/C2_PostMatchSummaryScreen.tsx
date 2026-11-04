@@ -14,130 +14,108 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
   const isWinner = match.winner === 'A' || match.scoreA >= match.scoreB;
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#f0f4f9] text-neutral-900 pb-6 select-none">
-      <MobileHeader title="สรุปผลการแข่งขัน & แจกรางวัล" showBack />
+    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+      <MobileHeader title="Match Victory Summary" showBack />
 
       <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
-        {/* Victory Header */}
+        {/* Slush Victory Trophy Header */}
         <div className="text-center pt-2">
-          <div
-            className={`w-16 h-16 rounded-3xl mx-auto mb-2.5 flex items-center justify-center shadow-md ${
-              isWinner
-                ? 'bg-[#d8ff00] text-black shadow-[0_0_25px_rgba(216,255,0,0.5)]'
-                : 'bg-neutral-800 text-white'
-            }`}
-          >
-            <Trophy className="w-9 h-9 stroke-[2.3]" />
+          <div className="w-16 h-16 rounded-3xl mx-auto mb-2.5 flex items-center justify-center bg-[#ffd731] border border-black rotate-[-6deg] shadow-xs">
+            <Trophy className="w-9 h-9 text-black stroke-[2.3]" />
           </div>
 
-          <div className="text-[11px] font-mono font-bold tracking-widest text-[#0066ff] uppercase">
+          <div className="text-[11px] font-extrabold tracking-wider text-[#5c4ade] uppercase">
             {isWinner ? 'MATCH VICTORY!' : 'MATCH COMPLETED'}
           </div>
-          <h2 className="text-2xl font-black text-neutral-900 mt-0.5 tracking-tight">
-            {isWinner ? 'ยินดีด้วย! คุณคว้าชัยชนะ' : 'สู้ได้ดีมากในเกมนี้!'}
+          <h2 className="font-['Antonio'] text-4xl font-extrabold text-black mt-0.5 tracking-tight uppercase leading-none">
+            {isWinner ? 'CHAMPION OF THE COURT!' : 'GREAT MATCH EFFORT!'}
           </h2>
-          <p className="text-xs text-neutral-500 font-medium">
+          <p className="text-xs text-neutral-600 font-bold mt-1">
             {match.playerAName} vs {match.playerBName}
           </p>
         </div>
 
-        {/* Sets Score Breakdown Card */}
-        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs text-center">
-          <div className="text-[10px] text-neutral-400 font-mono font-bold mb-3 uppercase tracking-wider">
-            FINAL SCORE SUMMARY
-          </div>
+        {/* Final Sets Score Breakdown Card */}
+        <div className="bg-white border border-black rounded-[32px] p-4 text-center shadow-xs">
+          <span className="px-3 py-0.5 rounded-full bg-[#dceeff] border border-black text-[10px] font-bold uppercase text-black inline-block mb-3">
+            Final Sets Breakdown
+          </span>
           <div className="flex items-center justify-center gap-8">
             <div>
               <div className="text-xs font-bold text-neutral-600">{match.playerAName}</div>
-              <div className="text-4xl font-black text-[#10b981] font-mono mt-1">
+              <div className="font-['Antonio'] text-6xl font-extrabold text-black mt-1 leading-none">
                 {match.setsWonA || 2}
               </div>
             </div>
-            <div className="text-xs font-mono text-neutral-300 font-extrabold uppercase">SETS</div>
+            <div className="font-['Antonio'] text-xl text-neutral-400 font-black uppercase">VS</div>
             <div>
               <div className="text-xs font-bold text-neutral-600">{match.playerBName}</div>
-              <div className="text-4xl font-black text-neutral-400 font-mono mt-1">
+              <div className="font-['Antonio'] text-6xl font-extrabold text-neutral-400 mt-1 leading-none">
                 {match.setsWonB || 0}
               </div>
             </div>
           </div>
         </div>
 
-        {/* Gamification EXP & Badges Gained */}
-        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-3">
+        {/* EXP Reward Card */}
+        <div className="bg-white border border-black rounded-[28px] p-4 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-extrabold text-neutral-800 uppercase tracking-wider">
-              รางวัลที่ได้รับ (Rewards Gained)
+            <span className="text-xs font-bold text-black uppercase tracking-wide">
+              Match Loot & Rewards
             </span>
-            <span className="px-2.5 py-0.5 rounded-full bg-[#d8ff00] text-black text-[10px] font-black">
-              +250 EXP EARNED
+            <span className="px-2.5 py-0.5 rounded-full bg-[#55db9c] border border-black text-black text-xs font-extrabold">
+              +250 EXP Total
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2.5">
-            <div className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/60 flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold">
-                <Flame className="w-5 h-5 fill-current" />
-              </div>
-              <div>
-                <div className="text-xs font-extrabold text-neutral-900">3-Week Streak</div>
-                <div className="text-[10px] text-neutral-500 font-medium">รักษาวินัยต่อเนื่อง 🔥</div>
-              </div>
+          <div className="space-y-1.5 text-xs">
+            <div className="flex items-center justify-between p-2 rounded-xl bg-[#dceeff]/50 border border-black">
+              <span>Match Play Reward</span>
+              <span className="font-bold text-black">+150 EXP</span>
             </div>
-
-            <div className="p-3 rounded-2xl bg-neutral-50 border border-neutral-200/60 flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
-                <Award className="w-5 h-5" />
-              </div>
-              <div>
-                <div className="text-xs font-extrabold text-neutral-900">Smash King</div>
-                <div className="text-[10px] text-neutral-500 font-medium">ตบทำแต้มครบ 50 ครั้ง</div>
-              </div>
+            <div className="flex items-center justify-between p-2 rounded-xl bg-[#ffd731]/40 border border-black">
+              <span className="flex items-center gap-1 font-bold">
+                <Flame className="w-3.5 h-3.5 text-[#fb4903] fill-current" />
+                <span>3-Week Streak Bonus (1.5x)</span>
+              </span>
+              <span className="font-bold text-black">+75 EXP</span>
+            </div>
+            <div className="flex items-center justify-between p-2 rounded-xl bg-[#e9ccff]/50 border border-black">
+              <span className="font-bold text-black">Smash Specialist Bonus</span>
+              <span className="font-bold text-black">+25 EXP</span>
             </div>
           </div>
         </div>
 
-        {/* Level Progression Bar */}
-        <div className="p-4 rounded-3xl bg-white border border-neutral-200/80 shadow-xs space-y-2">
-          <div className="flex items-center justify-between text-xs font-bold">
-            <span className="text-neutral-700">Player Level {player.level} (Diamond League)</span>
-            <span className="text-neutral-900 font-mono">{player.currentExp} / {player.nextLevelExp} EXP</span>
-          </div>
-          <div className="w-full h-2.5 rounded-full bg-neutral-100 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-[#d8ff00] to-[#10b981] rounded-full transition-all duration-700"
-              style={{ width: `${Math.min(100, (player.currentExp / player.nextLevelExp) * 100)}%` }}
-            />
+        {/* Complete Next Actions */}
+        <div className="space-y-2 pt-1">
+          <button
+            onClick={() => navigateTo('C3')}
+            className="w-full py-4 rounded-full bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider border border-black flex items-center justify-center gap-2 transition-transform active:scale-98 cursor-pointer shadow-sm"
+          >
+            <BarChart3 className="w-4 h-4" />
+            <span>AI Shot Diagnostics & Court Heatmap</span>
+            <ArrowRight className="w-4 h-4" />
+          </button>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => navigateTo('C4')}
+              className="py-3 rounded-full bg-[#ffd731] hover:bg-[#ffe259] border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            >
+              <Share2 className="w-3.5 h-3.5" />
+              <span>Recap Card (FUT)</span>
+            </button>
+
+            <button
+              onClick={() => navigateTo('D1')}
+              className="py-3 rounded-full bg-white hover:bg-neutral-100 border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            >
+              <Trophy className="w-3.5 h-3.5" />
+              <span>AI Coach Hub</span>
+            </button>
           </div>
         </div>
-      </div>
-
-      {/* Bottom Sticky Action Buttons */}
-      <div className="px-5 pt-3 border-t border-neutral-200 bg-white shrink-0 space-y-2">
-        <button
-          type="button"
-          onClick={() => navigateTo('C3')}
-          className="w-full h-14 bg-[#111318] hover:bg-[#1f2430] active:scale-[0.98] rounded-full p-2 flex items-center justify-between shadow-lg transition-all cursor-pointer group"
-        >
-          <div className="w-10 h-10 rounded-full bg-[#d8ff00] text-black flex items-center justify-center font-bold">
-            <BarChart3 className="w-5 h-5" />
-          </div>
-          <span className="text-white font-extrabold text-xs tracking-wider uppercase">
-            ดู AI วิเคราะห์จุดอ่อนช็อตตบ (AI Diagnostics)
-          </span>
-          <div className="w-10 h-10 rounded-full bg-white text-neutral-900 flex items-center justify-center group-hover:translate-x-0.5 transition-transform">
-            <ArrowRight className="w-4 h-4 stroke-[3]" />
-          </div>
-        </button>
-
-        <button
-          type="button"
-          onClick={() => navigateTo('C4')}
-          className="w-full h-11 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-800 text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
-        >
-          <Share2 className="w-4 h-4" />
-          <span>สร้างการ์ดแชร์ผลแมตช์ลงโซเชียล (Recap Card)</span>
-        </button>
       </div>
     </div>
   );
