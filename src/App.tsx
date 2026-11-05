@@ -123,7 +123,7 @@ function MainViewport() {
 
   return (
     <div className="flex-1 flex flex-col justify-between min-h-0 relative overflow-hidden">
-      <div className="flex-1 w-full h-full relative overflow-hidden">
+      <div className="flex-1 w-full h-full min-h-0 relative overflow-hidden">
         <AnimatePresence mode="popLayout" custom={navDirection} initial={false}>
           <motion.div
             key={currentScreen}
@@ -132,7 +132,7 @@ function MainViewport() {
             initial="enter"
             animate="center"
             exit="exit"
-            className="absolute inset-0 w-full h-full flex flex-col overflow-hidden will-change-transform"
+            className="absolute inset-0 w-full h-full min-h-0 flex flex-col overflow-hidden"
           >
             <ScreenRenderer />
           </motion.div>

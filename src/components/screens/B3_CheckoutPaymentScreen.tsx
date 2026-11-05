@@ -1,10 +1,5 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState } from 'react';
-import { QrCode, UploadCloud, CheckCircle2, ShieldCheck, Zap, AlertCircle, Copy, Clock, ArrowRight } from 'lucide-react';
+import { UploadCloud, CheckCircle2, Zap, Copy, Clock, ArrowRight, Check } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
@@ -13,7 +8,6 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
 
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationDone, setVerificationDone] = useState(false);
-  const [isSlipUploaded, setIsSlipUploaded] = useState(false);
   const [copiedPromptPay, setCopiedPromptPay] = useState(false);
 
   const promptPayNumber = '089-921-4820';
@@ -29,9 +23,8 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
     setIsVerifying(true);
     setTimeout(() => {
       setIsVerifying(false);
-      setIsSlipUploaded(true);
       setVerificationDone(true);
-    }, 1200);
+    }, 800);
   };
 
   const handleConfirmAndComplete = () => {
@@ -40,57 +33,56 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
       <MobileHeader title="PromptPay Checkout" showBack />
 
-      <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
+      <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
         {/* Booking Summary Card */}
-        <div className="bg-white border border-black rounded-[28px] p-4 space-y-2">
+        <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
           <div className="flex items-start justify-between">
             <div>
-              <span className="px-2.5 py-0.5 rounded-full bg-[#55db9c] border border-black text-[10px] font-black uppercase text-black inline-block mb-1">
+              <span className="px-3 py-1 rounded-[1600px] text-[10px] font-bold tracking-[0.032em] uppercase bg-[#55db9c] border border-[#000000] text-[#000000] inline-block mb-1">
                 Booking Summary
               </span>
-              <h3 className="font-['Antonio'] text-2xl font-extrabold text-black uppercase leading-tight">
+              <h3 className="font-['Antonio',sans-serif] text-xl font-black tracking-tight leading-tight uppercase text-[#000000]">
                 {selectedCourt.name}
               </h3>
-              <p className="text-xs text-neutral-600 font-medium">
-                Court {booking.selectedCourtNumber} · {booking.date || '7 Nov 2026'}
+              <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
+                Court {booking.selectedCourtNumber} · {booking.date || '12 Nov 2026'}
               </p>
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] font-bold text-neutral-500 uppercase">Total</span>
-              <div className="font-['Antonio'] text-2xl font-extrabold text-black">
+              <span className="text-[10px] font-bold text-[#000000]/60 uppercase block tracking-[0.032em]">ยอดชำระ</span>
+              <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#000000]">
                 ฿{totalAmount}
               </div>
             </div>
           </div>
 
-          <div className="p-2.5 rounded-2xl bg-[#ffd731] border border-black text-xs font-bold text-black flex items-center justify-between">
+          <div className="p-3 rounded-[20px] bg-[#ffd731] border border-[#000000] text-xs font-bold text-[#000000] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
-              <Zap className="w-4 h-4 fill-current" />
-              <span>Loot Reward on Payment</span>
+              <Zap className="w-4 h-4 fill-current text-[#000000]" />
+              <span>Loot Drop Reward on Payment</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-black text-white text-[10px]">
+            <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em]">
               +100 EXP
             </span>
           </div>
         </div>
 
-        {/* PromptPay QR Code Card (Slush QR Card style) */}
-        <div className="bg-[#5c4ade] border border-black rounded-[28px] p-4 text-white text-center space-y-3">
-          <div className="flex items-center justify-between text-xs font-bold px-1">
-            <span className="uppercase tracking-wider">Thai QR Payment</span>
-            <span className="flex items-center gap-1 text-[#ffd731]">
+        {/* PromptPay QR Code Card */}
+        <div className="border border-[#000000] rounded-[28px] p-5 text-center space-y-3.5 bg-[#ffffff] text-[#000000]">
+          <div className="flex items-center justify-between text-xs font-bold px-1 text-[#000000]">
+            <span className="uppercase tracking-[0.032em] font-['Antonio',sans-serif] text-sm font-black">Thai QR Payment</span>
+            <span className="flex items-center gap-1 text-[#fb4903]">
               <Clock className="w-3.5 h-3.5" />
-              <span>Auto-verify: 10:00 min</span>
+              <span>หมดอายุใน 10:00 นาที</span>
             </span>
           </div>
 
           {/* QR Box */}
-          <div className="w-44 h-44 bg-white border border-black rounded-2xl mx-auto p-3 flex flex-col items-center justify-center">
-            {/* Real SVG QR code mockup */}
+          <div className="w-44 h-44 bg-[#ffffff] border border-[#000000] rounded-[24px] mx-auto p-3 flex flex-col items-center justify-center">
             <svg viewBox="0 0 100 100" className="w-full h-full text-black fill-current">
               <rect x="0" y="0" width="30" height="30" fill="black" />
               <rect x="5" y="5" width="20" height="20" fill="white" />
@@ -104,74 +96,79 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
               <rect x="5" y="75" width="20" height="20" fill="white" />
               <rect x="10" y="80" width="10" height="10" fill="black" />
 
-              {/* Data modules */}
-              <rect x="36" y="10" width="8" height="8" fill="black" />
-              <rect x="48" y="14" width="12" height="8" fill="black" />
-              <rect x="36" y="36" width="28" height="28" fill="black" />
-              <rect x="42" y="42" width="16" height="16" fill="white" />
-              <rect x="46" y="46" width="8" height="8" fill="black" />
-              <rect x="10" y="44" width="14" height="8" fill="black" />
-              <rect x="76" y="44" width="14" height="8" fill="black" />
-              <rect x="40" y="74" width="20" height="14" fill="black" />
-              <rect x="72" y="74" width="18" height="18" fill="black" />
+              <rect x="35" y="10" width="10" height="10" fill="black" />
+              <rect x="50" y="10" width="10" height="10" fill="black" />
+              <rect x="35" y="35" width="15" height="15" fill="black" />
+              <rect x="55" y="35" width="10" height="20" fill="black" />
+              <rect x="70" y="45" width="20" height="10" fill="black" />
+              <rect x="35" y="65" width="20" height="10" fill="black" />
+              <rect x="65" y="65" width="15" height="20" fill="black" />
+              <rect x="45" y="80" width="15" height="10" fill="black" />
             </svg>
           </div>
 
-          <div className="flex items-center justify-center gap-2">
-            <span className="text-xs font-mono font-bold text-white bg-black/30 px-3 py-1 rounded-full border border-white/20">
-              PromptPay: {promptPayNumber}
-            </span>
-            <button
-              onClick={handleCopyPromptPay}
-              className="px-3 py-1 rounded-full bg-white text-black font-bold text-xs border border-black hover:bg-neutral-100 transition-transform active:scale-95 cursor-pointer flex items-center gap-1"
-            >
-              <Copy className="w-3 h-3" />
-              <span>{copiedPromptPay ? 'Copied!' : 'Copy'}</span>
-            </button>
+          <div className="text-xs">
+            <span className="text-[#000000]/60 block text-[11px] font-bold">พร้อมเพย์บัญชีทางการ (PromptPay ID)</span>
+            <div className="flex items-center justify-center gap-2 mt-1">
+              <span className="font-mono font-bold text-sm tracking-widest">{promptPayNumber}</span>
+              <button
+                type="button"
+                onClick={handleCopyPromptPay}
+                className="p-1.5 rounded-[1600px] border border-[#000000] bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] transition-colors cursor-pointer"
+                title="คัดลอกเบอร์พร้อมเพย์"
+              >
+                {copiedPromptPay ? <Check className="w-3.5 h-3.5 text-[#55db9c]" /> : <Copy className="w-3.5 h-3.5" />}
+              </button>
+            </div>
+            {copiedPromptPay && <span className="text-[10px] text-[#000000] font-bold">คัดลอกเบอร์สำเร็จ!</span>}
           </div>
         </div>
 
-        {/* Bank Slip Upload Simulation */}
-        <div className="bg-white border border-black rounded-[28px] p-4 space-y-3">
-          <label className="text-xs font-bold text-black uppercase tracking-wide block">
-            Payment Verification (สลิปโอนเงิน)
-          </label>
+        {/* Upload Bank Slip Box */}
+        <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
+          <div className="flex items-center justify-between">
+            <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+              Upload Transfer Slip (สลิปโอนเงิน)
+            </h4>
+            <span className="text-[10px] text-[#000000]/60 font-bold">AI Scan 100% Real-time</span>
+          </div>
 
-          {isSlipUploaded ? (
-            <div className="p-3 rounded-2xl bg-[#55db9c]/30 border border-black flex items-center gap-2.5">
-              <CheckCircle2 className="w-5 h-5 text-[#55db9c] fill-black shrink-0" />
-              <div>
-                <p className="text-xs font-bold text-black">Slip Verified Successfully!</p>
-                <p className="text-[10px] text-neutral-600 font-medium">Ref: PP-TRX-20261107-8891</p>
+          <div
+            onClick={handleSimulateSlipUpload}
+            className={`border border-dashed rounded-[20px] p-4 text-center cursor-pointer transition-all ${
+              verificationDone
+                ? 'border-[#000000] bg-[#55db9c]'
+                : 'border-[#000000] hover:bg-[#e9e9e9] bg-[#ffffff]'
+            }`}
+          >
+            {isVerifying ? (
+              <div className="flex flex-col items-center gap-2 py-2">
+                <div className="w-6 h-6 border-2 border-[#000000] border-t-transparent rounded-full animate-spin" />
+                <span className="text-xs font-bold text-[#000000]">AI กำลังสแกนความถูกต้องของสลิป...</span>
               </div>
-            </div>
-          ) : (
-            <button
-              type="button"
-              disabled={isVerifying}
-              onClick={handleSimulateSlipUpload}
-              className="w-full py-4 rounded-2xl border border-dashed border-black bg-[#dceeff]/40 hover:bg-[#dceeff] flex flex-col items-center justify-center gap-1 cursor-pointer transition-colors active:scale-98"
-            >
-              <UploadCloud className="w-6 h-6 text-black" />
-              <span className="text-xs font-bold text-black">
-                {isVerifying ? 'Verifying Bank Slip with AI...' : 'Tap to Upload Bank Transfer Slip'}
-              </span>
-              <span className="text-[10px] text-neutral-500 font-medium">
-                Supports KBank, SCB, BBL, Krungthai QR
-              </span>
-            </button>
-          )}
+            ) : verificationDone ? (
+              <div className="flex items-center justify-center gap-2 py-1 text-[#000000]">
+                <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                <span className="text-xs font-bold tracking-[0.032em]">สลิปถูกต้องเรียบร้อย (PromptPay Verified)</span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center gap-1.5 py-1">
+                <UploadCloud className="w-6 h-6 text-[#000000]" />
+                <span className="text-xs font-bold text-[#000000]">คลิกเพื่ออัปโหลดสลิปธนาคาร (Simulate Slip)</span>
+                <span className="text-[10px] text-[#000000]/60 font-bold">รองรับ K-Plus, SCB Easy, Krungthai, Bangkok Bank</span>
+              </div>
+            )}
+          </div>
         </div>
-      </div>
 
-      {/* Bottom Sticky CTA */}
-      <div className="px-4 pt-2">
+        {/* Confirm Payment CTA (Black fill only) */}
         <button
+          type="button"
           onClick={handleConfirmAndComplete}
-          className="w-full py-4 rounded-full bg-black hover:bg-neutral-800 text-white font-bold text-sm border border-black flex items-center justify-center gap-2 transition-transform active:scale-98 cursor-pointer shadow-sm"
+          className="w-full py-4 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
         >
-          <span>Confirm & Unlock E-Ticket (+100 EXP)</span>
-          <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+          <span>CONFIRM & GET COURT PASS</span>
+          <ArrowRight className="w-4 h-4" />
         </button>
       </div>
     </div>

@@ -1,8 +1,3 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState } from 'react';
 import { AlertTriangle, TrendingUp, Zap, ChevronRight, Activity, ArrowRight, ShieldAlert, Sparkles, Check, Share2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
@@ -16,49 +11,35 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
   const ZONE_INFO: Record<string, { name: string; errors: number; advice: string; tag: string; color: string }> = {
     'front-left': {
       name: 'Forehand Net Zone',
-      errors: 6,
-      advice: '4 net-tape errors detected. Keep racket head at eye level and bend knees before contacting shuttle.',
+      errors: 4,
+      advice: 'พบข้อผิดพลาดลูกติดเน็ต 4 ครั้ง แนะนำให้ตั้งหน้าไม้ระดับสายตาและย่อเข่าก่อนสัมผัสลูก',
       tag: 'Need Practice',
-      color: '#fb4903',
+      color: '#ff5c34',
     },
     'front-right': {
       name: 'Backhand Net Zone',
-      errors: 2,
-      advice: 'Net slice and kill execution was solid with an 80% point conversion rate.',
+      errors: 1,
+      advice: 'ลูกปั่นเน็ตและการตัดหยอดทำได้ยอดเยี่ยม เปลี่ยนเป็นแต้มได้ถึง 80%',
       tag: 'Strong Zone',
       color: '#55db9c',
     },
-    'mid-left': {
-      name: 'Midcourt Left (Drive)',
-      errors: 3,
-      advice: 'Fast recovery lag detected after jump smash (0.4s delay in split-step readiness).',
-      tag: 'Caution',
-      color: '#ffd731',
-    },
-    'mid-right': {
-      name: 'Midcourt Right (Intercept)',
-      errors: 1,
-      advice: 'Solid court coverage; intercepted 90% of opponent cross-court returns.',
-      tag: 'Excellent',
-      color: '#4da2ff',
-    },
     'back-left': {
       name: 'Backhand Deep Corner',
-      errors: 7,
-      advice: 'Critical weak zone! Late racket face angle caused 5 out-wide baseline errors.',
+      errors: 5,
+      advice: 'จุดอ่อนสำคัญ! องศาหน้าไม้ปิดช้าเกินไป ทำให้ลูกออกเส้นหลัง 5 ครั้ง',
       tag: 'Critical Weakness',
-      color: '#fb4903',
+      color: '#ff5c34',
     },
     'back-right': {
       name: 'Smash Power Hotspot',
-      errors: 2,
-      advice: 'Primary winner hotspot! 8 jump smash winners with average 312 km/h velocity.',
+      errors: 1,
+      advice: 'จุดทำแต้มหลัก! ตบ Smash ชนะ 8 ครั้ง ความเร็วเฉลี่ย 312 km/h',
       tag: 'Winner Hotspot',
       color: '#ffd731',
     },
   };
 
-  const currentZone = ZONE_INFO[selectedZone];
+  const currentZone = ZONE_INFO[selectedZone] || ZONE_INFO['front-left'];
 
   const handleAddDrill = () => {
     setDrillAdded(true);
@@ -69,153 +50,152 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
       <MobileHeader title="AI Match Diagnostics" showBack />
 
-      <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
+      <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
         {/* Header Intro Banner */}
-        <div className="bg-white border border-black rounded-[28px] p-4 shadow-xs">
+        <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff]">
           <div className="flex items-center gap-2 mb-1">
-            <span className="px-2.5 py-0.5 rounded-full bg-[#fb4903] text-white border border-black text-[10px] font-black uppercase">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ff5c34] text-[#ffffff] border border-[#000000]">
               AI Vision Heatmap
             </span>
-            <span className="text-xs font-bold text-neutral-600">Court 3 Match Diagnostics</span>
+            <span className="text-xs font-bold text-[#000000]/60">Court 3 Diagnostics</span>
           </div>
-          <h2 className="font-['Antonio'] text-3xl font-extrabold text-black uppercase tracking-tight leading-tight">
+          <h2 className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight leading-tight uppercase text-[#000000]">
             2D WEAKNESS HEATMAP
           </h2>
-          <p className="text-xs text-neutral-600 font-medium">
-            Tap any court zone below to view shot statistics and AI coaching drills.
+          <p className="text-xs text-[#000000]/70 font-medium">
+            แตะโซนบนสนามเพื่อดูสถิติและแบบฝึกซ้อมแก้จุดอ่อนที่ AI แนะนำ
           </p>
         </div>
 
-        {/* 2D Badminton Court Interactive Map (Slush Style) */}
-        <div className="bg-white border border-black rounded-[32px] p-4 text-center shadow-xs">
-          <div className="relative w-full max-w-[280px] h-60 mx-auto bg-[#55db9c]/30 border-2 border-black rounded-2xl p-2 flex flex-col justify-between relative overflow-hidden">
+        {/* 2D Badminton Court Interactive Map (Slush Style with 1px black outline) */}
+        <div className="border border-[#000000] rounded-[32px] p-4 text-center bg-[#ffffff]">
+          <div className="relative w-full max-w-[280px] h-60 mx-auto bg-[#55db9c]/30 border-2 border-[#000000] rounded-[24px] p-2 flex flex-col justify-between overflow-hidden">
             {/* Net Divider */}
-            <div className="absolute top-1/2 inset-x-0 h-1 bg-black z-10 flex items-center justify-center">
-              <span className="px-2 py-0.2 bg-white border border-black text-[9px] font-black uppercase">
+            <div className="absolute top-1/2 inset-x-0 h-1 bg-[#000000] z-10 flex items-center justify-center">
+              <span className="px-2 py-0.2 bg-[#000000] text-[#ffffff] text-[8px] font-black uppercase rounded-[1600px] border border-[#ffffff]">
                 NET
               </span>
             </div>
 
-            {/* Top Half (Opponent side) */}
-            <div className="grid grid-cols-2 gap-1.5 h-[46%] opacity-60">
-              <div className="rounded-xl border border-dashed border-black/40 flex items-center justify-center text-[10px] font-bold">
-                Opponent L
-              </div>
-              <div className="rounded-xl border border-dashed border-black/40 flex items-center justify-center text-[10px] font-bold">
-                Opponent R
-              </div>
+            {/* Top Half: Opponent side */}
+            <div className="flex-1 border-b border-dashed border-[#000000]/40 flex items-center justify-center">
+              <span className="text-[10px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
+                Opponent Court
+              </span>
             </div>
 
-            {/* Bottom Half (Player Zones - Clickable) */}
-            <div className="grid grid-cols-2 gap-1.5 h-[46%] z-20">
+            {/* Bottom Half: Player 4 zones */}
+            <div className="flex-1 grid grid-cols-2 grid-rows-2 gap-1.5 pt-1.5 z-20">
               <button
                 type="button"
                 onClick={() => setSelectedZone('front-left')}
-                className={`rounded-xl border-2 transition-transform cursor-pointer flex flex-col items-center justify-center p-1 ${
-                  selectedZone === 'front-left' ? 'scale-105 border-black shadow-xs font-extrabold' : 'border-black/60'
+                className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
+                  selectedZone === 'front-left'
+                    ? 'bg-[#ff5c34] text-[#ffffff] scale-102 ring-2 ring-[#000000]'
+                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
                 }`}
-                style={{ backgroundColor: ZONE_INFO['front-left'].color }}
               >
-                <span className="text-[10px] font-bold text-black">Net Forehand</span>
-                <span className="text-[9px] font-black px-1.5 py-0.2 bg-black text-white rounded-full">
-                  6 Errs
-                </span>
+                <span>Forehand Net</span>
+                <span className="text-[9px] font-mono mt-0.5">4 Errors</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setSelectedZone('front-right')}
-                className={`rounded-xl border-2 transition-transform cursor-pointer flex flex-col items-center justify-center p-1 ${
-                  selectedZone === 'front-right' ? 'scale-105 border-black shadow-xs font-extrabold' : 'border-black/60'
+                className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
+                  selectedZone === 'front-right'
+                    ? 'bg-[#55db9c] text-[#000000] scale-102 ring-2 ring-[#000000]'
+                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
                 }`}
-                style={{ backgroundColor: ZONE_INFO['front-right'].color }}
               >
-                <span className="text-[10px] font-bold text-black">Net Backhand</span>
-                <span className="text-[9px] font-black px-1.5 py-0.2 bg-white text-black border border-black rounded-full">
-                  80% Win
-                </span>
+                <span>Backhand Net</span>
+                <span className="text-[9px] font-mono mt-0.5">1 Error</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setSelectedZone('back-left')}
-                className={`rounded-xl border-2 transition-transform cursor-pointer flex flex-col items-center justify-center p-1 ${
-                  selectedZone === 'back-left' ? 'scale-105 border-black shadow-xs font-extrabold' : 'border-black/60'
+                className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
+                  selectedZone === 'back-left'
+                    ? 'bg-[#ff5c34] text-[#ffffff] scale-102 ring-2 ring-[#000000]'
+                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
                 }`}
-                style={{ backgroundColor: ZONE_INFO['back-left'].color }}
               >
-                <span className="text-[10px] font-bold text-black">Deep Backhand</span>
-                <span className="text-[9px] font-black px-1.5 py-0.2 bg-black text-white rounded-full">
-                  7 Errs
-                </span>
+                <span>Deep Backhand</span>
+                <span className="text-[9px] font-mono mt-0.5">5 Errors</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setSelectedZone('back-right')}
-                className={`rounded-xl border-2 transition-transform cursor-pointer flex flex-col items-center justify-center p-1 ${
-                  selectedZone === 'back-right' ? 'scale-105 border-black shadow-xs font-extrabold' : 'border-black/60'
+                className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
+                  selectedZone === 'back-right'
+                    ? 'bg-[#ffd731] text-[#000000] scale-102 ring-2 ring-[#000000]'
+                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
                 }`}
-                style={{ backgroundColor: ZONE_INFO['back-right'].color }}
               >
-                <span className="text-[10px] font-bold text-black">Smash Hotspot</span>
-                <span className="text-[9px] font-black px-1.5 py-0.2 bg-white text-black border border-black rounded-full">
-                  8 Winners
-                </span>
+                <span>Smash Zone</span>
+                <span className="text-[9px] font-mono mt-0.5">8 Winners</span>
               </button>
             </div>
           </div>
         </div>
 
-        {/* Selected Zone Insight Card */}
-        <div className="bg-white border border-black rounded-[28px] p-4 space-y-2">
+        {/* Selected Zone Detail Card */}
+        <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
           <div className="flex items-center justify-between">
-            <span className="font-['Antonio'] text-xl font-bold uppercase text-black">
+            <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
               {currentZone.name}
             </span>
-            <span
-              className="px-2.5 py-0.5 rounded-full border border-black text-[10px] font-black uppercase text-black"
-              style={{ backgroundColor: currentZone.color }}
-            >
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] text-[#000000]">
               {currentZone.tag}
             </span>
           </div>
 
-          <p className="text-xs text-neutral-700 leading-relaxed font-medium">
+          <p className="text-xs text-[#000000]/80 leading-relaxed font-medium">
             {currentZone.advice}
           </p>
 
-          <div className="pt-2">
-            <button
-              onClick={handleAddDrill}
-              className="w-full py-3 rounded-full bg-black hover:bg-neutral-800 text-white font-bold text-xs border border-black flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer"
-            >
-              <Zap className="w-4 h-4 fill-[#ffd731] text-[#ffd731]" />
-              <span>{drillAdded ? 'Added! Going to Quests...' : 'Add AI Drill to Quest Board (+80 EXP)'}</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={handleAddDrill}
+            className="w-full py-3.5 px-4 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
+          >
+            {drillAdded ? (
+              <>
+                <Check className="w-4 h-4 stroke-[3] text-[#55db9c] shrink-0" />
+                <span>DRILL ADDED (+80 EXP)</span>
+              </>
+            ) : (
+              <>
+                <Zap className="w-4 h-4 fill-[#ffd731] text-[#ffd731] shrink-0" />
+                <span>ADD DRILL TO QUESTS (D2)</span>
+                <ArrowRight className="w-4 h-4 shrink-0" />
+              </>
+            )}
+          </button>
         </div>
 
-        {/* Quick Navigations */}
+        {/* Dual Actions Footer */}
         <div className="grid grid-cols-2 gap-2 pt-1">
           <button
+            type="button"
             onClick={() => navigateTo('C4')}
-            className="py-3 rounded-full bg-[#ffd731] hover:bg-[#ffe259] border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
           >
-            <Share2 className="w-3.5 h-3.5" />
-            <span>FUT Athlete Card</span>
+            <Share2 className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
+            <span>SHARE RECAP (C4)</span>
           </button>
-
           <button
+            type="button"
             onClick={() => navigateTo('D1')}
-            className="py-3 rounded-full bg-white hover:bg-neutral-100 border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
+            className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
           >
-            <Zap className="w-3.5 h-3.5" />
-            <span>AI Coach Radar</span>
+            <span>AI COACH (D1)</span>
+            <ArrowRight className="w-3.5 h-3.5 shrink-0" />
           </button>
         </div>
       </div>

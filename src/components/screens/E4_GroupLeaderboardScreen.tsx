@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { Trophy, Medal, Zap, Flame, Crown, ChevronRight, TrendingUp, Filter, Swords, ArrowRight } from 'lucide-react';
+import { Trophy, Medal, Zap, Flame, Crown, Swords, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 import { PlayerTier } from '../../types';
 
 export const E4_GroupLeaderboardScreen: React.FC = () => {
-  const { leaderboard, player, navigateTo } = useApp();
+  const { leaderboard, player, navigateTo, setSparringModalPlayer } = useApp();
   const [selectedTierFilter, setSelectedTierFilter] = useState<'All' | PlayerTier>('All');
 
   const filteredList = leaderboard.filter((item) => {
@@ -14,52 +14,52 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
   });
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
       <MobileHeader title="ตารางอันดับก๊วน & SEASON TIER" showBack />
 
-      <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
-        {/* Season Header Banner - Slush Voltage Violet Sticker */}
-        <div className="p-5 rounded-[28px] bg-[#5c4ade] text-white border-[1.5px] border-black space-y-2 relative overflow-hidden">
+      <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
+        {/* Season Header Banner */}
+        <div className="border border-[#000000] rounded-[28px] p-5 space-y-2.5 bg-[#ffffff]">
           <div className="flex items-center justify-between text-xs">
-            <span className="px-3 py-1 rounded-full bg-[#ffd731] text-black border border-black font-extrabold text-[10px] uppercase tracking-wider flex items-center gap-1.5">
-              <Crown className="w-3.5 h-3.5 fill-black" />
+            <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] font-bold text-[10px] uppercase tracking-[0.032em] flex items-center gap-1.5">
+              <Crown className="w-3.5 h-3.5 fill-[#000000]" />
               SEASON 4: BANGKOK CLASH
             </span>
-            <span className="text-[10px] bg-black/30 px-2 py-0.5 rounded-full font-mono font-bold text-white">
+            <span className="text-[10px] bg-[#dceeff] border border-[#000000] px-2.5 py-0.5 rounded-[1600px] font-bold">
               14 DAYS LEFT
             </span>
           </div>
 
-          <h2 className="text-xl font-['Antonio',sans-serif] font-black uppercase tracking-tight text-white pt-1">
+          <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight pt-1 leading-tight text-[#000000]">
             ตารางจัดอันดับก๊วนตบสนั่น พระราม 9
           </h2>
-          <p className="text-xs text-white/90 font-bold">
+          <p className="text-xs text-[#000000]/70 font-medium">
             สะสม Win Rate และ Smash Winner Points เพื่อเลื่อนชั้นสู่ Diamond Tier
           </p>
 
-          <div className="pt-2 flex items-center gap-2">
+          <div className="pt-1 flex items-center gap-2">
             <button
               type="button"
               onClick={() => navigateTo('E3')}
-              className="px-3 py-1.5 rounded-full bg-[#ffd731] text-black border border-black font-['Antonio',sans-serif] font-black text-xs uppercase flex items-center gap-1 hover:bg-[#ffe366] cursor-pointer"
+              className="px-4 py-2 rounded-[1600px] bg-[#000000] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center gap-1.5 cursor-pointer transition-transform active:scale-95 border border-[#000000] hover:bg-[#1a1a1a] whitespace-nowrap"
             >
-              <Swords className="w-3.5 h-3.5" />
-              <span>เปิดระบบจับคู่ AI Matchmaker</span>
+              <Swords className="w-3.5 h-3.5 shrink-0" />
+              <span className="whitespace-nowrap">AI SMART MATCHMAKER (E3)</span>
             </button>
           </div>
         </div>
 
-        {/* Tier Filter Pills - Slush Hand-Cut Sticker Style */}
+        {/* Tier Filter Pills */}
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
           {['All', 'Diamond', 'Gold', 'Silver', 'Bronze'].map((tier) => (
             <button
               type="button"
               key={tier}
               onClick={() => setSelectedTierFilter(tier as any)}
-              className={`px-4 py-1.5 rounded-full text-xs font-['Antonio',sans-serif] font-black uppercase shrink-0 cursor-pointer transition-all border-[1.5px] border-black ${
+              className={`px-4 py-1.5 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] shrink-0 cursor-pointer transition-all border border-[#000000] ${
                 selectedTierFilter === tier
-                  ? 'bg-black text-[#ffd731]'
-                  : 'bg-white text-black hover:bg-[#ffd731]/40'
+                  ? 'bg-[#000000] text-[#ffffff]'
+                  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
               }`}
             >
               {tier === 'All' ? 'ทั้งหมด (ALL TIERS)' : `${tier} LEAGUE`}
@@ -71,93 +71,63 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
         <div className="space-y-2.5">
           {filteredList.map((item) => {
             const isUser = item.name.includes('กานต์') || item.rank === 1;
-            const rankBg =
-              item.rank === 1
-                ? 'bg-[#ffd731]' // Sunburst gold
-                : item.rank === 2
-                ? 'bg-white'
-                : item.rank === 3
-                ? 'bg-[#e9ccff]' // Lavender
-                : isUser
-                ? 'bg-[#55db9c]' // Mint Pop
-                : 'bg-white';
 
             return (
               <div
                 key={item.id}
-                className={`p-3.5 rounded-[24px] border-[1.5px] border-black transition-all flex items-center justify-between ${rankBg}`}
+                onClick={() => setSparringModalPlayer({
+                  name: item.name,
+                  ovr: item.ovr,
+                  tier: `${item.tier} League`,
+                  role: 'Top Ranked Smasher',
+                  status: 'พร้อมดวลคะแนน Season 4',
+                  winRate: item.winRate,
+                })}
+                className={`p-3.5 rounded-[24px] border border-[#000000] transition-all flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
+                  isUser ? 'bg-[#ffd731]' : 'bg-[#ffffff]'
+                }`}
               >
                 <div className="flex items-center gap-3">
-                  <div
-                    className={`w-8 h-8 rounded-full border border-black flex items-center justify-center font-['Antonio',sans-serif] font-black text-sm shrink-0 ${
-                      item.rank === 1
-                        ? 'bg-black text-[#ffd731]'
-                        : item.rank === 2
-                        ? 'bg-[#5c4ade] text-white'
-                        : item.rank === 3
-                        ? 'bg-[#fb4903] text-white'
-                        : 'bg-black/10 text-black'
-                    }`}
-                  >
+                  <div className={`w-8 h-8 rounded-[1600px] border border-[#000000] flex items-center justify-center font-['Antonio',sans-serif] text-base font-black ${
+                    item.rank === 1
+                      ? 'bg-[#000000] text-[#ffd731]'
+                      : item.rank === 2
+                      ? 'bg-[#cccccc] text-[#000000]'
+                      : item.rank === 3
+                      ? 'bg-[#ff5c34] text-[#ffffff]'
+                      : 'bg-[#ffffff] text-[#000000]'
+                  }`}>
                     {item.rank}
                   </div>
 
-                  <img
-                    src={item.avatarUrl}
-                    alt={item.name}
-                    className="w-11 h-11 rounded-full object-cover border-[1.5px] border-black bg-white"
-                  />
-
                   <div>
-                    <div className="text-xs font-extrabold text-black flex items-center gap-1.5">
-                      <span>{item.name}</span>
-                      {item.rank === 1 && <Crown className="w-3.5 h-3.5 text-[#fb4903] fill-[#fb4903]" />}
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-bold text-xs text-[#000000]">{item.name}</span>
                       {isUser && (
-                        <span className="px-1.5 py-0.2 rounded-full bg-black text-[#55db9c] text-[8px] font-black font-mono">
-                          YOU
+                        <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-bold uppercase">
+                          You
                         </span>
                       )}
                     </div>
-                    <div className="text-[10px] text-black/70 font-black font-mono mt-0.5">
-                      OVR {item.ovr} · {item.tier} LEAGUE
-                    </div>
+                    <span className="text-[10px] text-[#000000]/60 font-bold uppercase tracking-[0.032em]">
+                      {item.tier} · OVR {item.ovr}
+                    </span>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-sm font-['Antonio',sans-serif] font-black text-black">
-                    {item.exp.toLocaleString()} EXP
+                  <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
+                    {item.winRate}% WIN
                   </div>
-                  <div className="text-[10px] text-[#fb4903] font-black">
-                    WIN {item.winRate}% ({item.totalGames}G)
-                  </div>
+                  <span className="text-[10px] font-bold text-[#000000]/60">
+                    {item.totalGames} แมตช์ · {item.smashPoints} pts
+                  </span>
                 </div>
               </div>
             );
           })}
         </div>
-
-        {/* Challenge Action CTA Card */}
-        <div className="p-4 rounded-[28px] bg-white border-[1.5px] border-black flex items-center justify-between">
-          <div>
-            <div className="text-xs font-black uppercase text-black font-['Antonio',sans-serif]">
-              ท้าดวลอันดับ 1 ก๊วน (CHALLENGE S1)
-            </div>
-            <div className="text-[10px] text-black/70 font-bold">
-              จัดทีมสลับมือแบบสมดุล AI Balance 50/50
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => navigateTo('E3')}
-            className="px-4 py-2 rounded-full bg-[#fb4903] text-white border-[1.5px] border-black font-['Antonio',sans-serif] font-black text-xs uppercase flex items-center gap-1 hover:bg-[#ff5d1e] active:scale-95 cursor-pointer"
-          >
-            <span>ท้าดวล</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </div>
       </div>
     </div>
   );
 };
-

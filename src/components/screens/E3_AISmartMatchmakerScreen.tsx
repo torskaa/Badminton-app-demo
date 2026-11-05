@@ -1,16 +1,10 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState } from 'react';
-import { Sparkles, RefreshCw, Zap, Trophy, Play, Users, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Sparkles, RefreshCw, Zap, Trophy, Play, Users, ArrowRight, ShieldCheck, Swords } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const E3_AISmartMatchmakerScreen: React.FC = () => {
-  const { currentEvent, navigateTo } = useApp();
-
+  const { navigateTo, gainExp } = useApp();
   const [shuffleCount, setShuffleCount] = useState(0);
 
   const PAIRING_OPTIONS = [
@@ -52,125 +46,104 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
     setShuffleCount((prev) => prev + 1);
   };
 
+  const handleAcceptDuel = () => {
+    gainExp(40, 'เริ่มการแข่งขันแมตช์สลับมือสมดุล AI');
+    navigateTo('C1');
+  };
+
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
       <MobileHeader title="AI Smart Matchmaker" showBack />
 
-      <div className="p-4 space-y-4 flex-1 overflow-y-auto no-scrollbar">
+      <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
         {/* Matchmaker Banner Card */}
-        <div className="bg-white border border-black rounded-[32px] p-4 flex items-center justify-between shadow-xs">
+        <div className="border border-[#000000] rounded-[32px] p-5 bg-[#ffffff]">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#5c4ade] text-white border border-black text-[10px] font-black uppercase">
+              <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#5c4ade] text-[#ffffff] border border-[#000000]">
                 AI Radar Balancing
               </span>
-              <span className="text-xs font-bold text-neutral-600">MMR Skill Equalizer</span>
+              <span className="text-xs font-bold text-[#000000]/60">MMR Skill Equalizer</span>
             </div>
-            <h2 className="font-['Antonio'] text-3xl font-extrabold text-black uppercase tracking-tight leading-tight">
+            <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase leading-tight tracking-tight text-[#000000]">
               FAIR PLAY MATCHMAKING
             </h2>
-            <p className="text-xs text-neutral-600 font-medium">
-              Eliminate one-sided games. AI matches team stats for a thrilling 50/50 clash.
+            <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
+              จัดทีมสลับมือแบบสมดุล หมดปัญหามือห่าง เกมขาด ด้วยอัลกอริทึม 50/50
             </p>
           </div>
         </div>
 
-        {/* Balance Score Sticker Card */}
-        <div className="p-3.5 rounded-[28px] bg-[#55db9c] border border-black flex items-center justify-between shadow-xs">
+        {/* Balance Score Card */}
+        <div className="p-4 rounded-[26px] border border-[#000000] flex items-center justify-between bg-[#55db9c] text-[#000000]">
           <div className="flex items-center gap-2.5">
-            <Sparkles className="w-5 h-5 text-black stroke-[2.5]" />
-            <span className="font-['Antonio'] text-xl font-extrabold text-black uppercase leading-none">
+            <Sparkles className="w-5 h-5 text-[#000000] stroke-[2.5]" />
+            <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide">
               {currentPairing.balanceScore}
             </span>
           </div>
 
           <button
+            type="button"
             onClick={handleShuffle}
-            className="px-3 py-1 rounded-full bg-white text-black border border-black text-xs font-bold hover:bg-neutral-100 flex items-center gap-1 transition-transform active:scale-95 cursor-pointer"
+            className="px-3 py-1.5 rounded-[1600px] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]"
           >
-            <RefreshCw className="w-3 h-3" />
-            <span>Shuffle</span>
+            <RefreshCw className="w-3.5 h-3.5" />
+            <span>สลับคู่ใหม่</span>
           </button>
         </div>
 
-        {/* Versus Teams Split (Slush Cards) */}
-        <div className="space-y-3">
-          {/* Team A (Blue) */}
-          <div className="bg-white border border-black rounded-[28px] p-4 space-y-2 shadow-xs">
+        {/* Balanced Teams Display */}
+        <div className="grid grid-cols-2 gap-3">
+          {/* Team A */}
+          <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffd731] space-y-2.5">
             <div className="flex items-center justify-between">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#4da2ff] border border-black text-black text-[10px] font-black uppercase">
-                Team A (Blue)
-              </span>
-              <span className="font-['Antonio'] text-xl font-bold text-black">
-                {currentPairing.teamAOvr} OVR AVG ({currentPairing.winProbA}% Win)
-              </span>
+              <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">TEAM A</span>
+              <span className="text-xs font-black text-[#000000]">OVR {currentPairing.teamAOvr}</span>
             </div>
-
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              {currentPairing.teamA.map((p, idx) => (
-                <div key={idx} className="p-2.5 rounded-2xl bg-[#dceeff]/50 border border-black">
-                  <div className="font-bold text-black truncate">{p.name}</div>
-                  <div className="text-[10px] text-neutral-600 font-medium">{p.role} · {p.ovr} OVR</div>
+            <div className="space-y-2">
+              {currentPairing.teamA.map((p, i) => (
+                <div key={i} className="p-2.5 rounded-[18px] bg-[#ffffff] border border-[#000000] text-xs">
+                  <span className="font-bold block truncate text-[#000000]">{p.name}</span>
+                  <span className="text-[10px] text-[#000000]/60 block">{p.role}</span>
                 </div>
               ))}
             </div>
-          </div>
-
-          <div className="text-center">
-            <span className="font-['Antonio'] text-2xl font-black text-black px-4 py-1 rounded-full bg-white border border-black inline-block">
-              VS
-            </span>
-          </div>
-
-          {/* Team B (Yellow) */}
-          <div className="bg-white border border-black rounded-[28px] p-4 space-y-2 shadow-xs">
-            <div className="flex items-center justify-between">
-              <span className="px-2.5 py-0.5 rounded-full bg-[#ffd731] border border-black text-black text-[10px] font-black uppercase">
-                Team B (Yellow)
-              </span>
-              <span className="font-['Antonio'] text-xl font-bold text-black">
-                {currentPairing.teamBOvr} OVR AVG ({currentPairing.winProbB}% Win)
-              </span>
+            <div className="text-center pt-1 font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
+              โอกาสชนะ {currentPairing.winProbA}%
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-2 text-xs">
-              {currentPairing.teamB.map((p, idx) => (
-                <div key={idx} className="p-2.5 rounded-2xl bg-[#ffd731]/30 border border-black">
-                  <div className="font-bold text-black truncate">{p.name}</div>
-                  <div className="text-[10px] text-neutral-600 font-medium">{p.role} · {p.ovr} OVR</div>
+          {/* Team B */}
+          <div className="border border-[#000000] rounded-[28px] p-4 bg-[#e9ccff] space-y-2.5">
+            <div className="flex items-center justify-between">
+              <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">TEAM B</span>
+              <span className="text-xs font-black text-[#000000]">OVR {currentPairing.teamBOvr}</span>
+            </div>
+            <div className="space-y-2">
+              {currentPairing.teamB.map((p, i) => (
+                <div key={i} className="p-2.5 rounded-[18px] bg-[#ffffff] border border-[#000000] text-xs">
+                  <span className="font-bold block truncate text-[#000000]">{p.name}</span>
+                  <span className="text-[10px] text-[#000000]/60 block">{p.role}</span>
                 </div>
               ))}
+            </div>
+            <div className="text-center pt-1 font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
+              โอกาสชนะ {currentPairing.winProbB}%
             </div>
           </div>
         </div>
 
-        {/* Action Buttons (Direct flow into Match Logger C1) */}
-        <div className="space-y-2 pt-1">
+        {/* Accept Duel CTA */}
+        <div className="pt-2">
           <button
-            onClick={() => navigateTo('C1')}
-            className="w-full py-4 rounded-full bg-black hover:bg-neutral-800 text-white font-bold text-xs uppercase tracking-wider border border-black flex items-center justify-center gap-2 cursor-pointer transition-transform active:scale-98 shadow-sm"
+            type="button"
+            onClick={handleAcceptDuel}
+            className="w-full py-3.5 px-4 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
           >
-            <Play className="w-4 h-4 fill-current" />
-            <span>Accept Duel & Start Match (Go to Courtside)</span>
-            <ArrowRight className="w-4 h-4" />
+            <Play className="w-4 h-4 fill-[#ffffff] shrink-0" />
+            <span className="whitespace-nowrap">ACCEPT DUEL & START MATCH (C1)</span>
           </button>
-
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              onClick={() => navigateTo('E4')}
-              className="py-3 rounded-full bg-white hover:bg-neutral-100 border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
-            >
-              <span>View Leaderboards</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-
-            <button
-              onClick={() => navigateTo('E1')}
-              className="py-3 rounded-full bg-white hover:bg-neutral-100 border border-black text-xs font-bold text-black flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer"
-            >
-              <span>Back to Guild</span>
-            </button>
-          </div>
         </div>
       </div>
     </div>

@@ -1,10 +1,5 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React, { useState } from 'react';
-import { Star, MapPin, Zap, Clock, ShieldCheck, Check, ArrowRight, Sparkles, ChevronLeft } from 'lucide-react';
+import { Star, MapPin, Zap, ArrowRight, Bookmark, Share2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 import { CourtSlot } from '../../types';
@@ -13,7 +8,18 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
   const { selectedCourt, booking, updateBooking, navigateTo } = useApp();
 
   const [selectedCourtNum, setSelectedCourtNum] = useState<number>(booking.selectedCourtNumber || 3);
-  const [selectedDate, setSelectedDate] = useState('2026-11-07');
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(2); // S 12 Saturday
+  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
+
+  const daysOfWeek = [
+    { day: 'T', date: 10, label: 'Thu' },
+    { day: 'F', date: 11, label: 'Fri' },
+    { day: 'S', date: 12, label: 'Sat' },
+    { day: 'S', date: 13, label: 'Sun' },
+    { day: 'M', date: 14, label: 'Mon' },
+    { day: 'T', date: 15, label: 'Tue' },
+    { day: 'W', date: 16, label: 'Wed' },
+  ];
 
   const AVAILABLE_SLOTS: CourtSlot[] = [
     { id: 's_17', courtNumber: selectedCourtNum, startTime: '17:00', endTime: '18:00', price: selectedCourt.pricePerHour, isAvailable: true },
@@ -41,146 +47,208 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
       court: selectedCourt,
       selectedCourtNumber: selectedCourtNum,
       selectedSlots,
-      date: selectedDate,
+      date: `2026-11-${daysOfWeek[selectedDayIndex].date}`,
       totalAmount: totalPrice,
     });
     navigateTo('B3');
   };
 
   return (
-    <div className="flex-1 flex flex-col justify-between bg-[#dceeff] text-black pb-6 select-none font-['Plus_Jakarta_Sans',sans-serif]">
+    <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
       <MobileHeader title={selectedCourt.name} showBack />
 
-      <div className="flex-1 overflow-y-auto no-scrollbar p-4 space-y-4">
-        {/* Court Hero Card with Slush Sticker Badge */}
-        <div className="bg-white border border-black rounded-[32px] p-4 relative overflow-hidden">
-          <div className="flex items-center justify-between mb-2">
-            <span className="px-3 py-1 rounded-full bg-[#ffd731] border border-black text-[10px] font-black uppercase text-black flex items-center gap-1">
-              <Zap className="w-3 h-3 fill-current" />
-              <span>2X EXP Slot Bonus</span>
-            </span>
-            <div className="flex items-center gap-1 text-xs font-bold text-black">
-              <Star className="w-3.5 h-3.5 fill-[#ffd731] stroke-black" />
-              <span>4.9 (BWF Grade)</span>
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-6">
+        {/* Court Hero Image with Hand-cut 1px solid black border */}
+        <div className="relative w-full h-56 bg-[#000000] overflow-hidden border-b border-[#000000]">
+          <img
+            src={selectedCourt.imageUrl || 'https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=800&auto=format&fit=crop&q=80'}
+            alt={selectedCourt.name}
+            className="w-full h-full object-cover opacity-90"
+          />
+
+          {/* Action pills top right */}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsBookmarked(!isBookmarked)}
+              className={`w-9 h-9 rounded-[1600px] border border-[#000000] flex items-center justify-center transition-all cursor-pointer ${
+                isBookmarked ? 'bg-[#ffd731] text-[#000000]' : 'bg-[#ffffff] text-[#000000]'
+              }`}
+            >
+              <Bookmark className="w-4 h-4 fill-current" />
+            </button>
+            <button
+              type="button"
+              className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] cursor-pointer"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* Bottom badge overlay */}
+          <div className="absolute bottom-4 left-4 right-4 text-[#ffffff] bg-[#000000]/70 p-3 rounded-[24px] border border-[#000000]">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] border border-[#000000] text-[10px] font-black uppercase">
+                Active BWF
+              </span>
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] text-[10px] font-black uppercase flex items-center gap-1">
+                <Zap className="w-3 h-3 fill-current" />
+                <span>2X EXP BONUS</span>
+              </span>
+            </div>
+            <h1 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#ffffff] leading-tight">
+              {selectedCourt.name}
+            </h1>
+            <p className="text-xs text-[#ffffff]/90 font-bold">{selectedCourt.location} · 4 คอร์ท BWF Taraflex</p>
+          </div>
+        </div>
+
+        <div className="p-4 space-y-4">
+          {/* Amenities Strip (Multi-color sticker cards with 1px black borders) */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
+              <span className="text-xs font-bold block text-[#000000]">พื้น Taraflex</span>
+              <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#55db9c] border border-[#000000] inline-block mt-1">
+                Shock Absorb
+              </span>
+            </div>
+            <div className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
+              <span className="text-xs font-bold block text-[#000000]">แอร์เย็นฉ่ำ</span>
+              <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#4da2ff] border border-[#000000] inline-block mt-1">
+                24°C Comfort
+              </span>
+            </div>
+            <div className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
+              <span className="text-xs font-bold block text-[#000000]">ไฟ Pro LED</span>
+              <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#ffd731] border border-[#000000] inline-block mt-1">
+                500 Lux Glareless
+              </span>
             </div>
           </div>
 
-          <h2 className="font-['Antonio'] text-3xl font-extrabold text-black uppercase tracking-tight leading-tight">
-            {selectedCourt.name}
-          </h2>
-          <p className="text-xs text-neutral-600 font-medium mt-0.5">
-            {selectedCourt.location} · {selectedCourt.surfaceType} (BWF Standard)
-          </p>
+          {/* Availability Calendar Day Selector */}
+          <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000]">
+            <div className="flex items-center justify-between mb-3">
+              <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                Availability (รอบสัปดาห์นี้)
+              </span>
+              <span className="text-xs font-bold text-[#5c4ade]">พฤศจิกายน 2026</span>
+            </div>
 
-          <div className="flex items-center gap-2 mt-3 pt-3 border-t border-neutral-200">
-            <span className="px-2.5 py-1 rounded-full bg-[#55db9c] border border-black text-[10px] font-bold text-black">
-              ✓ Taraflex Flooring
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-[#e9ccff] border border-black text-[10px] font-bold text-black">
-              ✓ Air-Conditioned
-            </span>
-            <span className="px-2.5 py-1 rounded-full bg-[#4da2ff] border border-black text-[10px] font-bold text-black">
-              ✓ Pro Lighting
-            </span>
+            <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
+              {daysOfWeek.map((item, idx) => {
+                const isSelected = selectedDayIndex === idx;
+                return (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => setSelectedDayIndex(idx)}
+                    className={`flex-1 min-w-[42px] py-2 rounded-[20px] border border-[#000000] flex flex-col items-center justify-center transition-all cursor-pointer ${
+                      isSelected
+                        ? 'bg-[#000000] text-[#ffffff] font-black'
+                        : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+                    }`}
+                  >
+                    <span className="text-[10px] font-bold opacity-80">{item.day}</span>
+                    <span className="text-sm font-black mt-0.5">{item.date}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Court Number Pill Selector */}
-        <div className="bg-white border border-black rounded-[28px] p-4 space-y-2">
-          <label className="text-xs font-bold text-black block mb-1 uppercase tracking-wide">
-            Select Court Number (คอร์ท)
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {[1, 2, 3, 4].map((cNum) => {
-              const isSelected = selectedCourtNum === cNum;
-              return (
-                <button
-                  type="button"
-                  key={cNum}
-                  onClick={() => setSelectedCourtNum(cNum)}
-                  className={`py-2 rounded-full border text-xs font-bold cursor-pointer transition-transform active:scale-95 ${
-                    isSelected
-                      ? 'bg-black text-white border-black font-extrabold'
-                      : 'bg-white hover:bg-neutral-100 text-black border-black'
-                  }`}
-                >
-                  Court {cNum}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Schedule Time Slots (Slush Sticker Cards) */}
-        <div className="bg-white border border-black rounded-[28px] p-4 space-y-3">
-          <div className="flex items-center justify-between">
-            <label className="text-xs font-bold text-black uppercase tracking-wide">
-              Select Time Slots (เลือกช่วงเวลา)
+          {/* Court Number Pill Selector */}
+          <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000]">
+            <label className="font-['Antonio',sans-serif] text-sm font-black block mb-2 uppercase tracking-wider text-[#000000]">
+              Select Court Number (เลือกคอร์ท)
             </label>
-            <span className="text-[10px] font-bold text-[#5c4ade]">
-              {selectedSlots.length} hours selected
-            </span>
+            <div className="grid grid-cols-4 gap-2">
+              {[1, 2, 3, 4].map((cNum) => {
+                const isSelected = selectedCourtNum === cNum;
+                return (
+                  <button
+                    type="button"
+                    key={cNum}
+                    onClick={() => setSelectedCourtNum(cNum)}
+                    className={`py-2 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-all cursor-pointer border border-[#000000] ${
+                      isSelected
+                        ? 'bg-[#ffd731] text-[#000000]'
+                        : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+                    }`}
+                  >
+                    คอร์ท {cNum}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
-            {AVAILABLE_SLOTS.map((slot) => {
-              const isSelected = activeSlotIds.includes(slot.id);
-              return (
-                <button
-                  type="button"
-                  key={slot.id}
-                  disabled={!slot.isAvailable}
-                  onClick={() => toggleSlot(slot)}
-                  className={`p-3 rounded-2xl border text-left transition-all cursor-pointer flex flex-col justify-between ${
-                    !slot.isAvailable
-                      ? 'bg-neutral-100 text-neutral-400 border-neutral-300 cursor-not-allowed opacity-60'
-                      : isSelected
-                      ? 'bg-[#ffd731] border-black text-black scale-[1.02]'
-                      : 'bg-[#dceeff]/50 hover:bg-[#dceeff] border-black/80 text-black'
-                  } active:scale-95`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="font-['Antonio'] text-lg font-bold">
-                      {slot.startTime} - {slot.endTime}
-                    </span>
-                    {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+          {/* Time Slots List */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between text-xs px-1">
+              <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                Available Prime-Time Slots
+              </span>
+              <span className="text-[#000000]/60 font-bold">เลือกได้มากกว่า 1 ชม.</span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              {AVAILABLE_SLOTS.map((slot) => {
+                const isSelected = activeSlotIds.includes(slot.id);
+                return (
+                  <div
+                    key={slot.id}
+                    onClick={() => toggleSlot(slot)}
+                    className={`p-3.5 rounded-[24px] border border-[#000000] transition-all cursor-pointer flex flex-col justify-between ${
+                      !slot.isAvailable
+                        ? 'opacity-40 cursor-not-allowed bg-[#cccccc]'
+                        : isSelected
+                        ? 'bg-[#ffd731] text-[#000000]'
+                        : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9ccff]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="font-['Antonio',sans-serif] text-base font-black">{slot.startTime} - {slot.endTime}</span>
+                      {isSelected && (
+                        <span className="w-5 h-5 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] flex items-center justify-center text-[10px] font-bold">
+                          ✓
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center justify-between text-[11px] font-bold">
+                      <span className="text-[#000000]/70">คอร์ท {slot.courtNumber}</span>
+                      <span className="font-black text-[#000000]">฿{slot.price}</span>
+                    </div>
                   </div>
-                  <div className="flex items-center justify-between text-[11px] mt-1 font-bold">
-                    <span>{slot.isAvailable ? `฿${slot.price}` : 'Booked'}</span>
-                    {slot.isAvailable && slot.startTime >= '19:00' && (
-                      <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-black text-white">
-                        2x EXP
-                      </span>
-                    )}
-                  </div>
-                </button>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Bottom Sticky Checkout Bar */}
-      <div className="px-4 pt-2">
-        <div className="bg-white border border-black rounded-[32px] p-3 flex items-center justify-between shadow-xs">
+      {/* Pinned Bottom Booking Bar (Paper White, 1px solid black border, black CTA fill) */}
+      <div className="shrink-0 p-4 border-t border-[#000000] bg-[#ffffff] z-30">
+        <div className="w-full flex items-center justify-between gap-4">
           <div>
-            <span className="text-[10px] font-bold text-neutral-500 uppercase">Total Amount</span>
-            <div className="font-['Antonio'] text-2xl font-extrabold text-black leading-none">
-              ฿{totalPrice} <span className="text-xs text-[#55db9c] font-bold">(+100 EXP)</span>
-            </div>
+            <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">Total ({selectedSlots.length} ชม.)</span>
+            <span className="font-['Antonio',sans-serif] text-3xl font-black tracking-tight text-[#000000] leading-none">
+              ฿{totalPrice}
+            </span>
           </div>
 
           <button
-            onClick={handleContinueToCheckout}
+            type="button"
             disabled={selectedSlots.length === 0}
-            className={`py-3 px-5 rounded-full font-bold text-xs border border-black flex items-center gap-2 transition-transform cursor-pointer ${
-              selectedSlots.length > 0
-                ? 'bg-black text-white hover:bg-neutral-800 active:scale-95'
-                : 'bg-neutral-200 text-neutral-500 cursor-not-allowed'
+            onClick={handleContinueToCheckout}
+            className={`py-3.5 px-6 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer border border-[#000000] whitespace-nowrap shrink-0 ${
+              selectedSlots.length === 0
+                ? 'bg-[#cccccc] text-[#000000]/40 cursor-not-allowed'
+                : 'bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff]'
             }`}
           >
-            <span>Lock & Pay</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <span>PROCEED TO CHECKOUT</span>
+            <ArrowRight className="w-4 h-4" />
           </button>
         </div>
       </div>

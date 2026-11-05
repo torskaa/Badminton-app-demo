@@ -56,11 +56,19 @@ interface AppContextType {
   viewMode: AppViewMode;
   setViewMode: (mode: AppViewMode) => void;
 
-  // Retro Arcade Settings
+  // Theme Settings (Light / Dark)
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
+
+  // Sound Settings
   isSoundEnabled: boolean;
   toggleSound: () => void;
   isCrtEnabled: boolean;
   toggleCrt: () => void;
+
+  // Quick Sparring Modal
+  sparringModalPlayer: any | null;
+  setSparringModalPlayer: (player: any | null) => void;
 
   // Player & Gamification
   player: PlayerProfile;
@@ -119,9 +127,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [navDirection, setNavDirection] = useState<'forward' | 'backward'>('forward');
   const [activeTab, setActiveTabState] = useState<MainTab>('home');
   const [isDeviceFrameEnabled, setIsDeviceFrameEnabled] = useState<boolean>(true);
-  const [viewMode, setViewModeState] = useState<AppViewMode>('showcase');
+  const [viewMode, setViewModeState] = useState<AppViewMode>('single');
   const [isSoundEnabled, setIsSoundEnabled] = useState<boolean>(true);
   const [isCrtEnabled, setIsCrtEnabled] = useState<boolean>(false);
+
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+  const [sparringModalPlayer, setSparringModalPlayer] = useState<any | null>(null);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+    playSelectSound();
+  };
 
   const toggleSound = () => {
     const muted = toggleAudioMute();
@@ -139,6 +155,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   React.useEffect(() => {
     (window as any).__setAppViewMode = setViewMode;
   }, []);
+
+  React.useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [theme]);
 
   // Player State
   const [player, setPlayer] = useState<PlayerProfile>(INITIAL_PLAYER);
@@ -570,6 +594,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         convertCaloriesToExp,
         analyzedVideoResult,
         setAnalyzedVideoResult,
+        theme,
+        toggleTheme,
+        sparringModalPlayer,
+        setSparringModalPlayer,
         isSoundEnabled,
         toggleSound,
         isCrtEnabled,

@@ -83,10 +83,10 @@ export const ExpCelebrationModal: React.FC = () => {
             <button
               type="button"
               onClick={dismissExpCelebration}
-              className="w-full py-3.5 rounded-full bg-black hover:bg-neutral-800 text-white text-xs font-bold uppercase tracking-wide border border-black cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5"
+              className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 whitespace-nowrap"
             >
-              <span>Claim & Continue</span>
-              <ArrowRight className="w-3.5 h-3.5" />
+              <span className="whitespace-nowrap">CLAIM & CONTINUE</span>
+              <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
           </motion.div>
         </motion.div>

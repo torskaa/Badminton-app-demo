@@ -1,18 +1,23 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
 import React from 'react';
 import { motion } from 'framer-motion';
-import { LayoutGrid, Calendar, Play, Users, User } from 'lucide-react';
+import { Compass, Calendar, Play, Users, User, LayoutGrid } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MainTab } from '../../types';
 
 export const BottomTabBar: React.FC = () => {
   const { activeTab, setActiveTab, currentScreen, navigateTo } = useApp();
 
-  if (['A1', 'A2'].includes(currentScreen)) {
+  // Hide BottomTabBar on dedicated sub-flows and actions to avoid covering buttons
+  const HIDE_TAB_BAR_SCREENS = [
+    'A1', 'A2',
+    'B2', 'B3', 'B4',
+    'C1', 'C4',
+    'D3',
+    'E2', 'E3',
+    'F2',
+  ];
+
+  if (HIDE_TAB_BAR_SCREENS.includes(currentScreen)) {
     return null;
   }
 
@@ -21,67 +26,70 @@ export const BottomTabBar: React.FC = () => {
     label: string;
     icon: React.ElementType;
     isPrimary?: boolean;
-    color: string;
+    targetScreen: any;
   }[] = [
-    { id: 'home', label: 'Coach', icon: LayoutGrid, color: '#4da2ff' },
-    { id: 'booking', label: 'Courts', icon: Calendar, color: '#55db9c' },
-    { id: 'logger', label: 'Live Score', icon: Play, isPrimary: true, color: '#ffd731' },
-    { id: 'community', label: 'Guilds', icon: Users, color: '#e9ccff' },
-    { id: 'profile', label: 'Profile', icon: User, color: '#fb4903' },
+    { id: 'booking', label: 'Courts', icon: Compass, targetScreen: 'B1' },
+    { id: 'coach', label: 'AI Coach', icon: LayoutGrid, targetScreen: 'D1' },
+    { id: 'logger', label: 'Live', icon: Play, isPrimary: true, targetScreen: 'C1' },
+    { id: 'community', label: 'Guilds', icon: Users, targetScreen: 'E1' },
+    { id: 'profile', label: 'Profile', icon: User, targetScreen: 'F1' },
   ];
 
   return (
-    <div className="absolute bottom-4 left-4 right-4 z-40 select-none">
-      <nav className="w-full bg-white border border-black rounded-full px-2 py-1.5 flex items-center justify-between shadow-[0_10px_30px_rgba(0,0,0,0.1)]">
+    <div className="absolute bottom-4 left-4 right-4 z-40 select-none pointer-events-none">
+      <nav className="w-full bg-[#ffffff] border border-[#000000] rounded-[1600px] px-2 py-1.5 flex items-center justify-between pointer-events-auto">
         {tabs.map((tab) => {
           const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+          const isActive =
+            (tab.id === 'booking' && ['B1', 'B2', 'B3', 'B4'].includes(currentScreen)) ||
+            (tab.id === 'coach' && ['D1', 'D2', 'D3'].includes(currentScreen)) ||
+            (tab.id === 'logger' && ['C1', 'C2', 'C3', 'C4'].includes(currentScreen)) ||
+            (tab.id === 'community' && ['E1', 'E2', 'E3', 'E4'].includes(currentScreen)) ||
+            (tab.id === 'profile' && ['F1', 'F2'].includes(currentScreen));
 
           if (tab.isPrimary) {
             return (
-              <motion.button
+              <button
                 key={tab.id}
-                whileTap={{ scale: 0.9 }}
-                whileHover={{ scale: 1.06 }}
+                type="button"
                 onClick={() => {
                   setActiveTab(tab.id);
-                  navigateTo('C1');
+                  navigateTo(tab.targetScreen);
                 }}
-                className="group cursor-pointer relative -my-1"
-                title="Courtside Score Tracker"
+                className="cursor-pointer relative -my-1 group active:scale-95 transition-transform"
+                title="Courtside Live Score Tracker"
               >
-                <div className="w-12 h-12 rounded-full bg-black text-white border border-black flex items-center justify-center transition-all duration-200 hover:bg-[#4da2ff] hover:text-black shadow-md">
+                {/* Slush CTA: Black-fill with 1px black outline */}
+                <div className="w-12 h-12 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] flex items-center justify-center hover:bg-[#1a1a1a] transition-all">
                   <Icon className="w-5 h-5 fill-current stroke-[2.4]" />
                 </div>
-              </motion.button>
+              </button>
             );
           }
 
           return (
-            <motion.button
+            <button
               key={tab.id}
-              whileTap={{ scale: 0.92 }}
+              type="button"
               onClick={() => {
                 setActiveTab(tab.id);
+                navigateTo(tab.targetScreen);
               }}
-              className="relative flex items-center justify-center min-w-[44px] h-11 px-3 rounded-full cursor-pointer transition-colors"
+              className={`relative flex items-center justify-center h-10 px-3.5 rounded-[1600px] cursor-pointer transition-all active:scale-95 ${
+                isActive
+                  ? 'bg-[#ffd731] border border-[#000000] text-[#000000]'
+                  : 'text-[#000000]/70 hover:text-[#000000] hover:bg-[#e9e9e9]'
+              }`}
             >
-              {isActive && (
-                <motion.div
-                  layoutId="activeTabPill"
-                  className="absolute inset-0 rounded-full border border-black"
-                  style={{ backgroundColor: tab.color }}
-                  transition={{ type: 'spring', stiffness: 450, damping: 32 }}
-                />
-              )}
-              <div className="relative z-10 flex flex-col items-center">
-                <Icon
-                  className={`w-5 h-5 transition-transform duration-200 ${
-                    isActive ? 'scale-110 stroke-[2.5] text-black' : 'stroke-[2] text-neutral-500 hover:text-black'
-                  }`}
-                />
+              <div className="flex items-center gap-1.5">
+                <Icon className="w-4 h-4 stroke-[2.5]" />
+                {isActive && (
+                  <span className="text-[11px] font-bold tracking-[0.032em] uppercase">
+                    {tab.label}
+                  </span>
+                )}
               </div>
-            </motion.button>
+            </button>
           );
         })}
       </nav>

@@ -28,7 +28,7 @@ export type MainTab = 'home' | 'booking' | 'logger' | 'coach' | 'community' | 'p
 
 export type AppViewMode = 'single' | 'showcase';
 
-export type PlayerTier = 'Bronze' | 'Silver' | 'Gold' | 'Diamond';
+export type PlayerTier = 'Bronze' | 'Silver' | 'Gold' | 'Diamond' | 'Pro';
 
 export interface SkillRadar {
   power: number;     // e.g. 88 (Smash speed, offensive impact)
