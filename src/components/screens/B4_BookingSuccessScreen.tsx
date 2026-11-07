@@ -16,38 +16,63 @@ export const B4_BookingSuccessScreen: React.FC = () => {
           <div className="w-16 h-16 rounded-[1600px] bg-[#55db9c] border border-[#000000] text-[#000000] flex items-center justify-center mx-auto mb-2">
             <CheckCircle2 className="w-10 h-10 stroke-[2.5]" />
           </div>
+          <span className="px-3 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-bold uppercase tracking-wider inline-block mb-1">
+            บัตรเข้าคอร์ทสำเร็จ · RESERVATION CONFIRMED
+          </span>
           <h2 className="font-['Antonio',sans-serif] text-3xl font-black tracking-tight leading-tight uppercase text-[#000000]">
             BOOKING CONFIRMED!
           </h2>
-          <p className="text-xs text-[#000000]/70 font-medium">
+          <p className="text-xs text-[#000000]/70 font-medium max-w-xs mx-auto">
             บัตรเข้าคอร์ทดิจิทัลพร้อมใช้งานสำหรับการเช็คอินที่เคาน์เตอร์สนาม
           </p>
         </div>
 
-        {/* EXP Reward Loot Card */}
-        <div className="p-4 rounded-[28px] border border-[#000000] bg-[#ffd731] text-[#000000] flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-11 h-11 rounded-[1600px] bg-[#000000] text-[#ffffff] flex items-center justify-center font-bold">
-              <Zap className="w-6 h-6 fill-current" />
-            </div>
-            <div>
-              <div className="font-['Antonio',sans-serif] text-lg font-black tracking-tight uppercase text-[#000000]">
-                +100 EXP CLAIMED!
+        {/* EXP Reward Loot Card Container */}
+        <div className="p-4 rounded-[28px] border border-[#000000] bg-[#ffd731] text-[#000000] space-y-2">
+          <div className="flex items-center justify-between">
+            <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-black uppercase tracking-wider">
+              โบนัสความสำเร็จ · LOOT REWARD
+            </span>
+            <span className="text-[10px] font-bold text-[#000000]/70">
+              Lv.{player.level} Smasher
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="w-11 h-11 rounded-[1600px] bg-[#000000] text-[#ffffff] flex items-center justify-center font-bold">
+                <Zap className="w-6 h-6 fill-current text-[#ffd731]" />
               </div>
-              <div className="text-xs text-[#000000]/80 font-bold mt-0.5">
-                Current Level: Lv.{player.level} ({player.currentExp} / {player.nextLevelExp} EXP)
+              <div>
+                <div className="font-['Antonio',sans-serif] text-xl font-black tracking-tight uppercase text-[#000000]">
+                  +100 EXP CLAIMED!
+                </div>
+                <div className="text-xs text-[#000000]/80 font-bold mt-0.5">
+                  สะสม EXP เพื่อเลื่อนขั้นสู่ Diamond Tier ({player.currentExp} / {player.nextLevelExp} EXP)
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Digital E-Ticket Pass */}
+        {/* Digital E-Ticket Pass Container */}
         <div className="border border-[#000000] rounded-[32px] overflow-hidden bg-[#ffffff]">
+          {/* Container Subheader */}
+          <div className="px-4 pt-3 pb-2 bg-[#f8fafc] border-b border-[#000000]/10 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[9px] font-black uppercase tracking-wider text-[#000000]">
+                บัตรผ่านดิจิทัล · COURT E-TICKET
+              </span>
+            </div>
+            <span className="text-[10px] font-bold text-[#000000]/60">
+              สถานะ: ยืนยันแล้ว
+            </span>
+          </div>
+
           {/* Ticket Header */}
           <div className="p-4 bg-[#000000] text-[#ffffff] flex items-center justify-between">
             <div>
               <span className="text-[10px] font-bold text-[#ffd731] uppercase tracking-[0.032em] block mb-0.5">
-                BWF TARAFLEX PASS · SMASH.AI
+                BWF TARAFLEX PASS · SMASH
               </span>
               <h3 className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight leading-none text-[#ffffff]">
                 {selectedCourt.name}
@@ -62,11 +87,11 @@ export const B4_BookingSuccessScreen: React.FC = () => {
           <div className="p-4 space-y-3">
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div className="p-3 rounded-[20px] border border-[#000000] bg-[#dceeff]">
-                <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">Date & Time</span>
+                <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">วันและเวลาที่จอง</span>
                 <span className="font-bold">{booking.date || '12 Nov 2026'} (19:00 - 21:00)</span>
               </div>
               <div className="p-3 rounded-[20px] border border-[#000000] bg-[#dceeff]">
-                <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">Pass Reference</span>
+                <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">รหัสอ้างอิงบัตร</span>
                 <span className="font-mono font-bold text-[#5c4ade]">{booking.bookingRef || 'BK-SMA-8921'}</span>
               </div>
             </div>

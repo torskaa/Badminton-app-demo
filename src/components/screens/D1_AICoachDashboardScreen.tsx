@@ -6,7 +6,7 @@ import { ProSubscriptionModal } from '../common/ProSubscriptionModal';
 import { playCoinSound } from '../../utils/retroAudio';
 
 export const D1_AICoachDashboardScreen: React.FC = () => {
-  const { player, navigateTo } = useApp();
+  const { player, navigateTo, language } = useApp();
   const [showPastComparison, setShowPastComparison] = useState(true);
   const [isProModalOpen, setIsProModalOpen] = useState(false);
 
@@ -25,11 +25,11 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
   };
 
   const currentStats = [
-    { label: 'POW', full: 'Power (พลังตบ)', val: player.skillRadar.power },
-    { label: 'SPD', full: 'Speed (สปีด)', val: player.skillRadar.speed },
-    { label: 'CTL', full: 'Control (หยอด/คุม)', val: player.skillRadar.control },
-    { label: 'STA', full: 'Stamina (ความอึด)', val: player.skillRadar.stamina },
-    { label: 'TAC', full: 'Tactics (แท็กติก)', val: player.skillRadar.tactics },
+    { label: 'POW', full: language === 'th' ? 'พลังตบ' : 'Power', val: player.skillRadar.power },
+    { label: 'SPD', full: language === 'th' ? 'สปีด' : 'Speed', val: player.skillRadar.speed },
+    { label: 'CTL', full: language === 'th' ? 'การคุมลูก' : 'Control', val: player.skillRadar.control },
+    { label: 'STA', full: language === 'th' ? 'ความอึด' : 'Stamina', val: player.skillRadar.stamina },
+    { label: 'TAC', full: language === 'th' ? 'แท็กติก' : 'Tactics', val: player.skillRadar.tactics },
   ];
 
   const pastStats = [
@@ -59,32 +59,42 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#5c4ade] text-[#ffffff] border border-[#000000]">
-              COACHING RADAR
+              {language === 'th' ? 'เรดาร์ทักษะ & โค้ช' : 'COACHING & SKILL RADAR'}
             </span>
             <span className="text-[11px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
-              PERFORMANCE OVERVIEW
+              {language === 'th' ? 'ภาพรวมฟอร์มการเล่น' : 'PERFORMANCE OVERVIEW'}
             </span>
           </div>
           <h1 className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight leading-none text-[#000000]">
-            AI COACH & SKILL RADAR
+            {language === 'th' ? 'โค้ช & เรดาร์วัดทักษะ' : 'COACH & SKILL RADAR'}
           </h1>
-          <p className="text-xs text-[#000000]/70 font-medium leading-relaxed">
-            ระบบวิเคราะห์ฟอร์มการเล่น 5 มิติ ติดตามพัฒนาการรายเดือน และแนะนำแบบฝึกซ้อมเฉพาะบุคคล
+          <p className="text-xs text-[#000000]/70 font-bold leading-relaxed">
+            {language === 'th'
+              ? 'ระบบวิเคราะห์ฟอร์มการเล่น 5 มิติ ติดตามพัฒนาการรายเดือน และแนะนำแบบฝึกซ้อมเฉพาะบุคคล'
+              : '5-dimensional athletic performance analysis, monthly tracking, and personalized drills.'}
           </p>
         </div>
 
         {/* 1. Athlete Banner Profile Card */}
         <div className="border border-[#000000] rounded-[32px] p-4 bg-[#ffffff] space-y-3">
+          {/* Subheader */}
           <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15">
             <div>
-              <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
-                ATHLETE IDENTITY (ข้อมูลนักกีฬา)
-              </span>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'ข้อมูลนักกีฬา' : 'ATHLETE PROFILE'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'ระดับเทียร์ & ข้อมูลผู้เล่น' : 'ATHLETE IDENTITY & TIER'}
+                </span>
+              </div>
               <p className="text-[10px] text-[#000000]/60 font-bold">
-                ระดับเทียร์ สถิติสตรีคชนะ และสไตล์การเล่นของคุณ
+                {language === 'th'
+                  ? 'ระดับฝีมือปัจจุบัน สถิติสตรีคชนะต่อเนื่อง และเลเวลนักกีฬา'
+                  : 'Your current skill tier, active win streak, and athlete level'}
               </p>
             </div>
-            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000]">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000] shrink-0">
               {player.tier} TIER
             </span>
           </div>
@@ -120,23 +130,33 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* 2. SmashAI Pro Upgrade Banner */}
+        {/* 2. Smash Pro Upgrade Banner */}
         <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffd731] space-y-2">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Crown className="w-4 h-4 text-[#000000]" />
+          {/* Subheader */}
+          <div className="flex items-center justify-between pb-1.5 border-b border-[#000000]/15">
+            <div className="flex items-center gap-1.5">
+              <Crown className="w-4 h-4 text-[#000000] shrink-0" />
+              <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#000000] text-[#ffffff] border border-[#000000]">
+                {language === 'th' ? 'สิทธิพิเศษ PRO' : 'PRO BENEFITS'}
+              </span>
               <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
-                PRO ATHLETE MEMBERSHIP (สิทธิพิเศษ)
+                {language === 'th' ? 'อัปเกรดเป็นสมาชิก PRO' : 'PRO ATHLETE MEMBERSHIP'}
               </span>
             </div>
-            <span className="text-[10px] font-bold text-[#000000]/70">฿199/ด.</span>
+            <span className="text-[10px] font-bold text-[#000000]/80">
+              {language === 'th' ? '฿199/เดือน' : '฿199/mo'}
+            </span>
           </div>
           <p className="text-[10px] text-[#000000]/80 font-bold">
-            ส่วนลดค่าคอร์ท 10% ทุกสนามพันธมิตร · สแกนวิดีโอ 3D วิเคราะห์ฟอร์มไม่จำกัด
+            {language === 'th'
+              ? 'ส่วนลดค่าคอร์ท 10% ทุกสนามพันธมิตร · สแกนวิดีโอ 3D วิเคราะห์ฟอร์มไม่จำกัดครั้ง'
+              : '10% court booking discount · Unlimited 3D computer vision video scans'}
           </p>
           <div className="pt-1 flex items-center justify-between">
             <span className="text-[11px] font-bold text-[#000000]">
-              {player.tier === 'Pro' ? 'สถานะ: สมาชิก PRO ใช้งานได้เต็มระบบ' : 'ปลดล็อกสิทธิพิเศษนักกีฬาแบบเต็มรูปแบบ'}
+              {player.tier === 'Pro'
+                ? (language === 'th' ? 'สมาชิก PRO ใช้งานได้เต็มระบบ' : 'Pro membership active')
+                : (language === 'th' ? 'ปลดล็อกสิทธิพิเศษนักกีฬาเต็มรูปแบบ' : 'Unlock full athlete privileges')}
             </span>
             <button
               type="button"
@@ -146,20 +166,30 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
               }}
               className="px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] font-bold text-[11px] uppercase tracking-[0.032em] hover:bg-[#1a1a1a] transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
             >
-              {player.tier === 'Pro' ? 'ดูสถานะ PRO' : 'อัปเกรด PRO'}
+              {player.tier === 'Pro'
+                ? (language === 'th' ? 'ดูสถานะ PRO' : 'View Pro')
+                : (language === 'th' ? 'อัปเกรด PRO' : 'Upgrade Pro')}
             </button>
           </div>
         </div>
 
         {/* 3. 5-Axis Skill Radar Card */}
         <div className="border border-[#000000] rounded-[32px] p-4 bg-[#ffffff] space-y-2">
-          <div className="flex items-center justify-between">
+          {/* Subheader */}
+          <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15">
             <div className="text-left">
-              <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wide text-[#000000]">
-                5-AXIS AI SKILL RADAR
-              </h3>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'เรดาร์วัดผล 5 มิติ' : '5-AXIS RADAR'}
+                </span>
+                <h3 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide text-[#000000]">
+                  {language === 'th' ? 'เรดาร์ประเมินทักษะรอบด้าน' : 'ATHLETIC SKILL RADAR'}
+                </h3>
+              </div>
               <p className="text-[10px] text-[#000000]/60 font-bold">
-                เรดาร์วัดทักษะ 5 ด้าน คำนวณจากสถิติแข่งขัน 30 วัน (Power, Speed, Control, Stamina, Tactics)
+                {language === 'th'
+                  ? 'คำนวณจากสถิติแข่งขัน 30 วัน: พลังตบ (POW), สปีด (SPD), คุมลูก (CTL), ความอึด (STA), แท็กติก (TAC)'
+                  : 'Calculated from 30-day match statistics: Power, Speed, Control, Stamina, Tactics'}
               </p>
             </div>
             <button
@@ -167,7 +197,9 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
               onClick={() => setShowPastComparison((prev) => !prev)}
               className="px-3 py-1 rounded-[1600px] text-[10px] font-bold tracking-[0.032em] cursor-pointer transition-transform active:scale-95 border border-[#000000] bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] shrink-0 whitespace-nowrap"
             >
-              {showPastComparison ? '✓ Past 30D Active' : 'Show Past 30D'}
+              {showPastComparison
+                ? (language === 'th' ? '✓ เปิดสถิติ 30 วัน' : '✓ Past 30D Active')
+                : (language === 'th' ? 'ดูสถิติ 30 วัน' : 'Show Past 30D')}
             </button>
           </div>
 
@@ -271,53 +303,65 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
           <div className="flex items-center justify-center gap-4 text-[11px] font-bold pt-2 border-t border-[#000000]/15">
             <div className="flex items-center gap-1.5 text-[#5c4ade]">
               <span className="w-2.5 h-2.5 rounded-[1600px] bg-[#5c4ade] border border-[#000000]" />
-              <span>Current Form (ปัจจุบัน)</span>
+              <span>{language === 'th' ? 'ฟอร์มปัจจุบัน' : 'Current Form'}</span>
             </div>
             {showPastComparison && (
               <div className="flex items-center gap-1.5 text-[#000000]/60">
                 <span className="w-3 h-0.5 bg-[#000000]/40" />
-                <span>Past 30 Days</span>
+                <span>{language === 'th' ? 'สถิติ 30 วันก่อน' : 'Past 30 Days'}</span>
               </div>
             )}
           </div>
         </div>
 
-        {/* 4. AI Head Coach Advice */}
+        {/* 4. Head Coach Advice */}
         <div className="border border-[#000000] rounded-[28px] p-4 space-y-2.5 bg-[#ffffff]">
-          <div className="flex items-center gap-2">
-            <span className="w-7 h-7 rounded-[1600px] bg-[#55db9c] border border-[#000000] text-[#000000] flex items-center justify-center font-bold">
-              <Sparkles className="w-4 h-4" />
-            </span>
-            <div>
+          {/* Subheader */}
+          <div className="pb-2 border-b border-[#000000]/15">
+            <div className="flex items-center gap-2 mb-0.5">
+              <span className="w-6 h-6 rounded-[1600px] bg-[#55db9c] border border-[#000000] text-[#000000] flex items-center justify-center font-bold">
+                <Sparkles className="w-3.5 h-3.5" />
+              </span>
+              <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] border border-[#000000]">
+                {language === 'th' ? 'บทวิเคราะห์จากโค้ช' : 'COACH DIAGNOSTICS'}
+              </span>
               <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                AI HEAD COACH DIAGNOSTICS (วิเคราะห์ฟอร์ม)
+                {language === 'th' ? 'จุดแข็ง & คำแนะนำเชิงแท็กติก' : 'STRENGTHS & TACTICAL ADVICE'}
               </h4>
-              <p className="text-[10px] text-[#000000]/60 font-bold">
-                สรุปจุดแข็งและข้อผิดพลาดล่าสุด พร้อมทางลัดสู่แบบฝึกซ้อมและสแกนกล้อง 3D
-              </p>
             </div>
+            <p className="text-[10px] text-[#000000]/60 font-bold">
+              {language === 'th'
+                ? 'สรุปจุดเด่นและข้อผิดพลาดล่าสุด พร้อมทางลัดสู่แบบฝึกซ้อมและสแกนกล้อง 3D'
+                : 'Key strengths and weakness breakdown with training shortcuts'}
+            </p>
           </div>
 
           <p className="text-xs text-[#000000]/80 leading-relaxed font-medium">
-            พลังตบ Smash ของคุณอยู่ในระดับท็อป <strong>(Power 88 / 342 km/h)</strong> แต่ยังมีจุดที่ต้องพัฒนาในเรื่อง <strong>การตัดหยอดหน้าเน็ต (Control 76)</strong> แนะนำให้ฝึกซ้อม Split-step drills สัปดาห์ละ 2 ครั้งเพื่อลด Unforced errors
+            {language === 'th'
+              ? 'พลังตบ Smash ของคุณอยู่ในระดับท็อป (Power 88 / 342 km/h) แต่ยังมีจุดที่ต้องพัฒนาในเรื่อง การตัดหยอดหน้าเน็ต (Control 76) แนะนำให้ฝึกซ้อม Split-step drills สัปดาห์ละ 2 ครั้งเพื่อลด Unforced errors'
+              : 'Your smash power is in top tier (Power 88 / 342 km/h), but net drop control (Control 76) needs improvement. Recommended 2 weekly split-step drill sessions.'}
           </p>
 
           <div className="pt-1 grid grid-cols-2 gap-2">
             <button
               type="button"
               onClick={() => navigateTo('D2')}
-              className="py-3 px-2 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 border border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-[#1a1a1a] cursor-pointer whitespace-nowrap"
+              className="py-3 px-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 border border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-[#1a1a1a] cursor-pointer whitespace-nowrap"
             >
               <Dumbbell className="w-4 h-4 shrink-0" />
-              <span>AI QUESTS (D2)</span>
+              <span className="whitespace-nowrap">
+                {language === 'th' ? 'แบบฝึกซ้อม D2' : 'QUESTS & DRILLS (D2)'}
+              </span>
             </button>
             <button
               type="button"
               onClick={() => navigateTo('D3')}
-              className="py-3 px-2 rounded-[1600px] font-bold text-xs border border-[#000000] flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] uppercase tracking-[0.032em] whitespace-nowrap"
+              className="py-3 px-3 rounded-[1600px] font-bold text-xs border border-[#000000] flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] uppercase tracking-[0.032em] whitespace-nowrap"
             >
               <Video className="w-4 h-4 text-[#5c4ade] shrink-0" />
-              <span>VISION SCAN (D3)</span>
+              <span className="whitespace-nowrap">
+                {language === 'th' ? 'สแกนวิดีโอ 3D D3' : 'VISION SCAN (D3)'}
+              </span>
             </button>
           </div>
         </div>

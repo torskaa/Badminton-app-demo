@@ -36,6 +36,7 @@ import {
   playLevelUpSound,
   toggleAudioMute,
 } from '../utils/retroAudio';
+import { Language, TRANSLATIONS } from '../utils/i18n';
 
 interface ExpGainPayload {
   amount: number;
@@ -45,6 +46,11 @@ interface ExpGainPayload {
 }
 
 interface AppContextType {
+  // Language & Localization
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: typeof TRANSLATIONS['th'];
+
   // Navigation
   currentScreen: ScreenId;
   navigateTo: (screen: ScreenId, direction?: 'forward' | 'backward') => void;
@@ -123,7 +129,15 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentScreen, setCurrentScreen] = useState<ScreenId>('B1');
+  const [language, setLanguageState] = useState<Language>('th');
+  const t = TRANSLATIONS[language];
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    playSelectSound();
+  };
+
+  const [currentScreen, setCurrentScreen] = useState<ScreenId>('HOME');
   const [navDirection, setNavDirection] = useState<'forward' | 'backward'>('forward');
   const [activeTab, setActiveTabState] = useState<MainTab>('home');
   const [isDeviceFrameEnabled, setIsDeviceFrameEnabled] = useState<boolean>(true);
@@ -265,7 +279,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [analyzedVideoResult, setAnalyzedVideoResult] = useState<any>(null);
 
   const SCREEN_ORDER: Record<ScreenId, number> = {
-    A1: 0, A2: 1,
+    HOME: 0,
+    MAP: 1,
+    CLUB_TOOLS: 2,
+    FINANCE: 3,
+    A1: 4, A2: 5,
     B1: 10, B2: 11, B3: 12, B4: 13,
     C1: 20, C2: 21, C3: 22, C4: 23,
     D1: 30, D2: 31, D3: 32,
@@ -279,42 +297,37 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const dir = direction || (SCREEN_ORDER[screen] < SCREEN_ORDER[currentScreen] ? 'backward' : 'forward');
     setNavDirection(dir);
     setCurrentScreen(screen);
-    // sync tab
-    if (['A1', 'A2'].includes(screen)) {
-      // keep
-    } else if (['B1', 'B2', 'B3', 'B4'].includes(screen)) {
-      setActiveTabState('booking');
-    } else if (['C1', 'C2', 'C3', 'C4'].includes(screen)) {
-      setActiveTabState('logger');
-    } else if (['D1', 'D2', 'D3'].includes(screen)) {
-      setActiveTabState('coach');
-    } else if (['E1', 'E2', 'E3', 'E4'].includes(screen)) {
-      setActiveTabState('community');
-    } else if (['F1', 'F2'].includes(screen)) {
+    // sync bottom tab
+    if (screen === 'HOME') {
+      setActiveTabState('home');
+    } else if (screen === 'MAP' || ['B1', 'B2', 'B3', 'B4'].includes(screen)) {
+      setActiveTabState('discover');
+    } else if (screen === 'CLUB_TOOLS' || ['E1', 'E2', 'E3', 'E4'].includes(screen)) {
+      setActiveTabState('club');
+    } else if (screen === 'FINANCE') {
+      setActiveTabState('more');
+    } else if (screen === 'F1' || screen === 'F2' || ['D1', 'D2', 'D3'].includes(screen)) {
       setActiveTabState('profile');
     }
   };
 
   const setActiveTab = (tab: MainTab) => {
-    let targetScreen: ScreenId = 'D1';
+    let targetScreen: ScreenId = 'HOME';
     switch (tab) {
       case 'home':
-        targetScreen = 'D1'; // Dashboard hub
+        targetScreen = 'HOME';
         break;
-      case 'booking':
-        targetScreen = 'B1'; // Discovery
+      case 'club':
+        targetScreen = 'CLUB_TOOLS';
         break;
-      case 'logger':
-        targetScreen = 'C1'; // Match logger
+      case 'discover':
+        targetScreen = 'MAP';
         break;
-      case 'coach':
-        targetScreen = 'D1'; // AI Coach
-        break;
-      case 'community':
-        targetScreen = 'E1'; // Guild hub
+      case 'more':
+        targetScreen = 'FINANCE';
         break;
       case 'profile':
-        targetScreen = 'F1'; // Trophy room
+        targetScreen = 'F1';
         break;
     }
     navigateTo(targetScreen);
@@ -555,6 +568,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <AppContext.Provider
       value={{
+        language,
+        setLanguage,
+        t,
         currentScreen,
         navigateTo,
         navDirection,

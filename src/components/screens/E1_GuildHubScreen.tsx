@@ -42,15 +42,20 @@ export const E1_GuildHubScreen: React.FC = () => {
 
       <div className="p-4 space-y-4">
         {/* Community Header Banner */}
-        <div className="border border-[#000000] rounded-[28px] p-4 flex items-center justify-between bg-[#ffffff]">
+        <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff] space-y-2">
+          <div className="flex items-center justify-between border-b border-[#000000]/10 pb-1.5">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[9px] font-black tracking-wider uppercase bg-[#e9ccff] border border-[#000000] text-[#000000]">
+              ศูนย์กลางคอมมูนิตี้ · SQUAD HUB
+            </span>
+            <span className="text-[10px] font-bold text-[#000000]/60">
+              สถานะ: เปิดรับสมาชิก
+            </span>
+          </div>
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-[1600px] bg-[#ffd731] border border-[#000000] flex items-center justify-center font-bold text-[#000000] text-xl shrink-0">
               👥
             </div>
             <div>
-              <span className="px-2.5 py-0.5 rounded-[1600px] text-[9px] font-bold tracking-[0.032em] uppercase bg-[#e9ccff] border border-[#000000] text-[#000000] inline-block mb-0.5">
-                Community Hub
-              </span>
               <h2 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
                 BANGKOK SMASHERS GUILD
               </h2>
@@ -66,10 +71,15 @@ export const E1_GuildHubScreen: React.FC = () => {
           onClick={() => navigateTo('E2')}
           className="border border-[#000000] rounded-[28px] p-5 cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-transform space-y-3 bg-[#ffffff]"
         >
-          <div className="flex items-center justify-between text-xs">
-            <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-[#000000] font-bold tracking-[0.032em] text-[10px] uppercase flex items-center gap-1">
-              <Calendar className="w-3.5 h-3.5" /> Next Saturday Session
-            </span>
+          <div className="flex items-center justify-between text-xs border-b border-[#000000]/10 pb-2">
+            <div className="flex items-center gap-1.5">
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[#000000] font-black tracking-wider text-[9px] uppercase">
+                กิจกรรมนัดตีแบด · UPCOMING SESSION
+              </span>
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-[#000000] font-bold tracking-[0.032em] text-[10px] uppercase flex items-center gap-1">
+                <Calendar className="w-3 h-3" /> Next Saturday
+              </span>
+            </div>
             <span className="px-2.5 py-0.5 rounded-[1600px] text-xs font-black bg-[#55db9c] border border-[#000000] text-[#000000]">
               {currentEvent.attendees.length}/{currentEvent.maxPlayers} RSVP'd
             </span>
@@ -115,12 +125,17 @@ export const E1_GuildHubScreen: React.FC = () => {
             onClick={() => navigateTo('E3')}
             className="border border-[#000000] rounded-[24px] p-4 text-left cursor-pointer hover:scale-105 active:scale-95 transition-transform flex flex-col justify-between h-32 bg-[#ffffff]"
           >
-            <div className="w-9 h-9 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-[#000000] flex items-center justify-center font-bold">
-              <Swords className="w-4 h-4" />
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-[#000000] flex items-center justify-center font-bold">
+                <Swords className="w-4 h-4" />
+              </div>
+              <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000]">
+                จับคู่อัจฉริยะ
+              </span>
             </div>
             <div>
               <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight text-[#000000]">
-                AI Matchmaker
+                Smart Matchmaker
               </h4>
               <p className="text-[10px] text-[#000000]/70 font-bold">จัดทีม 50/50 สลับมือสมดุล →</p>
             </div>
@@ -131,8 +146,13 @@ export const E1_GuildHubScreen: React.FC = () => {
             onClick={() => navigateTo('E4')}
             className="border border-[#000000] rounded-[24px] p-4 text-left cursor-pointer hover:scale-105 active:scale-95 transition-transform flex flex-col justify-between h-32 bg-[#ffffff]"
           >
-            <div className="w-9 h-9 rounded-[1600px] bg-[#55db9c] border border-[#000000] text-[#000000] flex items-center justify-center font-bold">
-              <Trophy className="w-4 h-4" />
+            <div className="flex items-center justify-between">
+              <div className="w-9 h-9 rounded-[1600px] bg-[#55db9c] border border-[#000000] text-[#000000] flex items-center justify-center font-bold">
+                <Trophy className="w-4 h-4" />
+              </div>
+              <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-[1600px] bg-[#ffd731] border border-[#000000]">
+                ตารางอันดับ
+              </span>
             </div>
             <div>
               <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight text-[#000000]">

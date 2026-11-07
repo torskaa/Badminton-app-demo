@@ -21,14 +21,14 @@ export const E2_GroupEventRSVPScreen: React.FC = () => {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="Squad Event & Court RSVP" showBack />
+      <MobileHeader title="นัดหมายก๊วน & ยืนยันเข้าร่วม" subtitle="Squad Event & RSVP" showBack />
 
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
         {/* Event Header Banner (Slush style) */}
         <div className="border border-[#000000] rounded-[32px] p-5 space-y-2.5 bg-[#ffffff]">
-          <div className="flex items-center justify-between text-xs">
-            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] border border-[#000000] text-[#000000]">
-              RSVP Open · Saturday
+          <div className="flex items-center justify-between text-xs border-b border-[#000000]/10 pb-2">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-black uppercase tracking-[0.032em] bg-[#55db9c] border border-[#000000] text-[#000000]">
+              เปิดรับสมาชิกลงชื่อ · RSVP OPEN
             </span>
             <span className="text-xs font-bold text-[#ff5c34]">
               เหลือ {currentEvent.maxPlayers - confirmedCount} ที่นั่ง
@@ -53,19 +53,24 @@ export const E2_GroupEventRSVPScreen: React.FC = () => {
 
         {/* Automatic Split-Bill Calculator Card */}
         <div className="border border-[#000000] rounded-[28px] p-4 space-y-2 bg-[#ffd731]">
-          <div className="flex items-center justify-between">
-            <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-              AUTO SPLIT-BILL ESTIMATOR (หารค่าคอร์ท & ลูก)
+          <div className="flex items-center justify-between border-b border-[#000000]/15 pb-1.5">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[9px] font-black uppercase tracking-[0.032em] bg-[#ffffff] border border-[#000000]">
+              ระบบหารบิลอัตโนมัติ · AUTO SPLIT BILL
             </span>
-            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffffff] border border-[#000000]">
-              รวม ฿{totalExpense}
+            <span className="text-[10px] font-bold text-[#000000]/80">
+              รวมค่าใช้จ่ายทั้งสิ้น ฿{totalExpense}
             </span>
           </div>
 
           <div className="flex items-baseline justify-between pt-1">
-            <span className="text-xs font-bold text-[#000000]/80">
-              เฉลี่ยจ่ายคนละประมาณ:
-            </span>
+            <div>
+              <div className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
+                เฉลี่ยจ่ายคนละประมาณ
+              </div>
+              <p className="text-[10px] text-[#000000]/70 font-bold">
+                รวมค่าคอร์ท 2 ชม. + ลูกขนไก่ RSL Silver
+              </p>
+            </div>
             <div className="font-['Antonio',sans-serif] text-4xl font-black text-[#000000] leading-none">
               ~฿{costPerPerson} <span className="text-xs font-normal text-[#000000]/70">({confirmedCount} คน)</span>
             </div>
@@ -74,10 +79,10 @@ export const E2_GroupEventRSVPScreen: React.FC = () => {
 
         {/* Confirmed Attendees List */}
         <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
-          <div className="flex items-center justify-between">
-            <h3 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-              Confirmed Squad ({confirmedCount})
-            </h3>
+          <div className="flex items-center justify-between border-b border-[#000000]/10 pb-1.5">
+            <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[9px] font-black uppercase tracking-wider text-[#000000]">
+              รายชื่อผู้เล่นที่ยืนยัน · CONFIRMED SQUAD
+            </span>
             <span className="text-xs font-bold text-[#000000]/60">Max {currentEvent.maxPlayers} คน</span>
           </div>
 
@@ -131,7 +136,7 @@ export const E2_GroupEventRSVPScreen: React.FC = () => {
             className="w-full py-3 px-4 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] border border-[#000000] flex items-center justify-center gap-2 transition-colors cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
           >
             <Swords className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
-            <span className="whitespace-nowrap">AI SMART MATCHMAKER (E3)</span>
+            <span className="whitespace-nowrap">SMART MATCHMAKER จัดทีมสมดุล (E3)</span>
             <ArrowRight className="w-3.5 h-3.5 shrink-0" />
           </button>
         </div>

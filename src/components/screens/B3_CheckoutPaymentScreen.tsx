@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const B3_CheckoutPaymentScreen: React.FC = () => {
-  const { booking, selectedCourt, gainExp, navigateTo } = useApp();
+  const { booking, selectedCourt, gainExp, navigateTo, language } = useApp();
 
   const [isVerifying, setIsVerifying] = useState(false);
   const [verificationDone, setVerificationDone] = useState(false);
@@ -28,32 +28,48 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
   };
 
   const handleConfirmAndComplete = () => {
-    gainExp(100, `จองสนาม ${selectedCourt.name} สำเร็จ`, 'Early Bird Shuttler');
+    gainExp(100, language === 'th' ? `จองสนาม ${selectedCourt.name} สำเร็จ` : `Booked ${selectedCourt.name}`, 'Early Bird Shuttler');
     navigateTo('B4');
   };
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="PromptPay Checkout" showBack />
+      <MobileHeader title={language === 'th' ? 'ชำระเงินผ่านพร้อมเพย์' : 'PromptPay Checkout'} showBack />
 
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
         {/* Booking Summary Card */}
         <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
+          <div className="flex items-start justify-between pb-2 border-b border-[#000000]/15">
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] border border-[#000000] text-[#000000]">
+                  {language === 'th' ? 'สรุปรายการจอง' : 'BOOKING SUMMARY'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'รายละเอียดคอร์ท & วันเวลา' : 'COURT PASS DETAILS'}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th' ? 'ตรวจสอบสนาม วันที่ และหมายเลขคอร์ทก่อนชำระเงิน' : 'Verify facility, date, and court number before payment'}
+              </p>
+            </div>
+            <span className="text-[10px] font-bold text-[#000000]/60 uppercase">Step 2/2</span>
+          </div>
+
           <div className="flex items-start justify-between">
             <div>
-              <span className="px-3 py-1 rounded-[1600px] text-[10px] font-bold tracking-[0.032em] uppercase bg-[#55db9c] border border-[#000000] text-[#000000] inline-block mb-1">
-                Booking Summary
-              </span>
               <h3 className="font-['Antonio',sans-serif] text-xl font-black tracking-tight leading-tight uppercase text-[#000000]">
                 {selectedCourt.name}
               </h3>
               <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
-                Court {booking.selectedCourtNumber} · {booking.date || '12 Nov 2026'}
+                {language === 'th' ? `คอร์ท ${booking.selectedCourtNumber || 3}` : `Court ${booking.selectedCourtNumber || 3}`} · {booking.date || '12 Nov 2026'}
               </p>
             </div>
 
             <div className="text-right">
-              <span className="text-[10px] font-bold text-[#000000]/60 uppercase block tracking-[0.032em]">ยอดชำระ</span>
+              <span className="text-[10px] font-bold text-[#000000]/60 uppercase block tracking-[0.032em]">
+                {language === 'th' ? 'ยอดชำระสุทธิ' : 'Net Total'}
+              </span>
               <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#000000]">
                 ฿{totalAmount}
               </div>
@@ -63,7 +79,7 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
           <div className="p-3 rounded-[20px] bg-[#ffd731] border border-[#000000] text-xs font-bold text-[#000000] flex items-center justify-between">
             <span className="flex items-center gap-1.5">
               <Zap className="w-4 h-4 fill-current text-[#000000]" />
-              <span>Loot Drop Reward on Payment</span>
+              <span>{language === 'th' ? 'รับโบนัส EXP เมื่อชำระเงิน' : 'Loot Drop Reward on Payment'}</span>
             </span>
             <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em]">
               +100 EXP
@@ -73,11 +89,23 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
 
         {/* PromptPay QR Code Card */}
         <div className="border border-[#000000] rounded-[28px] p-5 text-center space-y-3.5 bg-[#ffffff] text-[#000000]">
-          <div className="flex items-center justify-between text-xs font-bold px-1 text-[#000000]">
-            <span className="uppercase tracking-[0.032em] font-['Antonio',sans-serif] text-sm font-black">Thai QR Payment</span>
-            <span className="flex items-center gap-1 text-[#fb4903]">
+          <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15 text-left">
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'ช่องทางชำระเงิน' : 'PAYMENT'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'คิวอาร์โค้ดพร้อมเพย์' : 'THAI QR PAYMENT'}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th' ? 'สแกนด้วยแอปพลิเคชันธนาคารทุกแห่งในไทย' : 'Scan via any Thai mobile banking app'}
+              </p>
+            </div>
+            <span className="flex items-center gap-1 text-[#fb4903] text-xs font-bold shrink-0">
               <Clock className="w-3.5 h-3.5" />
-              <span>หมดอายุใน 10:00 นาที</span>
+              <span>10:00</span>
             </span>
           </div>
 
@@ -108,29 +136,47 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
           </div>
 
           <div className="text-xs">
-            <span className="text-[#000000]/60 block text-[11px] font-bold">พร้อมเพย์บัญชีทางการ (PromptPay ID)</span>
+            <span className="text-[#000000]/60 block text-[11px] font-bold">
+              {language === 'th' ? 'หมายเลขพร้อมเพย์ทางการ' : 'Official PromptPay ID'}
+            </span>
             <div className="flex items-center justify-center gap-2 mt-1">
               <span className="font-mono font-bold text-sm tracking-widest">{promptPayNumber}</span>
               <button
                 type="button"
                 onClick={handleCopyPromptPay}
                 className="p-1.5 rounded-[1600px] border border-[#000000] bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] transition-colors cursor-pointer"
-                title="คัดลอกเบอร์พร้อมเพย์"
+                title={language === 'th' ? 'คัดลอกเบอร์พร้อมเพย์' : 'Copy PromptPay Number'}
               >
                 {copiedPromptPay ? <Check className="w-3.5 h-3.5 text-[#55db9c]" /> : <Copy className="w-3.5 h-3.5" />}
               </button>
             </div>
-            {copiedPromptPay && <span className="text-[10px] text-[#000000] font-bold">คัดลอกเบอร์สำเร็จ!</span>}
+            {copiedPromptPay && (
+              <span className="text-[10px] text-[#000000] font-bold">
+                {language === 'th' ? 'คัดลอกเบอร์สำเร็จ!' : 'Copied successfully!'}
+              </span>
+            )}
           </div>
         </div>
 
         {/* Upload Bank Slip Box */}
         <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
-          <div className="flex items-center justify-between">
-            <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-              Upload Transfer Slip (สลิปโอนเงิน)
-            </h4>
-            <span className="text-[10px] text-[#000000]/60 font-bold">AI Scan 100% Real-time</span>
+          <div className="flex items-center justify-between pb-1.5 border-b border-[#000000]/15">
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'ยืนยันการโอน' : 'SLIP VERIFY'}
+                </span>
+                <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'อัปโหลดสลิปโอนเงิน' : 'UPLOAD TRANSFER SLIP'}
+                </h4>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th' ? 'สแกนตรวจสอบความถูกต้องและออกบัตรเข้าสนาม' : 'Scan & verify slip to unlock your digital court pass'}
+              </p>
+            </div>
+            <span className="text-[10px] text-[#000000]/60 font-bold">
+              {language === 'th' ? 'ตรวจทันที' : 'Instant'}
+            </span>
           </div>
 
           <div
@@ -144,33 +190,43 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
             {isVerifying ? (
               <div className="flex flex-col items-center gap-2 py-2">
                 <div className="w-6 h-6 border-2 border-[#000000] border-t-transparent rounded-full animate-spin" />
-                <span className="text-xs font-bold text-[#000000]">AI กำลังสแกนความถูกต้องของสลิป...</span>
+                <span className="text-xs font-bold text-[#000000]">
+                  {language === 'th' ? 'กำลังตรวจสอบความถูกต้องของสลิป...' : 'Verifying transfer slip...'}
+                </span>
               </div>
             ) : verificationDone ? (
               <div className="flex items-center justify-center gap-2 py-1 text-[#000000]">
                 <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
-                <span className="text-xs font-bold tracking-[0.032em]">สลิปถูกต้องเรียบร้อย (PromptPay Verified)</span>
+                <span className="text-xs font-bold tracking-[0.032em]">
+                  {language === 'th' ? 'สลิปถูกต้องเรียบร้อย ยืนยันแล้ว' : 'Slip Verified Successfully'}
+                </span>
               </div>
             ) : (
               <div className="flex flex-col items-center gap-1.5 py-1">
                 <UploadCloud className="w-6 h-6 text-[#000000]" />
-                <span className="text-xs font-bold text-[#000000]">คลิกเพื่ออัปโหลดสลิปธนาคาร (Simulate Slip)</span>
-                <span className="text-[10px] text-[#000000]/60 font-bold">รองรับ K-Plus, SCB Easy, Krungthai, Bangkok Bank</span>
+                <span className="text-xs font-bold text-[#000000]">
+                  {language === 'th' ? 'คลิกเพื่ออัปโหลดสลิปธนาคาร' : 'Click to Upload Bank Slip'}
+                </span>
+                <span className="text-[10px] text-[#000000]/60 font-bold">
+                  {language === 'th' ? 'รองรับ K PLUS, SCB Easy, Krungthai NEXT' : 'Supports all major Thai banking apps'}
+                </span>
               </div>
             )}
           </div>
         </div>
 
-        {/* Confirm Payment CTA (Black fill only) */}
+        {/* Confirm Payment CTA */}
         <button
           type="button"
           onClick={handleConfirmAndComplete}
           className="w-full py-4 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
         >
-          <span>CONFIRM & GET COURT PASS</span>
-          <ArrowRight className="w-4 h-4" />
+          <span className="whitespace-nowrap">
+            {language === 'th' ? 'ยืนยันและรับบัตรเข้าคอร์ท' : 'CONFIRM & GET COURT PASS'}
+          </span>
         </button>
       </div>
     </div>
   );
 };
+

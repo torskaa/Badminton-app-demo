@@ -4,57 +4,71 @@ import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const D2_AIQuestsDrillsScreen: React.FC = () => {
-  const { quests, claimQuestReward, drills, completeDrill, navigateTo } = useApp();
+  const { quests, claimQuestReward, drills, completeDrill, language } = useApp();
   const [activeTab, setActiveTab] = useState<'quests' | 'drills'>('quests');
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="Daily Quests & Drills" showBack />
+      <MobileHeader
+        title={language === 'th' ? 'ภารกิจและแบบฝึกซ้อม' : 'Daily Quests & Drills'}
+        showBack
+      />
 
-      {/* Pill Segmented Tabs (Paper White with 1px black outline) */}
+      {/* Pill Segmented Tabs */}
       <div className="px-5 py-3 flex items-center gap-2 border-b border-[#000000] bg-[#ffffff] shrink-0">
         <button
           type="button"
           onClick={() => setActiveTab('quests')}
-          className={`flex-1 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 border border-[#000000] ${
+          className={`flex-1 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 border border-[#000000] whitespace-nowrap ${
             activeTab === 'quests'
               ? 'bg-[#000000] text-[#ffffff]'
               : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
           }`}
         >
-          <Trophy className="w-3.5 h-3.5" />
-          <span>Daily Quests ({quests.filter((q) => !q.claimed).length})</span>
+          <Trophy className="w-3.5 h-3.5 shrink-0" />
+          <span className="whitespace-nowrap">
+            {language === 'th' ? `ภารกิจรายวัน (${quests.filter((q) => !q.claimed).length})` : `Daily Quests (${quests.filter((q) => !q.claimed).length})`}
+          </span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('drills')}
-          className={`flex-1 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 border border-[#000000] ${
+          className={`flex-1 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 border border-[#000000] whitespace-nowrap ${
             activeTab === 'drills'
               ? 'bg-[#000000] text-[#ffffff]'
               : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
           }`}
         >
-          <Dumbbell className="w-3.5 h-3.5" />
-          <span>AI Drills ({drills.length})</span>
+          <Dumbbell className="w-3.5 h-3.5 shrink-0" />
+          <span className="whitespace-nowrap">
+            {language === 'th' ? `แบบฝึกซ้อม (${drills.length})` : `Practice Drills (${drills.length})`}
+          </span>
         </button>
       </div>
 
-      {/* Single Scroll Container with min-h-0 */}
+      {/* Single Scroll Container */}
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
         {activeTab === 'quests' ? (
           <>
             {/* Quests Header Info */}
             <div className="border border-[#000000] rounded-[28px] p-4 flex items-center justify-between bg-[#ffffff]">
               <div>
-                <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] inline-block mb-1 text-[#000000]">
-                  Active Quests
-                </span>
+                <div className="flex items-center gap-1.5 mb-1">
+                  <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] inline-block text-[#000000]">
+                    {language === 'th' ? 'ภารกิจที่กำลังเปิด' : 'Active Quests'}
+                  </span>
+                  <span className="text-[10px] font-bold text-[#000000]/60 uppercase">
+                    {language === 'th' ? 'รีเซ็ตทุก 24 ชม.' : 'Resets in 24h'}
+                  </span>
+                </div>
                 <h3 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
-                  DAILY MISSION BOARD
+                  {language === 'th' ? 'กระดานภารกิจสะสม EXP ประจำวัน' : 'DAILY MISSION BOARD'}
                 </h3>
-                <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
-                  ทำภารกิจรายวันเพื่อรับ EXP และปลดล็อกเหรียญตราเกียรติยศ
+                <p className="text-xs text-[#000000]/70 font-bold mt-0.5">
+                  {language === 'th'
+                    ? 'ทำภารกิจรายวันเพื่อรับ EXP และปลดล็อกเหรียญตราเกียรติยศนักกีฬา'
+                    : 'Complete daily missions to earn EXP and unlock athlete badges.'}
                 </p>
               </div>
             </div>
@@ -75,11 +89,12 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
                         </div>
                         <div>
                           <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide text-[#000000]">
-                            {quest.title}
+                            {language === 'th' ? quest.thaiTitle : quest.title}
                           </h4>
-                          <p className="text-[11px] text-[#000000]/70 font-medium mt-0.5">
-                            {quest.thaiTitle}
+                          <p className="text-[11px] text-[#000000]/70 font-bold mt-0.5">
+                            {language === 'th' ? `เป้าหมาย: ${quest.target} ครั้ง` : `Target: ${quest.target} completions`}
                           </p>
+
                         </div>
                       </div>
 
@@ -98,13 +113,13 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
 
                     <div className="flex items-center justify-between text-xs pt-1">
                       <span className="text-[11px] font-bold text-[#000000]/60">
-                        {quest.current} / {quest.target} สำเร็จ
+                        {quest.current} / {quest.target} {language === 'th' ? 'สำเร็จ' : 'done'}
                       </span>
 
                       {quest.claimed ? (
                         <span className="flex items-center gap-1 text-[11px] font-bold text-[#55db9c]">
                           <CheckCircle2 className="w-3.5 h-3.5" />
-                          <span>รับแล้ว</span>
+                          <span>{language === 'th' ? 'รับแล้ว' : 'Claimed'}</span>
                         </span>
                       ) : isCompleted ? (
                         <button
@@ -112,10 +127,12 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
                           onClick={() => claimQuestReward(quest.id)}
                           className="px-4 py-1.5 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] bg-[#000000] text-[#ffffff] border border-[#000000] hover:bg-[#1a1a1a] transition-transform active:scale-95 cursor-pointer shadow-xs whitespace-nowrap shrink-0"
                         >
-                          CLAIM +{quest.expReward} EXP
+                          {language === 'th' ? `รับ +${quest.expReward} EXP` : `CLAIM +${quest.expReward} EXP`}
                         </button>
                       ) : (
-                        <span className="text-[11px] font-bold text-[#000000]/50">กำลังดำเนินการ</span>
+                        <span className="text-[11px] font-bold text-[#000000]/50">
+                          {language === 'th' ? 'กำลังดำเนินการ' : 'In progress'}
+                        </span>
                       )}
                     </div>
                   </div>
@@ -127,14 +144,21 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
           <>
             {/* Drills Section */}
             <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff]">
-              <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#e9ccff] border border-[#000000] inline-block mb-1 text-[#000000]">
-                AI Tactical Drills
-              </span>
+              <div className="flex items-center gap-1.5 mb-1">
+                <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#e9ccff] border border-[#000000] inline-block text-[#000000]">
+                  {language === 'th' ? 'การฝึกซ้อมเชิงแท็กติก' : 'TACTICAL DRILLS'}
+                </span>
+                <span className="text-[10px] font-bold text-[#000000]/60 uppercase">
+                  {language === 'th' ? 'ออกแบบตามจุดอ่อน' : 'Weakness-Targeted'}
+                </span>
+              </div>
               <h3 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
-                RECOMMENDED PRACTICE DRILLS
+                {language === 'th' ? 'แบบฝึกซ้อมเฉพาะบุคคลเพื่อยกระดับทักษะ' : 'PERSONALIZED PRACTICE DRILLS'}
               </h3>
-              <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
-                แบบฝึกซ้อมเฉพาะบุคคลที่ AI ออกแบบจากข้อมูลจุดอ่อนบนคอร์ท
+              <p className="text-xs text-[#000000]/70 font-bold mt-0.5">
+                {language === 'th'
+                  ? 'แบบฝึกซ้อมเฉพาะบุคคลที่ออกแบบจากสถิติจุดอ่อนบนคอร์ท เพื่อพัฒนาเรดาร์ทักษะ 5 ด้าน'
+                  : 'Personalized drills tailored from in-match telemetry to level up your 5-axis skill radar.'}
               </p>
             </div>
 
@@ -151,13 +175,13 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
                           {drill.focusArea}
                         </span>
                         <span className="text-[11px] font-bold text-[#000000]/60">
-                          ⏱️ {drill.durationMin} นาที
+                          ⏱️ {drill.durationMin} {language === 'th' ? 'นาที' : 'mins'}
                         </span>
                       </div>
                       <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
-                        {drill.title}
+                        {language === 'th' ? drill.thaiTitle : drill.title}
                       </h4>
-                      <p className="text-xs text-[#000000]/70 mt-1 font-medium leading-relaxed">
+                      <p className="text-xs text-[#000000]/70 mt-1 font-bold leading-relaxed">
                         {drill.description}
                       </p>
                     </div>
@@ -172,7 +196,9 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
                       onClick={() => completeDrill(drill.id)}
                       className="px-4 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] bg-[#000000] text-[#ffffff] border border-[#000000] hover:bg-[#1a1a1a] transition-transform active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
                     >
-                      {drill.completed ? 'COMPLETED (REPEAT)' : 'START DRILL'}
+                      {drill.completed
+                        ? (language === 'th' ? 'สำเร็จแล้ว' : 'COMPLETED')
+                        : (language === 'th' ? 'เริ่มฝึกซ้อม' : 'START DRILL')}
                     </button>
                   </div>
                 </div>
@@ -184,3 +210,5 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
     </div>
   );
 };
+
+

@@ -10,7 +10,7 @@ import { MobileHeader } from '../common/MobileHeader';
 import { PlayerTier } from '../../types';
 
 export const A2_PlaystyleSetupScreen: React.FC = () => {
-  const { player, updatePlayer, gainExp, navigateTo } = useApp();
+  const { player, updatePlayer, gainExp, navigateTo, language } = useApp();
 
   const [hand, setHand] = useState<'Right' | 'Left'>(player.dominantHand);
   const [playstyle, setPlaystyle] = useState(player.playstyle);
@@ -77,22 +77,28 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="ATHLETE DNA SETUP" subtitle="Custom AI Playstyle Archetype" showBack />
+      <MobileHeader
+        title={language === 'th' ? 'ตั้งค่า DNA นักกีฬา' : 'ATHLETE DNA SETUP'}
+        subtitle={language === 'th' ? 'สร้างสไตล์การเล่นและสายความถนัด' : 'Custom Playstyle Archetype'}
+        showBack
+      />
 
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
-        {/* Intro Card (Paper White, 1px solid black border, 28px radius) */}
-        <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000]">
-          <div className="flex items-center gap-2 mb-1.5">
+        {/* Intro Card */}
+        <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] space-y-1">
+          <div className="flex items-center gap-2 mb-1">
             <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase">
-              Character Setup
+              {language === 'th' ? 'ตั้งค่าตัวละคร' : 'Character Setup'}
             </span>
             <span className="text-xs text-[#000000]/70 font-bold">+150 EXP Reward</span>
           </div>
           <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000] leading-tight">
-            CUSTOMIZE YOUR ATHLETE DNA
+            {language === 'th' ? 'สร้างสไตล์ DNA นักกีฬาเฉพาะตัว' : 'CUSTOMIZE YOUR ATHLETE DNA'}
           </h2>
           <p className="text-xs text-[#000000]/70 mt-1 font-medium leading-relaxed">
-            ระบบ AI Coach จะใช้ Archetype นี้ในการวิเคราะห์เรดาร์ 5 มิติ แนะนำคู่ซ้อม และจัด Drills ฝึกฝน
+            {language === 'th'
+              ? 'ระบบจะนำ Archetype นี้ไปวิเคราะห์เรดาร์ทักษะ 5 มิติ แนะนำคู่ซ้อม และจัด Drills ฝึกฝน'
+              : 'Your archetype directly shapes your 5-axis skill radar, sparring recommendations, and custom drills.'}
           </p>
         </div>
 
@@ -247,14 +253,16 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Save and Continue Button (Black fill only per rules) */}
+        {/* Save and Continue Button */}
         <button
           type="button"
           onClick={handleSaveAndContinue}
           className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 border border-[#000000] transition-transform active:scale-98 cursor-pointer"
         >
           <Sparkles className="w-4 h-4 fill-[#ffffff]" />
-          <span>บันทึก DNA และสร้าง AI Skill Radar (+150 EXP)</span>
+          <span>
+            {language === 'th' ? 'บันทึก DNA และสร้างเรดาร์ทักษะ (+150 EXP)' : 'SAVE DNA & BUILD SKILL RADAR (+150 EXP)'}
+          </span>
           <ArrowRight className="w-4 h-4 stroke-[2.5]" />
         </button>
       </div>

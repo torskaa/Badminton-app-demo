@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const C4_MatchRecapCardScreen: React.FC = () => {
-  const { player, navigateTo } = useApp();
+  const { player, navigateTo, language } = useApp();
   const [copiedLink, setCopiedLink] = useState(false);
 
   const handleShareStory = () => {
@@ -14,23 +14,33 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="Athlete Recap Card" showBack />
+      <MobileHeader
+        title={language === 'th' ? 'การ์ดสรุปผลนักกีฬา' : 'Athlete Recap Card'}
+        showBack
+      />
 
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar flex flex-col items-center pb-12">
         {/* Banner Label */}
-        <div className="text-center px-2">
-          <span className="px-3 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] text-[#000000] inline-block mb-1">
-            Story Share Ready
-          </span>
+        <div className="text-center px-2 space-y-1">
+          <div className="flex items-center justify-center gap-2 mb-1">
+            <span className="px-3 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] text-[#000000] inline-block">
+              {language === 'th' ? 'พร้อมแชร์ลงสตอรี่' : 'Story Share Ready'}
+            </span>
+            <span className="text-[10px] font-bold text-[#000000]/60 uppercase">
+              {language === 'th' ? 'การ์ดทองคำ' : 'Gold Edition'}
+            </span>
+          </div>
           <h2 className="font-['Antonio',sans-serif] text-3xl font-black tracking-tight leading-[0.88] uppercase text-[#000000]">
-            ATHLETE TRADING CARD
+            {language === 'th' ? 'การ์ดนักกีฬาประจำแมตช์' : 'ATHLETE TRADING CARD'}
           </h2>
           <p className="text-xs text-[#000000]/70 font-bold mt-1">
-            แชร์ผลการแข่งขันขึ้น Instagram Story, TikTok และ Line ได้ทันที
+            {language === 'th'
+              ? 'แชร์ผลงานการแข่งขันขึ้น Instagram Story, TikTok และ Line ได้ทันที'
+              : 'Share your match glory directly to Instagram Story, TikTok, and Line.'}
           </p>
         </div>
 
-        {/* Modern Athlete Card (Gold / Sunburst with 1px solid black outline) */}
+        {/* Modern Athlete Card */}
         <div className="w-full max-w-[320px] rounded-[36px] bg-[#ffd731] border-2 border-[#000000] p-4 text-[#000000]">
           {/* Top row: OVR, Position, Tier */}
           <div className="flex items-start justify-between">
@@ -93,7 +103,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
           {/* Bottom Card Footer */}
           <div className="flex items-center justify-between text-[10px] font-bold text-[#000000]/70 pt-2 border-t border-[#000000]/20">
             <span>BWF COURT MASTER 2026</span>
-            <span className="text-[#000000] font-black">SMASH.AI VERIFIED</span>
+            <span className="text-[#000000] font-black">SMASH VERIFIED</span>
           </div>
         </div>
 
@@ -107,12 +117,12 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
             {copiedLink ? (
               <>
                 <Check className="w-4 h-4 stroke-[3] text-[#55db9c] shrink-0" />
-                <span className="whitespace-nowrap">COPIED FOR STORY!</span>
+                <span className="whitespace-nowrap">{language === 'th' ? 'คัดลอกลิงก์สตอรี่แล้ว!' : 'COPIED FOR STORY!'}</span>
               </>
             ) : (
               <>
                 <Share2 className="w-4 h-4 shrink-0" />
-                <span className="whitespace-nowrap">SHARE STORY (IG / TIKTOK)</span>
+                <span className="whitespace-nowrap">{language === 'th' ? 'แชร์ลง IG / TIKTOK STORY' : 'SHARE STORY (IG / TIKTOK)'}</span>
               </>
             )}
           </button>
@@ -123,7 +133,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
               onClick={() => navigateTo('D1')}
               className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
             >
-              <span>AI COACH (D1)</span>
+              <span>{language === 'th' ? 'เรดาร์โค้ช (D1)' : 'COACH RADAR (D1)'}</span>
               <ArrowRight className="w-3.5 h-3.5 shrink-0" />
             </button>
             <button

@@ -10,7 +10,13 @@ import { DeviceFrame } from './components/common/DeviceFrame';
 import { BottomTabBar } from './components/common/BottomTabBar';
 import { ExpCelebrationModal } from './components/common/ExpCelebrationModal';
 
-// Screens
+// Redesigned Grab-Superapp Primary Screens
+import { HomeScreen } from './components/screens/HomeScreen';
+import { CourtMapScreen } from './components/screens/CourtMapScreen';
+import { ClubToolsScreen } from './components/screens/ClubToolsScreen';
+import { FinanceScreen } from './components/screens/FinanceScreen';
+
+// Sub-flow Screens
 import { A1_WelcomeScreen } from './components/screens/A1_WelcomeScreen';
 import { A2_PlaystyleSetupScreen } from './components/screens/A2_PlaystyleSetupScreen';
 import { B1_CourtDiscoveryScreen } from './components/screens/B1_CourtDiscoveryScreen';
@@ -35,6 +41,16 @@ const ScreenRenderer: React.FC = () => {
   const { currentScreen } = useApp();
 
   switch (currentScreen) {
+    // PRIMARY SUPERAPP SCREENS (Grab Layout)
+    case 'HOME':
+      return <HomeScreen />;
+    case 'MAP':
+      return <CourtMapScreen />;
+    case 'CLUB_TOOLS':
+      return <ClubToolsScreen />;
+    case 'FINANCE':
+      return <FinanceScreen />;
+
     // PATH A: Authentication & Onboarding
     case 'A1':
       return <A1_WelcomeScreen />;
@@ -86,7 +102,7 @@ const ScreenRenderer: React.FC = () => {
       return <F2_WearableSyncScreen />;
 
     default:
-      return <D1_AICoachDashboardScreen />;
+      return <HomeScreen />;
   }
 };
 

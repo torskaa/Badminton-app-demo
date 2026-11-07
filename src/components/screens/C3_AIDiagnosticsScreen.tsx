@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const C3_AIDiagnosticsScreen: React.FC = () => {
-  const { navigateTo, gainExp } = useApp();
+  const { navigateTo, gainExp, language } = useApp();
   const [selectedZone, setSelectedZone] = useState<string>('front-left');
   const [drillAdded, setDrillAdded] = useState(false);
 
@@ -51,27 +51,53 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="AI Match Diagnostics" showBack />
+      <MobileHeader
+        title={language === 'th' ? 'สถิติและฮีทแมพการแข่งขัน' : 'Match Diagnostics & Heatmap'}
+        showBack
+      />
 
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
         {/* Header Intro Banner */}
-        <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff]">
+        <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff] space-y-1">
           <div className="flex items-center gap-2 mb-1">
             <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ff5c34] text-[#ffffff] border border-[#000000]">
-              AI Vision Heatmap
+              {language === 'th' ? 'ฮีทแมพจุดตกของลูก' : '2D COURT HEATMAP'}
             </span>
-            <span className="text-xs font-bold text-[#000000]/60">Court 3 Diagnostics</span>
+            <span className="text-xs font-bold text-[#000000]/60">
+              {language === 'th' ? 'วิเคราะห์คอร์ท 3' : 'Court 3 Diagnostics'}
+            </span>
           </div>
           <h2 className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight leading-tight uppercase text-[#000000]">
-            2D WEAKNESS HEATMAP
+            {language === 'th' ? 'แผนผังวิเคราะห์จุดอ่อน & ช็อตทำแต้ม' : '2D WEAKNESS & SCORING HEATMAP'}
           </h2>
           <p className="text-xs text-[#000000]/70 font-medium">
-            แตะโซนบนสนามเพื่อดูสถิติและแบบฝึกซ้อมแก้จุดอ่อนที่ AI แนะนำ
+            {language === 'th'
+              ? 'แตะโซนบนสนามเพื่อดูสถิติ Unforced Errors และแบบฝึกซ้อมแก้ไขจุดอ่อนที่แนะนำ'
+              : 'Tap any court zone to inspect unforced error counts and targeted practice drills.'}
           </p>
         </div>
 
-        {/* 2D Badminton Court Interactive Map (Slush Style with 1px black outline) */}
-        <div className="border border-[#000000] rounded-[32px] p-4 text-center bg-[#ffffff]">
+        {/* 2D Badminton Court Interactive Map */}
+        <div className="border border-[#000000] rounded-[32px] p-4 text-center bg-[#ffffff] space-y-3">
+          <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15 text-left">
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'ผังสนาม 4 โซน' : '4-ZONE MAP'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'เลือกโซนเพื่อดูสถิติ' : 'SELECT ZONE TO INSPECT'}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th'
+                  ? 'แสดงความแม่นยำหน้าเน็ตและท้ายคอร์ทของฝั่งคุณ'
+                  : 'Displays net and deep corner error distribution'}
+              </p>
+            </div>
+            <span className="text-[10px] font-bold text-[#000000]/60 uppercase">Interactive</span>
+          </div>
+
           <div className="relative w-full max-w-[280px] h-60 mx-auto bg-[#55db9c]/30 border-2 border-[#000000] rounded-[24px] p-2 flex flex-col justify-between overflow-hidden">
             {/* Net Divider */}
             <div className="absolute top-1/2 inset-x-0 h-1 bg-[#000000] z-10 flex items-center justify-center">
@@ -83,7 +109,7 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
             {/* Top Half: Opponent side */}
             <div className="flex-1 border-b border-dashed border-[#000000]/40 flex items-center justify-center">
               <span className="text-[10px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
-                Opponent Court
+                {language === 'th' ? 'แดนคู่ต่อสู้ (Opponent Court)' : 'Opponent Court'}
               </span>
             </div>
 
@@ -146,11 +172,24 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
 
         {/* Selected Zone Detail Card */}
         <div className="border border-[#000000] rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
-          <div className="flex items-center justify-between">
-            <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
-              {currentZone.name}
-            </span>
-            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] text-[#000000]">
+          {/* Subheader */}
+          <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15">
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'บทวิเคราะห์โซน' : 'ZONE ANALYSIS'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
+                  {currentZone.name}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th'
+                  ? 'ข้อผิดพลาดและคำแนะนำปรับปรุงเทคนิคการวางไม้ในโซนนี้'
+                  : 'Error count breakdown and biomechanics adjustments'}
+              </p>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] border border-[#000000] text-[#000000] shrink-0">
               {currentZone.tag}
             </span>
           </div>
@@ -167,12 +206,12 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
             {drillAdded ? (
               <>
                 <Check className="w-4 h-4 stroke-[3] text-[#55db9c] shrink-0" />
-                <span>DRILL ADDED (+80 EXP)</span>
+                <span>{language === 'th' ? 'เพิ่มแบบฝึกซ้อมสำเร็จ (+80 EXP)' : 'DRILL ADDED (+80 EXP)'}</span>
               </>
             ) : (
               <>
                 <Zap className="w-4 h-4 fill-[#ffd731] text-[#ffd731] shrink-0" />
-                <span>ADD DRILL TO QUESTS (D2)</span>
+                <span>{language === 'th' ? 'เพิ่มแบบฝึกซ้อมเข้า Quests (D2)' : 'ADD DRILL TO QUESTS (D2)'}</span>
                 <ArrowRight className="w-4 h-4 shrink-0" />
               </>
             )}
@@ -187,14 +226,14 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
             className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
           >
             <Share2 className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
-            <span>SHARE RECAP (C4)</span>
+            <span>{language === 'th' ? 'แชร์การ์ด (C4)' : 'SHARE RECAP (C4)'}</span>
           </button>
           <button
             type="button"
             onClick={() => navigateTo('D1')}
             className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
           >
-            <span>AI COACH (D1)</span>
+            <span>{language === 'th' ? 'เรดาร์โค้ช (D1)' : 'COACH RADAR (D1)'}</span>
             <ArrowRight className="w-3.5 h-3.5 shrink-0" />
           </button>
         </div>

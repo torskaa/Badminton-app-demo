@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Flame, Zap, Compass } from 'lucide-react';
+import { ArrowLeft, Flame, Zap, Compass, Settings } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ScreenSwitcherModal } from './ScreenSwitcherModal';
+import { AppSettingsModal } from './AppSettingsModal';
 
 interface MobileHeaderProps {
   title?: string;
@@ -11,8 +12,9 @@ interface MobileHeaderProps {
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onBack, subtitle }) => {
-  const { player, currentScreen, navigateTo } = useApp();
+  const { player, currentScreen, navigateTo, language, setLanguage } = useApp();
   const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
   const handleBack = () => {
     if (onBack) {
@@ -26,12 +28,12 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
     else if (['D2', 'D3'].includes(currentScreen)) navigateTo('D1', 'backward');
     else if (['E2', 'E3', 'E4'].includes(currentScreen)) navigateTo('E1', 'backward');
     else if (['F2'].includes(currentScreen)) navigateTo('F1', 'backward');
-    else navigateTo('D1', 'backward');
+    else navigateTo('HOME', 'backward');
   };
 
   return (
     <>
-      <header className="sticky top-0 z-30 px-4 py-2.5 bg-[#ffffff] border-b border-[#000000] flex items-center justify-between gap-2.5 shrink-0 select-none text-[#000000]">
+      <header className="sticky top-0 z-30 px-3 py-2 bg-[#ffffff] border-b border-[#000000] flex items-center justify-between gap-2 shrink-0 select-none text-[#000000]">
         {/* Left: Back Pill or Clean Logo */}
         <div className="flex items-center gap-2 min-w-0">
           {showBack ? (
@@ -45,7 +47,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
             </button>
           ) : (
             <div
-              onClick={() => navigateTo('B1')}
+              onClick={() => navigateTo('HOME')}
               className="cursor-pointer flex items-center gap-1 shrink-0 hover:scale-105 transition-transform"
             >
               <span className="font-['Antonio',sans-serif] text-xl font-black uppercase tracking-tight text-[#000000]">
@@ -56,7 +58,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
 
           {showBack && title && (
             <div className="min-w-0">
-              <h1 className="text-xs font-bold tracking-[0.032em] truncate leading-tight uppercase font-['Antonio',sans-serif] text-sm">
+              <h1 className="text-xs font-bold tracking-[0.032em] truncate leading-tight uppercase font-['Antonio',sans-serif]">
                 {title}
               </h1>
               {subtitle && (
@@ -68,12 +70,40 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
           )}
         </div>
 
-        {/* Right status: Streak + Level + Directory */}
+        {/* Right status: Language Pill + Streak + Level + Settings + Directory */}
         <div className="flex items-center gap-1.5 shrink-0">
+          {/* Quick Language Toggle Pill [ 🇹🇭 TH | 🇬🇧 EN ] */}
+          <div className="flex items-center p-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[10px] font-bold">
+            <button
+              type="button"
+              onClick={() => setLanguage('th')}
+              className={`px-1.5 py-0.5 rounded-[1600px] transition-all cursor-pointer ${
+                language === 'th'
+                  ? 'bg-[#000000] text-[#ffffff] font-black'
+                  : 'text-[#000000]/70 hover:text-[#000000]'
+              }`}
+              title="ภาษาไทย"
+            >
+              TH
+            </button>
+            <button
+              type="button"
+              onClick={() => setLanguage('en')}
+              className={`px-1.5 py-0.5 rounded-[1600px] transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-[#000000] text-[#ffffff] font-black'
+                  : 'text-[#000000]/70 hover:text-[#000000]'
+              }`}
+              title="English"
+            >
+              EN
+            </button>
+          </div>
+
           {/* Streak pill (Ember) */}
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-[1600px] bg-[#fb4903] text-[#ffffff] border border-[#000000] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+            className="flex items-center gap-1 px-2 py-1 rounded-[1600px] bg-[#fb4903] text-[#ffffff] border border-[#000000] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform"
           >
             <Flame className="w-3 h-3 fill-current text-[#ffffff]" />
             <span>{player.streakWeeks}W</span>
@@ -82,25 +112,37 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
           {/* Level pill (Sunburst) */}
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+            className="flex items-center gap-1 px-2 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform"
           >
             <Zap className="w-3 h-3 fill-current" />
             <span>Lv.{player.level}</span>
           </div>
 
+          {/* Settings Pill */}
+          <button
+            type="button"
+            onClick={() => setIsSettingsOpen(true)}
+            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center cursor-pointer hover:bg-[#e9e9e9] active:scale-95 transition-all"
+            title="Settings"
+          >
+            <Settings className="w-3.5 h-3.5 text-[#000000]" />
+          </button>
+
           {/* Directory Pill */}
           <button
             type="button"
             onClick={() => setIsSwitcherOpen(true)}
-            className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center cursor-pointer hover:bg-[#e9ccff] active:scale-95 transition-all"
-            title="App Navigation Directory (18 Screens)"
+            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center cursor-pointer hover:bg-[#e9ccff] active:scale-95 transition-all"
+            title="Directory (All 18 Screens)"
           >
-            <Compass className="w-4 h-4 text-[#5c4ade]" />
+            <Compass className="w-3.5 h-3.5 text-[#5c4ade]" />
           </button>
         </div>
       </header>
 
+      <AppSettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
       <ScreenSwitcherModal isOpen={isSwitcherOpen} onClose={() => setIsSwitcherOpen(false)} />
     </>
   );
 };
+

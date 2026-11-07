@@ -20,8 +20,8 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
         {/* Season Header Banner */}
         <div className="border border-[#000000] rounded-[28px] p-5 space-y-2.5 bg-[#ffffff]">
-          <div className="flex items-center justify-between text-xs">
-            <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] font-bold text-[10px] uppercase tracking-[0.032em] flex items-center gap-1.5">
+          <div className="flex items-center justify-between text-xs border-b border-[#000000]/10 pb-2">
+            <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] font-black text-[10px] uppercase tracking-[0.032em] flex items-center gap-1.5">
               <Crown className="w-3.5 h-3.5 fill-[#000000]" />
               SEASON 4: BANGKOK CLASH
             </span>
@@ -44,27 +44,48 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
               className="px-4 py-2 rounded-[1600px] bg-[#000000] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center gap-1.5 cursor-pointer transition-transform active:scale-95 border border-[#000000] hover:bg-[#1a1a1a] whitespace-nowrap"
             >
               <Swords className="w-3.5 h-3.5 shrink-0" />
-              <span className="whitespace-nowrap">AI SMART MATCHMAKER (E3)</span>
+              <span className="whitespace-nowrap">SMART MATCHMAKER จัดทีมสมดุล (E3)</span>
             </button>
           </div>
         </div>
 
-        {/* Tier Filter Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-          {['All', 'Diamond', 'Gold', 'Silver', 'Bronze'].map((tier) => (
-            <button
-              type="button"
-              key={tier}
-              onClick={() => setSelectedTierFilter(tier as any)}
-              className={`px-4 py-1.5 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] shrink-0 cursor-pointer transition-all border border-[#000000] ${
-                selectedTierFilter === tier
-                  ? 'bg-[#000000] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
-              }`}
-            >
-              {tier === 'All' ? 'ทั้งหมด (ALL TIERS)' : `${tier} LEAGUE`}
-            </button>
-          ))}
+        {/* Tier Filter Section */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#000000]/60">
+              เลือกลีกระดับฝีมือ · LEAGUE FILTER
+            </span>
+            <span className="text-[10px] font-bold text-[#5c4ade]">
+              {selectedTierFilter}
+            </span>
+          </div>
+          {/* Tier Filter Pills */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+            {['All', 'Diamond', 'Gold', 'Silver', 'Bronze'].map((tier) => (
+              <button
+                type="button"
+                key={tier}
+                onClick={() => setSelectedTierFilter(tier as any)}
+                className={`px-4 py-1.5 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] shrink-0 cursor-pointer transition-all border border-[#000000] ${
+                  selectedTierFilter === tier
+                    ? 'bg-[#000000] text-[#ffffff]'
+                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+                }`}
+              >
+                {tier === 'All' ? 'ทั้งหมด (ALL TIERS)' : `${tier} LEAGUE`}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Ranked Players List Header */}
+        <div className="flex items-center justify-between px-1 pt-1">
+          <span className="text-[10px] font-bold uppercase tracking-wider text-[#000000]/60">
+            อันดับนักกีฬาในก๊วน · SQUAD RANKINGS
+          </span>
+          <span className="text-[10px] font-bold text-[#000000]/60">
+            {filteredList.length} รายชื่อ
+          </span>
         </div>
 
         {/* Ranked Players List */}

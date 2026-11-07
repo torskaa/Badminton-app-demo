@@ -4,6 +4,10 @@
  */
 
 export type ScreenId = 
+  | 'HOME' // Superapp Home Screen (Grab style)
+  | 'MAP' // Discover / Court Map Screen with Bottom Sheet
+  | 'CLUB_TOOLS' // Club Assistant Tools Screen (Scoreboard, Randomizer, Tactic Board, Split Calc)
+  | 'FINANCE' // Finance & Wallet Screen (Purple Theme)
   | 'A1' // Welcome
   | 'A2' // Player Avatar & Playstyle Setup
   | 'B1' // Court Discovery
@@ -24,7 +28,7 @@ export type ScreenId =
   | 'F1' // User Profile & Trophy Room
   | 'F2'; // Wearable Companion Sync
 
-export type MainTab = 'home' | 'booking' | 'logger' | 'coach' | 'community' | 'profile';
+export type MainTab = 'home' | 'club' | 'discover' | 'more' | 'profile';
 
 export type AppViewMode = 'single' | 'showcase';
 
@@ -97,6 +101,24 @@ export interface CourtFacility {
   imageUrl: string;
   amenities: string[];
   slotsAvailableToday: number;
+  latitude?: number;
+  longitude?: number;
+  hasParking?: boolean;
+  hasShower?: boolean;
+  hasEvCharging?: boolean;
+  hasRacketRental?: boolean;
+  isBookable?: boolean;
+}
+
+export interface FinanceTransaction {
+  id: string;
+  title: string;
+  subtitle: string;
+  amount: number;
+  type: 'debit' | 'credit';
+  date: string;
+  category: 'court_booking' | 'split_bill' | 'wallet_topup' | 'gear_purchase';
+  status: 'completed' | 'pending';
 }
 
 export interface CourtSlot {

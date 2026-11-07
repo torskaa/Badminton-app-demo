@@ -57,7 +57,7 @@ export const A1_WelcomeScreen: React.FC = () => {
             🏸
           </div>
           <span className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight uppercase">
-            SMASH<span className="text-[#4da2ff]">.AI</span>
+            SMASH
           </span>
         </div>
 

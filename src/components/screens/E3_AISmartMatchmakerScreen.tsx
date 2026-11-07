@@ -4,7 +4,7 @@ import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const E3_AISmartMatchmakerScreen: React.FC = () => {
-  const { navigateTo, gainExp } = useApp();
+  const { navigateTo, gainExp, language } = useApp();
   const [shuffleCount, setShuffleCount] = useState(0);
 
   const PAIRING_OPTIONS = [
@@ -53,43 +53,55 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
 
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
-      <MobileHeader title="AI Smart Matchmaker" showBack />
+      <MobileHeader
+        title={language === 'th' ? 'ระบบจัดทีม & จับคู่ผู้เล่น' : 'Smart Matchmaker'}
+        showBack
+      />
 
       <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
         {/* Matchmaker Banner Card */}
-        <div className="border border-[#000000] rounded-[32px] p-5 bg-[#ffffff]">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#5c4ade] text-[#ffffff] border border-[#000000]">
-                AI Radar Balancing
-              </span>
-              <span className="text-xs font-bold text-[#000000]/60">MMR Skill Equalizer</span>
-            </div>
-            <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase leading-tight tracking-tight text-[#000000]">
-              FAIR PLAY MATCHMAKING
-            </h2>
-            <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
-              จัดทีมสลับมือแบบสมดุล หมดปัญหามือห่าง เกมขาด ด้วยอัลกอริทึม 50/50
-            </p>
+        <div className="border border-[#000000] rounded-[32px] p-5 bg-[#ffffff] space-y-1">
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#5c4ade] text-[#ffffff] border border-[#000000]">
+              {language === 'th' ? 'สมดุลเรดาร์ทักษะ' : 'Radar Balancing'}
+            </span>
+            <span className="text-xs font-bold text-[#000000]/60">
+              {language === 'th' ? 'ระบบปรับสมดุล MMR' : 'MMR Skill Equalizer'}
+            </span>
           </div>
+          <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase leading-tight tracking-tight text-[#000000]">
+            {language === 'th' ? 'จัดทีมสลับมือ 50/50 สมดุล' : 'FAIR PLAY MATCHMAKING'}
+          </h2>
+          <p className="text-xs text-[#000000]/70 font-medium">
+            {language === 'th'
+              ? 'จัดทีมสลับมือแบบสมดุล หมดปัญหามือห่าง เกมขาด ด้วยอัลกอริทึมคะแนนเรดาร์'
+              : 'Balanced team pairings to ensure close, competitive games with zero mismatch.'}
+          </p>
         </div>
 
         {/* Balance Score Card */}
         <div className="p-4 rounded-[26px] border border-[#000000] flex items-center justify-between bg-[#55db9c] text-[#000000]">
-          <div className="flex items-center gap-2.5">
-            <Sparkles className="w-5 h-5 text-[#000000] stroke-[2.5]" />
-            <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide">
-              {currentPairing.balanceScore}
-            </span>
+          <div>
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span className="px-1.5 py-0.1 rounded-[1600px] text-[8px] font-black uppercase tracking-[0.032em] bg-[#000000] text-[#ffffff]">
+                {language === 'th' ? 'ดัชนีความสมดุล' : 'BALANCE'}
+              </span>
+              <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide">
+                {currentPairing.balanceScore}
+              </span>
+            </div>
+            <p className="text-[10px] text-[#000000]/80 font-bold">
+              {language === 'th' ? 'โอกาสชนะใกล้เคียง 50/50 สูงสุด' : 'Both teams have equal 50/50 win probabilities'}
+            </p>
           </div>
 
           <button
             type="button"
             onClick={handleShuffle}
-            className="px-3 py-1.5 rounded-[1600px] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]"
+            className="px-3 py-1.5 rounded-[1600px] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] shrink-0"
           >
             <RefreshCw className="w-3.5 h-3.5" />
-            <span>สลับคู่ใหม่</span>
+            <span>{language === 'th' ? 'สลับคู่ใหม่' : 'Re-shuffle'}</span>
           </button>
         </div>
 
@@ -97,9 +109,18 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
         <div className="grid grid-cols-2 gap-3">
           {/* Team A */}
           <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffd731] space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">TEAM A</span>
-              <span className="text-xs font-black text-[#000000]">OVR {currentPairing.teamAOvr}</span>
+            <div className="flex items-center justify-between pb-1 border-b border-[#000000]/20">
+              <div>
+                <span className="text-[9px] font-bold uppercase block text-[#000000]/70">
+                  {language === 'th' ? 'ทีม A' : 'TEAM A'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
+                  OVR {currentPairing.teamAOvr}
+                </span>
+              </div>
+              <span className="text-[10px] font-black text-[#000000] px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000]">
+                {currentPairing.winProbA}% Win
+              </span>
             </div>
             <div className="space-y-2">
               {currentPairing.teamA.map((p, i) => (
@@ -109,16 +130,22 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
                 </div>
               ))}
             </div>
-            <div className="text-center pt-1 font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
-              โอกาสชนะ {currentPairing.winProbA}%
-            </div>
           </div>
 
           {/* Team B */}
           <div className="border border-[#000000] rounded-[28px] p-4 bg-[#e9ccff] space-y-2.5">
-            <div className="flex items-center justify-between">
-              <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">TEAM B</span>
-              <span className="text-xs font-black text-[#000000]">OVR {currentPairing.teamBOvr}</span>
+            <div className="flex items-center justify-between pb-1 border-b border-[#000000]/20">
+              <div>
+                <span className="text-[9px] font-bold uppercase block text-[#000000]/70">
+                  {language === 'th' ? 'ทีม B' : 'TEAM B'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
+                  OVR {currentPairing.teamBOvr}
+                </span>
+              </div>
+              <span className="text-[10px] font-black text-[#000000] px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000]">
+                {currentPairing.winProbB}% Win
+              </span>
             </div>
             <div className="space-y-2">
               {currentPairing.teamB.map((p, i) => (
@@ -127,9 +154,6 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
                   <span className="text-[10px] text-[#000000]/60 block">{p.role}</span>
                 </div>
               ))}
-            </div>
-            <div className="text-center pt-1 font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
-              โอกาสชนะ {currentPairing.winProbB}%
             </div>
           </div>
         </div>
@@ -142,7 +166,9 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
             className="w-full py-3.5 px-4 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
           >
             <Play className="w-4 h-4 fill-[#ffffff] shrink-0" />
-            <span className="whitespace-nowrap">ACCEPT DUEL & START MATCH (C1)</span>
+            <span className="whitespace-nowrap">
+              {language === 'th' ? 'ยอมรับผลจับคู่ & เริ่มนับแต้ม (C1)' : 'ACCEPT DUEL & START MATCH (C1)'}
+            </span>
           </button>
         </div>
       </div>

@@ -58,6 +58,15 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
           <div className="space-y-3.5 flex flex-col items-center">
             {/* Athlete Identity Trading Card (Gold / Sunburst finish with 1px solid black border) */}
             <div className="w-full max-w-[340px] rounded-[32px] bg-[#ffd731] border-2 border-[#000000] p-4 text-[#000000]">
+              <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#000000]/15">
+                <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-black uppercase tracking-wider">
+                  การ์ดข้อมูลนักกีฬา · ATHLETE CARD
+                </span>
+                <span className="text-[10px] font-bold text-[#000000]/70">
+                  SMASH VERIFIED
+                </span>
+              </div>
+
               <div className="flex items-start justify-between">
                 <div>
                   <div className="font-['Antonio',sans-serif] text-6xl font-black leading-none">
@@ -113,64 +122,88 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
             {/* My Active Booking Pass (Real User Flow) */}
             <div
               onClick={() => navigateTo('B4')}
-              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] cursor-pointer hover:bg-[#e9ccff] transition-all flex items-center justify-between"
+              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] cursor-pointer hover:bg-[#e9ccff] transition-all space-y-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[1600px] bg-[#55db9c] border border-[#000000] flex items-center justify-center font-bold text-[#000000]">
-                  <QrCode className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                    บัตรเข้าคอร์ทของฉัน (MY ACTIVE PASS)
-                  </div>
-                  <div className="text-[10px] text-[#000000]/70 font-bold">
-                    {booking.court?.name || 'สแมช อารีน่า พระราม 9'} · คอร์ท {booking.selectedCourtNumber || 3}
-                  </div>
-                </div>
+              <div className="flex items-center justify-between pb-1 border-b border-[#000000]/10 text-[10px]">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] font-black uppercase text-[#000000]">
+                  บัตรเข้าสนาม · ACTIVE PASS
+                </span>
+                <span className="font-bold text-[#55db9c]">● พร้อมใช้งาน</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#000000]" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-[1600px] bg-[#55db9c] border border-[#000000] flex items-center justify-center font-bold text-[#000000]">
+                    <QrCode className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                      บัตรเข้าคอร์ทของฉัน
+                    </div>
+                    <div className="text-[10px] text-[#000000]/70 font-bold">
+                      {booking.court?.name || 'สแมช อารีน่า พระราม 9'} · คอร์ท {booking.selectedCourtNumber || 3}
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[#000000]" />
+              </div>
             </div>
 
             {/* Wearable Sync Callout */}
             <div
               onClick={() => navigateTo('F2')}
-              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] cursor-pointer hover:bg-[#ffd731] transition-all flex items-center justify-between"
+              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] cursor-pointer hover:bg-[#ffd731] transition-all space-y-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[1600px] bg-[#4da2ff] border border-[#000000] flex items-center justify-center font-bold text-[#000000]">
-                  <Watch className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                    APPLE WATCH & GARMIN SYNC
-                  </div>
-                  <div className="text-[10px] text-[#000000]/70 font-bold">
-                    อัตราเต้นหัวใจ 164 BPM · แปลง 480 kcal เป็น +240 EXP
-                  </div>
-                </div>
+              <div className="flex items-center justify-between pb-1 border-b border-[#000000]/10 text-[10px]">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#4da2ff] text-[#000000] border border-[#000000] font-black uppercase">
+                  เชื่อมต่ออุปกรณ์ · SMART WEARABLE
+                </span>
+                <span className="font-bold text-[#000000]/60">164 BPM · 480 kcal</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#000000]" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-[1600px] bg-[#4da2ff] border border-[#000000] flex items-center justify-center font-bold text-[#000000]">
+                    <Watch className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                      APPLE WATCH & GARMIN SYNC
+                    </div>
+                    <div className="text-[10px] text-[#000000]/70 font-bold">
+                      ซิงค์ชีพจรและเผาผลาญแคลอรี่เป็นแต้ม EXP
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[#000000]" />
+              </div>
             </div>
 
             {/* Edit DNA & Settings */}
             <div
               onClick={() => navigateTo('A2')}
-              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] cursor-pointer hover:bg-[#e9e9e9] transition-all flex items-center justify-between"
+              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] cursor-pointer hover:bg-[#e9e9e9] transition-all space-y-2"
             >
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-[1600px] bg-[#e9ccff] border border-[#000000] flex items-center justify-center font-bold text-[#000000]">
-                  <UserCog className="w-5 h-5" />
-                </div>
-                <div>
-                  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                    แก้ไข ATHLETE DNA & สไตล์การเล่น
-                  </div>
-                  <div className="text-[10px] text-[#000000]/70 font-bold">
-                    ปรับสายตบ, มือกุมแร็กเก็ต, และเป้าหมายฝึกฝน
-                  </div>
-                </div>
+              <div className="flex items-center justify-between pb-1 border-b border-[#000000]/10 text-[10px]">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#e9ccff] border border-[#000000] font-black uppercase text-[#000000]">
+                  ตั้งค่าความถนัด · PLAYSTYLE DNA
+                </span>
+                <span className="font-bold text-[#000000]/60">แก้ไขข้อมูล</span>
               </div>
-              <ChevronRight className="w-4 h-4 text-[#000000]" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-[1600px] bg-[#e9ccff] border border-[#000000] flex items-center justify-center font-bold text-[#000000]">
+                    <UserCog className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                      แก้ไข ATHLETE DNA & สไตล์การเล่น
+                    </div>
+                    <div className="text-[10px] text-[#000000]/70 font-bold">
+                      ปรับสายตบ, มือกุมแร็กเก็ต, และเป้าหมายฝึกฝน
+                    </div>
+                  </div>
+                </div>
+                <ChevronRight className="w-4 h-4 text-[#000000]" />
+              </div>
             </div>
 
             {/* Pro Membership Monetization Shortcut */}
@@ -179,24 +212,32 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                 setIsProModalOpen(true);
                 playCoinSound();
               }}
-              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffd731] border border-[#000000] cursor-pointer hover:bg-[#ffe266] transition-all flex items-center justify-between gap-3"
+              className="w-full max-w-[340px] p-4 rounded-[28px] bg-[#ffd731] border border-[#000000] cursor-pointer hover:bg-[#ffe266] transition-all space-y-2"
             >
-              <div className="flex items-center gap-3 min-w-0 flex-1">
-                <div className="w-10 h-10 rounded-[1600px] bg-[#000000] text-[#ffd731] flex items-center justify-center font-bold shrink-0">
-                  <Crown className="w-5 h-5" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
-                    {player.tier === 'Pro' ? 'SMASHAI PRO MEMBER' : 'SMASHAI PRO MEMBER'}
-                  </div>
-                  <div className="text-[10px] text-[#000000]/80 font-bold truncate">
-                    ลดค่าคอร์ท 10% · สแกน 3D ไม่จำกัด (฿199/ด.)
-                  </div>
-                </div>
+              <div className="flex items-center justify-between pb-1 border-b border-[#000000]/15 text-[10px]">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffd731] font-black uppercase">
+                  สมาชิกสิทธิพิเศษ · PRO PASS
+                </span>
+                <span className="font-black text-[#000000]">฿199 / เดือน</span>
               </div>
-              <span className="px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em] uppercase shrink-0 whitespace-nowrap">
-                {player.tier === 'Pro' ? 'ACTIVE' : 'UPGRADE'}
-              </span>
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-3 min-w-0 flex-1">
+                  <div className="w-10 h-10 rounded-[1600px] bg-[#000000] text-[#ffd731] flex items-center justify-center font-bold shrink-0">
+                    <Crown className="w-5 h-5" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
+                      SMASH PRO MEMBER
+                    </div>
+                    <div className="text-[10px] text-[#000000]/80 font-bold truncate">
+                      ลดค่าคอร์ท 10% · สแกน 3D ไม่จำกัด
+                    </div>
+                  </div>
+                </div>
+                <span className="px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em] uppercase shrink-0 whitespace-nowrap">
+                  {player.tier === 'Pro' ? 'ACTIVE' : 'UPGRADE'}
+                </span>
+              </div>
             </div>
 
             {/* Quick Action Buttons (Black fill and outlined black) */}
@@ -207,7 +248,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                 className="p-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] border border-[#000000] hover:bg-[#e9e9e9] whitespace-nowrap"
               >
                 <Crosshair className="w-3.5 h-3.5 text-[#5c4ade]" />
-                <span>AI COACH RADAR</span>
+                <span>COACH RADAR (D1)</span>
               </button>
               <button
                 type="button"
@@ -215,7 +256,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                 className="p-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#000000] text-[#ffffff] border border-[#000000] hover:bg-[#1a1a1a] whitespace-nowrap"
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>BOOK COURTS</span>
+                <span>BOOK COURTS (B1)</span>
               </button>
             </div>
           </div>

@@ -259,7 +259,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
             <div className="w-9 h-9 rounded-[1600px] bg-[#ffd731] border border-[#000000] mx-auto mb-1 flex items-center justify-center font-bold text-base">
               ⚔️
             </div>
-            <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">จัดคู่ AI</span>
+            <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">จัดทีมก๊วน</span>
           </button>
 
           <button
@@ -270,7 +270,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
             <div className="w-9 h-9 rounded-[1600px] bg-[#55db9c] border border-[#000000] mx-auto mb-1 flex items-center justify-center font-bold text-base">
               📊
             </div>
-            <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">สถิติ AI</span>
+            <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">ฮีทแมพสถิติ</span>
           </button>
 
           <button

@@ -5,7 +5,7 @@ import { MobileHeader } from '../common/MobileHeader';
 import { ShotType, ErrorReason } from '../../types';
 
 export const C1_InMatchLoggerScreen: React.FC = () => {
-  const { match, addScorePoint, undoLastPoint, finishMatch, navigateTo } = useApp();
+  const { match, addScorePoint, undoLastPoint, finishMatch, navigateTo, language } = useApp();
 
   const [selectedShotType, setSelectedShotType] = useState<ShotType>('Smash');
   const [selectedErrorReason] = useState<ErrorReason | undefined>(undefined);
@@ -36,8 +36,8 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
   return (
     <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
       <MobileHeader
-        title="Courtside Match Tracker"
-        subtitle={`Set ${match.currentSet} · ${match.serviceBox === 'right' ? 'Right Box (Even)' : 'Left Box (Odd)'}`}
+        title={language === 'th' ? 'บันทึกคะแนนสดข้างสนาม' : 'Courtside Match Tracker'}
+        subtitle={language === 'th' ? `เซ็ต ${match.currentSet} · ${match.serviceBox === 'right' ? 'คอร์ทขวา (แต้มคู่)' : 'คอร์ทซ้าย (แต้มคี่)'}` : `Set ${match.currentSet} · ${match.serviceBox === 'right' ? 'Right Box (Even)' : 'Left Box (Odd)'}`}
       />
 
       <div className="p-4 space-y-3.5 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-8">
@@ -46,18 +46,40 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-[#55db9c] border border-[#000000]" />
             <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-              LIVE COURT 3 · SET {match.currentSet}
+              {language === 'th' ? `ถ่ายทอดสด คอร์ท 3 · เซ็ต ${match.currentSet}` : `LIVE COURT 3 · SET ${match.currentSet}`}
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-xs font-bold">
             <span className="px-3 py-1 rounded-[1600px] border border-[#000000] bg-[#ffffff] text-[11px] font-bold tracking-[0.032em] text-[#000000]">
-              Server: Team {match.server}
+              {language === 'th' ? `ผู้ส่งลูก: ทีม ${match.server}` : `Server: Team ${match.server}`}
             </span>
           </div>
         </div>
 
-        {/* Scoreboard Card (Paper White Canvas, 1px solid black border, 28px radius) */}
-        <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff]">
+        {/* 1. Scoreboard Card */}
+        <div className="border border-[#000000] rounded-[28px] p-4 bg-[#ffffff] space-y-3">
+          {/* Subheader */}
+          <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15">
+            <div>
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'กระดานคะแนนสด' : 'LIVE SCORE'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'แต้มการแข่งขัน & เซ็ต' : 'MATCH SCORE & SETS'}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th'
+                  ? 'แตะปุ่มเพื่อเพิ่มคะแนน ระบบจะคำนวณตำแหน่งเสิร์ฟให้อัตโนมัติ'
+                  : 'Tap to add points. Service box auto-rotates by even/odd rule'}
+              </p>
+            </div>
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] border border-[#000000]">
+              BWF 21 PTS
+            </span>
+          </div>
+
           <div className="grid grid-cols-2 gap-3 items-center">
             {/* Team A (Player) */}
             <div className="text-center p-4 rounded-[24px] border border-[#000000] bg-[#ffd731] text-[#000000]">
@@ -68,7 +90,7 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
                 {match.scoreA}
               </div>
               <span className="text-[10px] font-bold tracking-[0.032em] uppercase px-3 py-0.5 rounded-[1600px] inline-block mt-1 bg-[#000000] text-[#ffffff] border border-[#000000]">
-                Sets: {match.setsWonA}
+                {language === 'th' ? `เซ็ต: ${match.setsWonA}` : `Sets: ${match.setsWonA}`}
               </span>
             </div>
 
@@ -81,7 +103,7 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
                 {match.scoreB}
               </div>
               <span className="text-[10px] font-bold tracking-[0.032em] uppercase px-3 py-0.5 rounded-[1600px] inline-block mt-1 bg-[#000000] text-[#ffffff] border border-[#000000]">
-                Sets: {match.setsWonB}
+                {language === 'th' ? `เซ็ต: ${match.setsWonB}` : `Sets: ${match.setsWonB}`}
               </span>
             </div>
           </div>
@@ -94,16 +116,16 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
               className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-[1600px] border border-[#000000] bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] transition-transform active:scale-95 cursor-pointer font-bold tracking-[0.032em]"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Undo แต้ม</span>
+              <span>{language === 'th' ? 'Undo ย้อนแต้ม' : 'Undo Point'}</span>
             </button>
 
             <span className="text-[11px] text-[#000000]/70 font-bold">
-              แต้มรวม: {match.shotHistory.length} ช็อต
+              {language === 'th' ? `แต้มรวม: ${match.shotHistory.length} ช็อต` : `Total: ${match.shotHistory.length} shots`}
             </span>
           </div>
         </div>
 
-        {/* Live Audio Commentary Widget */}
+        {/* 2. Live Audio Commentary Widget */}
         <div className="p-3.5 rounded-[24px] border border-[#000000] bg-[#ffffff] flex items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
             <button
@@ -116,10 +138,17 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
               <Volume2 className="w-4 h-4" />
             </button>
             <div>
-              <span className="font-['Antonio',sans-serif] text-sm font-black block leading-tight text-[#000000]">
-                AI Live Audio Commentary
+              <div className="flex items-center gap-1.5">
+                <span className="px-1.5 py-0.1 rounded-[1600px] text-[8px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'พากย์เสียงสด' : 'AUDIO CAST'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-sm font-black block leading-tight text-[#000000]">
+                  {language === 'th' ? 'ระบบบรรยายเกมข้างสนาม' : 'LIVE MATCH COMMENTARY'}
+                </span>
+              </div>
+              <span className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th' ? 'วิเคราะห์เกมเรียลไทม์เพื่อเสริมสร้างสมาธิ (81\')' : 'Real-time courtside audio analysis (81\')'}
               </span>
-              <span className="text-[10px] text-[#000000]/60 font-bold">บรรยายสดวิเคราะห์เกมเรียลไทม์ (81')</span>
             </div>
           </div>
 
@@ -135,12 +164,26 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Shot Winner Type Tag Pills (Multi-color sticker set) */}
-        <div className="space-y-1.5">
-          <label className="text-[11px] font-bold uppercase text-[#000000]/70 block px-1 tracking-[0.032em]">
-            Point Winner Type (ระบุประเภทช็อตที่ได้แต้ม)
-          </label>
-          <div className="grid grid-cols-3 gap-1.5">
+        {/* 3. Shot Winner Type Tag Pills */}
+        <div className="border border-[#000000] rounded-[24px] p-3.5 bg-[#ffffff] space-y-2">
+          {/* Subheader */}
+          <div className="pb-1.5 border-b border-[#000000]/15">
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] border border-[#000000]">
+                {language === 'th' ? 'ประเภทช็อตทำแต้ม' : 'SHOT CLASSIFICATION'}
+              </span>
+              <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
+                {language === 'th' ? 'ระบุช็อตที่ได้แต้ม' : 'POINT WINNER TYPE'}
+              </span>
+            </div>
+            <p className="text-[10px] text-[#000000]/60 font-bold">
+              {language === 'th'
+                ? 'เลือกช็อตที่ทำคะแนนเพื่อนำไปคำนวณเรดาร์ทักษะ 5 ด้าน'
+                : 'Select the scoring shot to update your 5-axis skill radar stats'}
+            </p>
+          </div>
+
+          <div className="grid grid-cols-3 gap-1.5 pt-1">
             {WINNER_SHOTS.map((item) => {
               const isSelected = selectedShotType === item.type;
               return (
@@ -162,25 +205,33 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
           </div>
         </div>
 
-        {/* Ergonomic Giant Thumb Scoring Buttons (Black fill and outlined black only) */}
-        <div className="grid grid-cols-2 gap-3 pt-1">
-          <button
-            type="button"
-            onClick={handleScoreTeamA}
-            className="py-4 px-3 rounded-[28px] font-bold tracking-[0.032em] text-xs uppercase flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
-          >
-            <Plus className="w-5 h-5 stroke-[3] shrink-0" />
-            <span className="truncate">+1 {match.playerAName}</span>
-          </button>
+        {/* 4. Giant Thumb Scoring Buttons */}
+        <div className="space-y-1.5">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-[10px] font-bold uppercase text-[#000000]/70 tracking-[0.032em]">
+              {language === 'th' ? 'กดเพิ่มแต้มข้างสนาม (+1 POINT)' : 'COURTSIDE TAP-TO-SCORE (+1)'}
+            </span>
+            <span className="text-[10px] text-[#000000]/50 font-bold">Thumb Controls</span>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={handleScoreTeamA}
+              className="py-4 px-3 rounded-[28px] font-bold tracking-[0.032em] text-xs uppercase flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] whitespace-nowrap"
+            >
+              <Plus className="w-5 h-5 stroke-[3] shrink-0" />
+              <span className="truncate">+1 {match.playerAName}</span>
+            </button>
 
-          <button
-            type="button"
-            onClick={handleScoreTeamB}
-            className="py-4 px-3 rounded-[28px] font-bold tracking-[0.032em] text-xs uppercase flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] border border-[#000000] whitespace-nowrap"
-          >
-            <Plus className="w-5 h-5 stroke-[3] shrink-0" />
-            <span className="truncate">+1 {match.playerBName}</span>
-          </button>
+            <button
+              type="button"
+              onClick={handleScoreTeamB}
+              className="py-4 px-3 rounded-[28px] font-bold tracking-[0.032em] text-xs uppercase flex items-center justify-center gap-2 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] border border-[#000000] whitespace-nowrap"
+            >
+              <Plus className="w-5 h-5 stroke-[3] shrink-0" />
+              <span className="truncate">+1 {match.playerBName}</span>
+            </button>
+          </div>
         </div>
 
         {/* Finish Match Button (Ember Badge with 1px black outline) */}

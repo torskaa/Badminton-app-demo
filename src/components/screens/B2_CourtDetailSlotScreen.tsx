@@ -5,7 +5,7 @@ import { MobileHeader } from '../common/MobileHeader';
 import { CourtSlot } from '../../types';
 
 export const B2_CourtDetailSlotScreen: React.FC = () => {
-  const { selectedCourt, booking, updateBooking, navigateTo } = useApp();
+  const { selectedCourt, booking, updateBooking, navigateTo, language } = useApp();
 
   const [selectedCourtNum, setSelectedCourtNum] = useState<number>(booking.selectedCourtNumber || 3);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number>(2); // S 12 Saturday
@@ -86,53 +86,65 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
           </div>
 
           {/* Bottom badge overlay */}
-          <div className="absolute bottom-4 left-4 right-4 text-[#ffffff] bg-[#000000]/70 p-3 rounded-[24px] border border-[#000000]">
+          <div className="absolute bottom-4 left-4 right-4 text-[#ffffff] bg-[#000000]/75 p-3 rounded-[24px] border border-[#000000]">
             <div className="flex items-center gap-2 mb-1">
               <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] border border-[#000000] text-[10px] font-black uppercase">
-                Active BWF
+                {language === 'th' ? 'มาตรฐาน BWF' : 'BWF Standard'}
               </span>
               <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] text-[10px] font-black uppercase flex items-center gap-1">
                 <Zap className="w-3 h-3 fill-current" />
-                <span>2X EXP BONUS</span>
+                <span>+100 EXP BONUS</span>
               </span>
             </div>
             <h1 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#ffffff] leading-tight">
               {selectedCourt.name}
             </h1>
-            <p className="text-xs text-[#ffffff]/90 font-bold">{selectedCourt.location} · 4 คอร์ท BWF Taraflex</p>
+            <p className="text-xs text-[#ffffff]/90 font-bold">{selectedCourt.location}</p>
           </div>
         </div>
 
         <div className="p-4 space-y-4">
-          {/* Amenities Strip (Multi-color sticker cards with 1px black borders) */}
+          {/* Amenities Strip */}
           <div className="grid grid-cols-3 gap-2">
             <div className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
-              <span className="text-xs font-bold block text-[#000000]">พื้น Taraflex</span>
+              <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'พื้นสนาม' : 'Court Floor'}</span>
               <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#55db9c] border border-[#000000] inline-block mt-1">
-                Shock Absorb
+                Taraflex
               </span>
             </div>
             <div className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
-              <span className="text-xs font-bold block text-[#000000]">แอร์เย็นฉ่ำ</span>
+              <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'ระบบแอร์' : 'Air Condition'}</span>
               <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#4da2ff] border border-[#000000] inline-block mt-1">
                 24°C Comfort
               </span>
             </div>
             <div className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] text-center">
-              <span className="text-xs font-bold block text-[#000000]">ไฟ Pro LED</span>
+              <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'ระบบไฟ' : 'Pro Lighting'}</span>
               <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#ffd731] border border-[#000000] inline-block mt-1">
-                500 Lux Glareless
+                500 Lux
               </span>
             </div>
           </div>
 
           {/* Availability Calendar Day Selector */}
-          <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000]">
-            <div className="flex items-center justify-between mb-3">
-              <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                Availability (รอบสัปดาห์นี้)
+          <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] space-y-2.5">
+            <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15">
+              <div>
+                <div className="flex items-center gap-1.5 mb-0.5">
+                  <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] border border-[#000000]">
+                    {language === 'th' ? 'เลือกวันที่' : 'PLAY DATE'}
+                  </span>
+                  <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                    {language === 'th' ? 'ตารางรอบสัปดาห์นี้' : 'THIS WEEK SCHEDULE'}
+                  </span>
+                </div>
+                <p className="text-[10px] text-[#000000]/60 font-bold">
+                  {language === 'th' ? 'เลือกวันที่ต้องการเข้าใช้บริการสนาม' : 'Select your desired play date'}
+                </p>
+              </div>
+              <span className="text-xs font-bold text-[#5c4ade]">
+                {language === 'th' ? 'พฤศจิกายน 2026' : 'Nov 2026'}
               </span>
-              <span className="text-xs font-bold text-[#5c4ade]">พฤศจิกายน 2026</span>
             </div>
 
             <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
@@ -158,11 +170,21 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
           </div>
 
           {/* Court Number Pill Selector */}
-          <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000]">
-            <label className="font-['Antonio',sans-serif] text-sm font-black block mb-2 uppercase tracking-wider text-[#000000]">
-              Select Court Number (เลือกคอร์ท)
-            </label>
-            <div className="grid grid-cols-4 gap-2">
+          <div className="p-4 rounded-[28px] bg-[#ffffff] border border-[#000000] space-y-2.5">
+            <div className="pb-1.5 border-b border-[#000000]/15">
+              <div className="flex items-center gap-1.5 mb-0.5">
+                <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] border border-[#000000]">
+                  {language === 'th' ? 'หมายเลขคอร์ท' : 'COURT NUMBER'}
+                </span>
+                <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                  {language === 'th' ? 'เลือกคอร์ทแข่งขัน (1 - 4)' : 'SELECT COURT (1 - 4)'}
+                </span>
+              </div>
+              <p className="text-[10px] text-[#000000]/60 font-bold">
+                {language === 'th' ? 'ทุกคอร์ทปูพื้นยาง BWF Taraflex พร้อมระบบแอร์และไฟส่องสว่าง 500 Lux' : 'All courts feature certified Taraflex flooring with AC & 500 Lux lighting'}
+              </p>
+            </div>
+            <div className="grid grid-cols-4 gap-2 pt-1">
               {[1, 2, 3, 4].map((cNum) => {
                 const isSelected = selectedCourtNum === cNum;
                 return (
@@ -176,7 +198,7 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
                         : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
                     }`}
                   >
-                    คอร์ท {cNum}
+                    {language === 'th' ? `คอร์ท ${cNum}` : `Court ${cNum}`}
                   </button>
                 );
               })}
@@ -186,10 +208,19 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
           {/* Time Slots List */}
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs px-1">
-              <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                Available Prime-Time Slots
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] border border-[#000000]">
+                    {language === 'th' ? 'ช่วงเวลาที่เปิดจอง' : 'TIME SLOTS'}
+                  </span>
+                  <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+                    {language === 'th' ? 'เลือกรอบเวลาที่ต้องการเล่น' : 'AVAILABLE TIME SLOTS'}
+                  </span>
+                </div>
+              </div>
+              <span className="text-[#000000]/60 font-bold">
+                {language === 'th' ? 'เลือกได้หลาย ชม.' : 'Multi-hours allowed'}
               </span>
-              <span className="text-[#000000]/60 font-bold">เลือกได้มากกว่า 1 ชม.</span>
             </div>
 
             <div className="grid grid-cols-2 gap-2">
@@ -216,7 +247,9 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
                       )}
                     </div>
                     <div className="flex items-center justify-between text-[11px] font-bold">
-                      <span className="text-[#000000]/70">คอร์ท {slot.courtNumber}</span>
+                      <span className="text-[#000000]/70">
+                        {language === 'th' ? `คอร์ท ${slot.courtNumber}` : `Court ${slot.courtNumber}`}
+                      </span>
                       <span className="font-black text-[#000000]">฿{slot.price}</span>
                     </div>
                   </div>
@@ -227,11 +260,13 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* Pinned Bottom Booking Bar (Paper White, 1px solid black border, black CTA fill) */}
+      {/* Pinned Bottom Booking Bar */}
       <div className="shrink-0 p-4 border-t border-[#000000] bg-[#ffffff] z-30">
         <div className="w-full flex items-center justify-between gap-4">
           <div>
-            <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">Total ({selectedSlots.length} ชม.)</span>
+            <span className="text-[10px] text-[#000000]/60 font-bold uppercase block tracking-[0.032em]">
+              {language === 'th' ? `ยอดรวม (${selectedSlots.length} ชม.)` : `Total (${selectedSlots.length} hr)`}
+            </span>
             <span className="font-['Antonio',sans-serif] text-3xl font-black tracking-tight text-[#000000] leading-none">
               ฿{totalPrice}
             </span>
@@ -247,8 +282,10 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
                 : 'bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff]'
             }`}
           >
-            <span>PROCEED TO CHECKOUT</span>
-            <ArrowRight className="w-4 h-4" />
+            <span className="whitespace-nowrap">
+              {language === 'th' ? 'ดำเนินการชำระเงิน' : 'PROCEED TO CHECKOUT'}
+            </span>
+            <ArrowRight className="w-4 h-4 shrink-0" />
           </button>
         </div>
       </div>
