@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { ArrowLeft, Flame, Zap, Compass, Settings } from 'lucide-react';
+import { ArrowLeft, Flame, Zap, Compass, Settings, RotateCw } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { playSelectSound } from '../../utils/retroAudio';
 import { ScreenSwitcherModal } from './ScreenSwitcherModal';
 import { AppSettingsModal } from './AppSettingsModal';
 
@@ -12,7 +13,7 @@ interface MobileHeaderProps {
 }
 
 export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onBack, subtitle }) => {
-  const { player, currentScreen, navigateTo, language, setLanguage } = useApp();
+  const { player, currentScreen, navigateTo, language, setLanguage, simulateDataFetch } = useApp();
   const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 

@@ -257,3 +257,29 @@ export interface LeaderboardUser {
   guildTitle: string;
   avatarUrl: string;
 }
+
+export interface AppNotification {
+  id: string;
+  type: 'court_booking' | 'match_invite' | 'match_countdown' | 'party_update' | 'reward_exp';
+  title: string;
+  message: string;
+  timeAgo?: string;
+  icon?: string;
+  targetScreen?: ScreenId;
+  metadata?: {
+    courtName?: string;
+    courtNumber?: number;
+    inviterName?: string;
+    inviterAvatar?: string;
+    inviterTier?: string;
+    matchTime?: string;
+    countdownMinutes?: number;
+    expAmount?: number;
+  };
+  actions?: {
+    primaryLabel: string;
+    primaryAction?: () => void;
+    secondaryLabel?: string;
+    secondaryAction?: () => void;
+  };
+}

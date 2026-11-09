@@ -15,6 +15,7 @@ import {
   Clock,
   Sparkles,
   Check,
+  RotateCw,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { CourtFacility } from '../../types';
@@ -43,7 +44,7 @@ interface MapPinData {
 }
 
 export const CourtMapScreen: React.FC = () => {
-  const { courts, setSelectedCourt, updateBooking, navigateTo, t } = useApp();
+  const { courts, setSelectedCourt, updateBooking, navigateTo, t, simulateDataFetch } = useApp();
 
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState('');
@@ -906,6 +907,17 @@ export const CourtMapScreen: React.FC = () => {
           </div>
           <button
             type="button"
+            onClick={() => {
+              playSelectSound();
+              simulateDataFetch(600);
+            }}
+            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-colors cursor-pointer"
+            title="รีเฟรชสนาม (Simulate Data Fetching)"
+          >
+            <RotateCw className="w-3.5 h-3.5" />
+          </button>
+          <button
+            type="button"
             onClick={toggleSheetState}
             className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-colors cursor-pointer"
             title="Expand / Collapse List"
@@ -915,6 +927,49 @@ export const CourtMapScreen: React.FC = () => {
                 sheetState !== 'peek' ? 'rotate-180' : ''
               }`}
             />
+          </button>
+        </div>
+
+        {/* Smart Suggestion Chips */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+          <span className="text-[9px] font-black uppercase text-[#000000] bg-[#ffd731] px-2 py-0.5 rounded-full border border-[#000000] shrink-0">
+            SUGGEST
+          </span>
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              const pin1 = allPins.find((p) => p.id === 'court_1') || allPins[0];
+              handlePinClick(pin1);
+              setShowToast('💡 แนะนำใกล้สุด: สนามแบดอินฟินิตี้ (1.8 km · ฿200/ชม.)');
+            }}
+            className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#dceeff] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
+          >
+            <span>⚡ แนะนำใกล้สุด (1.8 km)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              const pinLam = allPins.find((p) => p.id === 'court_2') || allPins[0];
+              handlePinClick(pinLam);
+              setShowToast('🔥 แนะนำโปรเด็ด: Sport Refresh ลำลูกกา (ลด 20% รอบค่ำ)');
+            }}
+            className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#ffd731] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
+          >
+            <span>🔥 ลด 20% คืนนี้ (Court 2)</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              setActiveFilter(activeFilter === 'parking' ? null : 'parking');
+            }}
+            className={`px-2.5 py-1 rounded-[1600px] border border-[#000000] text-[10px] font-bold transition-colors cursor-pointer whitespace-nowrap shrink-0 shadow-xs ${
+              activeFilter === 'parking' ? 'bg-[#000000] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000]'
+            }`}
+          >
+            <span>🚗 มีที่จอดรถ</span>
           </button>
         </div>
 

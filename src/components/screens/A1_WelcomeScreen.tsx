@@ -51,7 +51,7 @@ export const A1_WelcomeScreen: React.FC = () => {
   return (
     <div className="flex-1 min-h-0 flex flex-col justify-between relative bg-[#dceeff] overflow-y-auto overscroll-contain no-scrollbar text-[#000000] font-['Plus_Jakarta_Sans',sans-serif]">
       {/* Top Header Bar */}
-      <div className="px-5 pt-4 pb-2 flex items-center justify-between z-30">
+      <div className="px-4 pt-4 pb-2 flex items-center justify-between z-30">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-[1600px] bg-[#ffd731] border border-[#000000] flex items-center justify-center font-black text-sm">
             🏸
@@ -72,7 +72,7 @@ export const A1_WelcomeScreen: React.FC = () => {
       </div>
 
       {/* Hero Visual Area with 3D Blue Inflatable Ribbon Sculpture & Sticker Clusters */}
-      <div className="relative flex-1 flex flex-col items-center justify-center px-6 py-2 overflow-hidden">
+      <div className="relative flex-1 flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
         {/* Floating Sticker Cluster (Six-color sticker palette applied as a shared set) */}
         <motion.div
           animate={{ y: [0, -8, 0], rotate: [-8, -4, -8] }}
@@ -171,7 +171,7 @@ export const A1_WelcomeScreen: React.FC = () => {
       </div>
 
       {/* Bottom Action Card (Paper White Canvas #ffffff alternating rhythm with 1px black outline) */}
-      <div className="bg-[#ffffff] border-t border-[#000000] rounded-t-[36px] p-5 pb-6 flex flex-col gap-3.5 z-30">
+      <div className="bg-[#ffffff] border-t border-[#000000] rounded-t-[36px] p-4 pb-6 flex flex-col gap-3.5 z-30">
         {/* Step Indicator Pill & Category Tag */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">

@@ -19,6 +19,7 @@ import {
   GuildGroup,
   GuildEvent,
   LeaderboardUser,
+  AppNotification,
 } from '../types';
 import {
   INITIAL_PLAYER,
@@ -124,6 +125,20 @@ interface AppContextType {
   // Video Analysis demo state
   analyzedVideoResult: any;
   setAnalyzedVideoResult: (res: any) => void;
+
+  // Screen Loading & Skeleton Transitions
+  isScreenLoading: boolean;
+  setIsScreenLoading: (loading: boolean) => void;
+  simulateDataFetch: (durationMs?: number) => void;
+
+  // Centralized Notification System
+  currentNotification: AppNotification | null;
+  showNotification: (notification: Omit<AppNotification, 'id'>) => void;
+  dismissNotification: () => void;
+  triggerSampleInvite: () => void;
+  triggerSampleBookingConfirmation: () => void;
+  triggerSampleCountdownAlert: () => void;
+  triggerSamplePartyUpdate: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -147,6 +162,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [sparringModalPlayer, setSparringModalPlayer] = useState<any | null>(null);
+
+  // Screen Loading & Transition Skeleton State
+  const [isScreenLoading, setIsScreenLoading] = useState<boolean>(false);
+
+  const simulateDataFetch = (durationMs = 500) => {
+    setIsScreenLoading(true);
+    setTimeout(() => {
+      setIsScreenLoading(false);
+    }, durationMs);
+  };
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -565,6 +590,120 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     gainExp(bonusExp, 'Smartwatch Health Sync (เบิร์น 680 แคลอรี่)');
   };
 
+  // Centralized Notification State
+  const [currentNotification, setCurrentNotification] = useState<AppNotification | null>(null);
+
+  const dismissNotification = () => {
+    setCurrentNotification(null);
+  };
+
+  const showNotification = (notif: Omit<AppNotification, 'id'>) => {
+    const newNotif: AppNotification = {
+      ...notif,
+      id: `notif_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`,
+    };
+    setCurrentNotification(newNotif);
+    if (notif.type === 'match_invite') {
+      playSmashSound();
+    } else if (notif.type === 'court_booking' || notif.type === 'reward_exp') {
+      playCoinSound();
+    } else {
+      playSelectSound();
+    }
+  };
+
+  const triggerSampleInvite = () => {
+    showNotification({
+      type: 'match_invite',
+      title: 'คำชวนดวลแมตช์ใหม่! (Match Invite)',
+      message: 'โค้ชอาร์ท (OVR 88 · Diamond) ท้าแข่งประเภทคู่ 21:00 น. ที่คอร์ท 3',
+      timeAgo: 'สดตอนนี้',
+      targetScreen: 'C1',
+      metadata: {
+        inviterName: 'โค้ชอาร์ท',
+        inviterAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+        inviterTier: 'DIAMOND',
+        matchTime: '21:00 น.',
+      },
+      actions: {
+        primaryLabel: 'ตอบรับคำท้า',
+        secondaryLabel: 'ขอผ่านก่อน',
+        primaryAction: () => {
+          navigateTo('C1');
+          gainExp(50, 'ตอบรับการแข่งขันสปาร์ริ่ง');
+        },
+      },
+    });
+  };
+
+  const triggerSampleBookingConfirmation = () => {
+    showNotification({
+      type: 'court_booking',
+      title: 'ยืนยันการจองคอร์ทสำเร็จ! (Confirmed)',
+      message: 'สนามแบดอินฟินิตี้ ลาดพร้าว · คอร์ท 3 วันนี้ 19:00 - 21:00 น.',
+      timeAgo: 'เมื่อสักครู่',
+      targetScreen: 'B4',
+      metadata: {
+        courtName: 'สนามแบดอินฟินิตี้ ลาดพร้าว',
+        courtNumber: 3,
+        matchTime: '19:00 - 21:00',
+      },
+      actions: {
+        primaryLabel: 'ดูตั๋วการจอง',
+        secondaryLabel: 'ปิด',
+        primaryAction: () => {
+          navigateTo('B4');
+        },
+      },
+    });
+  };
+
+  const triggerSampleCountdownAlert = () => {
+    showNotification({
+      type: 'match_countdown',
+      title: 'คอร์ทของคุณพร้อมแล้ว! (Ready to Play)',
+      message: 'อีก 15 นาทีจะเริ่มแมตช์ที่ คอร์ท 3 · ระบบแอร์เปิดแล้ว 24°C',
+      timeAgo: 'สดตอนนี้',
+      targetScreen: 'C1',
+      metadata: {
+        countdownMinutes: 15,
+        courtNumber: 3,
+      },
+      actions: {
+        primaryLabel: 'เข้า Match Room',
+        secondaryLabel: 'รับทราบ',
+        primaryAction: () => {
+          navigateTo('C1');
+        },
+      },
+    });
+  };
+
+  const triggerSamplePartyUpdate = () => {
+    showNotification({
+      type: 'party_update',
+      title: 'ก๊วนแบดคืนวันพุธ อัปเดต!',
+      message: 'มีสมาชิกใหม่ 2 คนเข้าร่วมก๊วน รวมเป็น 29/30 คน (เหลือ 1 ที่สุดท้าย!)',
+      timeAgo: '1 นาทีที่แล้ว',
+      targetScreen: 'E2',
+      actions: {
+        primaryLabel: 'ดูก๊วนและชำระเงิน',
+        secondaryLabel: 'ปิด',
+        primaryAction: () => {
+          navigateTo('E2');
+        },
+      },
+    });
+  };
+
+  // Auto trigger sample notification after 3.2s on initial load so the user experiences the live system immediately
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      triggerSampleInvite();
+    }, 3200);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <AppContext.Provider
       value={{
@@ -618,6 +757,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleSound,
         isCrtEnabled,
         toggleCrt,
+        isScreenLoading,
+        setIsScreenLoading,
+        simulateDataFetch,
+        currentNotification,
+        showNotification,
+        dismissNotification,
+        triggerSampleInvite,
+        triggerSampleBookingConfirmation,
+        triggerSampleCountdownAlert,
+        triggerSamplePartyUpdate,
       }}
     >
       {children}

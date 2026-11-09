@@ -19,7 +19,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
         showBack
       />
 
-      <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar flex flex-col items-center pb-12">
+      <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
         {/* Banner Label */}
         <div className="text-center px-2 space-y-1">
           <div className="flex items-center justify-center gap-2 mb-1">
@@ -41,7 +41,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
         </div>
 
         {/* Modern Athlete Card */}
-        <div className="w-full max-w-[320px] rounded-[36px] bg-[#ffd731] border-2 border-[#000000] p-4 text-[#000000]">
+        <div className="w-full rounded-[36px] bg-[#ffd731] border-2 border-[#000000] p-4 text-[#000000]">
           {/* Top row: OVR, Position, Tier */}
           <div className="flex items-start justify-between">
             <div>
@@ -108,7 +108,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
         </div>
 
         {/* Share Action Buttons */}
-        <div className="w-full max-w-[320px] space-y-2 pt-2">
+        <div className="w-full space-y-2 pt-2">
           <button
             type="button"
             onClick={handleShareStory}

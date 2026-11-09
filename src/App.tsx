@@ -9,6 +9,8 @@ import { AppProvider, useApp } from './context/AppContext';
 import { DeviceFrame } from './components/common/DeviceFrame';
 import { BottomTabBar } from './components/common/BottomTabBar';
 import { ExpCelebrationModal } from './components/common/ExpCelebrationModal';
+import { LoadingSkeleton } from './components/common/LoadingSkeleton';
+import { NotificationBanner } from './components/common/NotificationBanner';
 
 // Redesigned Grab-Superapp Primary Screens
 import { HomeScreen } from './components/screens/HomeScreen';
@@ -38,7 +40,11 @@ import { F1_UserProfileTrophyScreen } from './components/screens/F1_UserProfileT
 import { F2_WearableSyncScreen } from './components/screens/F2_WearableSyncScreen';
 
 const ScreenRenderer: React.FC = () => {
-  const { currentScreen } = useApp();
+  const { currentScreen, isScreenLoading } = useApp();
+
+  if (isScreenLoading) {
+    return <LoadingSkeleton screen={currentScreen} />;
+  }
 
   switch (currentScreen) {
     // PRIMARY SUPERAPP SCREENS (Grab Layout)
@@ -154,6 +160,7 @@ function MainViewport() {
           </motion.div>
         </AnimatePresence>
       </div>
+      <NotificationBanner />
       <BottomTabBar />
       <ExpCelebrationModal />
     </div>

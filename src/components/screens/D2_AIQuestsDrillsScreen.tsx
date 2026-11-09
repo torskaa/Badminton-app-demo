@@ -15,7 +15,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
       />
 
       {/* Pill Segmented Tabs */}
-      <div className="px-5 py-3 flex items-center gap-2 border-b border-[#000000] bg-[#ffffff] shrink-0">
+      <div className="px-4 py-3 flex items-center gap-2 border-b border-[#000000] bg-[#ffffff] shrink-0">
         <button
           type="button"
           onClick={() => setActiveTab('quests')}

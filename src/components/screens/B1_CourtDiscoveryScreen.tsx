@@ -91,7 +91,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
   return (
     <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 font-['Plus_Jakarta_Sans',sans-serif] bg-[#dceeff] text-[#000000]">
       {/* 1. Header: User Avatar + Greeting + Chat & Notifications */}
-      <div className="px-5 pt-4 pb-2 flex items-center justify-between">
+      <div className="px-4 pt-4 pb-2 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div
             onClick={() => navigateTo('F1')}
@@ -137,7 +137,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 2. Search Pill Bar (Paper white, 1600px radius, 1px solid black) */}
-      <div className="px-5 mt-2">
+      <div className="px-4 mt-2">
         <div className="w-full flex items-center gap-2.5 px-4 py-3 rounded-[1600px] bg-[#ffffff] border border-[#000000] focus-within:bg-[#ffffff]">
           <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
           <input
@@ -163,7 +163,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 3. Category Filter Horizontal Strip */}
-      <div className="px-5 mt-3.5">
+      <div className="px-4 mt-3.5">
         <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
@@ -187,7 +187,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 4. Hero Promo Banner: Book First Lesson / Tournament Card (Paper White Canvas) */}
-      <div className="px-5 mt-4">
+      <div className="px-4 mt-4">
         <div
           onClick={() => handleSelectCourt(courts[0])}
           className="rounded-[28px] p-5 bg-[#ffffff] border border-[#000000] relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
@@ -238,7 +238,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 5. Quick Actions 4-Pill Strip (Rainbow-style multi-color sticker palette) */}
-      <div className="px-5 mt-4">
+      <div className="px-4 mt-4">
         <div className="grid grid-cols-4 gap-2 text-center">
           <button
             type="button"
@@ -287,7 +287,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 6. Quick Match Sparring Partners (Paper White + Multi-color Sticker Pills) */}
-      <div className="px-5 mt-5">
+      <div className="px-4 mt-5">
         <div className="flex items-center justify-between mb-2.5">
           <div>
             <h2 className="font-['Antonio',sans-serif] text-base font-black tracking-tight uppercase text-[#000000]">
@@ -327,7 +327,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 7. Available Arenas in Bangkok (Section Alternating to Paper White & Soft mist) */}
-      <div className="px-5 mt-5 space-y-3">
+      <div className="px-4 mt-5 space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="font-['Antonio',sans-serif] text-base font-black tracking-tight uppercase text-[#000000]">
             Available Arenas in Bangkok

@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { FINANCE_TRANSACTIONS } from '../../data/mockData';
-import { playCoinSound } from '../../utils/retroAudio';
+import { playCoinSound, playSelectSound } from '../../utils/retroAudio';
 import { MobileHeader } from '../common/MobileHeader';
 
 export const FinanceScreen: React.FC = () => {
@@ -132,42 +132,127 @@ export const FinanceScreen: React.FC = () => {
         </div>
       </div>
 
-      {/* 3. Recommended for you (Slush Cards Carousel) */}
-      <div className="px-4 mt-6">
-        <h2 className="text-base font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide mb-3">
-          {t.recommendedTitle}
-        </h2>
+      {/* 3. Recommended for you (Grab-Style Slush Cards Carousel) */}
+      <div className="px-4 mt-6 space-y-3">
+        <div className="flex items-center justify-between">
+          <h2 className="text-base font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide">
+            {t.recommendedTitle} · RECOMMENDED FOR YOU
+          </h2>
+          <span className="text-[10px] font-black px-2 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] border border-[#000000]">
+            DEALS
+          </span>
+        </div>
 
-        <div className="grid grid-cols-2 gap-3">
-          {/* Promo Card 1: Mint Slush Promo */}
-          <div className="p-4 rounded-[28px] bg-[#55db9c] text-[#000000] border border-[#000000] flex flex-col justify-between h-36 shadow-xs relative overflow-hidden">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 snap-x">
+          {/* Promo Card 1: Get started with SmashPay Wallet (Matches Grab reference image) */}
+          <div
+            onClick={() => {
+              playCoinSound();
+              setIsTopUpModalOpen(true);
+            }}
+            className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#55db9c] text-[#000000] border-2 border-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
+          >
             <div>
-              <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[9px] font-black uppercase inline-block">
-                CASHBACK
-              </span>
-              <h3 className="font-['Antonio',sans-serif] text-sm font-black uppercase leading-tight mt-1.5 line-clamp-2">
-                {t.promoCashback}
+              <div className="flex items-center justify-between mb-1">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[9px] font-black uppercase">
+                  SMASHPAY
+                </span>
+                <span className="text-[10px] font-bold">10% CASHBACK</span>
+              </div>
+              <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
+                Get started with SmashPay Wallet
               </h3>
+              <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
+                เติมเงินครั้งแรกรับเหรียญคืน 10% พร้อมสิทธิ์จองคอร์ทแบบด่วน
+              </p>
             </div>
-            <div className="flex items-center justify-between text-xs font-bold pt-1">
-              <span className="text-[10px] text-[#000000]/70 font-bold">10% CASHBACK</span>
-              <span className="text-xl">💳</span>
+            <div className="flex items-center justify-between pt-1 border-t border-[#000000]/15">
+              <span className="text-xs font-bold underline">เติมเงินทันที →</span>
+              <span className="text-2xl">📱</span>
             </div>
           </div>
 
-          {/* Promo Card 2: Sunburst Slush Promo */}
-          <div className="p-4 rounded-[28px] bg-[#ffd731] text-[#000000] border border-[#000000] flex flex-col justify-between h-36 shadow-xs relative overflow-hidden">
+          {/* Promo Card 2: Pay easily with TrueMoney (Matches Grab reference image) */}
+          <div
+            onClick={() => {
+              playCoinSound();
+              setIsTopUpModalOpen(true);
+            }}
+            className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#ffd731] text-[#000000] border-2 border-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
+          >
             <div>
-              <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[9px] font-black uppercase inline-block">
-                PARTNER
-              </span>
-              <h3 className="font-['Antonio',sans-serif] text-sm font-black uppercase leading-tight mt-1.5 line-clamp-2">
-                {t.promoTrueMoney}
+              <div className="flex items-center justify-between mb-1">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[9px] font-black uppercase">
+                  PARTNER
+                </span>
+                <span className="text-[10px] font-bold">0% ค่าธรรมเนียม</span>
+              </div>
+              <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
+                Pay easily with TrueMoney
               </h3>
+              <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
+                สแกนจ่ายสะดวก รวดเร็ว ไร้สัมผัส ผ่าน TrueMoney และพร้อมเพย์ QR
+              </p>
             </div>
-            <div className="flex items-center justify-between text-xs font-bold pt-1">
-              <span className="text-[10px] text-[#000000]/70 font-bold">PROMPTPAY QR</span>
-              <span className="text-xl">📲</span>
+            <div className="flex items-center justify-between pt-1 border-t border-[#000000]/15">
+              <span className="text-xs font-bold underline">สแกนจ่าย →</span>
+              <span className="text-2xl">⚡</span>
+            </div>
+          </div>
+
+          {/* Promo Card 3: PayLater 0% Installment */}
+          <div
+            onClick={() => {
+              playSelectSound();
+              navigateTo('B1');
+            }}
+            className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#e9ccff] text-[#000000] border-2 border-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[9px] font-black uppercase">
+                  PAYLATER
+                </span>
+                <span className="text-[10px] font-bold">ดอกเบี้ย 0%</span>
+              </div>
+              <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
+                Play First, PayLater 0% 3 เดือน
+              </h3>
+              <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
+                ตีแบดก่อน ผ่อนค่าคอร์ทและอุปกรณ์สบายๆ 0% นาน 3 เดือน
+              </p>
+            </div>
+            <div className="flex items-center justify-between pt-1 border-t border-[#000000]/15">
+              <span className="text-xs font-bold underline">ดูวงเงิน →</span>
+              <span className="text-2xl">💳</span>
+            </div>
+          </div>
+
+          {/* Promo Card 4: Pro Pass Subscription */}
+          <div
+            onClick={() => {
+              playSelectSound();
+              navigateTo('F1');
+            }}
+            className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#ffffff] text-[#000000] border-2 border-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:bg-[#f8f9fa] transition-all"
+          >
+            <div>
+              <div className="flex items-center justify-between mb-1">
+                <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffd731] text-[9px] font-black uppercase">
+                  PRO PASS
+                </span>
+                <span className="text-[10px] font-bold text-[#5c4ade]">฿199/เดือน</span>
+              </div>
+              <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
+                Smash Pro Member Pass
+              </h3>
+              <p className="text-[10px] text-[#000000]/70 font-bold mt-1 line-clamp-2">
+                ลดค่าสนาม 10% ทุกการจอง + สแกน AI 3D ช็อตไม่จำกัด
+              </p>
+            </div>
+            <div className="flex items-center justify-between pt-1 border-t border-[#000000]/15">
+              <span className="text-xs font-bold underline">สมัครสมาชิก →</span>
+              <span className="text-2xl">👑</span>
             </div>
           </div>
         </div>
