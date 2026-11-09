@@ -28,32 +28,48 @@ export interface PastMatchResult {
   id: string;
   opponent: {
     name: string;
+    nameTh?: string;
+    nameEn?: string;
     tier: string;
     club: string;
   };
   courtName: string;
+  courtNameTh?: string;
+  courtNameEn?: string;
   date: string;
+  dateTh?: string;
+  dateEn?: string;
   result: 'win' | 'loss';
   matchType: 'Singles' | 'Doubles';
   partnerName?: string;
+  partnerNameTh?: string;
+  partnerNameEn?: string;
   scores: { set: number; userScore: number; opponentScore: number }[];
   finalScore: string;
   durationMin: number;
   expGained: number;
   highestSmashKmh: number;
   highlightShot: string;
+  highlightShotTh?: string;
+  highlightShotEn?: string;
 }
 
 const INITIAL_PAST_MATCHES: PastMatchResult[] = [
   {
     id: 'match_01',
     opponent: {
-      name: 'โอห์ม ปืนกล (Ohm Machinegun)',
+      name: 'โอห์ม ปืนกล',
+      nameTh: 'โอห์ม ปืนกล',
+      nameEn: 'Ohm Machinegun',
       tier: 'Diamond League',
       club: 'Rama 9 Smashers',
     },
     courtName: 'Winner Arena Badminton Rama 9 (Court 3)',
+    courtNameTh: 'วินเนอร์ อารีน่า พระราม 9 (คอร์ท 3)',
+    courtNameEn: 'Winner Arena Badminton Rama 9 (Court 3)',
     date: '7 พ.ย. 2026 · 19:30 น.',
+    dateTh: '7 พ.ย. 2026 · 19:30 น.',
+    dateEn: 'Nov 7, 2026 · 7:30 PM',
     result: 'win',
     matchType: 'Singles',
     scores: [
@@ -66,17 +82,27 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
     expGained: 150,
     highestSmashKmh: 342,
     highlightShot: 'Steep Jump Smash (Corner Line)',
+    highlightShotTh: 'ลูกจัมป์สแมชมุมคอร์ทเฉียบคม',
+    highlightShotEn: 'Steep Jump Smash (Corner Line)',
   },
   {
     id: 'match_02',
     opponent: {
-      name: 'แบงค์ & ท็อป (Bank & Top)',
+      name: 'แบงค์ & ท็อป',
+      nameTh: 'แบงค์ & ท็อป',
+      nameEn: 'Bank & Top',
       tier: 'Gold League',
       club: 'BKK Weekend Shuttlers',
     },
-    partnerName: 'พลอย จอมหยอด (Ploy)',
-    courtName: 'สนามแบดอินฟินิตี้ หทัยราษฎร์ (Infinity)',
+    partnerName: 'พลอย จอมหยอด',
+    partnerNameTh: 'พลอย จอมหยอด',
+    partnerNameEn: 'Ploy Net Master',
+    courtName: 'สนามแบดอินฟินิตี้ หทัยราษฎร์',
+    courtNameTh: 'สนามแบดอินฟินิตี้ หทัยราษฎร์',
+    courtNameEn: 'Infinity Badminton Hathairat',
     date: '5 พ.ย. 2026 · 20:00 น.',
+    dateTh: '5 พ.ย. 2026 · 20:00 น.',
+    dateEn: 'Nov 5, 2026 · 8:00 PM',
     result: 'win',
     matchType: 'Doubles',
     scores: [
@@ -88,16 +114,24 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
     expGained: 120,
     highestSmashKmh: 328,
     highlightShot: 'Double Net Kill Tap & Intercept',
+    highlightShotTh: 'การตัดหยอดหน้าเน็ตคู่ชิดเสา',
+    highlightShotEn: 'Double Net Kill Tap & Intercept',
   },
   {
     id: 'match_03',
     opponent: {
-      name: 'อาร์ท สปีด (Art Speedster)',
+      name: 'อาร์ท สปีด',
+      nameTh: 'อาร์ท สปีด',
+      nameEn: 'Art Speedster',
       tier: 'Diamond League',
       club: 'Rama 9 Smashers',
     },
-    courtName: 'Sport Refresh ลำลูกกา คลอง 4 (Court 5)',
+    courtName: 'Sport Refresh ลำลูกกา คลอง 4',
+    courtNameTh: 'สปอร์ต รีเฟรช ลำลูกกา คลอง 4 (คอร์ท 5)',
+    courtNameEn: 'Sport Refresh Lam Luk Ka Klong 4 (Court 5)',
     date: '2 พ.ย. 2026 · 18:15 น.',
+    dateTh: '2 พ.ย. 2026 · 18:15 น.',
+    dateEn: 'Nov 2, 2026 · 6:15 PM',
     result: 'loss',
     matchType: 'Singles',
     scores: [
@@ -110,17 +144,27 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
     expGained: 60,
     highestSmashKmh: 315,
     highlightShot: 'Full-Court Rally 34 Strokes',
+    highlightShotTh: 'การตีโต้เต็มคอร์ท 34 จังหวะ',
+    highlightShotEn: 'Full-Court Rally 34 Strokes',
   },
   {
     id: 'match_04',
     opponent: {
-      name: 'มีน แบ็กแฮนด์ & นัท (Meen & Nat)',
+      name: 'มีน แบ็กแฮนด์ & นัท',
+      nameTh: 'มีน แบ็กแฮนด์ & นัท',
+      nameEn: 'Meen & Nat',
       tier: 'Silver League',
       club: 'Rama 9 Smashers',
     },
-    partnerName: 'โอห์ม ปืนกล (Ohm)',
-    courtName: '71 Sport Club Ekkamai-Pridi (Court 2)',
+    partnerName: 'โอห์ม ปืนกล',
+    partnerNameTh: 'โอห์ม ปืนกล',
+    partnerNameEn: 'Ohm Machinegun',
+    courtName: '71 Sport Club เอกมัย-ปรีดี',
+    courtNameTh: '71 สปอร์ตคลับ เอกมัย-ปรีดี (คอร์ท 2)',
+    courtNameEn: '71 Sport Club Ekkamai-Pridi (Court 2)',
     date: '28 ต.ค. 2026 · 19:00 น.',
+    dateTh: '28 ต.ค. 2026 · 19:00 น.',
+    dateEn: 'Oct 28, 2026 · 7:00 PM',
     result: 'win',
     matchType: 'Doubles',
     scores: [
@@ -132,11 +176,14 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
     expGained: 100,
     highestSmashKmh: 336,
     highlightShot: 'Flick Serve Receiver Smash',
+    highlightShotTh: 'ลูกตบสวนกลับจากการเสิร์ฟสะบัด',
+    highlightShotEn: 'Flick Serve Receiver Smash',
   },
 ];
 
 export const F1_UserProfileTrophyScreen: React.FC = () => {
-  const { player, navigateTo, booking, gainExp } = useApp();
+  const { player, navigateTo, booking, gainExp, language } = useApp();
+  const isThai = language === 'th';
   const [activeTab, setActiveTab] = useState<'card' | 'matches' | 'trophies' | 'gear'>('card');
   const [isProModalOpen, setIsProModalOpen] = useState(false);
 
@@ -167,12 +214,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
     const newMatch: PastMatchResult = {
       id: `match_${Date.now()}`,
       opponent: {
-        name: 'แชมป์ สแมชไฟเออร์ (Champ)',
+        name: isThai ? 'แชมป์ สแมชไฟเออร์' : 'Champ Smashfire',
         tier: 'Diamond League',
         club: 'Bangkok Clash Arena',
       },
-      courtName: 'สแมช อารีน่า พระราม 9 (Court 1)',
-      date: 'วันนี้ · เมื่อสักครู่',
+      courtName: isThai ? 'สแมช อารีน่า พระราม 9 (คอร์ท 1)' : 'Smash Arena Rama 9 (Court 1)',
+      date: isThai ? 'วันนี้ เมื่อสักครู่' : 'Today Just now',
       result: 'win',
       matchType: 'Singles',
       scores: [
@@ -187,12 +234,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
     };
     setMatches([newMatch, ...matches]);
     setExpandedMatchId(newMatch.id);
-    gainExp(160, 'บันทึกชัยชนะแมตช์ใหม่ลงประวัตินักกีฬา!');
+    gainExp(160, isThai ? 'บันทึกชัยชนะแมตช์ใหม่ลงประวัตินักกีฬา!' : 'Saved new match victory to athlete profile!');
   };
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 font-['Plus_Jakarta_Sans',sans-serif] bg-[#dceeff] text-[#000000]">
-      <MobileHeader title="โปรไฟล์นักกีฬา & ตู้เหรียญรางวัล" />
+    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#dceeff] text-[#000000]">
+      <MobileHeader title={isThai ? 'โปรไฟล์นักกีฬา & ตู้เหรียญรางวัล' : 'Athlete Profile & Trophies'} />
 
       {/* Segmented Tab Bar (Paper white with 1px black border, 1600px pills) */}
       <div className="px-4 py-3 flex items-center gap-1.5 border-b border-[#000000] bg-[#ffffff] shrink-0 overflow-x-auto no-scrollbar">
@@ -208,7 +255,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
               : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
           }`}
         >
-          PLAYER CARD
+          {isThai ? 'การ์ดนักกีฬา' : 'Player Card'}
         </button>
 
         <button
@@ -223,7 +270,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
               : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
           }`}
         >
-          <span>ผลการแข่ง</span>
+          <span>{isThai ? 'ผลการแข่ง' : 'Match Results'}</span>
           <span
             className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
               activeTab === 'matches' ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#000000] text-[#ffffff]'
@@ -245,7 +292,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
               : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
           }`}
         >
-          เหรียญ ({player.badges.filter((b) => b.unlocked).length})
+          {isThai
+            ? `เหรียญ (${player.badges.filter((b) => b.unlocked).length})`
+            : `Badges (${player.badges.filter((b) => b.unlocked).length})`}
         </button>
 
         <button
@@ -260,7 +309,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
               : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
           }`}
         >
-          ไม้ & เอ็น
+          {isThai ? 'ไม้และเอ็น' : 'Gear & Strings'}
         </button>
       </div>
 
@@ -271,10 +320,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
             <div className="w-full rounded-[32px] bg-[#ffd731] border-2 border-[#000000] p-4 text-[#000000]">
               <div className="flex items-center justify-between pb-2 mb-2 border-b border-[#000000]/15">
                 <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-black uppercase tracking-wider">
-                  การ์ดข้อมูลนักกีฬา · ATHLETE CARD
+                  {isThai ? 'การ์ดข้อมูลนักกีฬา' : 'ATHLETE CARD'}
                 </span>
                 <span className="text-[10px] font-bold text-[#000000]/70">
-                  SMASH VERIFIED
+                  {isThai ? 'ยืนยันตัวตนแล้ว' : 'SMASH VERIFIED'}
                 </span>
               </div>
 
@@ -284,10 +333,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                     85
                   </div>
                   <div className="text-[11px] font-bold tracking-[0.032em] uppercase mt-0.5">
-                    OVR · SMASH PRO
+                    {isThai ? 'คะแนนรวม · สแมชโปร' : 'OVR · SMASH PRO'}
                   </div>
                   <span className="inline-block mt-1 px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-bold tracking-[0.032em]">
-                    DIAMOND LEAGUE
+                    {isThai ? 'ลีกไดมอนด์' : 'DIAMOND LEAGUE'}
                   </span>
                 </div>
 
@@ -300,29 +349,35 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
 
               <div className="text-center mt-3 pt-2.5 border-t border-[#000000]/20">
                 <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000]">
-                  {player.name}
+                  {isThai ? (player.nameTh || 'กานต์ ธนวัฒน์') : (player.nameEn || 'Karn Tanawat')}
                 </h3>
                 <p className="text-xs text-[#000000]/80 font-bold">
-                  สไตล์การเล่น: {player.playstyle}
+                  {isThai ? `สไตล์การเล่น: ${player.playstyleTh || 'สายบุกตบสแมชดุดัน'}` : `Playstyle: ${player.playstyleEn || player.playstyle}`}
                 </p>
               </div>
 
               {/* Stat Pills */}
               <div className="grid grid-cols-3 gap-2 mt-3 pt-2.5 border-t border-[#000000]/20 text-center">
                 <div className="p-2 rounded-[16px] bg-[#ffffff] border border-[#000000]">
-                  <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">POW</div>
+                  <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">
+                    {isThai ? 'พลัง' : 'POW'}
+                  </div>
                   <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
                     {player.skillRadar.power}
                   </div>
                 </div>
                 <div className="p-2 rounded-[16px] bg-[#ffffff] border border-[#000000]">
-                  <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">SPD</div>
+                  <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">
+                    {isThai ? 'สปีด' : 'SPD'}
+                  </div>
                   <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
                     {player.skillRadar.speed}
                   </div>
                 </div>
                 <div className="p-2 rounded-[16px] bg-[#ffffff] border border-[#000000]">
-                  <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">CTL</div>
+                  <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">
+                    {isThai ? 'คุมลูก' : 'CTL'}
+                  </div>
                   <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
                     {player.skillRadar.control}
                   </div>
@@ -339,10 +394,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                   </div>
                   <div>
                     <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wider text-[#000000] leading-none">
-                      ประวัติการแข่งขัน · PAST MATCHES
+                      {isThai ? 'ประวัติการแข่งขัน' : 'PAST MATCHES'}
                     </h4>
                     <p className="text-[10px] text-[#000000]/65 font-bold mt-0.5">
-                      บันทึกผลการแข่งขันล่าสุดและสถิติคอร์ท
+                      {isThai ? 'บันทึกผลการแข่งขันล่าสุดและสถิติคอร์ท' : 'Recent match results & court stats'}
                     </p>
                   </div>
                 </div>
@@ -355,7 +410,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                   }}
                   className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold uppercase tracking-[0.032em] flex items-center gap-1 hover:bg-[#333333] cursor-pointer"
                 >
-                  <span>ดูทั้งหมด</span>
+                  <span>{isThai ? 'ดูทั้งหมด' : 'See all'}</span>
                   <ChevronRight className="w-3 h-3" />
                 </button>
               </div>
@@ -374,7 +429,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                   <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
                     +{totalExpFromMatches}
                   </div>
-                  <div className="text-[9px] text-[#000000]/80 font-semibold">{totalMatchesCount} แมตช์</div>
+                  <div className="text-[9px] text-[#000000]/80 font-semibold">{totalMatchesCount} {isThai ? 'แมตช์' : 'Matches'}</div>
                 </div>
                 <div className="p-2 rounded-[16px] bg-[#ffffff] border border-[#000000]">
                   <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">TOP SMASH</div>
@@ -400,7 +455,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                       <div className="flex items-center justify-between text-[10px]">
                         <div className="flex items-center gap-1.5 font-bold text-[#000000]/70">
                           <Calendar className="w-3 h-3 text-[#000000]/60" />
-                          <span>{match.date}</span>
+                          <span>{isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[9px] font-bold uppercase">
@@ -411,7 +466,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                               isWin ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#fb4903] text-[#ffffff]'
                             }`}
                           >
-                            {isWin ? 'WIN ชนะ' : 'LOSS แพ้'} · {match.finalScore}
+                            {isWin ? (isThai ? 'ชนะ' : 'WIN') : (isThai ? 'แพ้' : 'LOSS')} · {match.finalScore}
                           </span>
                         </div>
                       </div>
@@ -422,7 +477,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                           <div className="flex items-center gap-1.5">
                             <span className="text-[11px] font-bold text-[#000000]/50 uppercase tracking-wider">VS</span>
                             <span className="font-['Antonio',sans-serif] text-base font-black text-[#000000] tracking-wide truncate">
-                              {match.opponent.name}
+                              {isThai ? (match.opponent.nameTh || match.opponent.name) : (match.opponent.nameEn || match.opponent.name)}
                             </span>
                           </div>
                           <div className="flex items-center gap-2 mt-0.5 text-[10px] text-[#000000]/70 font-semibold flex-wrap">
@@ -431,12 +486,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                             </span>
                             <span>{match.opponent.club}</span>
                             {match.partnerName && (
-                              <span className="text-[#5c4ade]">· คู่กับ {match.partnerName}</span>
+                              <span className="text-[#5c4ade]">· {isThai ? `คู่กับ ${match.partnerNameTh || match.partnerName}` : `with ${match.partnerNameEn || match.partnerName}`}</span>
                             )}
                           </div>
                           <div className="flex items-center gap-1 mt-1 text-[10px] text-[#000000]/60 font-medium truncate">
                             <MapPin className="w-3 h-3 shrink-0" />
-                            <span className="truncate">{match.courtName}</span>
+                            <span className="truncate">{isThai ? (match.courtNameTh || match.courtName) : (match.courtNameEn || match.courtName)}</span>
                           </div>
                         </div>
 
@@ -453,7 +508,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                             }}
                             className="mt-1 text-[9px] font-bold uppercase text-[#000000] underline flex items-center justify-end gap-0.5 cursor-pointer"
                           >
-                            <span>{isExpanded ? 'ย่อ' : 'ดูเซ็ต'}</span>
+                            <span>{isExpanded ? (isThai ? 'ย่อ' : 'Collapse') : (isThai ? 'ดูเซ็ต' : 'Sets')}</span>
                             {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                           </button>
                         </div>
@@ -461,7 +516,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
 
                       {/* Set-by-Set Score Chips */}
                       <div className="flex items-center gap-1.5 pt-1">
-                        <span className="text-[9px] font-bold text-[#000000]/60 uppercase">คะแนนเซ็ต:</span>
+                        <span className="text-[9px] font-bold text-[#000000]/60 uppercase">
+                          {isThai ? 'คะแนนเซ็ต:' : 'Set Scores:'}
+                        </span>
                         <div className="flex items-center gap-1.5 flex-wrap">
                           {match.scores.map((s) => (
                             <span
@@ -483,19 +540,25 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                         <div className="mt-2 pt-2 border-t border-[#000000]/15 bg-[#ffffff] p-2.5 rounded-[16px] border border-[#000000] space-y-2 text-[10px]">
                           <div className="grid grid-cols-3 gap-2 text-center">
                             <div className="p-1.5 rounded-[10px] bg-[#dceeff] border border-[#000000]">
-                              <span className="text-[8px] font-bold text-[#000000]/60 uppercase block">ความเร็วสแมช</span>
+                              <span className="text-[8px] font-bold text-[#000000]/60 uppercase block">
+                                {isThai ? 'ความเร็วสแมช' : 'Top Smash'}
+                              </span>
                               <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
                                 ⚡ {match.highestSmashKmh} km/h
                               </span>
                             </div>
                             <div className="p-1.5 rounded-[10px] bg-[#dceeff] border border-[#000000]">
-                              <span className="text-[8px] font-bold text-[#000000]/60 uppercase block">ระยะเวลาแข่ง</span>
+                              <span className="text-[8px] font-bold text-[#000000]/60 uppercase block">
+                                {isThai ? 'ระยะเวลาแข่ง' : 'Duration'}
+                              </span>
                               <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
-                                ⏱️ {match.durationMin} นาที
+                                ⏱️ {match.durationMin} {isThai ? 'นาที' : 'min'}
                               </span>
                             </div>
                             <div className="p-1.5 rounded-[10px] bg-[#ffd731] border border-[#000000]">
-                              <span className="text-[8px] font-bold text-[#000000]/70 uppercase block">EXP ที่ได้รับ</span>
+                              <span className="text-[8px] font-bold text-[#000000]/70 uppercase block">
+                                {isThai ? 'EXP ที่ได้รับ' : 'EXP Gained'}
+                              </span>
                               <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
                                 +{match.expGained} EXP
                               </span>
@@ -503,7 +566,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                           </div>
                           <div className="text-[10px] font-medium text-[#000000]/80 bg-[#f4f7fb] p-2 rounded-[12px] border border-[#000000]/10 flex items-center gap-1.5">
                             <Sparkles className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
-                            <span><strong>ไฮไลต์ช็อตสำคัญ:</strong> {match.highlightShot}</span>
+                            <span><strong>{isThai ? 'ไฮไลต์ช็อตสำคัญ:' : 'Highlight Shot:'}</strong> {match.highlightShot}</span>
                           </div>
                         </div>
                       )}
@@ -520,7 +583,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                   className="flex-1 py-2.5 px-3 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 hover:bg-[#ffe266] active:scale-95 transition-transform cursor-pointer text-[#000000]"
                 >
                   <Plus className="w-3.5 h-3.5 text-[#000000]" />
-                  <span>+ จำลองบันทึกผลแข่งใหม่ (TEST STATE)</span>
+                  <span>{isThai ? '+ จำลองบันทึกผลแข่งใหม่' : '+ Simulate New Match'}</span>
                 </button>
               </div>
             </div>
@@ -532,9 +595,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
             >
               <div className="flex items-center justify-between pb-1 border-b border-[#000000]/10 text-[10px]">
                 <span className="px-2 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] font-black uppercase text-[#000000]">
-                  บัตรเข้าสนาม · ACTIVE PASS
+                  {isThai ? 'บัตรเข้าสนาม' : 'ACTIVE PASS'}
                 </span>
-                <span className="font-bold text-[#55db9c]">● พร้อมใช้งาน</span>
+                <span className="font-bold text-[#55db9c]">● {isThai ? 'พร้อมใช้งาน' : 'Ready'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -590,9 +653,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
             >
               <div className="flex items-center justify-between pb-1 border-b border-[#000000]/10 text-[10px]">
                 <span className="px-2 py-0.5 rounded-[1600px] bg-[#e9ccff] border border-[#000000] font-black uppercase text-[#000000]">
-                  ตั้งค่าความถนัด · PLAYSTYLE DNA
+                  {isThai ? 'ตั้งค่าความถนัด' : 'PLAYSTYLE DNA'}
                 </span>
-                <span className="font-bold text-[#000000]/60">แก้ไขข้อมูล</span>
+                <span className="font-bold text-[#000000]/60">{isThai ? 'แก้ไขข้อมูล' : 'Edit'}</span>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -601,10 +664,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                   </div>
                   <div>
                     <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
-                      แก้ไข ATHLETE DNA & สไตล์การเล่น
+                      {isThai ? 'แก้ไขข้อมูลนักกีฬา & สไตล์การเล่น' : 'Edit Athlete DNA & Playstyle'}
                     </div>
                     <div className="text-[10px] text-[#000000]/70 font-bold">
-                      ปรับสายตบ, มือกุมแร็กเก็ต, และเป้าหมายฝึกฝน
+                      {isThai ? 'ปรับสายตบ, มือกุมแร็กเก็ต, และเป้าหมายฝึกฝน' : 'Customize playstyle, grip hand, and goals'}
                     </div>
                   </div>
                 </div>
@@ -622,9 +685,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
             >
               <div className="flex items-center justify-between pb-1 border-b border-[#000000]/15 text-[10px]">
                 <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffd731] font-black uppercase">
-                  สมาชิกสิทธิพิเศษ · PRO PASS
+                  {isThai ? 'สมาชิกสิทธิพิเศษ' : 'PRO PASS'}
                 </span>
-                <span className="font-black text-[#000000]">฿199 / เดือน</span>
+                <span className="font-black text-[#000000]">{isThai ? '฿199 / เดือน' : '฿199 / mo'}</span>
               </div>
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -636,12 +699,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                       SMASH PRO MEMBER
                     </div>
                     <div className="text-[10px] text-[#000000]/80 font-bold truncate">
-                      ลดค่าคอร์ท 10% · สแกน 3D ไม่จำกัด
+                      {isThai ? 'ลดค่าคอร์ท 10% · สแกน 3D ไม่จำกัด' : '10% off courts · Unlimited 3D Scans'}
                     </div>
                   </div>
                 </div>
                 <span className="px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em] uppercase shrink-0 whitespace-nowrap">
-                  {player.tier === 'Pro' ? 'ACTIVE' : 'UPGRADE'}
+                  {player.tier === 'Pro' ? (isThai ? 'ใช้งานอยู่' : 'ACTIVE') : (isThai ? 'อัปเกรด' : 'UPGRADE')}
                 </span>
               </div>
             </div>
@@ -654,7 +717,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                 className="p-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] border border-[#000000] hover:bg-[#e9e9e9] whitespace-nowrap"
               >
                 <Crosshair className="w-3.5 h-3.5 text-[#5c4ade]" />
-                <span>COACH RADAR (D1)</span>
+                <span>{isThai ? 'เรดาร์โค้ช AI' : 'COACH RADAR (D1)'}</span>
               </button>
               <button
                 type="button"
@@ -662,7 +725,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                 className="p-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#000000] text-[#ffffff] border border-[#000000] hover:bg-[#1a1a1a] whitespace-nowrap"
               >
                 <Calendar className="w-3.5 h-3.5" />
-                <span>BOOK COURTS (B1)</span>
+                <span>{isThai ? 'จองสนามแบด' : 'BOOK COURTS (B1)'}</span>
               </button>
             </div>
           </div>
@@ -676,10 +739,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
               <div className="flex items-center justify-between pb-2 border-b border-[#000000]/15">
                 <div>
                   <h4 className="font-['Antonio',sans-serif] text-lg font-black uppercase tracking-wider text-[#000000] leading-tight">
-                    ประวัติผลการแข่งขันทั้งหมด
+                    {isThai ? 'ประวัติผลการแข่งขันทั้งหมด' : 'ALL MATCH HISTORY'}
                   </h4>
                   <p className="text-[10px] text-[#000000]/70 font-bold">
-                    แมตช์ที่บันทึกในระบบ · Sourced from Live Local State
+                    {isThai ? 'แมตช์ที่บันทึกในระบบ' : 'Recorded matches in system'}
                   </p>
                 </div>
                 <button
@@ -688,22 +751,22 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                   className="px-3 py-1.5 rounded-[1600px] bg-[#55db9c] text-[#000000] border border-[#000000] text-xs font-black uppercase tracking-wide flex items-center gap-1 hover:bg-[#46c288] active:scale-95 transition-transform cursor-pointer"
                 >
                   <Plus className="w-3.5 h-3.5" />
-                  <span>เพิ่มผลแข่ง</span>
+                  <span>{isThai ? 'เพิ่มผลแข่ง' : 'Add Match'}</span>
                 </button>
               </div>
 
               {/* Big Stat Summary */}
               <div className="grid grid-cols-4 gap-2 text-center">
                 <div className="p-2 rounded-[16px] bg-[#dceeff] border border-[#000000]">
-                  <div className="text-[8px] font-bold uppercase text-[#000000]/60">แมตช์ทั้งหมด</div>
+                  <div className="text-[8px] font-bold uppercase text-[#000000]/60">{isThai ? 'แมตช์ทั้งหมด' : 'TOTAL'}</div>
                   <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">{matches.length}</div>
                 </div>
                 <div className="p-2 rounded-[16px] bg-[#55db9c]/30 border border-[#000000]">
-                  <div className="text-[8px] font-bold uppercase text-[#000000]/60">ชนะ (WINS)</div>
+                  <div className="text-[8px] font-bold uppercase text-[#000000]/60">{isThai ? 'ชนะ' : 'WINS'}</div>
                   <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">{winsCount}</div>
                 </div>
                 <div className="p-2 rounded-[16px] bg-[#fb4903]/20 border border-[#000000]">
-                  <div className="text-[8px] font-bold uppercase text-[#000000]/60">แพ้ (LOSSES)</div>
+                  <div className="text-[8px] font-bold uppercase text-[#000000]/60">{isThai ? 'แพ้' : 'LOSSES'}</div>
                   <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">
                     {matches.length - winsCount}
                   </div>
@@ -718,11 +781,11 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
               <div className="flex items-center gap-1.5 pt-1 overflow-x-auto no-scrollbar">
                 {(
                   [
-                    { id: 'all', label: `ทั้งหมด (${matches.length})` },
-                    { id: 'win', label: `ชนะ (${winsCount})` },
-                    { id: 'loss', label: `แพ้ (${matches.length - winsCount})` },
-                    { id: 'Singles', label: 'เดี่ยว (Singles)' },
-                    { id: 'Doubles', label: 'คู่ (Doubles)' },
+                    { id: 'all', label: isThai ? `ทั้งหมด (${matches.length})` : `All (${matches.length})` },
+                    { id: 'win', label: isThai ? `ชนะ (${winsCount})` : `Won (${winsCount})` },
+                    { id: 'loss', label: isThai ? `แพ้ (${matches.length - winsCount})` : `Lost (${matches.length - winsCount})` },
+                    { id: 'Singles', label: isThai ? 'เดี่ยว' : 'Singles' },
+                    { id: 'Doubles', label: isThai ? 'คู่' : 'Doubles' },
                   ] as const
                 ).map((f) => (
                   <button
@@ -764,7 +827,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                       <div className="flex items-center justify-between pb-2 border-b border-[#000000]/10">
                         <div className="flex items-center gap-1.5 text-xs font-bold text-[#000000]/70">
                           <Clock className="w-3.5 h-3.5" />
-                          <span>{match.date}</span>
+                          <span>{isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}</span>
                         </div>
                         <div className="flex items-center gap-1.5">
                           <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[10px] font-bold uppercase text-[#000000]">
@@ -775,7 +838,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                               isWin ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#fb4903] text-[#ffffff]'
                             }`}
                           >
-                            {isWin ? 'VICTORY ชนะ' : 'DEFEAT แพ้'}
+                            {isWin ? (isThai ? 'ชนะ' : 'VICTORY') : (isThai ? 'แพ้' : 'DEFEAT')}
                           </span>
                         </div>
                       </div>
@@ -784,10 +847,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                       <div className="flex items-center justify-between gap-3">
                         <div className="min-w-0 flex-1">
                           <div className="text-[10px] font-bold text-[#000000]/50 uppercase tracking-wider">
-                            คู่ต่อสู้ · OPPONENT
+                            {isThai ? 'คู่ต่อสู้' : 'OPPONENT'}
                           </div>
                           <h4 className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tracking-wide truncate">
-                            {match.opponent.name}
+                            {isThai ? (match.opponent.nameTh || match.opponent.name) : (match.opponent.nameEn || match.opponent.name)}
                           </h4>
                           <div className="flex items-center gap-1.5 mt-1 text-[11px] text-[#000000]/70 font-semibold flex-wrap">
                             <span className="px-2 py-0.2 rounded-full bg-[#ffd731] border border-[#000000] text-[9px] font-black">
@@ -797,29 +860,29 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                           </div>
                           {match.partnerName && (
                             <div className="text-[10px] text-[#5c4ade] font-bold mt-0.5">
-                              คู่หูร่วมทีม: {match.partnerName}
+                              {isThai ? `คู่หูร่วมทีม: ${match.partnerNameTh || match.partnerName}` : `Partner: ${match.partnerNameEn || match.partnerName}`}
                             </div>
                           )}
                           <div className="text-[10px] text-[#000000]/60 font-medium flex items-center gap-1 mt-1 truncate">
                             <MapPin className="w-3 h-3 shrink-0" />
-                            <span className="truncate">{match.courtName}</span>
+                            <span className="truncate">{isThai ? (match.courtNameTh || match.courtName) : (match.courtNameEn || match.courtName)}</span>
                           </div>
                         </div>
 
                         {/* Final Score Pill */}
                         <div className="text-center p-3 rounded-[20px] bg-[#dceeff] border border-[#000000] min-w-[76px] shrink-0">
-                          <div className="text-[9px] font-bold text-[#000000]/60 uppercase">สกอร์รวม</div>
+                          <div className="text-[9px] font-bold text-[#000000]/60 uppercase">{isThai ? 'สกอร์รวม' : 'SCORE'}</div>
                           <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#000000] leading-none my-0.5">
                             {match.finalScore}
                           </div>
-                          <div className="text-[9px] font-bold text-[#000000]/70">{match.durationMin} นาที</div>
+                          <div className="text-[9px] font-bold text-[#000000]/70">{match.durationMin} {isThai ? 'นาที' : 'min'}</div>
                         </div>
                       </div>
 
                       {/* Set By Set Breakdown */}
                       <div className="p-2.5 rounded-[18px] bg-[#f8fbff] border border-[#000000] space-y-2">
                         <div className="flex items-center justify-between text-[10px] font-bold text-[#000000]/70">
-                          <span>ผลการแข่งขันแต่ละเซ็ต (SET SCORES)</span>
+                          <span>{isThai ? 'ผลการแข่งขันแต่ละเซ็ต' : 'SET SCORES'}</span>
                           <button
                             type="button"
                             onClick={() => {
@@ -828,7 +891,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                             }}
                             className="text-[#000000] underline flex items-center gap-0.5 cursor-pointer"
                           >
-                            <span>{isExpanded ? 'ซ่อนรายละเอียด' : 'ดูเทเลเมทรี'}</span>
+                            <span>{isExpanded ? (isThai ? 'ซ่อนรายละเอียด' : 'Hide') : (isThai ? 'ดูเทเลเมทรี' : 'View Stats')}</span>
                             {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
                           </button>
                         </div>
@@ -843,12 +906,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                                   setWon ? 'bg-[#55db9c]/25' : 'bg-[#ffffff]'
                                 }`}
                               >
-                                <div className="text-[9px] font-bold text-[#000000]/60 uppercase">เซ็ต {s.set}</div>
+                                <div className="text-[9px] font-bold text-[#000000]/60 uppercase">{isThai ? `เซ็ต ${s.set}` : `Set ${s.set}`}</div>
                                 <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
                                   {s.userScore} - {s.opponentScore}
                                 </div>
                                 <div className="text-[8px] font-bold uppercase mt-0.5">
-                                  {setWon ? 'ชนะ' : 'แพ้'}
+                                  {setWon ? (isThai ? 'ชนะ' : 'WON') : (isThai ? 'แพ้' : 'LOST')}
                                 </div>
                               </div>
                             );
@@ -861,26 +924,32 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                         <div className="p-3 rounded-[20px] bg-[#fffbed] border border-[#000000] space-y-2.5 text-[11px]">
                           <div className="flex items-center justify-between border-b border-[#000000]/15 pb-1">
                             <span className="font-['Antonio',sans-serif] text-xs font-black uppercase text-[#000000]">
-                              สถิติการเล่น & ความเร็วลูก (SMASH METRICS)
+                              {isThai ? 'สถิติการเล่นและความเร็วลูก' : 'SMASH METRICS'}
                             </span>
-                            <span className="font-bold text-[#55db9c] text-[10px]">VERIFIED MATCH DATA</span>
+                            <span className="font-bold text-[#55db9c] text-[10px]">VERIFIED</span>
                           </div>
 
                           <div className="grid grid-cols-3 gap-2 text-center">
                             <div className="p-2 rounded-[14px] bg-[#ffffff] border border-[#000000]">
-                              <div className="text-[9px] font-bold text-[#000000]/60 uppercase">ลูกตบเร็วสุด</div>
+                              <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
+                                {isThai ? 'ลูกตบเร็วสุด' : 'TOP SMASH'}
+                              </div>
                               <div className="font-['Antonio',sans-serif] text-base font-black text-[#000000]">
                                 ⚡ {match.highestSmashKmh} km/h
                               </div>
                             </div>
                             <div className="p-2 rounded-[14px] bg-[#ffffff] border border-[#000000]">
-                              <div className="text-[9px] font-bold text-[#000000]/60 uppercase">ระยะเวลา</div>
+                              <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
+                                {isThai ? 'ระยะเวลา' : 'DURATION'}
+                              </div>
                               <div className="font-['Antonio',sans-serif] text-base font-black text-[#000000]">
-                                ⏱️ {match.durationMin} น.
+                                ⏱️ {match.durationMin} {isThai ? 'น.' : 'm'}
                               </div>
                             </div>
                             <div className="p-2 rounded-[14px] bg-[#ffffff] border border-[#000000]">
-                              <div className="text-[9px] font-bold text-[#000000]/60 uppercase">EXP ได้รับ</div>
+                              <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
+                                {isThai ? 'EXP ได้รับ' : 'EXP'}
+                              </div>
                               <div className="font-['Antonio',sans-serif] text-base font-black text-[#000000]">
                                 +{match.expGained} EXP
                               </div>
@@ -891,8 +960,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                             <div className="flex items-center gap-2">
                               <Sparkles className="w-4 h-4 text-[#ffd731] shrink-0" />
                               <div>
-                                <div className="text-[9px] font-bold text-[#000000]/60 uppercase">ช็อตไฮไลต์ประจำแมตช์</div>
-                                <div className="font-bold text-xs text-[#000000]">{match.highlightShot}</div>
+                                <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
+                                  {isThai ? 'ช็อตไฮไลต์ประจำแมตช์' : 'HIGHLIGHT SHOT'}
+                                </div>
+                                <div className="font-bold text-xs text-[#000000]">
+                                  {isThai ? (match.highlightShotTh || match.highlightShot) : (match.highlightShotEn || match.highlightShot)}
+                                </div>
                               </div>
                             </div>
                             <button
@@ -900,7 +973,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
                               onClick={() => navigateTo('C3')}
                               className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-bold uppercase tracking-wider hover:bg-[#333333] cursor-pointer"
                             >
-                              ตรวจ 3D ช็อต
+                              {isThai ? 'ตรวจ 3D ช็อต' : 'Analyze 3D'}
                             </button>
                           </div>
                         </div>
@@ -943,7 +1016,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
 
                   <div className="mt-3 pt-2 border-t border-[#000000]/20 flex items-center justify-between text-[10px] font-bold">
                     <span className={b.unlocked ? 'text-[#000000]' : 'text-[#000000]/50'}>
-                      {b.unlocked ? '✓ ปลดล็อกแล้ว (+100 EXP)' : `${b.progress}/${b.maxProgress}`}
+                      {b.unlocked ? (isThai ? '✓ ปลดล็อกแล้ว (+100 EXP)' : '✓ Unlocked (+100 EXP)') : `${b.progress}/${b.maxProgress}`}
                     </span>
                   </div>
                 </div>
@@ -955,24 +1028,24 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
         {activeTab === 'gear' && (
           <div className="p-5 rounded-[28px] bg-[#ffffff] border border-[#000000] space-y-4">
             <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wider text-[#000000]">
-              สเปกอุปกรณ์ไม้แบด (RACKET & STRING SPEC)
+              {isThai ? 'สเปกอุปกรณ์ไม้แบด' : 'RACKET & STRING SPEC'}
             </h4>
 
             <div className="space-y-2.5">
               <div className="p-3 rounded-[20px] bg-[#dceeff] border border-[#000000] flex items-center justify-between">
-                <span className="text-xs text-[#000000]/70 font-bold">รุ่นไม้แบด:</span>
+                <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'รุ่นไม้แบด:' : 'Racket Model:'}</span>
                 <span className="text-xs font-bold font-mono">{player.racket.model}</span>
               </div>
               <div className="p-3 rounded-[20px] bg-[#dceeff] border border-[#000000] flex items-center justify-between">
-                <span className="text-xs text-[#000000]/70 font-bold">น้ำหนัก / กริป:</span>
+                <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'น้ำหนัก / กริป:' : 'Weight / Grip:'}</span>
                 <span className="text-xs font-bold font-mono">{player.racket.weightGrip}</span>
               </div>
               <div className="p-3 rounded-[20px] bg-[#dceeff] border border-[#000000] flex items-center justify-between">
-                <span className="text-xs text-[#000000]/70 font-bold">ความตึงเอ็น:</span>
+                <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'ความตึงเอ็น:' : 'Tension:'}</span>
                 <span className="text-xs font-bold text-[#5c4ade] font-mono">{player.racket.stringTension}</span>
               </div>
               <div className="p-3 rounded-[20px] bg-[#dceeff] border border-[#000000] flex items-center justify-between">
-                <span className="text-xs text-[#000000]/70 font-bold">ประเภทเอ็น:</span>
+                <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'ประเภทเอ็น:' : 'String Type:'}</span>
                 <span className="text-xs font-bold">{player.racket.stringType}</span>
               </div>
             </div>

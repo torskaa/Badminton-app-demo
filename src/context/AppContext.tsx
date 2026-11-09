@@ -203,6 +203,17 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [theme]);
 
+  React.useEffect(() => {
+    document.documentElement.lang = language;
+    if (language === 'th') {
+      document.documentElement.classList.add('font-thai');
+      document.documentElement.classList.remove('font-eng');
+    } else {
+      document.documentElement.classList.add('font-eng');
+      document.documentElement.classList.remove('font-thai');
+    }
+  }, [language]);
+
   // Player State
   const [player, setPlayer] = useState<PlayerProfile>(INITIAL_PLAYER);
   const [expCelebration, setExpCelebration] = useState<ExpGainPayload | null>(null);
@@ -613,44 +624,50 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const triggerSampleInvite = () => {
+    const isThai = language === 'th';
     showNotification({
       type: 'match_invite',
-      title: 'คำชวนดวลแมตช์ใหม่! (Match Invite)',
-      message: 'โค้ชอาร์ท (OVR 88 · Diamond) ท้าแข่งประเภทคู่ 21:00 น. ที่คอร์ท 3',
-      timeAgo: 'สดตอนนี้',
+      title: isThai ? 'คำชวนดวลแมตช์ใหม่!' : 'New Match Invite!',
+      message: isThai
+        ? 'โค้ชอาร์ท (ระดับไดมอนด์) ท้าแข่งประเภทคู่ 21:00 น. ที่คอร์ท 3'
+        : 'Coach Art (Diamond Rank) invited you to a doubles match at 21:00 on Court 3',
+      timeAgo: isThai ? 'สดตอนนี้' : 'Just now',
       targetScreen: 'C1',
       metadata: {
-        inviterName: 'โค้ชอาร์ท',
+        inviterName: isThai ? 'โค้ชอาร์ท' : 'Coach Art',
         inviterAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
         inviterTier: 'DIAMOND',
-        matchTime: '21:00 น.',
+        matchTime: isThai ? '21:00 น.' : '21:00',
       },
       actions: {
-        primaryLabel: 'ตอบรับคำท้า',
-        secondaryLabel: 'ขอผ่านก่อน',
+        primaryLabel: isThai ? 'ตอบรับคำท้า' : 'Accept Challenge',
+        secondaryLabel: isThai ? 'ขอผ่านก่อน' : 'Decline',
         primaryAction: () => {
           navigateTo('C1');
-          gainExp(50, 'ตอบรับการแข่งขันสปาร์ริ่ง');
+          gainExp(50, isThai ? 'ตอบรับการแข่งขันสปาร์ริ่ง' : 'Accepted sparring challenge');
         },
       },
     });
   };
 
   const triggerSampleBookingConfirmation = () => {
+    const isThai = language === 'th';
     showNotification({
       type: 'court_booking',
-      title: 'ยืนยันการจองคอร์ทสำเร็จ! (Confirmed)',
-      message: 'สนามแบดอินฟินิตี้ ลาดพร้าว · คอร์ท 3 วันนี้ 19:00 - 21:00 น.',
-      timeAgo: 'เมื่อสักครู่',
+      title: isThai ? 'ยืนยันการจองคอร์ทสำเร็จ!' : 'Court Booking Confirmed!',
+      message: isThai
+        ? 'สนามแบดอินฟินิตี้ ลาดพร้าว · คอร์ท 3 วันนี้ 19:00 - 21:00 น.'
+        : 'Infinity Badminton Ladprao · Court 3 Today 19:00 - 21:00',
+      timeAgo: isThai ? 'เมื่อสักครู่' : 'Just now',
       targetScreen: 'B4',
       metadata: {
-        courtName: 'สนามแบดอินฟินิตี้ ลาดพร้าว',
+        courtName: isThai ? 'สนามแบดอินฟินิตี้ ลาดพร้าว' : 'Infinity Badminton Ladprao',
         courtNumber: 3,
         matchTime: '19:00 - 21:00',
       },
       actions: {
-        primaryLabel: 'ดูตั๋วการจอง',
-        secondaryLabel: 'ปิด',
+        primaryLabel: isThai ? 'ดูตั๋วการจอง' : 'View Pass',
+        secondaryLabel: isThai ? 'ปิด' : 'Dismiss',
         primaryAction: () => {
           navigateTo('B4');
         },
@@ -659,19 +676,22 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const triggerSampleCountdownAlert = () => {
+    const isThai = language === 'th';
     showNotification({
       type: 'match_countdown',
-      title: 'คอร์ทของคุณพร้อมแล้ว! (Ready to Play)',
-      message: 'อีก 15 นาทีจะเริ่มแมตช์ที่ คอร์ท 3 · ระบบแอร์เปิดแล้ว 24°C',
-      timeAgo: 'สดตอนนี้',
+      title: isThai ? 'คอร์ทของคุณพร้อมแล้ว!' : 'Your Court is Ready!',
+      message: isThai
+        ? 'อีก 15 นาทีจะเริ่มแมตช์ที่ คอร์ท 3 · ระบบแอร์เปิดแล้ว 24°C'
+        : '15 minutes until match starts at Court 3 · AC is set to 24°C',
+      timeAgo: isThai ? 'สดตอนนี้' : 'Just now',
       targetScreen: 'C1',
       metadata: {
         countdownMinutes: 15,
         courtNumber: 3,
       },
       actions: {
-        primaryLabel: 'เข้า Match Room',
-        secondaryLabel: 'รับทราบ',
+        primaryLabel: isThai ? 'เข้าห้องแมตช์' : 'Enter Match Room',
+        secondaryLabel: isThai ? 'รับทราบ' : 'Got it',
         primaryAction: () => {
           navigateTo('C1');
         },
@@ -680,15 +700,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const triggerSamplePartyUpdate = () => {
+    const isThai = language === 'th';
     showNotification({
       type: 'party_update',
-      title: 'ก๊วนแบดคืนวันพุธ อัปเดต!',
-      message: 'มีสมาชิกใหม่ 2 คนเข้าร่วมก๊วน รวมเป็น 29/30 คน (เหลือ 1 ที่สุดท้าย!)',
-      timeAgo: '1 นาทีที่แล้ว',
+      title: isThai ? 'ก๊วนแบดคืนวันพุธ อัปเดต!' : 'Wednesday Badminton Party Update!',
+      message: isThai
+        ? 'มีสมาชิกใหม่ 2 คนเข้าร่วมก๊วน รวมเป็น 29/30 คน (เหลือ 1 ที่สุดท้าย!)'
+        : '2 new players joined the party, now 29/30 players (1 spot left!)',
+      timeAgo: isThai ? '1 นาทีที่แล้ว' : '1 min ago',
       targetScreen: 'E2',
       actions: {
-        primaryLabel: 'ดูก๊วนและชำระเงิน',
-        secondaryLabel: 'ปิด',
+        primaryLabel: isThai ? 'ดูก๊วนและชำระเงิน' : 'View Party & Pay',
+        secondaryLabel: isThai ? 'ปิด' : 'Dismiss',
         primaryAction: () => {
           navigateTo('E2');
         },

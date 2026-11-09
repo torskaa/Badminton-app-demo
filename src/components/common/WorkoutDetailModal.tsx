@@ -7,16 +7,30 @@ import { useApp } from '../../context/AppContext';
 export interface WorkoutDetailData {
   id: string;
   title: string;
+  titleTh?: string;
+  titleEn?: string;
   subtitle: string;
+  subtitleTh?: string;
+  subtitleEn?: string;
   category: string;
   schedule: string;
+  scheduleTh?: string;
+  scheduleEn?: string;
   intensity: 'Low' | 'Medium' | 'High';
   intensityLabel: string;
+  intensityLabelTh?: string;
+  intensityLabelEn?: string;
   tags: string[];
+  tagsTh?: string[];
+  tagsEn?: string[];
   trainerName: string;
   trainerRole: string;
+  trainerRoleTh?: string;
+  trainerRoleEn?: string;
   trainerAvatar: string;
   courtName: string;
+  courtNameTh?: string;
+  courtNameEn?: string;
   videoPreviewUrl: string;
   targetScreen?: string;
   rating: string;
@@ -39,15 +53,23 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
   onChangeMoodClick,
   onStartTraining,
 }) => {
-  const { gainExp } = useApp();
+  const { gainExp, language } = useApp();
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isPlayingVideo, setIsPlayingVideo] = useState(false);
+  const isThai = language === 'th';
 
   if (!isOpen || !workout) return null;
 
+  const title = isThai ? (workout.titleTh || workout.title) : (workout.titleEn || workout.title);
+  const subtitle = isThai ? (workout.subtitleTh || workout.subtitle) : (workout.subtitleEn || workout.subtitle);
+  const schedule = isThai ? (workout.scheduleTh || workout.schedule) : (workout.scheduleEn || workout.schedule);
+  const intensityLabel = isThai ? (workout.intensityLabelTh || workout.intensityLabel) : (workout.intensityLabelEn || workout.intensityLabel);
+  const courtName = isThai ? (workout.courtNameTh || workout.courtName) : (workout.courtNameEn || workout.courtName);
+  const trainerRole = isThai ? (workout.trainerRoleTh || workout.trainerRole) : (workout.trainerRoleEn || workout.trainerRole);
+  const tags = isThai ? (workout.tagsTh || workout.tags) : (workout.tagsEn || workout.tags);
+
   const handleStart = () => {
     playSmashSound();
-    gainExp(60, `เริ่มการซ้อม: ${workout.title}`);
+    gainExp(60, isThai ? `เริ่มการซ้อม: ${title}` : `Started workout: ${title}`);
     onStartTraining();
     onClose();
   };
@@ -80,7 +102,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
               <div className="w-7 h-7 rounded-[1600px] bg-[#f3f4f6] border border-[#000000] flex items-center justify-center">
                 <ArrowLeft className="w-3.5 h-3.5 text-[#000000]" />
               </div>
-              <span>Workouts</span>
+              <span>{isThai ? 'การฝึกซ้อม' : 'Workouts'}</span>
             </button>
 
             {onChangeMoodClick && (
@@ -92,7 +114,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
                 }}
                 className="text-[11px] font-bold text-[#fb4903] hover:underline cursor-pointer whitespace-nowrap"
               >
-                Change my mood &gt;
+                {isThai ? 'เปลี่ยนอารมณ์ >' : 'Change my mood >'}
               </button>
             )}
           </div>
@@ -100,7 +122,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
           {/* Subheader */}
           <div className="px-4 pt-2">
             <span className="text-[10px] text-[#000000]/60 font-bold uppercase tracking-wider block">
-              Fits your mood today · แมตช์ที่ตรงกับพลังงานของคุณ
+              {isThai ? 'เซสชันที่เหมาะกับคุณ' : 'Fits your mood today'}
             </span>
           </div>
 
@@ -110,7 +132,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
             <div className="relative w-full aspect-[4/5] bg-[#243b34] rounded-[28px] border-2 border-[#000000] overflow-hidden shadow-md flex flex-col justify-between p-3.5">
               <img
                 src={workout.videoPreviewUrl}
-                alt={workout.title}
+                alt={title}
                 className="absolute inset-0 w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-[#000000]/40 pointer-events-none" />
@@ -119,7 +141,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
               <div className="relative z-10 flex items-center justify-between">
                 <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff] border border-[#ffffff]/30 text-[9px] font-bold flex items-center gap-1">
                   <Flame className="w-3 h-3 text-[#fb4903]" />
-                  <span>{workout.intensityLabel}</span>
+                  <span>{intensityLabel}</span>
                 </span>
 
                 <button
@@ -139,7 +161,9 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
               <div className="relative z-10 space-y-2">
                 <div className="text-center">
                   <span className="text-[10px] font-black uppercase tracking-wider text-[#ffffff]/90 bg-[#000000]/60 px-2.5 py-0.5 rounded-full backdrop-blur-xs border border-[#ffffff]/20">
-                    ⏱️ ประมาณ {workout.durationMin} นาที · เบิร์น ~{workout.caloriesBurnEstimate} kcal
+                    {isThai
+                      ? `⏱️ ประมาณ ${workout.durationMin} นาที · เผาผลาญ ~${workout.caloriesBurnEstimate} กิโลแคลอรี`
+                      : `⏱️ Approx ${workout.durationMin} min · Burn ~${workout.caloriesBurnEstimate} kcal`}
                   </span>
                 </div>
 
@@ -149,7 +173,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
                   className="w-full py-3 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff5a1a] text-[#ffffff] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-transform shadow-lg"
                 >
                   <Play className="w-4 h-4 fill-current" />
-                  <span>Start training · เริ่มเซสชันนี้</span>
+                  <span>{isThai ? 'เริ่มการฝึกซ้อม' : 'Start training'}</span>
                 </button>
               </div>
             </div>
@@ -157,23 +181,23 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
             {/* Session Info Details (Exact VibeMove video 00:11 text hierarchy) */}
             <div className="space-y-2">
               <h3 className="text-lg font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide leading-tight">
-                {workout.title}
+                {title}
               </h3>
 
               <div className="flex items-center gap-2 text-xs font-bold text-[#000000]/75">
                 <Clock className="w-3.5 h-3.5 text-[#5c4ade]" />
-                <span>{workout.schedule}</span>
+                <span>{schedule}</span>
                 <span>·</span>
-                <span className="truncate">{workout.courtName}</span>
+                <span className="truncate">{courtName}</span>
               </div>
 
               <p className="text-[11px] text-[#000000]/80 font-medium leading-relaxed">
-                {workout.subtitle}
+                {subtitle}
               </p>
 
               {/* Tags Row */}
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
-                {workout.tags.map((tag, idx) => (
+                {tags.map((tag, idx) => (
                   <span
                     key={idx}
                     className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[#000000] text-[10px] font-bold shrink-0 whitespace-nowrap"
@@ -193,7 +217,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
                   />
                   <div className="min-w-0">
                     <p className="font-bold text-xs text-[#000000] truncate">{workout.trainerName}</p>
-                    <p className="text-[10px] text-[#000000]/60 font-semibold truncate">{workout.trainerRole}</p>
+                    <p className="text-[10px] text-[#000000]/60 font-semibold truncate">{trainerRole}</p>
                   </div>
                 </div>
 

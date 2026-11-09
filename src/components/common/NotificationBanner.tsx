@@ -17,8 +17,9 @@ import { AppNotification } from '../../types';
 import { playSelectSound, playCoinSound } from '../../utils/retroAudio';
 
 export const NotificationBanner: React.FC = () => {
-  const { currentNotification, dismissNotification, navigateTo } = useApp();
+  const { currentNotification, dismissNotification, navigateTo, language } = useApp();
   const [progress, setProgress] = useState(100);
+  const isThai = language === 'th';
 
   useEffect(() => {
     if (!currentNotification) {
@@ -81,7 +82,7 @@ export const NotificationBanner: React.FC = () => {
         return {
           badgeBg: 'bg-[#55db9c]',
           badgeText: 'text-[#000000]',
-          badgeLabel: 'ยืนยันการจองคอร์ท · CONFIRMED',
+          badgeLabel: isThai ? 'ยืนยันการจองคอร์ท' : 'COURT CONFIRMED',
           icon: <Calendar className="w-4 h-4 text-[#000000]" />,
           borderAccent: 'border-l-4 border-l-[#55db9c]',
         };
@@ -89,7 +90,7 @@ export const NotificationBanner: React.FC = () => {
         return {
           badgeBg: 'bg-[#ffd731]',
           badgeText: 'text-[#000000]',
-          badgeLabel: 'คำชวนดวลแมตช์ · MATCH INVITE',
+          badgeLabel: isThai ? 'คำชวนดวลแมตช์' : 'MATCH INVITE',
           icon: <Swords className="w-4 h-4 text-[#000000]" />,
           borderAccent: 'border-l-4 border-l-[#ffd731]',
         };
@@ -97,7 +98,7 @@ export const NotificationBanner: React.FC = () => {
         return {
           badgeBg: 'bg-[#fb4903]',
           badgeText: 'text-[#ffffff]',
-          badgeLabel: 'การแจ้งเตือนแมตช์ · UPCOMING',
+          badgeLabel: isThai ? 'การแจ้งเตือนแมตช์' : 'UPCOMING MATCH',
           icon: <Clock className="w-4 h-4 text-[#ffffff]" />,
           borderAccent: 'border-l-4 border-l-[#fb4903]',
         };
@@ -105,7 +106,7 @@ export const NotificationBanner: React.FC = () => {
         return {
           badgeBg: 'bg-[#e9ccff]',
           badgeText: 'text-[#000000]',
-          badgeLabel: 'อัปเดตก๊วน · PARTY UPDATE',
+          badgeLabel: isThai ? 'อัปเดตก๊วน' : 'PARTY UPDATE',
           icon: <Users className="w-4 h-4 text-[#000000]" />,
           borderAccent: 'border-l-4 border-l-[#5c4ade]',
         };
@@ -113,7 +114,7 @@ export const NotificationBanner: React.FC = () => {
         return {
           badgeBg: 'bg-[#ffd731]',
           badgeText: 'text-[#000000]',
-          badgeLabel: 'รางวัลความสำเร็จ · REWARD',
+          badgeLabel: isThai ? 'รางวัลความสำเร็จ' : 'REWARD',
           icon: <Trophy className="w-4 h-4 text-[#000000]" />,
           borderAccent: 'border-l-4 border-l-[#ffd731]',
         };
@@ -121,7 +122,7 @@ export const NotificationBanner: React.FC = () => {
         return {
           badgeBg: 'bg-[#dceeff]',
           badgeText: 'text-[#000000]',
-          badgeLabel: 'การแจ้งเตือน · ALERT',
+          badgeLabel: isThai ? 'การแจ้งเตือน' : 'ALERT',
           icon: <Sparkles className="w-4 h-4 text-[#000000]" />,
           borderAccent: 'border-l-4 border-l-[#000000]',
         };
@@ -196,7 +197,7 @@ export const NotificationBanner: React.FC = () => {
           {/* Action Row */}
           <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#000000]/10">
             <div className="flex items-center gap-1 text-[10px] font-bold text-[#000000]/60">
-              <span>แตะเพื่อเปิดหน้าจอที่เกี่ยวข้อง</span>
+              <span>{isThai ? 'แตะเพื่อเปิดหน้าจอที่เกี่ยวข้อง' : 'Tap to open details'}</span>
               <ChevronRight className="w-3 h-3 text-[#000000]/40" />
             </div>
 
@@ -216,7 +217,7 @@ export const NotificationBanner: React.FC = () => {
                 onClick={handlePrimaryAction}
                 className="px-3 py-1 rounded-[1600px] bg-[#000000] hover:bg-[#222222] text-[#ffffff] border border-[#000000] text-[10px] font-black uppercase tracking-wider flex items-center gap-1 cursor-pointer active:scale-95 transition-transform"
               >
-                <span>{currentNotification.actions?.primaryLabel || 'ดูรายละเอียด'}</span>
+                <span>{currentNotification.actions?.primaryLabel || (isThai ? 'ดูรายละเอียด' : 'View Details')}</span>
                 <Check className="w-3 h-3 text-[#55db9c]" />
               </button>
             </div>

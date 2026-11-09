@@ -59,6 +59,8 @@ export interface Badge {
 export interface PlayerProfile {
   id: string;
   name: string;
+  nameTh?: string;
+  nameEn?: string;
   avatarUrl: string;
   level: number;
   currentExp: number;
@@ -67,6 +69,8 @@ export interface PlayerProfile {
   streakWeeks: number;
   dominantHand: 'Right' | 'Left';
   playstyle: 'Attacking Smash Hunter' | 'Defensive Wall' | 'Net Control Wizard' | 'All-Rounder';
+  playstyleTh?: string;
+  playstyleEn?: string;
   primaryGoal: 'Smash Mastery' | 'Lightning Footwork' | 'Tactical Net Play' | 'Endurance';
   skillRadar: SkillRadar;
   pastRadar: SkillRadar; // For level comparison

@@ -102,14 +102,14 @@ export const TRANSLATIONS = {
     openFullScorer: 'เปิดโหมดบันทึกแต้มเต็ม C1',
 
     // Randomizer Tool
-    randomizerHeader: 'สลับคู่มือสมดุล (Team Randomizer)',
+    randomizerHeader: 'สลับคู่จัดทีมสมดุล',
     shuffleBtn: 'สลับคู่ใหม่',
     court1: 'คอร์ท 1',
     balanceRate: 'ความสมดุลคู่แข่ง',
     balanceDesc: 'โอกาสชนะ 50/50 ฝีมือสูสี',
 
     // Tactic Tool
-    tacticHeader: 'กระดานแท็กติก (Tactic Board)',
+    tacticHeader: 'กระดานแผนการเล่น',
     formationAttack: 'หน้า-หลัง (บุก)',
     formationDefense: 'ซ้าย-ขวา (รับ)',
     tacticAttackDesc: 'แผนบุก: ผู้เล่นหน้าคุมลูกหยอดดักหน้าเน็ต ผู้เล่นหลังจัมป์ตบทำคะแนน',
@@ -124,33 +124,33 @@ export const TRANSLATIONS = {
     totalExpenseLabel: 'ยอดรวมทั้งหมด',
     perPersonLabel: 'จ่ายคนละประมาณ',
     calcFormulaDesc: 'คำนวณจากค่าคอร์ทและค่าลูกแบดตามจำนวนคนจริง',
-    shareToRsvpBtn: 'ส่งบิลนี้ไปยังหน้านัดก๊วน RSVP',
+    shareToRsvpBtn: 'ส่งบิลนี้ไปยังหน้านัดก๊วน',
 
     // Finance Screen
-    financeHeader: 'การเงิน & กระเป๋าเงิน',
+    financeHeader: 'การเงินและกระเป๋าเงิน',
     financeHeaderSub: 'จัดการค่าใช้จ่ายก๊วนและคอร์ทได้สะดวกในที่เดียว',
     zeroFeesBadge: 'ฟรีค่าธรรมเนียมการจองคอร์ท',
-    payLaterTitle: 'วงเงิน PayLater',
+    payLaterTitle: 'วงเงินผ่อนชำระ',
     creditBadge: 'วงเงินพร้อมใช้',
     topUpAction: 'เติมเงิน',
     transferAction: 'โอนเงิน',
     recommendedTitle: 'สิทธิพิเศษแนะนำ',
     promoCashback: 'รับเงินคืน 10% เมื่อเติมเงินกระเป๋า',
-    promoTrueMoney: 'ชำระง่ายผ่าน TrueMoney และพร้อมเพย์',
+    promoTrueMoney: 'ชำระง่ายผ่านทรูมันนี่และพร้อมเพย์',
     recentTxTitle: 'ประวัติธุรกรรมล่าสุด',
     viewAllTx: 'ดูทั้งหมด',
     completedStatus: 'สำเร็จ',
-    topUpModalTitle: 'เติมเงินเข้า SmashPay Wallet',
+    topUpModalTitle: 'เติมเงินเข้ากระเป๋าเงิน',
     selectAmount: 'เลือกจำนวนเงินที่ต้องการเติม',
-    topUpPromptPayBtn: 'ยืนยันเติมเงินผ่าน PromptPay QR',
+    topUpPromptPayBtn: 'ยืนยันเติมเงินผ่านพร้อมเพย์',
     topUpSuccessMsg: 'เติมเงินสำเร็จ ยอดเงินอัปเดตเรียบร้อย!',
 
     // Settings Modal
-    settingsLanguage: 'ภาษา / Language',
-    settingsTheme: 'ธีมสีและรูปแบบ / Theme',
-    settingsSound: 'เสียงเอฟเฟกต์ / Retro Sound',
-    thaiLang: 'ภาษาไทย (TH)',
-    engLang: 'English (EN)',
+    settingsLanguage: 'ภาษา',
+    settingsTheme: 'ธีมสีและรูปแบบ',
+    settingsSound: 'เสียงเอฟเฟกต์',
+    thaiLang: 'ภาษาไทย',
+    engLang: 'อังกฤษ',
   },
 
   en: {

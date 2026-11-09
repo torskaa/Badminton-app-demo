@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Check, Sparkles, Zap, Flame, Wind, Smile, BatteryCharging, X } from 'lucide-react';
 import { playSelectSound, playSmashSound, playCoinSound } from '../../utils/retroAudio';
+import { useApp } from '../../context/AppContext';
 
 export type MoodEnergyLevel = 'tense' | 'calm' | 'balanced' | 'energized' | 'high_energy';
 
@@ -10,80 +11,110 @@ export interface MoodConfig {
   label: string;
   thaiLabel: string;
   badge: string;
+  badgeTh?: string;
   color: string;
   bgColor: string;
   cardBg: string;
   headline: string;
+  headlineTh?: string;
   description: string;
+  descriptionEn?: string;
   badmintonFocus: string;
+  badmintonFocusEn?: string;
   recommendedType: string;
+  recommendedTypeTh?: string;
 }
 
 export const MOOD_LEVELS: MoodConfig[] = [
   {
     id: 'tense',
     label: 'Tense',
-    thaiLabel: 'เมื่อยล้า / ตึงกล้ามเนื้อ',
+    thaiLabel: 'เมื่อยล้า',
     badge: 'Stretching & Recovery',
+    badgeTh: 'ยืดเหยียดฟื้นฟู',
     color: '#8b5cf6',
     bgColor: 'bg-[#ede9fe]',
     cardBg: 'bg-[#2a233c]',
     headline: 'You feel a bit tight. Let’s loosen up and reset.',
-    description: 'รู้สึกตึงล้าจากงานหรือการซ้อมหนัก เหมาะกับการวอร์มอัปยืดเส้น โฟกัสท่ายืดกล้ามเนื้อหัวไหล่ ข้อมือ และฟุตเวิร์กเบาๆ',
-    badmintonFocus: 'เซฟโต้ช้าๆ · วอร์มยืดหยุ่น · ตีหยอดหน้าเน็ต',
+    headlineTh: 'กล้ามเนื้อตึงล้า มายืดเหยียดและรีเซ็ตกัน',
+    description: 'รู้สึกตึงล้าจากงานหรือการซ้อมหนัก เหมาะกับการวอร์มอัปยืดเส้น โฟกัสหัวไหล่ ข้อมือ และฟุตเวิร์กเบาๆ',
+    descriptionEn: 'Muscles feel tight or tired. Best for gentle warm-ups, shoulder mobility, wrist release, and light footwork.',
+    badmintonFocus: 'เซฟโต้ช้าๆ, ยืดหยุ่น, หยอดหน้าเน็ต',
+    badmintonFocusEn: 'Slow rally, flexibility, gentle net drops',
     recommendedType: 'Recovery & Flexibility Drill',
+    recommendedTypeTh: 'การฝึกยืดเหยียดและฟื้นฟู',
   },
   {
     id: 'calm',
     label: 'Calm',
-    thaiLabel: 'ผ่อนคลาย / แรลลี่สบาย',
+    thaiLabel: 'ผ่อนคลาย',
     badge: 'Mindful & Flow',
+    badgeTh: 'สมาธิและการเคลื่อนไหว',
     color: '#ec4899',
     bgColor: 'bg-[#fce7f3]',
     cardBg: 'bg-[#2b3a35]',
     headline: 'You feel relaxed and grounded. Looking for mindful movement.',
-    description: 'คุณรู้สึกสงบ ผ่อนคลาย และมีสมาธิ เหมาะกับการตีแรลลี่ยาวๆ เซฟลูกข้ามแดน ควบคุมวิถีลูกโดยไม่เน้นความเร็วหรือการกดดันแต้ม',
-    badmintonFocus: 'แรลลี่ 30 ช็อตต่อเนื่อง · ควบคุมทิศทาง · วิ่งเบาๆ',
+    headlineTh: 'รู้สึกสงบและผ่อนคลาย พร้อมสำหรับการเคลื่อนไหวที่นุ่มนวล',
+    description: 'คุณรู้สึกสงบ ผ่อนคลาย และมีสมาธิ เหมาะกับการตีแรลลี่ยาวๆ เซฟลูกข้ามแดน ควบคุมวิถีลูกโดยไม่เน้นความเร็ว',
+    descriptionEn: 'Feeling calm and centered. Ideal for long continuous rallies, lift control, and consistent court positioning.',
+    badmintonFocus: 'แรลลี่ 30 ช็อตต่อเนื่อง, คุมทิศทาง',
+    badmintonFocusEn: '30-shot rallies, precision placement',
     recommendedType: 'Flow Rally & Net Placement',
+    recommendedTypeTh: 'แรลลี่ต่อเนื่องและวางลูกหน้าเน็ต',
   },
   {
     id: 'balanced',
     label: 'Balanced',
-    thaiLabel: 'สมดุล / เกมมาตรฐาน',
+    thaiLabel: 'สมดุล',
     badge: 'Core & Control',
+    badgeTh: 'แกนกลางและการควบคุม',
     color: '#10b981',
     bgColor: 'bg-[#d1fae5]',
     cardBg: 'bg-[#1e2e42]',
     headline: 'You feel focused. A good moment for controlled, full-body training.',
-    description: 'คุณมีสมาธิดีและพลังงานคงที่ เหมาะสำหรับการลงทีมคู่ ซ้อมเกมรับสลับเกมบุก เล่นตามแท็กติก และฝึกฝนจังหวะเข้าบอล',
-    badmintonFocus: 'ซ้อมเล่นคู่ · สลับรับ-บุก · ก้าวฟุตเวิร์ก 6 มุม',
+    headlineTh: 'มีสมาธิคงที่ เหมาะสำหรับการซ้อมแบบรอบด้าน',
+    description: 'คุณมีสมาธิดีและพลังงานคงที่ เหมาะสำหรับการลงทีมคู่ ซ้อมเกมรับสลับเกมบุก เล่นตามแท็กติก',
+    descriptionEn: 'Good focus and steady energy. Perfect for tactical doubles, transitioning between defense and offense.',
+    badmintonFocus: 'เกมคู่ผสม, สลับรับบุก, ฟุตเวิร์ก 6 มุม',
+    badmintonFocusEn: 'Tactical doubles, transition play, 6-corner footwork',
     recommendedType: 'Tactical Doubles & Drill Mix',
+    recommendedTypeTh: 'เกมคู่แท็กติกและการฝึกผสม',
   },
   {
     id: 'energized',
     label: 'Energized',
-    thaiLabel: 'พลังเต็ม / พร้อมสแมช',
+    thaiLabel: 'พลังเต็ม',
     badge: 'Dynamic & Power',
+    badgeTh: 'พลังและจังหวะเร็ว',
     color: '#ffd731',
     bgColor: 'bg-[#fef9c3]',
     cardBg: 'bg-[#3b2a4a]',
     headline: 'You feel active. Time for dynamic workouts and higher intensity.',
-    description: 'ฟอร์มกำลังเข้าฝัก! กล้ามเนื้อพร้อมระเบิดพลัง อยากกระโดดตบสแมช วิ่งไล่เก็บทุกลูก และดวลแมตช์สปีดเร็วกับคู่แข่งฝีมือสูสี',
-    badmintonFocus: 'Jump Smash 340+ km/h · ดักตบหน้าเน็ต · แมตช์ความเร็วสูง',
+    headlineTh: 'ฟอร์มกำลังเข้าฝัก พร้อมระเบิดพลังและสปีด',
+    description: 'กล้ามเนื้อพร้อมระเบิดพลัง อยากกระโดดตบสแมช วิ่งไล่เก็บทุกลูก และดวลแมตช์สปีดเร็วกับคู่แข่งฝีมือสูสี',
+    descriptionEn: 'Muscles primed for high output. Ready for jump smashes, high-tempo exchanges, and intense sparring.',
+    badmintonFocus: 'Jump Smash 340+ km/h, ดักหน้าเน็ต, สปีดสูง',
+    badmintonFocusEn: 'Jump smashes 340+ km/h, aggressive net intercepts, fast pace',
     recommendedType: 'High-Speed Sparring & Smash Battle',
+    recommendedTypeTh: 'สปาร์ริ่งสปีดสูงและดวลลูกตบ',
   },
   {
     id: 'high_energy',
     label: 'High energy',
-    thaiLabel: 'บีสต์โหมด / เต็มร้อย',
+    thaiLabel: 'บีสต์โหมด',
     badge: 'Peak Performance',
+    badgeTh: 'ขีดสุดสมรรถนะ',
     color: '#fb4903',
     bgColor: 'bg-[#ffedd5]',
     cardBg: 'bg-[#40201d]',
     headline: 'You are on fire! Let’s push limits with maximum power.',
-    description: 'อะดรีนาลีนพลุ่งพล่าน! พร้อมลงแข่งขันจริง ซ้อม AI Drills สปีดเต็มพิกัด และเผาผลาญแคลอรี่ทะลุ 700+ kcal ในคอร์ท',
-    badmintonFocus: 'AI Footwork Speed Drill · แข่งขัน 3 เซ็ตเต็ม · เบิร์นไขมัน',
+    headlineTh: 'อะดรีนาลีนเต็มพิกัด พร้อมทลายขีดจำกัด',
+    description: 'พร้อมลงแข่งขันจริง ซ้อม AI Drills สปีดเต็มพิกัด และเผาผลาญแคลอรี่ทะลุ 700+ กิโลแคลอรี',
+    descriptionEn: 'Adrenaline pumping! Ready for full competitive intensity, AI speed drills, and 700+ kcal burn.',
+    badmintonFocus: 'AI Footwork Speed Drill, แมตช์ 3 เซ็ต, คาร์ดิโอหนัก',
+    badmintonFocusEn: 'AI footwork speed drill, full 3-set match, intense cardio',
     recommendedType: 'Tournament Intensity & Cardio Burn',
+    recommendedTypeTh: 'ทัวร์นาเมนต์เต็มแม็กซ์และเบิร์นหนัก',
   },
 ];
 
@@ -102,6 +133,8 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
   onSelectMood,
   playerName,
 }) => {
+  const { language } = useApp();
+  const isThai = language === 'th';
   const [activeMoodId, setActiveMoodId] = useState<MoodEnergyLevel>(selectedMood);
 
   if (!isOpen) return null;
@@ -401,7 +434,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
             </button>
 
             <span className="text-xs font-black uppercase tracking-wider text-[#000000] font-['Antonio',sans-serif]">
-              Today's Energy Level · ระดับพลังงาน
+              {isThai ? 'ระดับพลังงานวันนี้' : "Today's Energy Level"}
             </span>
 
             <button
@@ -421,10 +454,20 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
             {/* Header Question (with Serif Italic Accent like VibeMove) */}
             <div className="text-center space-y-1">
               <h2 className="text-lg font-black text-[#000000] leading-tight">
-                {playerName}, how do you <span className="font-serif italic font-normal underline decoration-[#ffd731] decoration-2">feel right</span> now?
+                {isThai ? (
+                  <>
+                    {playerName}, วันนี้คุณ<span className="font-serif italic font-normal underline decoration-[#ffd731] decoration-2">รู้สึกอย่างไร</span>บ้าง?
+                  </>
+                ) : (
+                  <>
+                    {playerName}, how do you <span className="font-serif italic font-normal underline decoration-[#ffd731] decoration-2">feel right</span> now?
+                  </>
+                )}
               </h2>
               <p className="text-[11px] text-[#000000]/70 font-bold">
-                บอกระดับพลังงานของคุณวันนี้ แล้ว AI จะแนะนำเกมและคอร์ทที่เข้ากับคุณ
+                {isThai
+                  ? 'เลือกพลังงานของคุณวันนี้ แล้วระบบจะแนะนำการฝึกซ้อมที่เข้ากับคุณ'
+                  : "Tell us how you feel, we'll recommend workouts matching your energy."}
               </p>
             </div>
 
@@ -444,7 +487,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
               {/* Tag / Category Badge */}
               <div className="absolute top-3 left-3 z-10">
                 <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffffff] text-[#000000] border border-[#000000] text-[9px] font-black uppercase tracking-wider">
-                  {currentConfig.badge}
+                  {isThai ? (currentConfig.badgeTh || currentConfig.badge) : currentConfig.badge}
                 </span>
               </div>
 
@@ -476,7 +519,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
                           transition={{ type: 'spring', stiffness: 450, damping: 30 }}
                         />
                       )}
-                      <span>{mood.label}</span>
+                      <span>{isThai ? mood.thaiLabel : mood.label}</span>
                     </button>
                   );
                 })}
@@ -491,15 +534,17 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
                 className="p-3 rounded-[20px] bg-[#f8fbff] border border-[#000000] text-center space-y-1"
               >
                 <div className="flex items-center justify-center gap-1.5 text-xs font-black text-[#000000]">
-                  <span>🎯 {currentConfig.thaiLabel}</span>
-                  <span className="text-[10px] text-[#000000]/50 font-normal">({currentConfig.recommendedType})</span>
+                  <span>🎯 {isThai ? currentConfig.thaiLabel : currentConfig.label}</span>
+                  <span className="text-[10px] text-[#000000]/50 font-normal">
+                    ({isThai ? (currentConfig.recommendedTypeTh || currentConfig.recommendedType) : currentConfig.recommendedType})
+                  </span>
                 </div>
                 <p className="text-[11px] text-[#000000]/80 font-bold leading-relaxed">
-                  {currentConfig.description}
+                  {isThai ? currentConfig.description : (currentConfig.descriptionEn || currentConfig.description)}
                 </p>
                 <div className="pt-1 flex items-center justify-center gap-1 text-[10px] text-[#fb4903] font-bold">
-                  <span>🏸 โฟกัส:</span>
-                  <span>{currentConfig.badmintonFocus}</span>
+                  <span>{isThai ? '🏸 โฟกัส:' : '🏸 Focus:'}</span>
+                  <span>{isThai ? currentConfig.badmintonFocus : (currentConfig.badmintonFocusEn || currentConfig.badmintonFocus)}</span>
                 </div>
               </motion.div>
             </div>
@@ -512,7 +557,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
               onClick={handleConfirm}
               className="w-full py-3 rounded-[1600px] bg-[#000000] text-[#ffffff] hover:bg-[#222222] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-transform shadow-md"
             >
-              <span>Let's find workout · ค้นหาคอร์ท & ก๊วนตาม Vibe</span>
+              <span>{isThai ? 'ค้นหาการฝึกซ้อมตามพลังงาน' : "Let's find workout"}</span>
               <Check className="w-4 h-4 text-[#55db9c]" />
             </button>
           </div>

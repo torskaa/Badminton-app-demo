@@ -1,6 +1,7 @@
 import React from 'react';
 import { Footprints, Flame, Clock, ChevronRight } from 'lucide-react';
 import { playSelectSound } from '../../utils/retroAudio';
+import { useApp } from '../../context/AppContext';
 
 interface ProgressRingsWidgetProps {
   steps?: number;
@@ -21,6 +22,9 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
   activityTargetMinutes = 120, // 2h
   onSeeActivityClick,
 }) => {
+  const { language } = useApp();
+  const isThai = language === 'th';
+
   // Circular ring calculations
   const radius = 17;
   const circumference = 2 * Math.PI * radius;
@@ -32,15 +36,18 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
   const formatHoursMinutes = (totalMin: number) => {
     const h = Math.floor(totalMin / 60);
     const m = totalMin % 60;
+    if (isThai) {
+      return `${h} ชม. ${m} นาที`;
+    }
     return `${h}h ${m}m`;
   };
 
   return (
     <div className="space-y-2">
-      {/* Header row with "See activity >" (exact VibeMove layout) */}
+      {/* Header row - Strictly single language */}
       <div className="flex items-center justify-between">
         <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
-          Your Progress · ความก้าวหน้าของคุณ
+          {isThai ? 'ความก้าวหน้าของคุณ' : 'Your Progress'}
         </h2>
         <button
           type="button"
@@ -50,12 +57,12 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
           }}
           className="text-xs font-bold text-[#000000]/70 hover:text-[#000000] flex items-center gap-0.5 cursor-pointer"
         >
-          <span>See activity</span>
+          <span>{isThai ? 'ดูสถิติ' : 'See activity'}</span>
           <ChevronRight className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      {/* 3 Progress Cards Grid (Exact VibeMove reference in Slush CI) */}
+      {/* 3 Progress Cards Grid */}
       <div className="grid grid-cols-3 gap-2">
         {/* Card 1: Steps */}
         <div
@@ -63,9 +70,8 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
             playSelectSound();
             if (onSeeActivityClick) onSeeActivityClick();
           }}
-          className="bg-[#ffffff] rounded-[22px] border border-[#000000] p-2.5 flex flex-col justify-between aspect-square hover:shadow-xs transition-all cursor-pointer active:scale-98"
+          className="bg-[#ffffff] rounded-[22px] border border-black/[0.06] shadow-sm p-2.5 flex flex-col justify-between aspect-square hover:shadow-md transition-all cursor-pointer active:scale-98"
         >
-          {/* Top Circular Ring with Icon */}
           <div className="relative w-10 h-10 mx-auto">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 44 44">
               <circle
@@ -93,13 +99,12 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
             </div>
           </div>
 
-          {/* Bottom Metric Label */}
           <div className="text-center">
             <div className="text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
               {steps.toLocaleString()}
             </div>
             <div className="text-[10px] text-[#000000]/60 font-bold truncate">
-              steps (ก้าว)
+              {isThai ? 'ก้าว' : 'steps'}
             </div>
           </div>
         </div>
@@ -110,9 +115,8 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
             playSelectSound();
             if (onSeeActivityClick) onSeeActivityClick();
           }}
-          className="bg-[#ffffff] rounded-[22px] border border-[#000000] p-2.5 flex flex-col justify-between aspect-square hover:shadow-xs transition-all cursor-pointer active:scale-98"
+          className="bg-[#ffffff] rounded-[22px] border border-black/[0.06] shadow-sm p-2.5 flex flex-col justify-between aspect-square hover:shadow-md transition-all cursor-pointer active:scale-98"
         >
-          {/* Top Circular Ring with Fire Icon */}
           <div className="relative w-10 h-10 mx-auto">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 44 44">
               <circle
@@ -140,13 +144,12 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
             </div>
           </div>
 
-          {/* Bottom Metric Label */}
           <div className="text-center">
             <div className="text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
               {calories}
             </div>
             <div className="text-[10px] text-[#000000]/60 font-bold truncate">
-              kcal (แคลอรี่)
+              {isThai ? 'แคลอรี่' : 'kcal'}
             </div>
           </div>
         </div>
@@ -157,9 +160,8 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
             playSelectSound();
             if (onSeeActivityClick) onSeeActivityClick();
           }}
-          className="bg-[#ffffff] rounded-[22px] border border-[#000000] p-2.5 flex flex-col justify-between aspect-square hover:shadow-xs transition-all cursor-pointer active:scale-98"
+          className="bg-[#ffffff] rounded-[22px] border border-black/[0.06] shadow-sm p-2.5 flex flex-col justify-between aspect-square hover:shadow-md transition-all cursor-pointer active:scale-98"
         >
-          {/* Top Circular Ring with Clock/Activity Icon */}
           <div className="relative w-10 h-10 mx-auto">
             <svg className="w-full h-full -rotate-90" viewBox="0 0 44 44">
               <circle
@@ -187,13 +189,12 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
             </div>
           </div>
 
-          {/* Bottom Metric Label */}
           <div className="text-center">
             <div className="text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
               {formatHoursMinutes(activityMinutes)}
             </div>
             <div className="text-[10px] text-[#000000]/60 font-bold truncate">
-              court activity
+              {isThai ? 'เวลาในสนาม' : 'court activity'}
             </div>
           </div>
         </div>

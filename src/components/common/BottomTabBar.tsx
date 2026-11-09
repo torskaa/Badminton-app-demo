@@ -5,7 +5,7 @@ import { MainTab } from '../../types';
 import { playSelectSound } from '../../utils/retroAudio';
 
 export const BottomTabBar: React.FC = () => {
-  const { activeTab, setActiveTab, currentScreen, navigateTo, t } = useApp();
+  const { activeTab, setActiveTab, currentScreen, navigateTo, t, language } = useApp();
 
   // Hide BottomTabBar on dedicated full-screen action flows
   const HIDE_TAB_BAR_SCREENS = [
@@ -29,8 +29,8 @@ export const BottomTabBar: React.FC = () => {
 
   return (
     <div className="absolute bottom-0 left-0 right-0 z-40 select-none px-3 pb-[max(0.4rem,env(safe-area-inset-bottom,0.4rem))] pt-1 bg-gradient-to-t from-[#ffffff] via-[#ffffff]/90 to-transparent pointer-events-none">
-      {/* Floating Sleek Dock Container (Proportioned like VibeMove in Slush CI) */}
-      <div className="max-w-md mx-auto bg-[#ffffff] rounded-[28px] border-2 border-[#000000] shadow-xl p-1.5 flex items-center justify-between pointer-events-auto">
+      {/* Floating Sleek Dock Container (Clean & Modern) */}
+      <div className="max-w-md mx-auto bg-[#ffffff] rounded-[28px] border border-black/[0.08] shadow-2xl p-1.5 flex items-center justify-between pointer-events-auto">
         {/* 1. Home (Pill active background like VibeMove video 00:01) */}
         <button
           type="button"
@@ -65,8 +65,8 @@ export const BottomTabBar: React.FC = () => {
               : 'text-[#000000]/60 hover:text-[#000000]'
           }`}
         >
-          <span className="absolute -top-1 right-2 px-1 py-0.1 rounded-[1600px] bg-[#fb4903] text-[#ffffff] border border-[#000000] text-[7px] font-black">
-            NEW
+          <span className="absolute -top-1 right-2 px-1 py-0.1 rounded-[1600px] bg-[#fb4903] text-[#ffffff] border border-black/[0.1] text-[7px] font-black">
+            {language === 'th' ? 'ใหม่' : 'NEW'}
           </span>
           <Users className={`w-5 h-5 ${isClubActive ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
           <span className="text-[9px] font-bold mt-0.5 leading-none">
@@ -83,7 +83,7 @@ export const BottomTabBar: React.FC = () => {
               setActiveTab('discover');
               navigateTo('MAP');
             }}
-            className="w-12 h-12 rounded-[1600px] bg-[#ffd731] hover:bg-[#ffe366] text-[#000000] shadow-md flex items-center justify-center active:scale-90 transition-all cursor-pointer border-2 border-[#000000] ring-3 ring-[#ffffff]"
+            className="w-12 h-12 rounded-[1600px] bg-[#ffd731] hover:bg-[#ffe366] text-[#000000] shadow-lg flex items-center justify-center active:scale-90 transition-all cursor-pointer border border-black/[0.12] ring-3 ring-[#ffffff]"
             title={t.tabDiscover}
           >
             {/* White Badminton Shuttlecock SVG Icon */}

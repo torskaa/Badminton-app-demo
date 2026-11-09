@@ -7,7 +7,9 @@ import { CourtFacility, PlayerProfile, Quest, AIDrill, GuildGroup, GuildEvent, L
 
 export const INITIAL_PLAYER: PlayerProfile = {
   id: 'usr_karn_007',
-  name: 'กานต์ ธนวัฒน์ (Karn)',
+  name: 'กานต์ ธนวัฒน์',
+  nameTh: 'กานต์ ธนวัฒน์',
+  nameEn: 'Karn Tanawat',
   avatarUrl: '/src/assets/images/badminton_smash_action_1793695158261.jpg',
   level: 12,
   currentExp: 4250,
@@ -16,6 +18,8 @@ export const INITIAL_PLAYER: PlayerProfile = {
   streakWeeks: 3,
   dominantHand: 'Right',
   playstyle: 'Attacking Smash Hunter',
+  playstyleTh: 'สายบุกตบสแมชดุดัน',
+  playstyleEn: 'Attacking Smash Hunter',
   primaryGoal: 'Smash Mastery',
   skillRadar: {
     power: 88,
@@ -456,7 +460,7 @@ export const CURRENT_GUILD_EVENT: GuildEvent = {
   shuttlecockFeeTotal: 960, // 16 shuttlecocks RSL Classic ~ 2 tubes
   maxPlayers: 12,
   attendees: [
-    { id: 'usr_karn_007', name: 'กานต์ (You)', avatar: '/src/assets/images/badminton_smash_action_1793695158261.jpg', tier: 'Diamond', ovr: 85, paid: true, isHost: true },
+    { id: 'usr_karn_007', name: 'กานต์ ธนวัฒน์', avatar: '/src/assets/images/badminton_smash_action_1793695158261.jpg', tier: 'Diamond', ovr: 85, paid: true, isHost: true },
     { id: 'usr_ohm', name: 'โอห์ม ปืนกล', avatar: '', tier: 'Diamond', ovr: 84, paid: true },
     { id: 'usr_bank', name: 'แบงค์ กำแพงเหล็ก', avatar: '', tier: 'Gold', ovr: 81, paid: true },
     { id: 'usr_ploy', name: 'พลอย จอมหยอด', avatar: '', tier: 'Gold', ovr: 80, paid: true },
@@ -472,7 +476,7 @@ export const LEADERBOARD_DATA: LeaderboardUser[] = [
   {
     rank: 1,
     id: 'usr_art',
-    name: 'อาร์ท สปีดโบ๊ท (Art)',
+    name: 'อาร์ท สปีดโบ๊ท',
     tier: 'Diamond',
     ovr: 86,
     winRate: 74.2,
@@ -485,7 +489,7 @@ export const LEADERBOARD_DATA: LeaderboardUser[] = [
   {
     rank: 2,
     id: 'usr_karn_007',
-    name: 'กานต์ ธนวัฒน์ (You)',
+    name: 'กานต์ ธนวัฒน์',
     tier: 'Diamond',
     ovr: 85,
     winRate: 68.5,
@@ -498,7 +502,7 @@ export const LEADERBOARD_DATA: LeaderboardUser[] = [
   {
     rank: 3,
     id: 'usr_ohm',
-    name: 'โอห์ม ปืนกล (Ohm)',
+    name: 'โอห์ม ปืนกล',
     tier: 'Diamond',
     ovr: 84,
     winRate: 66.0,

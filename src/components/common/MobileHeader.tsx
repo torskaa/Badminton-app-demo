@@ -34,14 +34,14 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
 
   return (
     <>
-      <header className="sticky top-0 z-30 px-3 py-2 bg-[#ffffff] border-b border-[#000000] flex items-center justify-between gap-2 shrink-0 select-none text-[#000000]">
+      <header className="sticky top-0 z-30 px-3 py-2 bg-[#ffffff] border-b border-black/[0.08] flex items-center justify-between gap-2 shrink-0 select-none text-[#000000] shadow-xs">
         {/* Left: Back Pill or Clean Logo */}
         <div className="flex items-center gap-2 min-w-0">
           {showBack ? (
             <button
               type="button"
               onClick={handleBack}
-              className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e9e9e9] transition-transform active:scale-90"
+              className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-black/[0.1] flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e9e9e9] transition-transform active:scale-90 shadow-xs"
               aria-label="Back"
             >
               <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
@@ -74,7 +74,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
         {/* Right status: Language Pill + Streak + Level + Settings + Directory */}
         <div className="flex items-center gap-1.5 shrink-0">
           {/* Quick Language Toggle Pill [ 🇹🇭 TH | 🇬🇧 EN ] */}
-          <div className="flex items-center p-0.5 rounded-[1600px] bg-[#dceeff] border border-[#000000] text-[10px] font-bold">
+          <div className="flex items-center p-0.5 rounded-[1600px] bg-[#dceeff] border border-black/[0.1] text-[10px] font-bold">
             <button
               type="button"
               onClick={() => setLanguage('th')}
@@ -104,7 +104,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
           {/* Streak pill (Ember) */}
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2 py-1 rounded-[1600px] bg-[#fb4903] text-[#ffffff] border border-[#000000] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+            className="flex items-center gap-1 px-2 py-1 rounded-[1600px] bg-[#fb4903] text-[#ffffff] border border-black/[0.1] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform shadow-xs"
           >
             <Flame className="w-3 h-3 fill-current text-[#ffffff]" />
             <span>{player.streakWeeks}W</span>
@@ -113,7 +113,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
           {/* Level pill (Sunburst) */}
           <div
             onClick={() => navigateTo('F1')}
-            className="flex items-center gap-1 px-2 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-[#000000] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform"
+            className="flex items-center gap-1 px-2 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] border border-black/[0.1] text-[10px] font-bold tracking-[0.032em] cursor-pointer hover:scale-105 active:scale-95 transition-transform shadow-xs"
           >
             <Zap className="w-3 h-3 fill-current" />
             <span>Lv.{player.level}</span>
@@ -123,7 +123,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
           <button
             type="button"
             onClick={() => setIsSettingsOpen(true)}
-            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center cursor-pointer hover:bg-[#e9e9e9] active:scale-95 transition-all"
+            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-black/[0.1] flex items-center justify-center cursor-pointer hover:bg-[#e9e9e9] active:scale-95 transition-all shadow-xs"
             title="Settings"
           >
             <Settings className="w-3.5 h-3.5 text-[#000000]" />
@@ -133,7 +133,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({ title, showBack, onB
           <button
             type="button"
             onClick={() => setIsSwitcherOpen(true)}
-            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center cursor-pointer hover:bg-[#e9ccff] active:scale-95 transition-all"
+            className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-black/[0.1] flex items-center justify-center cursor-pointer hover:bg-[#e9ccff] active:scale-95 transition-all shadow-xs"
             title="Directory (All 18 Screens)"
           >
             <Compass className="w-3.5 h-3.5 text-[#5c4ade]" />

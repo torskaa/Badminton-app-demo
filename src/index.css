@@ -32,22 +32,55 @@ body {
   overflow-x: hidden;
 }
 
-/* Strict Slush / Rainbow Token System: NO box shadows anywhere */
-*, ::before, ::after {
-  box-shadow: none !important;
+html[lang="th"],
+html[lang="th"] body,
+html[lang="th"] button,
+html[lang="th"] input,
+html[lang="th"] select,
+html[lang="th"] textarea,
+html[lang="th"] div:not([class*="Antonio"]):not([class*="font-mono"]),
+html[lang="th"] span:not([class*="Antonio"]):not([class*="font-mono"]),
+html[lang="th"] p:not([class*="Antonio"]):not([class*="font-mono"]),
+html[lang="th"] h1:not([class*="Antonio"]),
+html[lang="th"] h2:not([class*="Antonio"]),
+html[lang="th"] h3:not([class*="Antonio"]),
+html[lang="th"] h4:not([class*="Antonio"]),
+html[lang="th"] h5:not([class*="Antonio"]),
+html[lang="th"] h6:not([class*="Antonio"]),
+.font-thai {
+  font-family: 'IBM Plex Sans Thai', sans-serif !important;
 }
 
-/* Slush Soft Card: 1px solid #000000, 24px-36px radius, flat fill, no shadow */
+html[lang="en"],
+html[lang="en"] body,
+html[lang="en"] button,
+html[lang="en"] input,
+html[lang="en"] select,
+html[lang="en"] textarea,
+html[lang="en"] div:not([class*="Antonio"]):not([class*="font-mono"]),
+html[lang="en"] span:not([class*="Antonio"]):not([class*="font-mono"]),
+html[lang="en"] p:not([class*="Antonio"]):not([class*="font-mono"]),
+html[lang="en"] h1:not([class*="Antonio"]),
+html[lang="en"] h2:not([class*="Antonio"]),
+html[lang="en"] h3:not([class*="Antonio"]),
+html[lang="en"] h4:not([class*="Antonio"]),
+html[lang="en"] h5:not([class*="Antonio"]),
+html[lang="en"] h6:not([class*="Antonio"]),
+.font-eng {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+}
+
+/* Modern Clean Token System */
 .slush-card {
-  border: 1px solid #000000 !important;
+  border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 28px;
   background-color: #ffffff;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.05);
+  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
 }
 
-/* Slush Pill Button & Nav: 1600px radius, 1px solid #000000, 0.032em letter spacing */
+/* Slush Pill Button: 1600px radius */
 .slush-pill {
-  border: 1px solid #000000 !important;
   border-radius: 1600px !important;
   letter-spacing: 0.032em;
   font-weight: 700;
