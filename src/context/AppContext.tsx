@@ -604,9 +604,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Centralized Notification State
   const [currentNotification, setCurrentNotification] = useState<AppNotification | null>(null);
 
-  const dismissNotification = () => {
+  const dismissNotification = React.useCallback(() => {
     setCurrentNotification(null);
-  };
+  }, []);
 
   const showNotification = (notif: Omit<AppNotification, 'id'>) => {
     const newNotif: AppNotification = {
