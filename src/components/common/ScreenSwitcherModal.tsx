@@ -28,7 +28,7 @@ interface PathCategory {
 }
 
 export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen, onClose }) => {
- const { currentScreen, navigateTo, theme } = useApp();
+ const { currentScreen, navigateTo, theme, dataMode, setDataMode } = useApp();
  const isDark = theme === 'dark';
 
  const PATH_GROUPS: PathCategory[] = [
@@ -141,6 +141,29 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  <X className="w-4 h-4 stroke-[2.5]" />
  </button>
  </div>
+
+        {/* Break-UI / UI State Expander Selector (Demo / Worst Case / One / Empty) */}
+        <div className="px-4 py-2 border-b border-neutral-200 bg-neutral-50 flex flex-wrap items-center justify-between text-xs font-bold gap-2">
+          <span className="text-neutral-500 text-[10px] uppercase font-black tracking-wider">
+            Break-UI State:
+          </span>
+          <div className="flex items-center gap-1.5">
+            {(['demo', 'worst', 'one', 'empty'] as const).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setDataMode(mode)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase transition-transform active:scale-[0.96] cursor-pointer border ${
+                  dataMode === mode
+                    ? 'bg-black text-white border-black shadow-xs'
+                    : 'bg-white text-neutral-600 border-neutral-300 hover:bg-neutral-100'
+                }`}
+              >
+                {mode === 'worst' ? 'Worst Case' : mode.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
 
  {/* List of 18 Screens in Groups */}
  <div className="flex-1 overflow-y-auto p-4 space-y-3.5 no-scrollbar">

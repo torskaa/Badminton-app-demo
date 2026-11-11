@@ -3,6 +3,7 @@ import { Compass, Volume2, VolumeX, Maximize2, Minimize2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { ScreenSwitcherModal } from './ScreenSwitcherModal';
 import { QuickSparringModal } from './QuickSparringModal';
+import { StressTestToggle } from './StressTestToggle';
 
 interface DeviceFrameProps {
  children: React.ReactNode;
@@ -74,6 +75,9 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
 
  {/* Quick Sparring Modal */}
  <QuickSparringModal />
+
+ {/* Break UI Stress-Test Toggle (Demo / Worst Case / One / Empty) */}
+ <StressTestToggle />
  </div>
  );
 };

@@ -28,8 +28,36 @@ body {
   background-color: #dceeff;
   color: #000000;
   -webkit-tap-highlight-color: transparent;
-  user-select: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: auto;
+}
+
+/* Principle 15: Inputs at 16px on mobile to prevent iOS Safari auto-zoom */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}
+
+/* Headings & body wrapping per better-typography */
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
+  letter-spacing: -0.015em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+/* Tabular figures for telemetry, timers, amounts, and counters */
+.tabular-nums,
+time,
+data,
+.font-mono {
+  font-variant-numeric: tabular-nums;
 }
 
 /* ==========================================================================

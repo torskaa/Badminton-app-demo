@@ -31,6 +31,11 @@ import {
   LEADERBOARD_DATA,
 } from '../data/mockData';
 import {
+  WORST_CASE_PLAYER,
+  ONE_ITEM_PLAYER,
+  WORST_CASE_COURTS,
+} from '../data/stressTestData';
+import {
   playSelectSound,
   playCoinSound,
   playSmashSound,
@@ -88,6 +93,10 @@ interface AppContextType {
   courts: CourtFacility[];
   selectedCourt: CourtFacility;
   setSelectedCourt: (court: CourtFacility) => void;
+
+  // Break UI Stress-Testing
+  dataMode: 'demo' | 'worst' | 'empty' | 'one';
+  setDataMode: (mode: 'demo' | 'worst' | 'empty' | 'one') => void;
   booking: BookingState;
   updateBooking: (updates: Partial<BookingState>) => void;
   resetBooking: () => void;
@@ -214,6 +223,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [language]);
 
+  // Break UI Stress-Testing Mode (Demo / Worst case / Empty / One)
+  const [dataMode, setDataMode] = useState<'demo' | 'worst' | 'empty' | 'one'>('demo');
+
   // Player State
   const [player, setPlayer] = useState<PlayerProfile>(INITIAL_PLAYER);
   const [expCelebration, setExpCelebration] = useState<ExpGainPayload | null>(null);
@@ -221,6 +233,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Court Booking State
   const [courts] = useState<CourtFacility[]>(COURTS_DATA);
   const [selectedCourt, setSelectedCourt] = useState<CourtFacility>(COURTS_DATA[0]);
+
+  // Derived fixtures for stress testing (swapped at data boundary per break-ui rule)
+  const activePlayer = dataMode === 'worst' ? WORST_CASE_PLAYER : dataMode === 'one' ? ONE_ITEM_PLAYER : player;
+  const activeCourts = dataMode === 'worst' ? WORST_CASE_COURTS : dataMode === 'empty' ? [] : dataMode === 'one' ? [COURTS_DATA[0]] : courts;
   const [booking, setBooking] = useState<BookingState>({
     court: COURTS_DATA[0],
     selectedCourtNumber: 3,
@@ -742,14 +758,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         toggleDeviceFrame,
         viewMode,
         setViewMode,
-        player,
+        player: activePlayer,
         updatePlayer,
         gainExp,
         expCelebration,
         dismissExpCelebration,
-        courts,
+        courts: activeCourts,
         selectedCourt,
         setSelectedCourt,
+        dataMode,
+        setDataMode,
         booking,
         updateBooking,
         resetBooking,

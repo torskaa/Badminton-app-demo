@@ -284,8 +284,8 @@ export const HomeScreen: React.FC = () => {
  return (
  <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] overflow-y-auto overscroll-contain no-scrollbar pb-28">
  {/* 1. Grab-Signature Header Nav Bar (Exact Grab App Layout from Reference Screenshot) */}
- <div className="bg-[#004d2c] text-[#ffffff] px-3.5 pt-3.5 pb-3 shadow-sm relative z-30">
- <div className="flex items-center gap-2.5">
+ <div className="bg-[#004d2c] text-[#ffffff] px-4 pt-4 pb-3 shadow-sm relative z-30">
+ <div className="flex items-center gap-3">
  {/* A. QR / Barcode Scanner Squircle Button */}
  <button
  type="button"
@@ -293,7 +293,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('MAP');
  }}
- className="w-10 h-10 rounded-[14px] bg-[#ffffff]/15 hover:bg-[#ffffff]/25 border border-[#ffffff]/20 flex items-center justify-center text-[#ffffff] cursor-pointer active:scale-95 transition-all shrink-0 shadow-xs"
+ className="w-10 h-10 rounded-[14px] bg-[#ffffff]/15 hover:bg-[#ffffff]/25 border border-[#ffffff]/20 flex items-center justify-center text-[#ffffff] cursor-pointer active:scale-[0.96] transition-all shrink-0 shadow-xs"
  title={isThai ? 'สแกน QR โค้ด' : 'Scan QR Code'}
  >
  <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-current stroke-[2.2] text-[#ffffff]">
@@ -312,7 +312,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  setIsSearchSuggestionsOpen(!isSearchSuggestionsOpen);
  }}
- className="w-full h-10 px-3.5 rounded-[1600px] bg-[#ffffff] flex items-center gap-2 cursor-pointer shadow-xs hover:bg-[#f9fafb] transition-colors"
+ className="w-full h-10 px-4 rounded-[1600px] bg-[#ffffff] flex items-center gap-2 cursor-pointer shadow-xs hover:bg-[#f9fafb] transition-colors"
  >
  <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
  <input
@@ -340,7 +340,7 @@ export const HomeScreen: React.FC = () => {
  {/* Smart Search Dropdown */}
  {isSearchSuggestionsOpen && (
  <div className="absolute top-12 left-0 right-0 z-50 bg-[#ffffff] rounded-[24px] p-3 shadow-2xl space-y-2 animate-in fade-in zoom-in-95 text-[#000000]">
- <div className="flex items-center justify-between pb-1.5 text-[10px]">
+ <div className="flex items-center justify-between pb-2 text-[10px]">
  <span className="font-black uppercase tracking-wider text-[#000000] flex items-center gap-1">
  <Sparkles className="w-3 h-3 text-[#5c4ade]" />
  {isThai ? 'คำค้นหายอดนิยม' : 'Trending Searches'}
@@ -353,7 +353,7 @@ export const HomeScreen: React.FC = () => {
  {isThai ? 'ปิด' : 'Close'}
  </button>
  </div>
- <div className="flex flex-wrap gap-1.5 pt-1">
+ <div className="flex flex-wrap gap-2 pt-1">
  {(isThai
  ? ['ติดแอร์', 'ที่จอดรถ', 'ชาร์จรถ EV', 'ก๊วนมือใหม่', 'คอร์ทเปิดดึก', 'ลาดพร้าว']
  : ['Air-Con', 'Parking', 'EV Charging', 'Beginner Party', 'Late Night', 'Ladprao']
@@ -366,7 +366,7 @@ export const HomeScreen: React.FC = () => {
  setSearchQuery(tag);
  setIsSearchSuggestionsOpen(false);
  }}
- className="px-2.5 py-1 rounded-[1600px] bg-[#dceeff] text-[10px] font-bold hover:bg-[#c2e2ff] shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#dceeff] text-[10px] font-bold hover:bg-[#c2e2ff] shadow-xs"
  >
  {tag}
  </button>
@@ -383,7 +383,7 @@ export const HomeScreen: React.FC = () => {
  playCoinSound();
  navigateTo('FINANCE');
  }}
- className="w-9 h-9 rounded-full bg-gradient-to-br from-[#ffd731] via-[#f59e0b] to-[#d97706] flex items-center justify-center text-[#ffffff] font-black text-sm shadow-xs cursor-pointer active:scale-95 transition-transform shrink-0"
+ className="w-9 h-9 rounded-full bg-gradient-to-br from-[#ffd731] via-[#f59e0b] to-[#d97706] flex items-center justify-center text-[#ffffff] font-black text-sm shadow-xs cursor-pointer active:scale-[0.96] transition-transform shrink-0"
  title={isThai ? 'เหรียญสแมชเพย์' : 'SmashRewards (120 Coins)'}
  >
  <span className="font-['Antonio',sans-serif] text-base drop-shadow-xs font-black">G</span>
@@ -396,7 +396,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('F1');
  }}
- className="w-9 h-9 rounded-full bg-[#dceeff] border-2 border-[#ffffff] overflow-hidden flex items-center justify-center cursor-pointer active:scale-95 transition-transform shrink-0 shadow-xs relative"
+ className="w-9 h-9 rounded-full bg-[#dceeff] border-2 border-[#ffffff] overflow-hidden flex items-center justify-center cursor-pointer active:scale-[0.96] transition-transform shrink-0 shadow-xs relative"
  title={isThai ? 'โปรไฟล์ผู้ใช้' : 'User Profile'}
  >
  {player.avatarUrl ? (
@@ -416,20 +416,20 @@ export const HomeScreen: React.FC = () => {
 
  {/* Dual Quick Info Cards (Matching Grab reference: View Balance / Ride to) */}
  <div className="px-4 pt-3">
- <div className="grid grid-cols-2 gap-2.5">
+ <div className="grid grid-cols-2 gap-3">
  {/* Card 1: View Balance / SmashPay Wallet */}
  <div
  onClick={() => {
  playSelectSound();
  navigateTo('FINANCE');
  }}
- className="p-3 rounded-[20px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2 cursor-pointer hover:shadow-md active:scale-98 transition-all"
+ className="p-3 rounded-[20px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2 cursor-pointer hover:shadow-md active:scale-[0.96] transition-all"
  >
  <div className="min-w-0">
  <span className="text-[10px] text-[#000000]/60 font-semibold block leading-tight truncate">
  {isThai ? 'ยอดเงินคงเหลือ' : 'View Balance'}
  </span>
- <div className="flex items-center gap-1 mt-0.5">
+ <div className="flex items-center gap-1 mt-1">
  <span className="text-xs font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
  {isThai ? 'กระเป๋าเงินสแมชเพย์' : 'SmashPay Wallet'}
  </span>
@@ -449,13 +449,13 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('B4');
  }}
- className="p-3 rounded-[20px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2 cursor-pointer hover:shadow-md active:scale-98 transition-all"
+ className="p-3 rounded-[20px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2 cursor-pointer hover:shadow-md active:scale-[0.96] transition-all"
  >
  <div className="min-w-0">
  <span className="text-[10px] text-[#fb4903] font-black block leading-tight truncate">
  {isThai ? 'นัดหมายถัดไป' : 'Next Match'}
  </span>
- <div className="flex items-center gap-1 mt-0.5">
+ <div className="flex items-center gap-1 mt-1">
  <span className="text-xs font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
  {isThai ? 'เมทริส ลาดพร้าว' : 'Metris Ladprao'}
  </span>
@@ -470,14 +470,14 @@ export const HomeScreen: React.FC = () => {
  </div>
  </div>
       {/* Quick Action Dual Pills (Exact design.md 4.1) */}
-      <div className="grid grid-cols-2 gap-2 mt-2.5">
+      <div className="grid grid-cols-2 gap-2 mt-3">
         <button
           type="button"
           onClick={() => {
             playSelectSound();
             navigateTo('MAP');
           }}
-          className="py-2.5 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-xs"
+          className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
         >
           <span>🏸</span>
           <span>{isThai ? 'ค้นหาสนาม' : 'Find Courts'}</span>
@@ -488,11 +488,11 @@ export const HomeScreen: React.FC = () => {
             playSelectSound();
             navigateTo('E1');
           }}
-          className="py-2.5 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-xs relative"
+          className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs relative"
         >
           <span>👥</span>
           <span>{isThai ? 'หาก๊วน' : 'Find Groups'}</span>
-          <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black">
+          <span className="px-2 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black">
             28
           </span>
         </button>
@@ -500,9 +500,9 @@ export const HomeScreen: React.FC = () => {
  </div>
 
  {/* Main Body with Clean Proportions (Faithful to VibeMove video 00:01 - 00:03) */}
- <div className="px-4 pt-3.5 space-y-4">
+ <div className="px-4 pt-4 space-y-4">
  {/* 2. HERO VIBE CARD ("Not sure what you want to train today?") */}
- <div className="rounded-[28px] bg-[#243b34] text-[#ffffff] p-4 relative overflow-hidden shadow-lg flex flex-col justify-between space-y-3.5">
+ <div className="rounded-[28px] bg-[#243b34] text-[#ffffff] p-4 relative overflow-hidden shadow-lg flex flex-col justify-between space-y-4">
  {/* Top Row: Headings & Waving Mascot */}
  <div className="flex items-start justify-between gap-3 relative z-10">
  <div className="space-y-1 max-w-[70%]">
@@ -517,34 +517,63 @@ export const HomeScreen: React.FC = () => {
  </>
  )}
  </h2>
- <p className="text-[11px] text-[#ffffff]/80 font-normal leading-relaxed pt-0.5">
+ <p className="text-[11px] text-[#ffffff]/80 font-normal leading-relaxed pt-1">
  {isThai
  ? 'บอกความรู้สึกของคุณ แล้วเราจะแนะนำการฝึกซ้อมที่เข้ากับพลังงานและอารมณ์ของคุณ'
  : "Tell us how you feel, we'll recommend workouts matching your energy & mood."}
  </p>
  </div>
 
- {/* Cute Illustrated Mascot */}
- <div className="w-16 h-16 shrink-0 relative mt-0.5">
- <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md">
- <polygon
- points="50,5 57,18 71,9 72,23 87,20 81,33 95,38 84,48 96,58 82,63 89,76 74,74 72,89 60,81 50,92 40,81 28,89 26,74 11,76 18,63 4,58 16,48 5,38 19,33 13,20 28,23 29,9 43,18"
- fill="#ffd731"
- stroke="#000000"
- strokeWidth="2.5"
- />
- <circle cx="40" cy="43" r="3" fill="#000000" />
- <circle cx="60" cy="43" r="3" fill="#000000" />
- <path d="M 42,54 Q 50,62 58,54" fill="none" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
- <line x1="42" y1="80" x2="38" y2="92" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
- <line x1="58" y1="80" x2="62" y2="92" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
- <ellipse cx="34" cy="94" rx="7" ry="3.5" fill="#000000" />
- <ellipse cx="66" cy="94" rx="7" ry="3.5" fill="#000000" />
- <line x1="20" y1="46" x2="10" y2="35" stroke="#000000" strokeWidth="2" strokeLinecap="round" />
- <line x1="10" y1="35" x2="6" y2="28" stroke="#000000" strokeWidth="2" strokeLinecap="round" />
- <line x1="10" y1="35" x2="14" y2="28" stroke="#000000" strokeWidth="2" strokeLinecap="round" />
- </svg>
- </div>
+ {/* Character Mascot Toggle (Hidden per user request: 'hide character เมื่อกี้ก่อนไม่ต้องลบ') */}
+          {/* Note: Set showMascotHero to true whenever you want to re-enable Smashy #15 */}
+          {false ? (
+            <div className="shrink-0 relative mt-1 flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => {
+                  playSmashSound();
+                }}
+                title="น้องสแมชชี่ (Smashy) #15"
+                className="relative w-16 h-16 rounded-2xl overflow-hidden bg-[#162722] border-2 border-[#ffd731] shadow-lg cursor-pointer group active:scale-[0.96] transition-transform"
+              >
+                <img
+                  src="/assets/aistudio/Gemini_Generated_Image_b3fgwrb3fgwrb3fg_9069fb4e.jpeg"
+                  alt="Smashy Badminton Hero #15"
+                  className="w-full h-full object-cover object-[51%_22%] scale-110 group-hover:scale-125 transition-transform duration-300"
+                />
+                <div className="absolute top-0 right-0 bg-[#fb4903] text-white text-[8px] font-black px-1 rounded-bl-md">
+                  #15
+                </div>
+                <div className="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-xs py-0.2 text-center text-[7.5px] font-black text-[#ffd731] uppercase tracking-wider">
+                  SMASHY
+                </div>
+              </button>
+              <div className="mt-1 flex items-center gap-1">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#55db9c] animate-pulse" />
+                <span className="text-[8.5px] font-extrabold uppercase text-[#ffd731] tracking-wide">
+                  CO-PILOT
+                </span>
+              </div>
+            </div>
+          ) : (
+            <div className="w-16 h-16 shrink-0 relative mt-1">
+              <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md">
+                <polygon
+                  points="50,5 57,18 71,9 72,23 87,20 81,33 95,38 84,48 96,58 82,63 89,76 74,74 72,89 60,81 50,92 40,81 28,89 26,74 11,76 18,63 4,58 16,48 5,38 19,33 13,20 28,23 29,9 43,18"
+                  fill="#ffd731"
+                  stroke="#000000"
+                  strokeWidth="2.5"
+                />
+                <circle cx="40" cy="43" r="3" fill="#000000" />
+                <circle cx="60" cy="43" r="3" fill="#000000" />
+                <path d="M 42,54 Q 50,62 58,54" fill="none" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="42" y1="80" x2="38" y2="92" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
+                <line x1="58" y1="80" x2="62" y2="92" stroke="#000000" strokeWidth="2.5" strokeLinecap="round" />
+                <ellipse cx="34" cy="94" rx="7" ry="3.5" fill="#000000" />
+                <ellipse cx="66" cy="94" rx="7" ry="3.5" fill="#000000" />
+              </svg>
+            </div>
+          )}
  </div>
 
  {/* Wide Pill Button: "Find my match" - PRIMARY CTA KEEPS BORDER */}
@@ -555,9 +584,9 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  setIsEnergyModalOpen(true);
  }}
- className="w-full py-2.5 rounded-[1600px] bg-[#ffffff] hover:bg-[#f0f0f0] text-[#000000] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer active:scale-98 transition-transform shadow-xs"
+ className="w-full py-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f0f0f0] text-[#000000] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-transform shadow-xs"
  >
- <span>{isThai ? 'ค้นหาการฝึกที่ใช่' : 'Find my match'}</span>
+ <span>{isThai ? 'ค้นหาโปรแกรมซ้อมที่ตรงใจคุณ' : 'Match My Training Session'}</span>
  <span className="text-[10px] text-[#000000]/60 font-bold">
  ({isThai ? activeMoodConfig.thaiLabel : activeMoodConfig.label})
  </span>
@@ -577,7 +606,7 @@ export const HomeScreen: React.FC = () => {
       </div>
 
       {/* 4x2 Grid of 1:1 Squircles */}
-      <div className="grid grid-cols-4 gap-2.5">
+      <div className="grid grid-cols-4 gap-3">
         {servicesMatrix.map((srv) => (
           <button
             key={srv.id}
@@ -586,15 +615,15 @@ export const HomeScreen: React.FC = () => {
               playSelectSound();
               navigateTo(srv.screen as any);
             }}
-            className="p-2.5 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-95 transition-all cursor-pointer relative"
+            className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-[0.96] transition-all cursor-pointer relative"
           >
             {srv.badge && (
-              <span className="absolute -top-1 right-1 px-1.5 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black shadow-xs">
+              <span className="absolute -top-1 right-1 px-2 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black shadow-xs">
                 {srv.badge}
               </span>
             )}
             <div
-              className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-0.5 ${srv.color}`}
+              className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-1 ${srv.color}`}
             >
               {srv.icon}
             </div>
@@ -611,7 +640,7 @@ export const HomeScreen: React.FC = () => {
     {/* Line OpenChat Banner (Exact design.md 4.1) */}
     <div className="rounded-[24px] bg-[#06c755] text-[#ffffff] p-4 relative overflow-hidden shadow-md flex items-center justify-between gap-3">
       <div className="space-y-1 max-w-[65%] min-w-0">
-        <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000]/20 text-[#ffffff] text-[9px] font-bold inline-block">
+        <span className="px-2 py-1 rounded-[1600px] bg-[#000000]/20 text-[#ffffff] text-[9px] font-bold inline-block">
           {isThai ? 'ชุมชนคนตีแบด' : 'COMMUNITY'}
         </span>
         <h3 className="text-sm font-black leading-tight text-[#ffffff] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
@@ -627,16 +656,16 @@ export const HomeScreen: React.FC = () => {
               playSelectSound();
               navigateTo('E1');
             }}
-            className="px-3 py-1.5 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-95 transition-all shadow-xs"
+            className="px-3 py-2 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-[0.96] transition-all shadow-xs"
           >
             {isThai ? 'เข้ากลุ่ม LINE' : 'Join LINE OpenChat'}
           </button>
         </div>
       </div>
       {/* Line OpenChat QR Mascot Graphic */}
-      <div className="w-16 h-16 shrink-0 bg-[#ffffff] p-1.5 rounded-[16px] shadow-sm flex flex-col items-center justify-center">
+      <div className="w-16 h-16 shrink-0 bg-[#ffffff] p-2 rounded-[16px] shadow-sm flex flex-col items-center justify-center">
         <QrCode className="w-8 h-8 text-[#000000]" />
-        <span className="text-[7px] font-black text-[#000000] mt-0.5">OPENCHAT</span>
+        <span className="text-[7px] font-black text-[#000000] mt-1">OPENCHAT</span>
       </div>
     </div>
 
@@ -652,14 +681,14 @@ export const HomeScreen: React.FC = () => {
  />
 
  {/* 5. VIEW SELECTOR TABS (Well-proportioned switcher to keep layout clean & balanced) */}
- <div className="flex items-center gap-1.5 p-1 rounded-[1600px] bg-[#ffffff] shadow-xs">
+ <div className="flex items-center gap-2 p-1 rounded-[1600px] bg-[#ffffff] shadow-xs">
  <button
  type="button"
  onClick={() => {
  playSelectSound();
  setActiveSubTab('today');
  }}
- className={`flex-1 py-1.5 rounded-[1600px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+ className={`flex-1 py-2 rounded-[1600px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
  activeSubTab === 'today'
  ? 'bg-[#000000] text-[#ffffff] shadow-xs'
  : 'text-[#000000]/60 hover:text-[#000000]'
@@ -674,7 +703,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  setActiveSubTab('schedule');
  }}
- className={`flex-1 py-1.5 rounded-[1600px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+ className={`flex-1 py-2 rounded-[1600px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
  activeSubTab === 'schedule'
  ? 'bg-[#000000] text-[#ffffff] shadow-xs'
  : 'text-[#000000]/60 hover:text-[#000000]'
@@ -689,7 +718,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  setActiveSubTab('courts');
  }}
- className={`flex-1 py-1.5 rounded-[1600px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
+ className={`flex-1 py-2 rounded-[1600px] text-xs font-black uppercase tracking-wider transition-all cursor-pointer ${
  activeSubTab === 'courts'
  ? 'bg-[#000000] text-[#ffffff] shadow-xs'
  : 'text-[#000000]/60 hover:text-[#000000]'
@@ -701,7 +730,7 @@ export const HomeScreen: React.FC = () => {
 
  {/* TAB 1: TODAY'S SESSIONS (Fits your mood today - Video 00:02 & 00:11 layout) */}
  {activeSubTab === 'today' && (
- <div className="space-y-2.5">
+ <div className="space-y-3">
  <div className="flex items-center justify-between">
  <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
  {isThai ? 'เซสชันที่เหมาะกับคุณ' : 'Fits your mood today'}
@@ -712,7 +741,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  setIsEnergyModalOpen(true);
  }}
- className="text-xs font-bold text-[#fb4903] hover:underline flex items-center gap-0.5 cursor-pointer"
+ className="text-xs font-bold text-[#fb4903] hover:underline flex items-center gap-1 cursor-pointer"
  >
  <span>{isThai ? 'เปลี่ยนอารมณ์' : 'Change my mood'}</span>
  <ChevronRight className="w-3.5 h-3.5" />
@@ -738,7 +767,7 @@ export const HomeScreen: React.FC = () => {
 
  {/* Top Badge & Heart */}
  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff]  text-[9px] font-bold flex items-center gap-1">
+ <span className="px-3 py-1 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff]  text-[9px] font-bold flex items-center gap-1">
  <Flame className="w-3 h-3 text-[#fb4903]" />
  <span>{isThai ? currentWorkout.intensityLabelTh : currentWorkout.intensityLabelEn}</span>
  </span>
@@ -770,7 +799,7 @@ export const HomeScreen: React.FC = () => {
  gainExp(50, isThai ? `เริ่มการฝึกซ้อม: ${currentWorkout.titleTh}` : `Start training: ${currentWorkout.titleEn}`);
  navigateTo('C1');
  }}
- className="w-full py-2.5 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff5a1a] text-[#ffffff] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-transform shadow-md"
+ className="w-full py-3 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff5a1a] text-[#ffffff] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-transform shadow-md"
  >
  <Play className="w-3.5 h-3.5 fill-current" />
  <span>{isThai ? 'เริ่มการฝึกซ้อม' : 'Start training'}</span>
@@ -779,12 +808,12 @@ export const HomeScreen: React.FC = () => {
  </div>
 
  {/* Session Text Details below Media */}
- <div className="p-3.5 pt-0 space-y-2">
+ <div className="p-4 pt-0 space-y-2">
  <div className="flex items-start justify-between gap-2">
  <h3 className="font-['Antonio',sans-serif] text-base font-black text-[#000000] uppercase tracking-wide leading-tight line-clamp-1">
  {isThai ? currentWorkout.titleTh : currentWorkout.titleEn}
  </h3>
- <span className="text-xs font-black text-[#000000] bg-[#ffd731] px-2 py-0.5 rounded-full shrink-0 shadow-xs">
+ <span className="text-xs font-black text-[#000000] bg-[#ffd731] px-2 py-1 rounded-full shrink-0 shadow-xs">
  ★ {currentWorkout.rating}
  </span>
  </div>
@@ -797,11 +826,11 @@ export const HomeScreen: React.FC = () => {
  </div>
 
  {/* Tags */}
- <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-1">
+ <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
  {((isThai ? currentWorkout.tagsTh : currentWorkout.tagsEn) || currentWorkout.tags).map((tag, tIdx) => (
  <span
  key={tIdx}
- className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] text-[#000000] text-[9px] font-bold shrink-0 whitespace-nowrap shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#dceeff] text-[#000000] text-[9px] font-bold shrink-0 whitespace-nowrap shadow-xs"
  >
  {tag}
  </span>
@@ -832,15 +861,26 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('MAP');
  }}
- className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
- <span>{isThai ? 'เปิดแผนที่' : 'Open Map'}</span>
+ <span>{isThai ? 'ดูคอร์ทว่างบนแผนที่' : 'Explore Nearby Courts'}</span>
  <ChevronRight className="w-3.5 h-3.5" />
  </button>
  </div>
 
- <div className="space-y-2.5">
- {courts.slice(0, 3).map((court) => (
+ <div className="space-y-3">
+ {courts.length === 0 ? (
+ <div className="p-6 rounded-[24px] bg-[#ffffff] text-center space-y-2">
+ <div className="text-3xl">🏸</div>
+ <p className="text-xs font-bold text-neutral-800">
+ {isThai ? 'ไม่พบสนามในโหมดข้อมูลว่างเปล่า (Empty State)' : 'No courts available in Empty Data Mode'}
+ </p>
+ <p className="text-[11px] text-neutral-500">
+ {isThai ? 'สลับโหมดเป็น Demo หรือ Worst Case ที่แถบ Break-UI ด้านล่างเพื่อดูข้อมูล' : 'Switch data mode to Demo or Worst Case via testing controls'}
+ </p>
+ </div>
+ ) : (
+ courts.slice(0, 3).map((court) => (
  <div
  key={court.id}
  onClick={() => handleSelectCourt(court)}
@@ -853,11 +893,11 @@ export const HomeScreen: React.FC = () => {
  className="w-full h-full object-cover"
  />
 
- <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[9px] font-black shadow-xs">
+ <div className="absolute top-2.5 left-2.5 flex items-center gap-2">
+ <span className="px-2 py-1 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[9px] font-black shadow-xs">
  {isThai ? 'เปิดจอง' : 'Available'}
  </span>
-                  <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000]/65 text-[#ffffff] text-[8px] font-bold backdrop-blur-xs shadow-xs">
+                  <span className="px-2 py-1 rounded-[1600px] bg-[#000000]/65 text-[#ffffff] text-[8px] font-bold backdrop-blur-xs shadow-xs">
                     {isThai ? 'จองแล้วเมื่อ 5 นาทีก่อน' : 'Booked 5m ago'}
                   </span>
  </div>
@@ -876,7 +916,7 @@ export const HomeScreen: React.FC = () => {
  />
  </button>
 
- <div className="absolute bottom-2.5 right-2.5 px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] text-xs font-black shadow-xs">
+ <div className="absolute bottom-2.5 right-2.5 px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] text-xs font-black shadow-xs">
  ฿{court.pricePerHour}/{isThai ? 'ชม.' : 'hr'}
  </div>
  </div>
@@ -888,7 +928,7 @@ export const HomeScreen: React.FC = () => {
  </h3>
  <span className="text-xs font-bold text-[#000000] shrink-0">★ {court.rating}</span>
  </div>
- <div className="flex items-center justify-between gap-2 pt-0.5">
+ <div className="flex items-center justify-between gap-2 pt-1">
                     <p className="text-[10px] text-[#000000]/60 font-semibold truncate">
  {court.location} · {court.distanceKm} {isThai ? 'กม.' : 'km'}
  </p>
@@ -898,22 +938,23 @@ export const HomeScreen: React.FC = () => {
                         e.stopPropagation();
                         handleSelectCourt(court);
                       }}
-                      className="px-3 py-1 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-95 transition-transform shadow-xs shrink-0"
+                      className="px-3 py-1 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-[0.96] transition-transform shadow-xs shrink-0"
                     >
-                      {isThai ? 'จองคอร์ท' : 'Book'}
+                      {isThai ? 'จองคอร์ทและล็อกเวลา' : 'Book Slot'}
                     </button>
                   </div>
  </div>
  </div>
- ))}
+ ))
+ )}
  </div>
  </div>
  )}
 
  {/* 6. Compact Live Simulator Bar (Convenient testing triggers for notification banners) */}
- <div className="p-2.5 rounded-[22px] bg-[#ffffff] shadow-sm space-y-1.5">
+ <div className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm space-y-2">
  <div className="flex items-center justify-between text-[10px]">
- <div className="flex items-center gap-1.5">
+ <div className="flex items-center gap-2">
  <span className="w-2 h-2 rounded-full bg-[#55db9c] animate-pulse" />
  <span className="font-['Antonio',sans-serif] font-black uppercase tracking-wider text-[#000000]">
  {isThai ? '⚡ จำลองเหตุการณ์สด' : '⚡ LIVE EVENTS SIMULATOR'}
@@ -924,11 +965,11 @@ export const HomeScreen: React.FC = () => {
  </span>
  </div>
 
- <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+ <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
  <button
  type="button"
  onClick={triggerSampleInvite}
- className="px-2.5 py-1 rounded-[1600px] bg-[#ffd731] hover:bg-[#ffe366] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-95 transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#ffd731] hover:bg-[#ffe366] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>⚔️</span>
  <span>{isThai ? 'เพื่อนท้าแข่ง' : 'Match Invite'}</span>
@@ -937,7 +978,7 @@ export const HomeScreen: React.FC = () => {
  <button
  type="button"
  onClick={triggerSampleBookingConfirmation}
- className="px-2.5 py-1 rounded-[1600px] bg-[#55db9c] hover:bg-[#6be4ab] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-95 transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#55db9c] hover:bg-[#6be4ab] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>🎫</span>
  <span>{isThai ? 'จองคอร์ทสำเร็จ' : 'Booking Confirmed'}</span>
@@ -946,7 +987,7 @@ export const HomeScreen: React.FC = () => {
  <button
  type="button"
  onClick={triggerSampleCountdownAlert}
- className="px-2.5 py-1 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff6122] text-[#ffffff] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-95 transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff6122] text-[#ffffff] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>⏱️</span>
  <span>{isThai ? 'เตือนแมตช์ใกล้เริ่ม' : 'Upcoming Match'}</span>
@@ -955,7 +996,7 @@ export const HomeScreen: React.FC = () => {
  <button
  type="button"
  onClick={triggerSamplePartyUpdate}
- className="px-2.5 py-1 rounded-[1600px] bg-[#e9ccff] hover:bg-[#dfb3ff] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-95 transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#e9ccff] hover:bg-[#dfb3ff] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>👥</span>
  <span>{isThai ? 'อัปเดตก๊วนสด' : 'Party Update'}</span>

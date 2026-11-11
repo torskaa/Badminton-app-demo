@@ -8,6 +8,7 @@ import { motion, AnimatePresence, type Variants } from 'framer-motion';
 import { AppProvider, useApp } from './context/AppContext';
 import { DeviceFrame } from './components/common/DeviceFrame';
 import { BottomTabBar } from './components/common/BottomTabBar';
+import { GameCompanionWidget } from './components/common/GameCompanionWidget';
 import { ExpCelebrationModal } from './components/common/ExpCelebrationModal';
 import { LoadingSkeleton } from './components/common/LoadingSkeleton';
 import { NotificationBanner } from './components/common/NotificationBanner';
@@ -115,7 +116,7 @@ const ScreenRenderer: React.FC = () => {
 const screenVariants: Variants = {
   enter: (direction: 'forward' | 'backward') => ({
     x: direction === 'forward' ? '100%' : '-100%',
-    opacity: 0.35,
+    opacity: 0,
     scale: 0.985,
   }),
   center: {
@@ -123,22 +124,25 @@ const screenVariants: Variants = {
     opacity: 1,
     scale: 1,
     transition: {
-      x: { type: 'spring', stiffness: 350, damping: 32, mass: 0.8 },
-      opacity: { duration: 0.22, ease: 'easeOut' },
-      scale: { duration: 0.22, ease: 'easeOut' },
+      x: { type: 'spring', stiffness: 380, damping: 34, mass: 0.85 },
+      opacity: { duration: 0.2, ease: 'easeOut' },
+      scale: { duration: 0.2, ease: 'easeOut' },
     },
   },
   exit: (direction: 'forward' | 'backward') => ({
-    x: direction === 'forward' ? '-28%' : '100%',
+    x: direction === 'forward' ? '-24%' : '100%',
     opacity: 0,
     scale: 0.985,
     transition: {
-      x: { type: 'spring', stiffness: 350, damping: 32, mass: 0.8 },
-      opacity: { duration: 0.18, ease: 'easeIn' },
-      scale: { duration: 0.18, ease: 'easeIn' },
+      x: { type: 'spring', stiffness: 380, damping: 34, mass: 0.85 },
+      opacity: { duration: 0.16, ease: 'easeOut' },
+      scale: { duration: 0.16, ease: 'easeOut' },
     },
   }),
 };
+
+// Feature flag to show/hide character companion without deleting code
+const SHOW_GAME_COMPANION = false;
 
 function MainViewport() {
   const { currentScreen, navDirection } = useApp();
@@ -161,6 +165,7 @@ function MainViewport() {
         </AnimatePresence>
       </div>
       <NotificationBanner />
+      {SHOW_GAME_COMPANION && <GameCompanionWidget />}
       <BottomTabBar />
       <ExpCelebrationModal />
     </div>
