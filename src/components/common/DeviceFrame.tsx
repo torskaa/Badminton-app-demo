@@ -14,7 +14,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
  const [isDesktopFullScreen, setIsDesktopFullScreen] = useState(false);
 
  return (
- <div className="h-[100dvh] w-full flex flex-col items-center justify-center relative bg-[#dceeff] select-none font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="h-[100dvh] w-full flex flex-col items-center justify-center relative bg-[#dceeff] select-none  overflow-hidden">
  {/* Background Ambience (Desktop Only Subtle Texture) */}
  <div className="hidden md:block absolute inset-0 bg-radial from-[#ffffff]/40 via-transparent to-[#000000]/5 pointer-events-none" />
 

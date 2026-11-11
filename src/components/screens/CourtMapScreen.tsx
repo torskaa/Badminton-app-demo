@@ -533,7 +533,7 @@ export const CourtMapScreen: React.FC = () => {
  onMouseMove={handleMapMouseMove}
  onMouseUp={handleMapMouseUp}
  onWheel={handleWheel}
- className="flex-1 min-h-0 flex flex-col relative bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden select-none"
+ className="flex-1 min-h-0 flex flex-col relative bg-[#dceeff] text-[#000000]  overflow-hidden select-none"
  >
  {/* 1. Interactive Map Canvas (Full Pan & Zoomable SVG Vector Map) */}
  <div

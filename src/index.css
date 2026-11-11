@@ -24,7 +24,7 @@
 }
 
 body {
-  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+  font-family: 'IBM Plex Sans Thai', 'Plus Jakarta Sans', -apple-system, sans-serif;
   background-color: #dceeff;
   color: #000000;
   -webkit-tap-highlight-color: transparent;
@@ -32,42 +32,64 @@ body {
   overflow-x: hidden;
 }
 
+/* ==========================================================================
+   THAI TYPOGRAPHY: 100% IBM PLEX SANS THAI ACROSS ALL COMPONENTS & HEADINGS
+   ========================================================================== */
 html[lang="th"],
 html[lang="th"] body,
-html[lang="th"] button,
-html[lang="th"] input,
-html[lang="th"] select,
-html[lang="th"] textarea,
-html[lang="th"] div:not([class*="Antonio"]):not([class*="font-mono"]),
-html[lang="th"] span:not([class*="Antonio"]):not([class*="font-mono"]),
-html[lang="th"] p:not([class*="Antonio"]):not([class*="font-mono"]),
-html[lang="th"] h1:not([class*="Antonio"]),
-html[lang="th"] h2:not([class*="Antonio"]),
-html[lang="th"] h3:not([class*="Antonio"]),
-html[lang="th"] h4:not([class*="Antonio"]),
-html[lang="th"] h5:not([class*="Antonio"]),
-html[lang="th"] h6:not([class*="Antonio"]),
-.font-thai {
+html[lang="th"] *,
+html[lang="th"] *::before,
+html[lang="th"] *::after,
+html.font-thai,
+html.font-thai body,
+html.font-thai *,
+html.font-thai *::before,
+html.font-thai *::after,
+.font-thai,
+.font-thai * {
+  font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Monospace numbers/code exception in Thai */
+html[lang="th"] .font-mono,
+html[lang="th"] pre,
+html[lang="th"] code,
+html.font-thai .font-mono,
+html.font-thai pre,
+html.font-thai code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+}
+
+/* SVG text labels in Thai */
+html[lang="th"] svg text,
+html.font-thai svg text {
   font-family: 'IBM Plex Sans Thai', sans-serif !important;
 }
 
+/* ==========================================================================
+   ENGLISH TYPOGRAPHY: Plus Jakarta Sans for body + Antonio for display
+   ========================================================================== */
 html[lang="en"],
 html[lang="en"] body,
-html[lang="en"] button,
-html[lang="en"] input,
-html[lang="en"] select,
-html[lang="en"] textarea,
-html[lang="en"] div:not([class*="Antonio"]):not([class*="font-mono"]),
-html[lang="en"] span:not([class*="Antonio"]):not([class*="font-mono"]),
-html[lang="en"] p:not([class*="Antonio"]):not([class*="font-mono"]),
-html[lang="en"] h1:not([class*="Antonio"]),
-html[lang="en"] h2:not([class*="Antonio"]),
-html[lang="en"] h3:not([class*="Antonio"]),
-html[lang="en"] h4:not([class*="Antonio"]),
-html[lang="en"] h5:not([class*="Antonio"]),
-html[lang="en"] h6:not([class*="Antonio"]),
-.font-eng {
-  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif !important;
+html.font-eng,
+html.font-eng body {
+  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+}
+
+html[lang="en"] [class*="Antonio"],
+html[lang="en"] .lateral-display,
+html.font-eng [class*="Antonio"],
+html.font-eng .lateral-display {
+  font-family: 'Antonio', 'Lateral', sans-serif !important;
+}
+
+html[lang="en"] .font-mono,
+html[lang="en"] pre,
+html[lang="en"] code,
+html.font-eng .font-mono,
+html.font-eng pre,
+html.font-eng code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
 }
 
 /* Modern Clean Token System - Borderless elevated cards */

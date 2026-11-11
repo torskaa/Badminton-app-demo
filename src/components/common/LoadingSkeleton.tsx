@@ -29,7 +29,7 @@ const Bone: React.FC<{
  */
 const HomeSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
  {/* 1. Header Card */}
  <div className="bg-[#ffffff] px-4 pt-3 pb-12 space-y-3 relative">
  <div className="flex items-center justify-between gap-2.5">
@@ -202,7 +202,7 @@ const HomeSkeleton: React.FC = () => {
  */
 const ProfileSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
  {/* Header bar */}
  <div className="px-4 py-3 bg-[#ffffff] flex items-center justify-between">
  <Bone className="h-6 w-44" />
@@ -328,7 +328,7 @@ const ProfileSkeleton: React.FC = () => {
  */
 const MapSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col relative bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col relative bg-[#dceeff] text-[#000000]  overflow-hidden">
  {/* 1. Map Canvas Placeholder with vector grid lines & pins */}
  <div className="absolute inset-0 w-full h-full bg-[#e8f3fc] overflow-hidden">
  {/* Abstract vector land shapes */}
@@ -435,7 +435,7 @@ const MapSkeleton: React.FC = () => {
  */
 const FinanceSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
  <div className="bg-[#ffffff] px-4 pt-4 pb-12 space-y-2">
  <div className="flex items-center justify-between">
  <Bone className="h-7 w-48" />
@@ -493,7 +493,7 @@ const FinanceSkeleton: React.FC = () => {
  */
 const GenericSkeleton: React.FC<{ message?: string }> = ({ message }) => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] p-4 space-y-4 overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  p-4 space-y-4 overflow-y-auto no-scrollbar pb-28">
  <div className="bg-[#ffffff] p-4 rounded-[28px] space-y-3">
  <div className="flex justify-between items-center">
  <Bone className="h-6 w-48" />

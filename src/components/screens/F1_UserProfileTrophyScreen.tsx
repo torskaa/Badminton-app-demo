@@ -408,7 +408,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  playSelectSound();
  setActiveTab('matches');
  }}
- className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold uppercase tracking-[0.032em] flex items-center gap-1 hover:bg-[#333333] cursor-pointer"
+ className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] text-[10px] font-bold uppercase tracking-[0.032em] flex items-center gap-1 hover:bg-[#333333] cursor-pointer shadow-xs active:scale-95 transition-all"
  >
  <span>{isThai ? 'ดูทั้งหมด' : 'See all'}</span>
  <ChevronRight className="w-3 h-3" />
@@ -418,25 +418,35 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  {/* Local State Quick Stats Strip */}
  <div className="grid grid-cols-3 gap-2 text-center">
  <div className="p-2 rounded-[16px] bg-[#dceeff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">WIN RATE</div>
+ <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">
+ {isThai ? 'อัตราชนะ' : 'WIN RATE'}
+ </div>
  <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
  {winRatePercentage}%
  </div>
- <div className="text-[9px] text-[#000000]/70 font-semibold">{winsCount}W - {totalMatchesCount - winsCount}L</div>
+ <div className="text-[9px] text-[#000000]/70 font-semibold">
+ {isThai ? `ชนะ ${winsCount} - แพ้ ${totalMatchesCount - winsCount}` : `${winsCount}W - ${totalMatchesCount - winsCount}L`}
+ </div>
  </div>
  <div className="p-2 rounded-[16px] bg-[#ffd731] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/70 tracking-wider">TOTAL EXP</div>
+ <div className="text-[9px] font-bold uppercase text-[#000000]/70 tracking-wider">
+ {isThai ? 'EXP รวม' : 'TOTAL EXP'}
+ </div>
  <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
  +{totalExpFromMatches}
  </div>
  <div className="text-[9px] text-[#000000]/80 font-semibold">{totalMatchesCount} {isThai ? 'แมตช์' : 'Matches'}</div>
  </div>
  <div className="p-2 rounded-[16px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">TOP SMASH</div>
+ <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">
+ {isThai ? 'สปีดตบสูงสุด' : 'TOP SMASH'}
+ </div>
  <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
  {Math.max(...matches.map((m) => m.highestSmashKmh))} km/h
  </div>
- <div className="text-[9px] text-[#55db9c] font-bold">Speed Record</div>
+ <div className="text-[9px] text-[#55db9c] font-bold">
+ {isThai ? 'สถิติความเร็ว' : 'Speed Record'}
+ </div>
  </div>
  </div>
 
@@ -458,8 +468,8 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <span>{isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}</span>
  </div>
  <div className="flex items-center gap-1.5">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-bold uppercase">
- {match.matchType}
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-bold uppercase text-[#000000]/80">
+ {isThai ? (match.matchType.toLowerCase().includes('single') ? 'ประเภทเดี่ยว' : 'ประเภทคู่') : match.matchType}
  </span>
  <span
  className={`px-2.5 py-0.5 rounded-[1600px] text-[9px] font-black uppercase ${
@@ -481,8 +491,8 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </span>
  </div>
  <div className="flex items-center gap-2 mt-0.5 text-[10px] text-[#000000]/70 font-semibold flex-wrap">
- <span className="px-1.5 py-0.2 rounded-full bg-[#ffd731] text-[9px] font-black text-[#000000]">
- {match.opponent.tier}
+ <span className="px-2 py-0.5 rounded-full bg-[#ffd731] text-[9px] font-black text-[#000000]">
+ {isThai ? match.opponent.tier.replace('Diamond League', 'ลีกไดมอนด์').replace('Platinum League', 'ลีกแพลทินัม').replace('Gold League', 'ลีกโกลด์').replace('Silver League', 'ลีกซิลเวอร์').replace('Bronze League', 'ลีกบรอนซ์') : match.opponent.tier}
  </span>
  <span>{match.opponent.club}</span>
  {match.partnerName && (
@@ -529,7 +539,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  : 'bg-[#eeeeee] text-[#000000]/70'
  }`}
  >
- S{s.set}: {s.userScore}-{s.opponentScore}
+ {isThai ? `เซ็ต ${s.set}: ${s.userScore}–${s.opponentScore}` : `S${s.set}: ${s.userScore}-${s.opponentScore}`}
  </span>
  ))}
  </div>
@@ -544,7 +554,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  {isThai ? 'ความเร็วสแมช' : 'Top Smash'}
  </span>
  <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
- ⚡ {match.highestSmashKmh} km/h
+ ⚡ {match.highestSmashKmh} {isThai ? 'กม./ชม.' : 'km/h'}
  </span>
  </div>
  <div className="p-1.5 rounded-[10px] bg-[#dceeff] ">
@@ -566,7 +576,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  <div className="text-[10px] font-medium text-[#000000]/80 bg-[#f4f7fb] p-2 rounded-[12px] flex items-center gap-1.5">
  <Sparkles className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
- <span><strong>{isThai ? 'ไฮไลต์ช็อตสำคัญ:' : 'Highlight Shot:'}</strong> {match.highlightShot}</span>
+ <span><strong>{isThai ? 'ไฮไลต์ช็อตสำคัญ:' : 'Highlight Shot:'}</strong> {isThai ? (match.highlightShotTh || match.highlightShot) : (match.highlightShotEn || match.highlightShot)}</span>
  </div>
  </div>
  )}
@@ -699,7 +709,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  SMASH PRO MEMBER
  </div>
  <div className="text-[10px] text-[#000000]/80 font-bold truncate">
- {isThai ? 'ลดค่าคอร์ท 10% · สแกน 3D ไม่จำกัด' : '10% off courts · Unlimited 3D Scans'}
+ {isThai ? 'ลดค่าคอร์ท 10% · สแกน AI ไม่จำกัด' : '10% off courts · Unlimited AI Scans'}
  </div>
  </div>
  </div>
@@ -975,7 +985,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  onClick={() => navigateTo('C3')}
  className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] border-2 border-[#000000] text-[9px] font-bold uppercase tracking-wider hover:bg-[#333333] cursor-pointer shadow-xs active:scale-95 transition-transform"
  >
- {isThai ? 'ตรวจ 3D ช็อต' : 'Analyze 3D'}
+ {isThai ? 'ตรวจวิเคราะห์ช็อต' : 'Analyze Motion'}
  </button>
  </div>
  </div>

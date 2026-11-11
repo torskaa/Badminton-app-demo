@@ -34,7 +34,7 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
  <MobileHeader
  title={language === 'th' ? 'บันทึกคะแนนสดข้างสนาม' : 'Courtside Match Tracker'}
  subtitle={language === 'th' ? `เซ็ต ${match.currentSet} · ${match.serviceBox === 'right' ? 'คอร์ทขวา (แต้มคู่)' : 'คอร์ทซ้าย (แต้มคี่)'}` : `Set ${match.currentSet} · ${match.serviceBox === 'right' ? 'Right Box (Even)' : 'Left Box (Odd)'}`}

@@ -51,7 +51,7 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  }).join(' ');
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 font-['Plus_Jakarta_Sans',sans-serif] bg-[#dceeff] text-[#000000]">
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#dceeff] text-[#000000]">
  <MobileHeader />
 
  <div className="p-4 space-y-4">
@@ -149,8 +149,8 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  </div>
  <p className="text-[10px] text-[#000000]/80 font-bold">
  {language === 'th'
- ? 'ส่วนลดค่าคอร์ท 10% ทุกสนามพันธมิตร · สแกนวิดีโอ 3D วิเคราะห์ฟอร์มไม่จำกัดครั้ง'
- : '10% court booking discount · Unlimited 3D computer vision video scans'}
+ ? 'ส่วนลดค่าคอร์ท 10% ทุกสนามพันธมิตร · สแกนวิดีโอ AI วิเคราะห์ฟอร์มไม่จำกัดครั้ง'
+ : '10% court booking discount · Unlimited AI computer vision video scans'}
  </p>
  <div className="pt-1 flex items-center justify-between">
  <span className="text-[11px] font-bold text-[#000000]">
@@ -331,7 +331,7 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  </div>
  <p className="text-[10px] text-[#000000]/60 font-bold">
  {language === 'th'
- ? 'สรุปจุดเด่นและข้อผิดพลาดล่าสุด พร้อมทางลัดสู่แบบฝึกซ้อมและสแกนกล้อง 3D'
+ ? 'สรุปจุดเด่นและข้อผิดพลาดล่าสุด พร้อมทางลัดสู่แบบฝึกซ้อมและสแกนกล้อง AI'
  : 'Key strengths and weakness breakdown with training shortcuts'}
  </p>
  </div>
@@ -360,7 +360,7 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  >
  <Video className="w-4 h-4 text-[#5c4ade] shrink-0" />
  <span className="whitespace-nowrap">
- {language === 'th' ? 'สแกนวิดีโอ 3D D3' : 'VISION SCAN (D3)'}
+ {language === 'th' ? 'สแกนวิดีโอ AI (D3)' : 'VISION SCAN (D3)'}
  </span>
  </button>
  </div>

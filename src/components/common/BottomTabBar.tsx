@@ -41,7 +41,7 @@ export const BottomTabBar: React.FC = () => {
  }}
  className={`flex-1 py-1.5 px-1 rounded-[20px] flex flex-col items-center justify-center transition-all cursor-pointer active:scale-95 ${
  isHomeActive
- ? 'bg-[#fb4903] text-[#ffffff] font-black shadow-xs'
+ ? 'bg-[#00B14F] text-[#ffffff] font-black shadow-xs'
  : 'text-[#000000]/60 hover:text-[#000000]'
  }`}
  >
@@ -83,17 +83,17 @@ export const BottomTabBar: React.FC = () => {
  setActiveTab('discover');
  navigateTo('MAP');
  }}
- className="w-12 h-12 rounded-[1600px] bg-[#ffd731] hover:bg-[#ffe366] text-[#000000] shadow-lg flex items-center justify-center active:scale-90 transition-all cursor-pointer border border-[#000000] ring-3 ring-[#ffffff]"
+ className="w-12 h-12 rounded-[1600px] bg-[#00B14F] hover:bg-[#009e46] text-[#ffffff] shadow-[0_10px_25px_rgba(0,177,79,0.4)] flex items-center justify-center active:scale-90 transition-all cursor-pointer border border-[#000000] ring-3 ring-[#ffffff]"
  title={t.tabDiscover}
  >
- {/* White Badminton Shuttlecock SVG Icon */}
- <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-[#000000]">
+ {/* Badminton Shuttlecock SVG Icon */}
+ <svg viewBox="0 0 24 24" className="w-6 h-6 fill-current text-[#ffffff]">
  <path d="M12 2a4 4 0 0 0-4 4c0 1.6 1 3 2.4 3.6L7 16l2 2 3.5-3.5L16 18l2-2-3.4-6.4C16 9 17 7.6 17 6a4 4 0 0 0-4-4zm0 2a2 2 0 0 1 2 2c0 1.1-.9 2-2 2s-2-.9-2-2a2 2 0 0 1 2-2zM9.8 11.5l1.6 3 1.6-3c-.5-.3-1-.5-1.6-.5s-1.1.2-1.6.5z" />
  </svg>
  </button>
  <span
  className={`text-[9px] font-black mt-0.5 whitespace-nowrap ${
- isDiscoverActive ? 'text-[#000000]' : 'text-[#000000]/60'
+ isDiscoverActive ? 'text-[#00B14F]' : 'text-[#000000]/60'
  }`}
  >
  {t.tabDiscover}

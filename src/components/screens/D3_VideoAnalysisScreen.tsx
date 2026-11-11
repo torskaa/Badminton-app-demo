@@ -39,7 +39,7 @@ export const D3_VideoAnalysisScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
  <MobileHeader
  title={language === 'th' ? 'วิเคราะห์ท่าทาง & สปีดตบ' : 'Pose & Smash Vision'}
  subtitle={language === 'th' ? 'สแกนมุมชีวกลศาสตร์และความเร็วลูกตบ' : 'Biomechanics Angle & Velocity Scan'}
@@ -52,7 +52,7 @@ export const D3_VideoAnalysisScreen: React.FC = () => {
  <div className="flex items-center justify-between px-1">
  <div className="flex items-center gap-1.5">
  <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] ">
- {language === 'th' ? 'สแกนวิดีโอ 3D' : '3D COMPUTER VISION'}
+ {language === 'th' ? 'สแกนวิดีโอ AI' : 'AI COMPUTER VISION'}
  </span>
  <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
  {language === 'th' ? 'การติดตามมุมข้อต่อ & จุดกระทบลูก' : 'KEYPOINT JOINT TRACKING'}

@@ -52,7 +52,7 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
  <MobileHeader
  title={language === 'th' ? 'ระบบจัดทีม & จับคู่ผู้เล่น' : 'Smart Matchmaker'}
  showBack

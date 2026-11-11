@@ -49,7 +49,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col justify-between relative bg-[#dceeff] overflow-y-auto overscroll-contain no-scrollbar text-[#000000] font-['Plus_Jakarta_Sans',sans-serif]">
+ <div className="flex-1 min-h-0 flex flex-col justify-between relative bg-[#dceeff] overflow-y-auto overscroll-contain no-scrollbar text-[#000000] ">
  {/* Top Header Bar */}
  <div className="px-4 pt-4 pb-2 flex items-center justify-between z-30">
  <div className="flex items-center gap-2">

@@ -37,7 +37,7 @@ export const E1_GuildHubScreen: React.FC = () => {
  : guilds;
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 font-['Plus_Jakarta_Sans',sans-serif] bg-[#dceeff] text-[#000000]">
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#dceeff] text-[#000000]">
  <MobileHeader title="Guilds & Community" />
 
  <div className="p-4 space-y-4">

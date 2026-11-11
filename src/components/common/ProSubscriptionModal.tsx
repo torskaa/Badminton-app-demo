@@ -33,7 +33,7 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  const perks = [
  {
  title: 'Unlimited CV Smash Radar Scan',
- desc: 'วัดความเร็วลูกตบแบบ Computer Vision 3D ไม่จำกัดจำนวนครั้ง',
+ desc: 'วัดความเร็วลูกตบแบบ Computer Vision AI ไม่จำกัดจำนวนครั้ง',
  color: '#ffd731',
  },
  {

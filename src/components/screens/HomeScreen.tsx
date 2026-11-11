@@ -269,21 +269,17 @@ export const HomeScreen: React.FC = () => {
  navigateTo('B2');
  };
 
- // Primary 4 categories (Exact VibeMove 1-row layout)
- const primaryCategories = [
- { id: 'cat_courts', label: 'Courts', thai: 'คอร์ทแบด', icon: '🏸', screen: 'MAP', color: 'bg-[#55db9c]' },
- { id: 'cat_parties', label: 'Parties', thai: 'จอยก๊วน', icon: '👥', screen: 'E1', color: 'bg-[#ffd731]', badge: '28' },
- { id: 'cat_coach', label: 'AI Coach', thai: 'AI ซ้อม', icon: '🎯', screen: 'D1', color: 'bg-[#4da2ff]' },
- { id: 'cat_video', label: 'Video AI', thai: 'วิเคราะห์ AI', icon: '⚡', screen: 'D3', color: 'bg-[#e9ccff]' },
- ];
-
- // Additional categories shown when "See all >" is tapped
- const secondaryCategories = [
- { id: 'cat_tourn', label: 'Tournaments', thai: 'ทัวร์นาเมนต์', icon: '🏆', screen: 'E4', color: 'bg-[#fb4903]' },
- { id: 'cat_string', label: 'Stringing', thai: 'ขึ้นเอ็น 3D', icon: '🛠️', screen: 'F1', color: 'bg-[#ffffff]' },
- { id: 'cat_spar', label: 'Sparring', thai: 'สปาร์ริ่ง', icon: '⏱️', screen: 'C1', color: 'bg-[#ffd731]' },
- { id: 'cat_wallet', label: 'SmashPay', thai: 'กระเป๋าเงิน', icon: '🪙', screen: 'FINANCE', color: 'bg-[#55db9c]' },
- ];
+ // 8 Services Matrix (Grid 4x2) per design.md specification
+  const servicesMatrix = [
+    { id: 'srv_courts', label: 'Find Courts', thai: 'ค้นหาสนาม', icon: '🏸', screen: 'MAP', color: 'bg-[#55db9c]' },
+    { id: 'srv_groups', label: 'Find Groups', thai: 'หาก๊วน', icon: '👥', screen: 'E1', color: 'bg-[#ffd731]', badge: '28' },
+    { id: 'srv_create', label: 'Create Party', thai: 'สร้างก๊วน', icon: '➕', screen: 'E2', color: 'bg-[#4da2ff]' },
+    { id: 'srv_tools', label: 'Club Tools', thai: 'กล่องเครื่องมือ', icon: '🛠️', screen: 'CLUB_TOOLS', color: 'bg-[#e9ccff]', badge: 'HOT' },
+    { id: 'srv_coach', label: 'Find Coach', thai: 'หาโค้ชสอน', icon: '🎯', screen: 'D1', color: 'bg-[#55db9c]' },
+    { id: 'srv_tourn', label: 'Tournaments', thai: 'ทัวร์นาเมนต์', icon: '🏆', screen: 'E4', color: 'bg-[#ffd731]' },
+    { id: 'srv_activity', label: 'Activities', thai: 'กิจกรรมเด่น', icon: '⚡', screen: 'D2', color: 'bg-[#fb4903]', badge: 'NEW' },
+    { id: 'srv_quiz', label: 'Level Quiz', thai: 'วัดระดับฝีมือ', icon: '📝', screen: 'A2', color: 'bg-[#5c4ade]', badge: 'NEW' },
+  ];
 
  return (
  <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] overflow-y-auto overscroll-contain no-scrollbar pb-28">
@@ -473,6 +469,34 @@ export const HomeScreen: React.FC = () => {
  </div>
  </div>
  </div>
+      {/* Quick Action Dual Pills (Exact design.md 4.1) */}
+      <div className="grid grid-cols-2 gap-2 mt-2.5">
+        <button
+          type="button"
+          onClick={() => {
+            playSelectSound();
+            navigateTo('MAP');
+          }}
+          className="py-2.5 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-xs"
+        >
+          <span>🏸</span>
+          <span>{isThai ? 'ค้นหาสนาม' : 'Find Courts'}</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => {
+            playSelectSound();
+            navigateTo('E1');
+          }}
+          className="py-2.5 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all shadow-xs relative"
+        >
+          <span>👥</span>
+          <span>{isThai ? 'หาก๊วน' : 'Find Groups'}</span>
+          <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black">
+            28
+          </span>
+        </button>
+      </div>
  </div>
 
  {/* Main Body with Clean Proportions (Faithful to VibeMove video 00:01 - 00:03) */}
@@ -541,84 +565,80 @@ export const HomeScreen: React.FC = () => {
  </div>
  </div>
 
- {/* 3. CATEGORIES SECTION (1 Clean Proportioned Row of 4 Squircles with "See all >") */}
- <div className="space-y-2">
- <div className="flex items-center justify-between">
- <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
- {isThai ? 'หมวดหมู่บริการ' : 'Categories'}
- </h2>
- <button
- type="button"
- onClick={() => {
- playSelectSound();
- setShowAllCategories(!showAllCategories);
- }}
- className="text-xs font-bold text-[#000000]/70 hover:text-[#000000] flex items-center gap-0.5 cursor-pointer"
- >
- <span>{isThai ? (showAllCategories ? 'ย่อลง' : 'ดูทั้งหมด') : (showAllCategories ? 'Show less' : 'See all')}</span>
- <ChevronRight className={`w-3.5 h-3.5 transition-transform ${showAllCategories ? 'rotate-90' : ''}`} />
- </button>
- </div>
+ {/* 3. SERVICES MATRIX (Grid 4x2 - 8 Services per design.md 4.1) */}
+    <div className="space-y-2">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
+          {isThai ? 'บริการทั้งหมด (8 รายการ)' : 'Services Matrix (8)'}
+        </h2>
+        <span className="text-[10px] font-bold text-[#000000]/60">
+          {isThai ? 'ครบครันทุกเรื่องแบด' : 'All-in-One'}
+        </span>
+      </div>
 
- {/* Primary 4 squircle cards */}
- <div className="grid grid-cols-4 gap-2.5">
- {primaryCategories.map((cat) => (
- <button
- key={cat.id}
- type="button"
- onClick={() => {
- playSelectSound();
- navigateTo(cat.screen as any);
- }}
- className="p-2.5 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-95 transition-all cursor-pointer relative"
- >
- {cat.badge && (
- <span className="absolute -top-1 right-1 px-1.5 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black">
- {cat.badge}
- </span>
- )}
- <div
- className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-0.5 ${cat.color}`}
- >
- {cat.icon}
- </div>
- <div className="text-center">
- <span className="text-[10px] font-black text-[#000000] block leading-tight">
- {isThai ? cat.thai : cat.label}
- </span>
- </div>
- </button>
- ))}
- </div>
+      {/* 4x2 Grid of 1:1 Squircles */}
+      <div className="grid grid-cols-4 gap-2.5">
+        {servicesMatrix.map((srv) => (
+          <button
+            key={srv.id}
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              navigateTo(srv.screen as any);
+            }}
+            className="p-2.5 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-95 transition-all cursor-pointer relative"
+          >
+            {srv.badge && (
+              <span className="absolute -top-1 right-1 px-1.5 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black shadow-xs">
+                {srv.badge}
+              </span>
+            )}
+            <div
+              className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-0.5 ${srv.color}`}
+            >
+              {srv.icon}
+            </div>
+            <div className="text-center">
+              <span className="text-[10px] font-black text-[#000000] block leading-tight">
+                {isThai ? srv.thai : srv.label}
+              </span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
 
- {/* Expandable secondary categories when user clicks "See all >" */}
- {showAllCategories && (
- <div className="grid grid-cols-4 gap-2.5 pt-1 animate-in fade-in zoom-in-95">
- {secondaryCategories.map((cat) => (
- <button
- key={cat.id}
- type="button"
- onClick={() => {
- playSelectSound();
- navigateTo(cat.screen as any);
- }}
- className="p-2.5 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-95 transition-all cursor-pointer"
- >
- <div
- className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-0.5 ${cat.color}`}
- >
- {cat.icon}
- </div>
- <div className="text-center">
- <span className="text-[10px] font-black text-[#000000] block leading-tight">
- {isThai ? cat.thai : cat.label}
- </span>
- </div>
- </button>
- ))}
- </div>
- )}
- </div>
+    {/* Line OpenChat Banner (Exact design.md 4.1) */}
+    <div className="rounded-[24px] bg-[#06c755] text-[#ffffff] p-4 relative overflow-hidden shadow-md flex items-center justify-between gap-3">
+      <div className="space-y-1 max-w-[65%] min-w-0">
+        <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000]/20 text-[#ffffff] text-[9px] font-bold inline-block">
+          {isThai ? 'ชุมชนคนตีแบด' : 'COMMUNITY'}
+        </span>
+        <h3 className="text-sm font-black leading-tight text-[#ffffff] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
+          {isThai ? 'เข้าร่วม Line OpenChat แอปตีแบด' : 'Join Badminton Community OpenChat'}
+        </h3>
+        <p className="text-[10px] text-[#ffffff]/95 font-medium line-clamp-2">
+          {isThai ? 'หาเพื่อนตีแบด แชร์โปรคอร์ท และนัดแมตช์สด 1,480 คน' : 'Find friends, share court discounts, and live matchmaking (1,480 players)'}
+        </p>
+        <div className="pt-1">
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              navigateTo('E1');
+            }}
+            className="px-3 py-1.5 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-95 transition-all shadow-xs"
+          >
+            {isThai ? 'เข้ากลุ่ม LINE' : 'Join LINE OpenChat'}
+          </button>
+        </div>
+      </div>
+      {/* Line OpenChat QR Mascot Graphic */}
+      <div className="w-16 h-16 shrink-0 bg-[#ffffff] p-1.5 rounded-[16px] shadow-sm flex flex-col items-center justify-center">
+        <QrCode className="w-8 h-8 text-[#000000]" />
+        <span className="text-[7px] font-black text-[#000000] mt-0.5">OPENCHAT</span>
+      </div>
+    </div>
 
  {/* 4. YOUR PROGRESS SECTION (3 Proportional Square Cards side-by-side) */}
  <ProgressRingsWidget
@@ -718,7 +738,7 @@ export const HomeScreen: React.FC = () => {
 
  {/* Top Badge & Heart */}
  <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff] -[#ffffff]/30 text-[9px] font-bold flex items-center gap-1">
+ <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff]  text-[9px] font-bold flex items-center gap-1">
  <Flame className="w-3 h-3 text-[#fb4903]" />
  <span>{isThai ? currentWorkout.intensityLabelTh : currentWorkout.intensityLabelEn}</span>
  </span>
@@ -812,7 +832,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('MAP');
  }}
- className="text-xs font-bold text-[#000000] hover:underline flex items-center gap-0.5"
+ className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-95 transition-all shadow-xs"
  >
  <span>{isThai ? 'เปิดแผนที่' : 'Open Map'}</span>
  <ChevronRight className="w-3.5 h-3.5" />
@@ -837,6 +857,9 @@ export const HomeScreen: React.FC = () => {
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[9px] font-black shadow-xs">
  {isThai ? 'เปิดจอง' : 'Available'}
  </span>
+                  <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000]/65 text-[#ffffff] text-[8px] font-bold backdrop-blur-xs shadow-xs">
+                    {isThai ? 'จองแล้วเมื่อ 5 นาทีก่อน' : 'Booked 5m ago'}
+                  </span>
  </div>
 
  <button
@@ -865,9 +888,21 @@ export const HomeScreen: React.FC = () => {
  </h3>
  <span className="text-xs font-bold text-[#000000] shrink-0">★ {court.rating}</span>
  </div>
- <p className="text-[10px] text-[#000000]/60 font-semibold truncate">
+ <div className="flex items-center justify-between gap-2 pt-0.5">
+                    <p className="text-[10px] text-[#000000]/60 font-semibold truncate">
  {court.location} · {court.distanceKm} {isThai ? 'กม.' : 'km'}
  </p>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleSelectCourt(court);
+                      }}
+                      className="px-3 py-1 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-95 transition-transform shadow-xs shrink-0"
+                    >
+                      {isThai ? 'จองคอร์ท' : 'Book'}
+                    </button>
+                  </div>
  </div>
  </div>
  ))}

@@ -18,6 +18,7 @@ import { MobileHeader } from '../common/MobileHeader';
 
 export const FinanceScreen: React.FC = () => {
  const { gainExp, navigateTo, t, language } = useApp();
+  const isThai = language === 'th';
  const [walletBalance, setWalletBalance] = useState(1250);
  const [payLaterBalance] = useState(0);
  const [transactions, setTransactions] = useState(FINANCE_TRANSACTIONS);
@@ -48,7 +49,7 @@ export const FinanceScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-y-auto overscroll-contain no-scrollbar pb-24">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
  {/* 1. Header Card in Slush CI with 1px Solid Black Border */}
  <div className="bg-[#ffffff] text-[#000000] px-4 pt-4 pb-12 relative">
  <div className="flex items-center justify-between mb-2">
@@ -136,15 +137,15 @@ export const FinanceScreen: React.FC = () => {
  <div className="px-4 mt-6 space-y-3">
  <div className="flex items-center justify-between">
  <h2 className="text-base font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide">
- {t.recommendedTitle} · RECOMMENDED FOR YOU
+ {t.recommendedTitle}
  </h2>
  <span className="text-[10px] font-black px-2 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] ">
- DEALS
+ {isThai ? 'สิทธิพิเศษ' : 'DEALS'}
  </span>
  </div>
 
  <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 snap-x">
- {/* Promo Card 1: Get started with SmashPay Wallet (Matches Grab reference image) */}
+ {/* Promo Card 1: {isThai ? 'เริ่มต้นใช้งาน SmashPay Wallet' : 'Get started with SmashPay Wallet'} (Matches Grab reference image) */}
  <div
  onClick={() => {
  playCoinSound();
@@ -157,10 +158,10 @@ export const FinanceScreen: React.FC = () => {
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-black uppercase">
  SMASHPAY
  </span>
- <span className="text-[10px] font-bold">10% CASHBACK</span>
+ <span className="text-[10px] font-bold">{isThai ? 'เงินคืน 10%' : '10% CASHBACK'}</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- Get started with SmashPay Wallet
+ {isThai ? 'เริ่มต้นใช้งาน SmashPay Wallet' : 'Get started with SmashPay Wallet'}
  </h3>
  <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
  เติมเงินครั้งแรกรับเหรียญคืน 10% พร้อมสิทธิ์จองคอร์ทแบบด่วน
@@ -172,7 +173,7 @@ export const FinanceScreen: React.FC = () => {
  </div>
  </div>
 
- {/* Promo Card 2: Pay easily with TrueMoney (Matches Grab reference image) */}
+ {/* Promo Card 2: {isThai ? 'จ่ายง่ายรวดเร็วด้วย TrueMoney' : 'Pay easily with TrueMoney'} (Matches Grab reference image) */}
  <div
  onClick={() => {
  playCoinSound();
@@ -183,12 +184,12 @@ export const FinanceScreen: React.FC = () => {
  <div>
  <div className="flex items-center justify-between mb-1">
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-black uppercase">
- PARTNER
+ {isThai ? 'พันธมิตร' : 'PARTNER'}
  </span>
  <span className="text-[10px] font-bold">0% ค่าธรรมเนียม</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- Pay easily with TrueMoney
+ {isThai ? 'จ่ายง่ายรวดเร็วด้วย TrueMoney' : 'Pay easily with TrueMoney'}
  </h3>
  <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
  สแกนจ่ายสะดวก รวดเร็ว ไร้สัมผัส ผ่าน TrueMoney และพร้อมเพย์ QR
@@ -216,7 +217,7 @@ export const FinanceScreen: React.FC = () => {
  <span className="text-[10px] font-bold">ดอกเบี้ย 0%</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- Play First, PayLater 0% 3 เดือน
+ {isThai ? 'ตีแบดก่อน ผ่อน 0% นาน 3 เดือน' : 'Play First, PayLater 0% 3 Months'}
  </h3>
  <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
  ตีแบดก่อน ผ่อนค่าคอร์ทและอุปกรณ์สบายๆ 0% นาน 3 เดือน
@@ -244,10 +245,10 @@ export const FinanceScreen: React.FC = () => {
  <span className="text-[10px] font-bold text-[#5c4ade]">฿199/เดือน</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- Smash Pro Member Pass
+ {isThai ? 'แพ็กเกจสมาชิก Smash Pro' : 'Smash Pro Member Pass'}
  </h3>
  <p className="text-[10px] text-[#000000]/70 font-bold mt-1 line-clamp-2">
- ลดค่าสนาม 10% ทุกการจอง + สแกน AI 3D ช็อตไม่จำกัด
+ ลดค่าสนาม 10% ทุกการจอง + สแกน AI วิเคราะห์ช็อตไม่จำกัด
  </p>
  </div>
  <div className="flex items-center justify-between pt-1 ">

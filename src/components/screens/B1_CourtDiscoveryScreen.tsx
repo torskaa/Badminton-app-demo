@@ -89,7 +89,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  });
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 font-['Plus_Jakarta_Sans',sans-serif] bg-[#dceeff] text-[#000000]">
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#dceeff] text-[#000000]">
  {/* 1. Header: User Avatar + Greeting + Chat & Notifications */}
  <div className="px-4 pt-4 pb-2 flex items-center justify-between">
  <div className="flex items-center gap-3">

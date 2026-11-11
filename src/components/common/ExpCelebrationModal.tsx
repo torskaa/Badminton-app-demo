@@ -25,7 +25,7 @@ export const ExpCelebrationModal: React.FC = () => {
  animate={{ scale: 1, opacity: 1, y: 0 }}
  exit={{ scale: 0.9, opacity: 0, y: 15 }}
  transition={{ type: 'spring', damping: 25, stiffness: 300 }}
- className="w-full max-w-xs bg-white rounded-[36px] p-6 text-center relative overflow-hidden font-['Plus_Jakarta_Sans',sans-serif] text-black shadow-2xl"
+ className="w-full max-w-xs bg-white rounded-[36px] p-6 text-center relative overflow-hidden  text-black shadow-2xl"
  >
  {/* Floating Top Sticker Accent */}
  <div className="w-16 h-16 rounded-3xl bg-[#ffd731] text-black flex items-center justify-center mx-auto mb-3 rotate-[-6deg] hover:rotate-3 transition-transform shadow-xs">

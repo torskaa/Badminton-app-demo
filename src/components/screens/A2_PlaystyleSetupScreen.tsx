@@ -76,7 +76,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
  <MobileHeader
  title={language === 'th' ? 'ตั้งค่า DNA นักกีฬา' : 'ATHLETE DNA SETUP'}
  subtitle={language === 'th' ? 'สร้างสไตล์การเล่นและสายความถนัด' : 'Custom Playstyle Archetype'}

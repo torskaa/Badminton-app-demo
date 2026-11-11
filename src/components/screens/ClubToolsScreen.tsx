@@ -46,7 +46,7 @@ export const ClubToolsScreen: React.FC = () => {
  const costPerPerson = playerCount > 0 ? Math.ceil(totalExpense / playerCount) : 0;
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-y-auto overscroll-contain no-scrollbar pb-24">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
  {/* Header in Slush CI */}
  <div className="bg-[#ffffff] px-4 pt-4 pb-3 flex items-center justify-between sticky top-0 z-20 shadow-xs">
  <div>

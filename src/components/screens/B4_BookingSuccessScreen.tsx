@@ -7,7 +7,7 @@ export const B4_BookingSuccessScreen: React.FC = () => {
  const { booking, selectedCourt, player, navigateTo } = useApp();
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] font-['Plus_Jakarta_Sans',sans-serif] overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
  <MobileHeader title="Court Pass Confirmed" />
 
  <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
