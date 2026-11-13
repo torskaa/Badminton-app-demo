@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { AlertTriangle, TrendingUp, Zap, ChevronRight, Activity, ArrowRight, ShieldAlert, Sparkles, Check, Share2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 
 export const C3_AIDiagnosticsScreen: React.FC = () => {
  const { navigateTo, gainExp, language } = useApp();
@@ -14,28 +15,28 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  errors: 4,
  advice: 'พบข้อผิดพลาดลูกติดเน็ต 4 ครั้ง แนะนำให้ตั้งหน้าไม้ระดับสายตาและย่อเข่าก่อนสัมผัสลูก',
  tag: 'Need Practice',
- color: '#ff5c34',
+ color: '#e85729',
  },
  'front-right': {
  name: 'Backhand Net Zone',
  errors: 1,
  advice: 'ลูกปั่นเน็ตและการตัดหยอดทำได้ยอดเยี่ยม เปลี่ยนเป็นแต้มได้ถึง 80%',
  tag: 'Strong Zone',
- color: '#55db9c',
+ color: '#7cd7a0',
  },
  'back-left': {
  name: 'Backhand Deep Corner',
  errors: 5,
  advice: 'จุดอ่อนสำคัญ! องศาหน้าไม้ปิดช้าเกินไป ทำให้ลูกออกเส้นหลัง 5 ครั้ง',
  tag: 'Critical Weakness',
- color: '#ff5c34',
+ color: '#e85729',
  },
  'back-right': {
  name: 'Smash Power Hotspot',
  errors: 1,
  advice: 'จุดทำแต้มหลัก! ตบ Smash ชนะ 8 ครั้ง ความเร็วเฉลี่ย 312 km/h',
  tag: 'Winner Hotspot',
- color: '#ffd731',
+ color: '#7cd7a0',
  },
  };
 
@@ -50,58 +51,26 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader
- title={language === 'th' ? 'สถิติและฮีทแมพการแข่งขัน' : 'Match Diagnostics & Heatmap'}
- showBack
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
+
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
+ {/* 2D Badminton Court Interactive Map */}
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'แผนผังวิเคราะห์จุดอ่อน 4 โซน' : '2D WEAKNESS HEATMAP (4-ZONE)'}
+ subtitle={language === 'th'
+ ? 'แตะโซนบนคอร์ทเพื่อดู Unforced Errors และวิธีแก้ไข'
+ : 'Tap any court zone to inspect errors & targeted drills'}
+ badge={language === 'th' ? 'คอร์ท 3' : 'COURT 3'}
+ badgeVariant="orange"
  />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
- {/* Header Intro Banner */}
- <div className="rounded-[28px] p-4 bg-[#ffffff] space-y-1">
- <div className="flex items-center gap-2 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ff5c34] text-[#ffffff] ">
- {language === 'th' ? 'ฮีทแมพจุดตกของลูก' : '2D COURT HEATMAP'}
- </span>
- <span className="text-xs font-bold text-[#000000]/60">
- {language === 'th' ? 'วิเคราะห์คอร์ท 3' : 'Court 3 Diagnostics'}
- </span>
- </div>
- <h2 className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight leading-tight uppercase text-[#000000]">
- {language === 'th' ? 'แผนผังวิเคราะห์จุดอ่อน & ช็อตทำแต้ม' : '2D WEAKNESS & SCORING HEATMAP'}
- </h2>
- <p className="text-xs text-[#000000]/70 font-medium">
- {language === 'th'
- ? 'แตะโซนบนสนามเพื่อดูสถิติ Unforced Errors และแบบฝึกซ้อมแก้ไขจุดอ่อนที่แนะนำ'
- : 'Tap any court zone to inspect unforced error counts and targeted practice drills.'}
- </p>
- </div>
-
- {/* 2D Badminton Court Interactive Map */}
- <div className="rounded-[32px] p-4 text-center bg-[#ffffff] space-y-3">
- <div className="flex items-center justify-between pb-2 text-left">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] ">
- {language === 'th' ? 'ผังสนาม 4 โซน' : '4-ZONE MAP'}
- </span>
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'เลือกโซนเพื่อดูสถิติ' : 'SELECT ZONE TO INSPECT'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th'
- ? 'แสดงความแม่นยำหน้าเน็ตและท้ายคอร์ทของฝั่งคุณ'
- : 'Displays net and deep corner error distribution'}
- </p>
- </div>
- <span className="text-[10px] font-bold text-[#000000]/60 uppercase">Interactive</span>
- </div>
-
- <div className="relative w-full max-w-[280px] h-60 mx-auto bg-[#55db9c]/30 rounded-[24px] p-2 flex flex-col justify-between overflow-hidden">
+ <div className="rounded-[32px] p-4 text-center bg-[#ffffff]">
+ <div className="relative w-full max-w-[280px] h-60 mx-auto bg-[#7cd7a0]/30 rounded-[24px] p-2 flex flex-col justify-between overflow-hidden">
  {/* Net Divider */}
  <div className="absolute top-1/2 inset-x-0 h-1 bg-[#000000] z-10 flex items-center justify-center">
- <span className="px-2 py-0.2 bg-[#000000] text-[#ffffff] text-[8px] font-black uppercase rounded-[1600px] -[#ffffff]">
+ <span className="px-2 py-0.5 bg-[#000000] text-[#ffffff] text-[8px] font-black uppercase rounded-[1600px] whitespace-nowrap">
  NET
  </span>
  </div>
@@ -120,7 +89,7 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  onClick={() => setSelectedZone('front-left')}
  className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
  selectedZone === 'front-left'
- ? 'bg-[#ff5c34] text-[#ffffff] scale-102 ring-2 ring-[#000000]'
+ ? 'bg-[#e85729] text-[#ffffff] scale-102 ring-2 ring-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -133,7 +102,7 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  onClick={() => setSelectedZone('front-right')}
  className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
  selectedZone === 'front-right'
- ? 'bg-[#55db9c] text-[#000000] scale-102 ring-2 ring-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000] scale-102 ring-2 ring-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -146,7 +115,7 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  onClick={() => setSelectedZone('back-left')}
  className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
  selectedZone === 'back-left'
- ? 'bg-[#ff5c34] text-[#ffffff] scale-102 ring-2 ring-[#000000]'
+ ? 'bg-[#e85729] text-[#ffffff] scale-102 ring-2 ring-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -159,7 +128,7 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  onClick={() => setSelectedZone('back-right')}
  className={`rounded-[16px] p-1.5 text-[10px] font-bold uppercase tracking-[0.032em] flex flex-col items-center justify-center transition-all cursor-pointer border border-[#000000] ${
  selectedZone === 'back-right'
- ? 'bg-[#ffd731] text-[#000000] scale-102 ring-2 ring-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000] scale-102 ring-2 ring-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -169,30 +138,20 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  </div>
  </div>
  </div>
+ </div>
 
  {/* Selected Zone Detail Card */}
+ <div className="space-y-2">
+ <SectionHeader
+ title={currentZone.name}
+ subtitle={language === 'th'
+ ? 'สถิติข้อผิดพลาดและแนวทางปรับเทคนิคในโซนนี้'
+ : 'Error count breakdown & biomechanics tips'}
+ badge={currentZone.tag}
+ badgeVariant={currentZone.color === '#e85729' ? 'orange' : 'green'}
+ />
+
  <div className="rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
- {/* Subheader */}
- <div className="flex items-center justify-between pb-2 ">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] ">
- {language === 'th' ? 'บทวิเคราะห์โซน' : 'ZONE ANALYSIS'}
- </span>
- <span className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
- {currentZone.name}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th'
- ? 'ข้อผิดพลาดและคำแนะนำปรับปรุงเทคนิคการวางไม้ในโซนนี้'
- : 'Error count breakdown and biomechanics adjustments'}
- </p>
- </div>
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] shrink-0">
- {currentZone.tag}
- </span>
- </div>
 
  <p className="text-xs text-[#000000]/80 leading-relaxed font-medium">
  {currentZone.advice}
@@ -205,17 +164,18 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  >
  {drillAdded ? (
  <>
- <Check className="w-4 h-4 stroke-[3] text-[#55db9c] shrink-0" />
+ <Check className="w-4 h-4 stroke-[3] text-[#7cd7a0] shrink-0" />
  <span>{language === 'th' ? 'เพิ่มแบบฝึกซ้อมสำเร็จ (+80 EXP)' : 'DRILL ADDED (+80 EXP)'}</span>
  </>
  ) : (
  <>
- <Zap className="w-4 h-4 fill-[#ffd731] text-[#ffd731] shrink-0" />
+ <Zap className="w-4 h-4 fill-[#e85729] text-[#e85729] shrink-0" />
  <span>{language === 'th' ? 'เพิ่มแบบฝึกซ้อมเข้า Quests (D2)' : 'ADD DRILL TO QUESTS (D2)'}</span>
  <ArrowRight className="w-4 h-4 shrink-0" />
  </>
  )}
  </button>
+ </div>
  </div>
 
  {/* Dual Actions Footer */}
@@ -225,7 +185,7 @@ export const C3_AIDiagnosticsScreen: React.FC = () => {
  onClick={() => navigateTo('C4')}
  className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
  >
- <Share2 className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
+ <Share2 className="w-3.5 h-3.5 text-[#e85729] shrink-0" />
  <span>{language === 'th' ? 'แชร์การ์ด (C4)' : 'SHARE RECAP (C4)'}</span>
  </button>
  <button

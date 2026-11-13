@@ -9,6 +9,7 @@ import {
  Star,
  Calendar,
  Zap,
+ ArrowLeft,
  ArrowRight,
  X,
  MapPin,
@@ -16,11 +17,19 @@ import {
  Sparkles,
  Check,
  RotateCw,
+ WifiOff,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { CourtFacility } from '../../types';
 import { MAP_CLUSTERS } from '../../data/mockData';
 import { playSelectSound } from '../../utils/retroAudio';
+import {
+ CACHE_KEYS,
+ CourtMapCacheData,
+ formatCacheTimestamp,
+ readCache,
+ writeCache,
+} from '../../utils/offlineCache';
 
 interface MapPinData {
  id: string;
@@ -44,25 +53,42 @@ interface MapPinData {
 }
 
 export const CourtMapScreen: React.FC = () => {
- const { courts, setSelectedCourt, updateBooking, navigateTo, t, simulateDataFetch } = useApp();
+ const {
+ courts,
+ setSelectedCourt,
+ updateBooking,
+ navigateTo,
+ goBack,
+ t,
+ simulateDataFetch,
+ isOnline,
+ lastSyncedAt,
+ refreshOfflineCache,
+ language,
+ } = useApp();
 
- // Search & Filter State
- const [searchQuery, setSearchQuery] = useState('');
- const [activeFilter, setActiveFilter] = useState<string | null>(null);
- const [showPricePerHour, setShowPricePerHour] = useState(true);
- const [onlyBookable, setOnlyBookable] = useState(false);
- const [selectedCourtId, setSelectedCourtId] = useState<string>('court_1');
+ const initialMapCache = useMemo(
+ () => readCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP),
+ []
+ );
+
+ // Search & Filter State (Rehydrated from localStorage)
+ const [searchQuery, setSearchQuery] = useState(() => initialMapCache?.searchQuery ?? '');
+ const [activeFilter, setActiveFilter] = useState<string | null>(() => initialMapCache?.activeFilter ?? null);
+ const [showPricePerHour, setShowPricePerHour] = useState(() => initialMapCache?.showPricePerHour ?? true);
+ const [onlyBookable, setOnlyBookable] = useState(() => initialMapCache?.onlyBookable ?? false);
+ const [selectedCourtId, setSelectedCourtId] = useState<string>(() => initialMapCache?.selectedCourtId ?? 'court_1');
  const [showToast, setShowToast] = useState<string | null>(null);
 
  // Bottom Sheet Height State: 'peek' (~130px) | 'half' (~46vh) | 'full' (~84vh)
- const [sheetState, setSheetState] = useState<'peek' | 'half' | 'full'>('peek');
+ const [sheetState, setSheetState] = useState<'peek' | 'half' | 'full'>(() => initialMapCache?.sheetState ?? 'peek');
  const [sheetDragDeltaY, setSheetDragDeltaY] = useState(0);
  const [isDraggingSheet, setIsDraggingSheet] = useState(false);
  const dragStartYRef = useRef(0);
 
- // Interactive Map State: Pan, Zoom, and Drag
- const [pan, setPan] = useState({ x: 0, y: 0 });
- const [zoom, setZoom] = useState(1.05);
+ // Interactive Map State: Pan, Zoom, and Drag (Rehydrated from localStorage)
+ const [pan, setPan] = useState(() => initialMapCache?.pan ?? { x: 0, y: 0 });
+ const [zoom, setZoom] = useState(() => initialMapCache?.zoom ?? 1.05);
  const [isMapDragging, setIsMapDragging] = useState(false);
  const mapDragStartRef = useRef({ x: 0, y: 0 });
  const panStartRef = useRef({ x: 0, y: 0 });
@@ -71,6 +97,23 @@ export const CourtMapScreen: React.FC = () => {
 
  // User location pulse indicator
  const [userLocationPulse, setUserLocationPulse] = useState(false);
+
+ // Persist Court Map UI state & cached court dataset to localStorage
+ useEffect(() => {
+ const existing = readCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP);
+ writeCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP, {
+ courts: courts.length > 0 ? courts : (existing?.courts ?? []),
+ selectedCourtId,
+ activeFilter,
+ searchQuery,
+ onlyBookable,
+ showPricePerHour,
+ sheetState,
+ pan,
+ zoom,
+ lastSyncedAt: isOnline ? Date.now() : (existing?.lastSyncedAt || Date.now()),
+ });
+ }, [courts, selectedCourtId, activeFilter, searchQuery, onlyBookable, showPricePerHour, sheetState, pan, zoom, isOnline]);
 
  // Filter options matching user interface
  const filterOptions = [
@@ -533,7 +576,7 @@ export const CourtMapScreen: React.FC = () => {
  onMouseMove={handleMapMouseMove}
  onMouseUp={handleMapMouseUp}
  onWheel={handleWheel}
- className="flex-1 min-h-0 flex flex-col relative bg-[#dceeff] text-[#000000]  overflow-hidden select-none"
+ className="flex-1 min-h-0 flex flex-col relative bg-[#f4f8fb] text-[#000000]  overflow-hidden select-none"
  >
  {/* 1. Interactive Map Canvas (Full Pan & Zoomable SVG Vector Map) */}
  <div
@@ -623,7 +666,7 @@ export const CourtMapScreen: React.FC = () => {
  <path
  d="M 280,0 L 320,500 L 420,900"
  fill="none"
- stroke="#ffd731"
+ stroke="#e85729"
  strokeWidth="10"
  />
 
@@ -693,7 +736,7 @@ export const CourtMapScreen: React.FC = () => {
  cx="0"
  cy="0"
  r="24"
- fill="#5c4ade"
+ fill="#15803d"
  fillOpacity="0.18"
  className="animate-ping"
  />
@@ -702,12 +745,12 @@ export const CourtMapScreen: React.FC = () => {
  cx="0"
  cy="0"
  r="36"
- fill="#ffd731"
+ fill="#e85729"
  fillOpacity="0.35"
  className="animate-ping"
  />
  )}
- <circle cx="0" cy="0" r="10" fill="#5c4ade" stroke="#000000" strokeWidth="2.5" />
+ <circle cx="0" cy="0" r="10" fill="#15803d" stroke="#000000" strokeWidth="2.5" />
  <circle cx="0" cy="0" r="4" fill="#ffffff" />
  </g>
 
@@ -731,7 +774,7 @@ export const CourtMapScreen: React.FC = () => {
  cx="0"
  cy="0"
  r="16"
- fill="#ffd731"
+ fill="#e85729"
  stroke="#000000"
  strokeWidth="2"
  filter="drop-shadow(0 2px 4px rgba(0,0,0,0.2))"
@@ -774,7 +817,7 @@ export const CourtMapScreen: React.FC = () => {
  cx="0"
  cy="0"
  r="22"
- fill="#ffd731"
+ fill="#e85729"
  fillOpacity="0.4"
  className="animate-pulse"
  />
@@ -785,7 +828,7 @@ export const CourtMapScreen: React.FC = () => {
  cx="0"
  cy="0"
  r="15"
- fill={isSelected ? '#ffd731' : '#55db9c'}
+ fill={isSelected ? '#e85729' : '#7cd7a0'}
  stroke="#000000"
  strokeWidth={isSelected ? '2.5' : '1.8'}
  filter="drop-shadow(0 2px 5px rgba(0,0,0,0.25))"
@@ -811,7 +854,7 @@ export const CourtMapScreen: React.FC = () => {
  height="16"
  rx="8"
  fill={isSelected ? '#000000' : '#000000'}
- stroke={isSelected ? '#ffd731' : '#000000'}
+ stroke={isSelected ? '#e85729' : '#000000'}
  strokeWidth="1.5"
  filter="drop-shadow(0 1px 3px rgba(0,0,0,0.3))"
  />
@@ -819,7 +862,7 @@ export const CourtMapScreen: React.FC = () => {
  x="0"
  y="2.5"
  textAnchor="middle"
- fill={isSelected ? '#ffd731' : '#ffffff'}
+ fill={isSelected ? '#e85729' : '#ffffff'}
  fontSize="8.5"
  fontWeight="900"
  >
@@ -855,11 +898,11 @@ export const CourtMapScreen: React.FC = () => {
  />
  </div>
  <div className="min-w-0 flex-1">
- <div className="flex items-center gap-1 text-[9px] font-black text-[#55db9c]">
+ <div className="flex items-center gap-1 text-[9px] font-black text-[#7cd7a0]">
  <span>● เปิดจอง</span>
  <span className="text-[#000000]/40">·</span>
  <span className="text-[#000000] flex items-center gap-0.5">
- <Star className="w-2.5 h-2.5 fill-[#ffd731] stroke-[#000000]" />
+ <Star className="w-2.5 h-2.5 fill-[#e85729] stroke-[#000000]" />
  {selectedPin.rating}
  </span>
  </div>
@@ -882,18 +925,27 @@ export const CourtMapScreen: React.FC = () => {
  )}
  </div>
 
- {/* 2. Top Search Bar & Filter Header in Slush CI */}
- <div className="relative z-20 px-4 pt-3 space-y-2 pointer-events-auto">
- {/* Search Input Box */}
- <div className="bg-[#ffffff] rounded-[1600px] p-2.5 shadow-sm flex items-center justify-between gap-2">
- <div className="flex items-center gap-2 flex-1 pl-1">
+ {/* 2. Top Search Bar & Filter Header */}
+ <div className="relative z-20 app-header-safe px-5 space-y-2.5 pointer-events-auto">
+ {/* Search Input Box with Back Navigation */}
+ <div className="bg-[#ffffff] rounded-[1600px] p-2 shadow-sm flex items-center justify-between gap-2">
+ <button
+ type="button"
+ onClick={goBack}
+ className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-transform active:scale-90 cursor-pointer shrink-0"
+ aria-label="Back"
+ title={language === 'th' ? 'ย้อนกลับ' : 'Back'}
+ >
+ <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+ </button>
+ <div className="flex items-center gap-2 flex-1 min-w-0">
  <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
  <input
  type="text"
  value={searchQuery}
  onChange={(e) => setSearchQuery(e.target.value)}
  placeholder={t.searchMap || 'ค้นหาสนามแบดมินตัน...'}
- className="w-full bg-transparent text-xs font-bold text-[#000000] placeholder:text-[#000000]/50 outline-none"
+ className="w-full bg-transparent text-xs font-bold text-[#000000] placeholder:text-[#000000]/50 outline-none truncate"
  />
  {searchQuery && (
  <button
@@ -909,10 +961,20 @@ export const CourtMapScreen: React.FC = () => {
  type="button"
  onClick={() => {
  playSelectSound();
- simulateDataFetch(600);
+ if (!isOnline) {
+ setShowToast(
+ language === 'th'
+ ? `📦 กำลังใช้ข้อมูลแคชออฟไลน์ (อัปเดต ${formatCacheTimestamp(lastSyncedAt, 'th')})`
+ : `📦 Using cached court map (Synced ${formatCacheTimestamp(lastSyncedAt, 'en')})`
+ );
+ setTimeout(() => setShowToast(null), 2400);
+ return;
+ }
+ refreshOfflineCache();
+ simulateDataFetch(500);
  }}
  className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-colors cursor-pointer"
- title="รีเฟรชสนาม (Simulate Data Fetching)"
+ title={language === 'th' ? 'รีเฟรชและอัปเดตแคชสนาม' : 'Refresh & cache courts'}
  >
  <RotateCw className="w-3.5 h-3.5" />
  </button>
@@ -932,7 +994,7 @@ export const CourtMapScreen: React.FC = () => {
 
  {/* Smart Suggestion Chips */}
  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
- <span className="text-[9px] font-black uppercase text-[#000000] bg-[#ffd731] px-2 py-0.5 rounded-full shrink-0">
+ <span className="text-[9px] font-black uppercase text-[#000000] bg-[#e85729] px-2 py-0.5 rounded-full shrink-0">
  SUGGEST
  </span>
  <button
@@ -943,7 +1005,7 @@ export const CourtMapScreen: React.FC = () => {
  handlePinClick(pin1);
  setShowToast('💡 แนะนำใกล้สุด: สนามแบดอินฟินิตี้ (1.8 km · ฿200/ชม.)');
  }}
- className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#dceeff] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
+ className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#f4f8fb] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
  >
  <span>⚡ แนะนำใกล้สุด (1.8 km)</span>
  </button>
@@ -955,7 +1017,7 @@ export const CourtMapScreen: React.FC = () => {
  handlePinClick(pinLam);
  setShowToast('🔥 แนะนำโปรเด็ด: Sport Refresh ลำลูกกา (ลด 20% รอบค่ำ)');
  }}
- className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#ffd731] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
+ className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#e85729] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
  >
  <span>🔥 ลด 20% คืนนี้ (Court 2)</span>
  </button>
@@ -974,7 +1036,7 @@ export const CourtMapScreen: React.FC = () => {
  </div>
 
  {/* Filter Pills Strip */}
- <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+ <div data-filter="true" className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
  {filterOptions.map((f) => {
  const isSelected = activeFilter === f.id;
  return (
@@ -1007,7 +1069,7 @@ export const CourtMapScreen: React.FC = () => {
  }}
  className={`px-3 py-1.5 rounded-[1600px] text-[11px] font-bold border border-[#000000] flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap active:scale-95 shadow-xs ${
  showPricePerHour
- ? 'bg-[#ffd731] text-[#000000]'
+ ? 'bg-[#e85729] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000]/60'
  }`}
  >
@@ -1023,13 +1085,13 @@ export const CourtMapScreen: React.FC = () => {
  }}
  className={`px-3 py-1.5 rounded-[1600px] text-[11px] font-bold border border-[#000000] flex items-center gap-1.5 transition-all cursor-pointer whitespace-nowrap active:scale-95 shadow-xs ${
  onlyBookable
- ? 'bg-[#55db9c] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000]/60'
  }`}
  >
  <Calendar className="w-3.5 h-3.5 text-[#000000]" />
  <span>{t.btnBookable || 'สนามที่เปิดจอง'}</span>
- <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black">
+ <span className="px-1.5 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[8px] font-black whitespace-nowrap shrink-0">
  {t.newBadge || 'ใหม่'}
  </span>
  </button>
@@ -1038,7 +1100,7 @@ export const CourtMapScreen: React.FC = () => {
 
  {/* Toast Notification Banner */}
  {showToast && (
- <div className="absolute top-36 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] -[#ffd731] text-xs font-bold shadow-lg animate-bounce whitespace-nowrap">
+ <div className="absolute top-36 left-1/2 -translate-x-1/2 z-30 px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] -[#e85729] text-xs font-bold shadow-lg animate-bounce whitespace-nowrap">
  {showToast}
  </div>
  )}
@@ -1053,7 +1115,7 @@ export const CourtMapScreen: React.FC = () => {
  <button
  type="button"
  onClick={handleRecenter}
- className="w-10 h-10 rounded-[1600px] bg-[#ffffff] border border-[#000000] shadow-md flex items-center justify-center text-[#000000] hover:bg-[#ffd731] transition-transform active:scale-90 cursor-pointer"
+ className="w-10 h-10 rounded-[1600px] bg-[#ffffff] border border-[#000000] shadow-md flex items-center justify-center text-[#000000] hover:bg-[#e85729] transition-transform active:scale-90 cursor-pointer"
  title="ตำแหน่งปัจจุบัน (Recenter)"
  >
  <Navigation className="w-4 h-4 fill-current rotate-45 text-[#000000]" />
@@ -1064,7 +1126,7 @@ export const CourtMapScreen: React.FC = () => {
  <button
  type="button"
  onClick={handleZoomIn}
- className="w-10 h-9 flex items-center justify-center text-[#000000] hover:bg-[#ffd731] active:bg-[#f3f4f6] cursor-pointer transition-colors"
+ className="w-10 h-9 flex items-center justify-center text-[#000000] hover:bg-[#e85729] active:bg-[#f3f4f6] cursor-pointer transition-colors"
  title="ซูมเข้า (Zoom In)"
  >
  <Plus className="w-4 h-4 stroke-[2.5]" />
@@ -1073,7 +1135,7 @@ export const CourtMapScreen: React.FC = () => {
  <button
  type="button"
  onClick={handleZoomOut}
- className="w-10 h-9 flex items-center justify-center text-[#000000] hover:bg-[#ffd731] active:bg-[#f3f4f6] cursor-pointer transition-colors"
+ className="w-10 h-9 flex items-center justify-center text-[#000000] hover:bg-[#e85729] active:bg-[#f3f4f6] cursor-pointer transition-colors"
  title="ซูมออก (Zoom Out)"
  >
  <Minus className="w-4 h-4 stroke-[2.5]" />
@@ -1099,23 +1161,29 @@ export const CourtMapScreen: React.FC = () => {
  className="pt-2.5 pb-2 px-4 flex flex-col items-center cursor-grab active:cursor-grabbing select-none shrink-0 "
  >
  {/* Visual Pull-up Handle Pill */}
- <div className="w-12 h-1.5 rounded-[1600px] bg-[#000000] hover:bg-[#5c4ade] mb-2 transition-colors" />
+ <div className="w-12 h-1.5 rounded-[1600px] bg-[#000000] hover:bg-[#15803d] mb-2 transition-colors" />
 
- <div className="w-full flex items-center justify-between">
- <div className="flex items-center gap-2">
- <span className="font-['Antonio',sans-serif] text-2xl font-black text-[#000000] leading-none">
+ <div className="w-full flex items-center justify-between gap-2">
+ <div className="flex items-center gap-2 min-w-0">
+ <span className="font-['Antonio',sans-serif] text-2xl font-black text-[#000000] leading-none shrink-0">
  {filteredPins.length}
  </span>
- <h3 className="font-bold text-sm text-[#000000]">
+ <h3 className="font-bold text-sm text-[#000000] truncate">
  {t.nearbyCourts || 'สนามแบดมินตันใกล้คุณ'}
  </h3>
+ {!isOnline && (
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] border border-[#000000] text-[9px] font-black flex items-center gap-1 shrink-0">
+ <WifiOff className="w-2.5 h-2.5" />
+ {language === 'th' ? 'แคชออฟไลน์' : 'Cached'}
+ </span>
+ )}
  </div>
 
  {/* Tap to Toggle Expand/Collapse */}
  <button
  type="button"
  onClick={toggleSheetState}
- className="text-xs font-bold text-[#000000] flex items-center gap-1 hover:underline cursor-pointer bg-[#dceeff] px-2.5 py-1 rounded-[1600px] border border-[#000000]"
+ className="text-xs font-bold text-[#000000] flex items-center gap-1 hover:underline cursor-pointer bg-[#f4f8fb] px-2.5 py-1 rounded-[1600px] border border-[#000000]"
  >
  <span>
  {sheetState === 'full' ? 'ย่อหน้าต่าง' : sheetState === 'half' ? 'ขยายเต็มจอ' : 'ขยายดูทั้งหมด'}
@@ -1163,8 +1231,8 @@ export const CourtMapScreen: React.FC = () => {
  onClick={() => handlePinClick(court)}
  className={`p-3 rounded-[24px] transition-all cursor-pointer flex items-center justify-between gap-3 shadow-xs ${
  isSelected
- ? 'bg-[#ffd731]/25 scale-[1.01]'
- : 'bg-[#ffffff] -[#000000] hover:bg-[#dceeff]/30'
+ ? 'bg-[#e85729]/25 scale-[1.01]'
+ : 'bg-[#ffffff] -[#000000] hover:bg-[#f4f8fb]/30'
  }`}
  >
  <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -1176,17 +1244,17 @@ export const CourtMapScreen: React.FC = () => {
  className="w-full h-full object-cover"
  />
  {isSelected && (
- <div className="absolute top-1 left-1 w-2.5 h-2.5 rounded-full bg-[#55db9c] " />
+ <div className="absolute top-1 left-1 w-2.5 h-2.5 rounded-full bg-[#7cd7a0] " />
  )}
  </div>
 
  <div className="min-w-0 flex-1">
  <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[8px] font-black whitespace-nowrap">
+ <span className="px-1.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[8px] font-black whitespace-nowrap shrink-0">
  {t.bookableTag || 'เปิดจอง'}
  </span>
  <div className="flex items-center gap-0.5 text-[10px] font-bold text-[#000000]">
- <Star className="w-3 h-3 text-[#ffd731] fill-[#ffd731]" />
+ <Star className="w-3 h-3 text-[#e85729] fill-[#e85729]" />
  <span>{court.rating}</span>
  </div>
  </div>

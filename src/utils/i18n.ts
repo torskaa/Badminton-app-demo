@@ -74,8 +74,8 @@ export const TRANSLATIONS = {
     collapseList: 'ย่อลง',
 
     // Club Tools Screen
-    clubToolsHeader: 'กล่องเครื่องมือสโมสร',
-    clubToolsHeaderSub: 'ชุดเครื่องมือผู้ช่วยก๊วนและสโมสรแบดมินตัน',
+    clubToolsHeader: 'เครื่องมือ',
+    clubToolsHeaderSub: 'จัดทีม นับแต้ม และหารค่าคอร์ทก๊วน',
     backToMenu: '← เมนูเครื่องมือ',
     toolScoreboard: 'สมุดบันทึกคะแนน v2',
     toolScoreboardDesc: 'ระบบนับคะแนนสดและตัวช่วยเสิร์ฟ',
@@ -127,8 +127,8 @@ export const TRANSLATIONS = {
     shareToRsvpBtn: 'ส่งบิลนี้ไปยังหน้านัดก๊วน',
 
     // Finance Screen
-    financeHeader: 'การเงินและกระเป๋าเงิน',
-    financeHeaderSub: 'จัดการค่าใช้จ่ายก๊วนและคอร์ทได้สะดวกในที่เดียว',
+    financeHeader: 'การเงิน',
+    financeHeaderSub: 'จัดการยอดเงิน เติมเครดิตและดูประวัติ',
     zeroFeesBadge: 'ฟรีค่าธรรมเนียมการจองคอร์ท',
     payLaterTitle: 'วงเงินผ่อนชำระ',
     creditBadge: 'วงเงินพร้อมใช้',
@@ -226,8 +226,8 @@ export const TRANSLATIONS = {
     collapseList: 'Collapse',
 
     // Club Tools Screen
-    clubToolsHeader: 'Club Tools',
-    clubToolsHeaderSub: 'Assistant toolbox for squads & badminton clubs',
+    clubToolsHeader: 'Tools',
+    clubToolsHeaderSub: 'Scoreboard, teams & split bills.',
     backToMenu: '← Tool Menu',
     toolScoreboard: 'Scoreboard v2',
     toolScoreboardDesc: 'Live scorer & service box indicator',
@@ -279,8 +279,8 @@ export const TRANSLATIONS = {
     shareToRsvpBtn: 'Share Bill to Event RSVP (E2)',
 
     // Finance Screen
-    financeHeader: 'Finance & Wallet',
-    financeHeaderSub: 'Do more with your money with SmashFinance!',
+    financeHeader: 'Finance',
+    financeHeaderSub: 'Wallet balance & court receipts.',
     zeroFeesBadge: 'Zero Fees for Badminton Courts',
     payLaterTitle: 'PayLater Credit',
     creditBadge: 'Available Limit',

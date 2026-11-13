@@ -12,6 +12,7 @@ import { GameCompanionWidget } from './components/common/GameCompanionWidget';
 import { ExpCelebrationModal } from './components/common/ExpCelebrationModal';
 import { LoadingSkeleton } from './components/common/LoadingSkeleton';
 import { NotificationBanner } from './components/common/NotificationBanner';
+import { OfflineIndicator } from './components/common/OfflineIndicator';
 
 // Redesigned Grab-Superapp Primary Screens
 import { HomeScreen } from './components/screens/HomeScreen';
@@ -165,6 +166,7 @@ function MainViewport() {
         </AnimatePresence>
       </div>
       <NotificationBanner />
+      <OfflineIndicator />
       {SHOW_GAME_COMPANION && <GameCompanionWidget />}
       <BottomTabBar />
       <ExpCelebrationModal />

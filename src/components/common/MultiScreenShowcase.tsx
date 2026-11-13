@@ -37,7 +37,7 @@ export const MultiScreenShowcase: React.FC = () => {
  subtitle: 'Build Community & Instant Booking',
  targetScreen: 'A1',
  badge: 'Visual Hero & CTA',
- badgeColor: 'bg-[#55db9c]',
+ badgeColor: 'bg-[#7cd7a0]',
  component: <A1_WelcomeScreen />,
  showTabBar: false,
  },
@@ -47,7 +47,7 @@ export const MultiScreenShowcase: React.FC = () => {
  subtitle: 'Categories, Quick Match & Arenas',
  targetScreen: 'B1',
  badge: 'Quick Sparring',
- badgeColor: 'bg-[#4da2ff]',
+ badgeColor: 'bg-[#7cd7a0]',
  component: <B1_CourtDiscoveryScreen />,
  showTabBar: true,
  },
@@ -57,7 +57,7 @@ export const MultiScreenShowcase: React.FC = () => {
  subtitle: 'Taraflex BWF & Realtime Schedule',
  targetScreen: 'B2',
  badge: '2x EXP Prime-Time',
- badgeColor: 'bg-[#ffd731]',
+ badgeColor: 'bg-[#e8f7ee]',
  component: <B2_CourtDetailSlotScreen />,
  showTabBar: false,
  },
@@ -67,7 +67,7 @@ export const MultiScreenShowcase: React.FC = () => {
  subtitle: 'Sets Tracking & Audio Waves',
  targetScreen: 'C1',
  badge: 'Thumb-Tap Scoring',
- badgeColor: 'bg-[#fb4903]',
+ badgeColor: 'bg-[#e85729] text-[#ffffff]',
  component: <C1_InMatchLoggerScreen />,
  showTabBar: true,
  },
@@ -77,7 +77,7 @@ export const MultiScreenShowcase: React.FC = () => {
  subtitle: 'Weakness Diagnostics & FIFA Card',
  targetScreen: 'D1',
  badge: '5-Axis AI Radar',
- badgeColor: 'bg-[#e9ccff]',
+ badgeColor: 'bg-[#e8f7ee]',
  component: <D1_AICoachDashboardScreen />,
  showTabBar: true,
  },
@@ -92,12 +92,12 @@ export const MultiScreenShowcase: React.FC = () => {
  };
 
  return (
- <div className="w-full flex flex-col items-center py-6 px-4 select-none min-h-screen bg-[#dceeff] text-[#000000]">
+ <div className="w-full flex flex-col items-center py-6 px-4 select-none min-h-screen bg-[#f4f8fb] text-[#000000]">
  {/* Header Info Banner (Max-width 1360px per guidelines, soft card 28px, 1px black outline) */}
  <div className="w-full max-w-[1360px] mb-6 p-6 rounded-[28px] bg-[#ffffff] flex flex-col md:flex-row md:items-center justify-between gap-4">
  <div>
- <div className="flex items-center gap-2 text-xs font-bold tracking-[0.032em] text-[#fb4903] uppercase mb-1">
- <span className="w-2.5 h-2.5 rounded-full bg-[#fb4903] " />
+ <div className="flex items-center gap-2 text-xs font-bold tracking-[0.032em] text-[#e85729] uppercase mb-1">
+ <span className="w-2.5 h-2.5 rounded-full bg-[#e85729] " />
  <span>INTERACTIVE MULTI-SCREEN SHOWCASE</span>
  </div>
  <h1 className="lateral-display text-4xl md:text-5xl font-black uppercase tracking-tight text-[#000000]">
@@ -110,7 +110,7 @@ export const MultiScreenShowcase: React.FC = () => {
  </div>
 
  <div className="flex items-center gap-2.5 shrink-0">
- <span className="px-4 py-2 rounded-[1600px] bg-[#ffd731] text-[#000000] font-bold text-xs uppercase tracking-[0.032em]">
+ <span className="px-4 py-2 rounded-[1600px] bg-[#7cd7a0] text-[#000000] font-bold text-xs uppercase tracking-[0.032em]">
  📱 5 SCREENS ACTIVE
  </span>
  </div>
@@ -143,7 +143,7 @@ export const MultiScreenShowcase: React.FC = () => {
  <button
  type="button"
  onClick={() => handleOpenSingle(item.targetScreen)}
- className="px-3.5 py-1.5 rounded-[1600px] text-xs font-bold tracking-[0.032em] uppercase flex items-center gap-1.5 transition-all cursor-pointer border border-[#000000] bg-[#ffffff] text-[#000000] hover:bg-[#ffd731] active:scale-95"
+ className="px-3.5 py-1.5 rounded-[1600px] text-xs font-bold tracking-[0.032em] uppercase flex items-center gap-1.5 transition-all cursor-pointer border border-[#000000] bg-[#ffffff] text-[#000000] hover:bg-[#7cd7a0] active:scale-95"
  title="เปิดทดสอบหน้าจอนี้ในโหมดเดี่ยว"
  >
  <Maximize2 className="w-3.5 h-3.5" />
@@ -157,7 +157,7 @@ export const MultiScreenShowcase: React.FC = () => {
  <div className="absolute top-3.5 inset-x-0 z-50 flex justify-center pointer-events-none">
  <div className="w-24 h-5 bg-[#000000] rounded-[1600px] flex items-center justify-between px-2 text-[9px] text-[#ffffff]">
  <span className="w-2 h-2 rounded-full bg-[#333333]" />
- <span className="w-2.5 h-2.5 rounded-full bg-[#55db9c]" />
+ <span className="w-2.5 h-2.5 rounded-full bg-[#7cd7a0]" />
  </div>
  </div>
 

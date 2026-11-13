@@ -1,21 +1,63 @@
-import React, { useState } from 'react';
-import { Zap, CheckCircle2, Trophy, Dumbbell, Award, ArrowRight, Sparkles, Check } from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { Zap, CheckCircle2, Trophy, Dumbbell, WifiOff } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
+import {
+ CACHE_KEYS,
+ QuestsDrillsCacheData,
+ formatCacheTimestamp,
+ readCache,
+ writeCache,
+} from '../../utils/offlineCache';
 
 export const D2_AIQuestsDrillsScreen: React.FC = () => {
- const { quests, claimQuestReward, drills, completeDrill, language } = useApp();
- const [activeTab, setActiveTab] = useState<'quests' | 'drills'>('quests');
+ const { quests, claimQuestReward, drills, completeDrill, language, isOnline, hasPendingSync, lastSyncedAt } = useApp();
+ const [activeTab, setActiveTab] = useState<'quests' | 'drills'>(() => {
+ const cached = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+ return cached?.activeTab === 'drills' ? 'drills' : 'quests';
+ });
+
+ useEffect(() => {
+ const existing = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+ writeCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS, {
+ quests: existing?.quests ?? quests,
+ drills: existing?.drills ?? drills,
+ activeTab,
+ lastSyncedAt: existing?.lastSyncedAt ?? Date.now(),
+ pendingSync: existing?.pendingSync ?? !isOnline,
+ });
+ }, [activeTab, quests, drills, isOnline]);
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader
- title={language === 'th' ? 'ภารกิจและแบบฝึกซ้อม' : 'Daily Quests & Drills'}
- showBack
- />
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
+
+ {/* Offline Cached Progress Notice */}
+ {!isOnline && (
+ <div className="px-4 pt-2.5 shrink-0">
+ <div className="rounded-[18px] bg-[#ffffff] border border-[#000000] px-3 py-2 flex items-center justify-between gap-2 text-[10px] font-bold">
+ <div className="flex items-center gap-1.5 min-w-0">
+ <span className="w-5 h-5 rounded-[1600px] bg-[#e85729] text-[#ffffff] flex items-center justify-center shrink-0">
+ <WifiOff className="w-3 h-3" />
+ </span>
+ <span className="truncate text-[#000000]">
+ {language === 'th'
+ ? `บันทึกความคืบหน้า EXP ในเครื่องอัตโนมัติ (แคช ${formatCacheTimestamp(lastSyncedAt, 'th')})`
+ : `Quest EXP saved locally offline (Cached ${formatCacheTimestamp(lastSyncedAt, 'en')})`}
+ </span>
+ </div>
+ {hasPendingSync && (
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] border border-[#000000] text-[9px] font-black shrink-0">
+ {language === 'th' ? 'รอซิงค์' : 'Queued'}
+ </span>
+ )}
+ </div>
+ </div>
+ )}
 
  {/* Pill Segmented Tabs */}
- <div className="px-4 py-3 flex items-center gap-2 bg-[#ffffff] shrink-0">
+ <div data-filter="true" className="px-5 py-3 flex items-center gap-2 bg-[#ffffff] shrink-0">
  <button
  type="button"
  onClick={() => setActiveTab('quests')}
@@ -48,30 +90,17 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </div>
 
  {/* Single Scroll Container */}
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
  {activeTab === 'quests' ? (
  <>
- {/* Quests Header Info */}
- <div className="rounded-[28px] p-4 flex items-center justify-between bg-[#ffffff]">
- <div>
- <div className="flex items-center gap-1.5 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] inline-block text-[#000000]">
- {language === 'th' ? 'ภารกิจที่กำลังเปิด' : 'Active Quests'}
- </span>
- <span className="text-[10px] font-bold text-[#000000]/60 uppercase">
- {language === 'th' ? 'รีเซ็ตทุก 24 ชม.' : 'Resets in 24h'}
- </span>
- </div>
- <h3 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
- {language === 'th' ? 'กระดานภารกิจสะสม EXP ประจำวัน' : 'DAILY MISSION BOARD'}
- </h3>
- <p className="text-xs text-[#000000]/70 font-bold mt-0.5">
- {language === 'th'
- ? 'ทำภารกิจรายวันเพื่อรับ EXP และปลดล็อกเหรียญตราเกียรติยศนักกีฬา'
- : 'Complete daily missions to earn EXP and unlock athlete badges.'}
- </p>
- </div>
- </div>
+ <SectionHeader
+ title={language === 'th' ? 'ภารกิจสะสม EXP ประจำวัน' : 'DAILY MISSION BOARD'}
+ subtitle={language === 'th'
+ ? 'ทำภารกิจรายวันเพื่อรับ EXP และปลดล็อกเหรียญตรา'
+ : 'Complete daily missions to earn EXP and badges'}
+ badge={language === 'th' ? 'รีเซ็ต 24 ชม.' : 'RESETS 24H'}
+ badgeVariant="green"
+ />
 
  {/* Quest Items */}
  <div className="space-y-2.5">
@@ -84,7 +113,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  >
  <div className="flex items-start justify-between gap-2">
  <div className="flex items-center gap-3">
- <div className="w-11 h-11 rounded-[1600px] bg-[#ffd731] flex items-center justify-center text-xl shrink-0">
+ <div className="w-11 h-11 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center text-xl shrink-0">
  {quest.icon || '🏸'}
  </div>
  <div>
@@ -98,7 +127,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </div>
  </div>
 
- <span className="px-2.5 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] shrink-0 bg-[#55db9c] text-[#000000]">
+ <span className="px-2.5 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] shrink-0 whitespace-nowrap bg-[#7cd7a0] text-[#000000]">
  +{quest.expReward} EXP
  </span>
  </div>
@@ -106,7 +135,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  {/* Progress Bar */}
  <div className="w-full bg-[#e9e9e9] rounded-[1600px] h-3 overflow-hidden p-0.5 ">
  <div
- className="bg-[#55db9c] h-full rounded-[1600px] transition-all duration-300"
+ className="bg-[#7cd7a0] h-full rounded-[1600px] transition-all duration-300"
  style={{ width: `${Math.min(100, (quest.current / quest.target) * 100)}%` }}
  />
  </div>
@@ -117,7 +146,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </span>
 
  {quest.claimed ? (
- <span className="flex items-center gap-1 text-[11px] font-bold text-[#55db9c]">
+ <span className="flex items-center gap-1 text-[11px] font-bold text-[#7cd7a0]">
  <CheckCircle2 className="w-3.5 h-3.5" />
  <span>{language === 'th' ? 'รับแล้ว' : 'Claimed'}</span>
  </span>
@@ -142,25 +171,14 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </>
  ) : (
  <>
- {/* Drills Section */}
- <div className="rounded-[28px] p-4 bg-[#ffffff]">
- <div className="flex items-center gap-1.5 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#e9ccff] inline-block text-[#000000]">
- {language === 'th' ? 'การฝึกซ้อมเชิงแท็กติก' : 'TACTICAL DRILLS'}
- </span>
- <span className="text-[10px] font-bold text-[#000000]/60 uppercase">
- {language === 'th' ? 'ออกแบบตามจุดอ่อน' : 'Weakness-Targeted'}
- </span>
- </div>
- <h3 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
- {language === 'th' ? 'แบบฝึกซ้อมเฉพาะบุคคลเพื่อยกระดับทักษะ' : 'PERSONALIZED PRACTICE DRILLS'}
- </h3>
- <p className="text-xs text-[#000000]/70 font-bold mt-0.5">
- {language === 'th'
- ? 'แบบฝึกซ้อมเฉพาะบุคคลที่ออกแบบจากสถิติจุดอ่อนบนคอร์ท เพื่อพัฒนาเรดาร์ทักษะ 5 ด้าน'
- : 'Personalized drills tailored from in-match telemetry to level up your 5-axis skill radar.'}
- </p>
- </div>
+ <SectionHeader
+ title={language === 'th' ? 'แบบฝึกซ้อมเฉพาะบุคคล' : 'PERSONALIZED PRACTICE DRILLS'}
+ subtitle={language === 'th'
+ ? 'ออกแบบตามจุดอ่อนบนคอร์ทเพื่ออัปเรดาร์ 5 ด้าน'
+ : 'Tailored from telemetry to boost your 5-axis skill radar'}
+ badge={language === 'th' ? 'สายแท็กติก' : 'TACTICAL'}
+ badgeVariant="green"
+ />
 
  <div className="space-y-3">
  {drills.map((drill) => (
@@ -168,13 +186,10 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  key={drill.id}
  className="rounded-[24px] p-4 space-y-3 bg-[#ffffff]"
  >
- <div className="flex items-start justify-between">
- <div>
+ <div className="flex items-start justify-between gap-2">
+ <div className="min-w-0">
  <div className="flex items-center gap-2 mb-1">
- <span className="px-2 py-0.5 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000]">
- {drill.focusArea}
- </span>
- <span className="text-[11px] font-bold text-[#000000]/60">
+ <span className="text-[11px] font-bold text-[#000000]/60 whitespace-nowrap">
  ⏱️ {drill.durationMin} {language === 'th' ? 'นาที' : 'mins'}
  </span>
  </div>
@@ -185,10 +200,13 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  {drill.description}
  </p>
  </div>
+ <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#7cd7a0] text-[#000000] shrink-0 whitespace-nowrap">
+ {drill.focusArea}
+ </span>
  </div>
 
  <div className="flex items-center justify-between pt-2 ">
- <span className="text-xs font-black text-[#5c4ade]">
+ <span className="text-xs font-black text-[#15803d]">
  +{drill.expReward} EXP
  </span>
  <button

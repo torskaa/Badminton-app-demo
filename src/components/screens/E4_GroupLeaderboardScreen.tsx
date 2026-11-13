@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Trophy, Medal, Zap, Flame, Crown, Swords, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 import { PlayerTier } from '../../types';
 
 export const E4_GroupLeaderboardScreen: React.FC = () => {
@@ -14,23 +16,21 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
  });
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader title="ตารางอันดับก๊วน & SEASON TIER" showBack />
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
  {/* Season Header Banner */}
- <div className="rounded-[28px] p-5 space-y-2.5 bg-[#ffffff]">
- <div className="flex items-center justify-between text-xs pb-2">
- <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] font-black text-[10px] uppercase tracking-[0.032em] flex items-center gap-1.5">
- <Crown className="w-3.5 h-3.5 fill-[#000000]" />
- SEASON 4: BANGKOK CLASH
- </span>
- <span className="text-[10px] bg-[#dceeff] px-2.5 py-0.5 rounded-[1600px] font-bold">
- 14 DAYS LEFT
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title="SEASON 4: BANGKOK CLASH"
+ subtitle="สะสม Win Rate และคะแนนเพื่อเลื่อนชั้น"
+ badge="14 DAYS LEFT"
+ badgeVariant="orange"
+ />
 
- <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight pt-1 leading-tight text-[#000000]">
+ <div className="rounded-[28px] p-5 space-y-2.5 bg-[#ffffff]">
+ <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight leading-tight text-[#000000]">
  ตารางจัดอันดับก๊วนตบสนั่น พระราม 9
  </h2>
  <p className="text-xs text-[#000000]/70 font-medium">
@@ -48,19 +48,17 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
  </button>
  </div>
  </div>
+ </div>
 
  {/* Tier Filter Section */}
- <div className="space-y-1.5">
- <div className="flex items-center justify-between px-1">
- <span className="text-[10px] font-bold uppercase tracking-wider text-[#000000]/60">
- เลือกลีกระดับฝีมือ · LEAGUE FILTER
- </span>
- <span className="text-[10px] font-bold text-[#5c4ade]">
- {selectedTierFilter}
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title="เลือกลีกระดับฝีมือ · LEAGUE FILTER"
+ badge={selectedTierFilter}
+ badgeVariant="orange"
+ />
  {/* Tier Filter Pills */}
- <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+ <div data-filter="true" className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
  {['All', 'Diamond', 'Gold', 'Silver', 'Bronze'].map((tier) => (
  <button
  type="button"
@@ -79,14 +77,11 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
  </div>
 
  {/* Ranked Players List Header */}
- <div className="flex items-center justify-between px-1 pt-1">
- <span className="text-[10px] font-bold uppercase tracking-wider text-[#000000]/60">
- อันดับนักกีฬาในก๊วน · SQUAD RANKINGS
- </span>
- <span className="text-[10px] font-bold text-[#000000]/60">
- {filteredList.length} รายชื่อ
- </span>
- </div>
+ <SectionHeader
+ title="อันดับนักกีฬาในก๊วน · SQUAD RANKINGS"
+ badge={`${filteredList.length} รายชื่อ`}
+ badgeVariant="soft"
+ />
 
  {/* Ranked Players List */}
  <div className="space-y-2.5">
@@ -105,27 +100,29 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
  winRate: item.winRate,
  })}
  className={`p-3.5 rounded-[24px] transition-all flex items-center justify-between cursor-pointer hover:scale-[1.01] active:scale-[0.99] ${
- isUser ? 'bg-[#ffd731]' : 'bg-[#ffffff]'
+ isUser ? 'bg-[#7cd7a0]' : 'bg-[#ffffff]'
  }`}
  >
- <div className="flex items-center gap-3">
- <div className={`w-8 h-8 rounded-[1600px] flex items-center justify-center font-['Antonio',sans-serif] text-base font-black ${
+ <div className="flex items-center gap-2.5 min-w-0">
+ <div className={`w-7 h-7 rounded-[1600px] border-[1.5px] border-[#000000] flex items-center justify-center font-['Antonio',sans-serif] text-sm font-black shrink-0 ${
  item.rank === 1
- ? 'bg-[#000000] text-[#ffd731]'
+ ? 'bg-[#000000] text-[#e85729]'
  : item.rank === 2
- ? 'bg-[#cccccc] text-[#000000]'
+ ? 'bg-[#f4f8fb] text-[#000000]'
  : item.rank === 3
- ? 'bg-[#ff5c34] text-[#ffffff]'
+ ? 'bg-[#e85729] text-[#ffffff]'
  : 'bg-[#ffffff] text-[#000000]'
  }`}>
  {item.rank}
  </div>
 
- <div>
+ <DoodleAvatar seed={item.name} size="sm" />
+
+ <div className="min-w-0">
  <div className="flex items-center gap-1.5">
  <span className="font-bold text-xs text-[#000000]">{item.name}</span>
  {isUser && (
- <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-bold uppercase">
+ <span className="px-1.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-bold uppercase whitespace-nowrap shrink-0">
  You
  </span>
  )}

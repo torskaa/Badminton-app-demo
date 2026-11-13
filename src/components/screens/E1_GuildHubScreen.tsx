@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Users, Calendar, Trophy, ChevronRight, Plus, ArrowRight, Swords, Sparkles } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 import { GuildHubEmptyState } from '../common/GuildHubEmptyState';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 
 export const E1_GuildHubScreen: React.FC = () => {
  const { guilds, currentEvent, navigateTo, gainExp } = useApp();
@@ -37,22 +39,22 @@ export const E1_GuildHubScreen: React.FC = () => {
  : guilds;
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#dceeff] text-[#000000]">
- <MobileHeader title="Guilds & Community" />
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#f4f8fb] text-[#000000]">
+ <MobileHeader />
 
- <div className="p-4 space-y-4">
+ <div className="px-5 pt-4 pb-6 space-y-4">
  {/* Community Header Banner */}
- <div className="rounded-[28px] p-4 bg-[#ffffff] space-y-2">
- <div className="flex items-center justify-between pb-1.5">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[9px] font-black tracking-wider uppercase bg-[#e9ccff] text-[#000000]">
- ศูนย์กลางคอมมูนิตี้ · SQUAD HUB
- </span>
- <span className="text-[10px] font-bold text-[#000000]/60">
- สถานะ: เปิดรับสมาชิก
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title="ศูนย์กลางคอมมูนิตี้ · SQUAD HUB"
+ subtitle="รวมก๊วนตีแบดในกรุงเทพฯ และจัดทีมลงแข่ง"
+ badge="เปิดรับสมาชิก"
+ badgeVariant="green"
+ />
+
+ <div className="rounded-[28px] p-4 bg-[#ffffff]">
  <div className="flex items-center gap-3">
- <div className="w-12 h-12 rounded-[1600px] bg-[#ffd731] flex items-center justify-center font-bold text-[#000000] text-xl shrink-0">
+ <div className="w-12 h-12 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center font-bold text-[#000000] text-xl shrink-0">
  👥
  </div>
  <div>
@@ -65,33 +67,41 @@ export const E1_GuildHubScreen: React.FC = () => {
  </div>
  </div>
  </div>
+ </div>
 
  {/* Featured Upcoming Guild Event Banner */}
+ <div className="space-y-2">
+ <SectionHeader
+ title="กิจกรรมนัดตีแบด · UPCOMING SESSION"
+ subtitle="เสาร์หน้า · นัดรวมก๊วนประจำสัปดาห์"
+ badge={`${currentEvent.attendees.length}/${currentEvent.maxPlayers} RSVP'd`}
+ badgeVariant="green"
+ />
+
  <div
  onClick={() => navigateTo('E2')}
  className="rounded-[28px] p-5 cursor-pointer hover:scale-[1.01] active:scale-[0.99] transition-transform space-y-3 bg-[#ffffff]"
  >
- <div className="flex items-center justify-between text-xs pb-2">
- <div className="flex items-center gap-1.5">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] text-[#000000] font-black tracking-wider text-[9px] uppercase">
- กิจกรรมนัดตีแบด · UPCOMING SESSION
- </span>
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] font-bold tracking-[0.032em] text-[10px] uppercase flex items-center gap-1">
- <Calendar className="w-3 h-3" /> Next Saturday
- </span>
- </div>
- <span className="px-2.5 py-0.5 rounded-[1600px] text-xs font-black bg-[#55db9c] text-[#000000]">
- {currentEvent.attendees.length}/{currentEvent.maxPlayers} RSVP'd
- </span>
- </div>
 
- <div>
+ <div className="flex items-start justify-between gap-2">
+ <div className="min-w-0">
  <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase leading-tight tracking-tight text-[#000000]">
  {currentEvent.title}
  </h3>
  <p className="text-xs text-[#000000]/70 font-medium mt-0.5">
  {currentEvent.courtName} · {currentEvent.date} ({currentEvent.timeRange})
  </p>
+ </div>
+ <div className="flex items-center -space-x-2 shrink-0 pt-0.5">
+ {currentEvent.attendees.slice(0, 3).map((a) => (
+ <DoodleAvatar
+ key={a.id}
+ seed={a.name}
+ size="xs"
+ ringClass="border-2 border-[#000000] ring-1 ring-[#ffffff]"
+ />
+ ))}
+ </div>
  </div>
 
  {/* Split Bill preview & Attend button */}
@@ -117,6 +127,7 @@ export const E1_GuildHubScreen: React.FC = () => {
  </button>
  </div>
  </div>
+ </div>
 
  {/* Quick Hub Navigation Cards */}
  <div className="grid grid-cols-2 gap-2.5">
@@ -126,10 +137,10 @@ export const E1_GuildHubScreen: React.FC = () => {
  className="border border-[#000000] rounded-[24px] p-4 text-left cursor-pointer hover:scale-105 active:scale-95 transition-transform flex flex-col justify-between h-32 bg-[#ffffff]"
  >
  <div className="flex items-center justify-between">
- <div className="w-9 h-9 rounded-[1600px] bg-[#ffd731] text-[#000000] flex items-center justify-center font-bold">
+ <div className="w-9 h-9 rounded-[1600px] bg-[#e85729] text-[#ffffff] flex items-center justify-center font-bold">
  <Swords className="w-4 h-4" />
  </div>
- <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-[1600px] bg-[#dceeff] ">
+ <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-[1600px] bg-[#f4f8fb] whitespace-nowrap shrink-0">
  จับคู่อัจฉริยะ
  </span>
  </div>
@@ -147,10 +158,10 @@ export const E1_GuildHubScreen: React.FC = () => {
  className="border border-[#000000] rounded-[24px] p-4 text-left cursor-pointer hover:scale-105 active:scale-95 transition-transform flex flex-col justify-between h-32 bg-[#ffffff]"
  >
  <div className="flex items-center justify-between">
- <div className="w-9 h-9 rounded-[1600px] bg-[#55db9c] text-[#000000] flex items-center justify-center font-bold">
+ <div className="w-9 h-9 rounded-[1600px] bg-[#7cd7a0] text-[#000000] flex items-center justify-center font-bold">
  <Trophy className="w-4 h-4" />
  </div>
- <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-[1600px] bg-[#ffd731] ">
+ <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-[1600px] bg-[#e8f7ee] whitespace-nowrap shrink-0">
  ตารางอันดับ
  </span>
  </div>
@@ -165,27 +176,25 @@ export const E1_GuildHubScreen: React.FC = () => {
 
  {/* Guild Category Tabs + Empty State Simulator Toggle */}
  <div className="space-y-3">
- <div className="flex items-center justify-between">
- <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wider text-[#000000]">
- ก๊วนแบดมินตันในกรุงเทพฯ
- </h4>
- <div className="flex items-center gap-2">
+ <SectionHeader
+ title="ก๊วนแบดมินตันในกรุงเทพฯ"
+ subtitle={`พบ ${filteredGuilds.length} ก๊วนที่เปิดรับสมาชิก`}
+ rightSlot={
  <button
  type="button"
  onClick={() => setSimulateEmpty(!simulateEmpty)}
- className={`text-[10px] font-bold tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] border border-[#000000] cursor-pointer transition-colors ${
- simulateEmpty ? 'bg-[#fb4903] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+ className={`text-[10px] font-bold tracking-[0.032em] px-2.5 py-1 rounded-[1600px] border border-[#000000] cursor-pointer transition-colors whitespace-nowrap shrink-0 ${
+ simulateEmpty ? 'bg-[#e85729] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  title="สลับดูหน้าตาตอนไม่พบก๊วน (Empty State)"
  >
- {simulateEmpty ? '✕ ปิดจำลอง Empty' : '🔍 ทดสอบ Empty State'}
+ {simulateEmpty ? '✕ ปิด Empty' : '🔍 ทดสอบ Empty'}
  </button>
- <span className="text-xs text-[#000000]/60 font-bold">{filteredGuilds.length} ก๊วน</span>
- </div>
- </div>
+ }
+ />
 
  {/* Filter Pills */}
- <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+ <div data-filter="true" className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
  {filters.map((f) => {
  const isActive = activeFilter === f.id && !simulateEmpty;
  return (
@@ -209,7 +218,7 @@ export const E1_GuildHubScreen: React.FC = () => {
  </div>
 
  {createToast && (
- <div className="p-3 rounded-[20px] bg-[#55db9c] text-xs font-bold text-[#000000] text-center animate-bounce">
+ <div className="p-3 rounded-[20px] bg-[#7cd7a0] text-xs font-bold text-[#000000] text-center animate-bounce">
  🎉 สร้างก๊วนสำเร็จ! +100 EXP มุ่งหน้าสู่หน้าตั้งค่าปาร์ตี้...
  </div>
  )}

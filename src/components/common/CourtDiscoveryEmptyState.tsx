@@ -17,19 +17,19 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
  {/* Whimsical Slush / Rainbow On-Brand Vector Illustration */}
  <div className="relative w-44 h-36 flex items-center justify-center mb-3">
  {/* Floating Stars and Badges */}
- <div className="absolute top-1 left-2 w-7 h-7 rounded-[1600px] bg-[#ffd731] flex items-center justify-center text-xs font-black shadow-xs rotate-[-12deg] animate-bounce">
+ <div className="absolute top-1 left-2 w-7 h-7 rounded-[1600px] bg-[#e85729] flex items-center justify-center text-xs font-black shadow-xs rotate-[-12deg] animate-bounce">
  ★
  </div>
- <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-[1600px] bg-[#e9ccff] text-[9px] font-bold tracking-[0.032em] text-[#000000] rotate-[8deg]">
+ <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-[1600px] bg-[#e8f7ee] text-[9px] font-bold tracking-[0.032em] text-[#000000] rotate-[8deg]">
  ? MISSING
  </div>
 
  {/* Central Whimsical Searching Shuttlecock with Magnifying Glass SVG */}
  <svg viewBox="0 0 160 130" className="w-full h-full">
- {/* Subtle 3D Inflatable Ribbon Base (Electric Blue #4da2ff) */}
+ {/* Subtle 3D Inflatable Ribbon Base (Electric Blue #7cd7a0) */}
  <path
  d="M 15,90 C 30,30 80,30 115,65 C 135,85 145,70 148,50 C 152,90 120,120 75,110 C 35,100 22,115 15,90 Z"
- fill="#4da2ff"
+ fill="#7cd7a0"
  stroke="#000000"
  strokeWidth="1.5"
  />
@@ -55,11 +55,11 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
  {/* Feather Lines */}
  <line x1="20" y1="65" x2="28" y2="20" stroke="#000000" strokeWidth="1" strokeDasharray="3 2" />
  <line x1="40" y1="65" x2="32" y2="20" stroke="#000000" strokeWidth="1" strokeDasharray="3 2" />
- <line x1="16" y1="45" x2="44" y2="45" stroke="#5c4ade" strokeWidth="1.5" />
- <line x1="13" y1="55" x2="47" y2="55" stroke="#ffd731" strokeWidth="1.5" />
+ <line x1="16" y1="45" x2="44" y2="45" stroke="#e85729" strokeWidth="1.5" />
+ <line x1="13" y1="55" x2="47" y2="55" stroke="#e85729" strokeWidth="1.5" />
 
  {/* Cork Base (Head) */}
- <circle cx="30" cy="15" r="14" fill="#fb4903" stroke="#000000" strokeWidth="1.5" />
+ <circle cx="30" cy="15" r="14" fill="#e85729" stroke="#000000" strokeWidth="1.5" />
  
  {/* Cute Face: Curious Blinking Eyes */}
  <circle cx="25" cy="14" r="2.5" fill="#ffffff" stroke="#000000" strokeWidth="0.8" />
@@ -72,10 +72,10 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
 
  {/* Whimsical Magnifying Glass with Mint Pop Rim */}
  <g transform="translate(85, 45) rotate(15)">
- <circle cx="20" cy="20" r="18" fill="#e9ccff" fillOpacity="0.5" stroke="#000000" strokeWidth="1.5" />
- <circle cx="20" cy="20" r="14" fill="none" stroke="#55db9c" strokeWidth="3" />
+ <circle cx="20" cy="20" r="18" fill="#e8f7ee" fillOpacity="0.5" stroke="#000000" strokeWidth="1.5" />
+ <circle cx="20" cy="20" r="14" fill="none" stroke="#7cd7a0" strokeWidth="3" />
  <line x1="33" y1="33" x2="52" y2="52" stroke="#000000" strokeWidth="4" strokeLinecap="round" />
- <line x1="33" y1="33" x2="50" y2="50" stroke="#ffd731" strokeWidth="2" strokeLinecap="round" />
+ <line x1="33" y1="33" x2="50" y2="50" stroke="#e85729" strokeWidth="2" strokeLinecap="round" />
  {/* Sparkle reflection */}
  <path d="M 12,12 Q 18,8 24,12" fill="none" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" />
  </g>
@@ -84,7 +84,7 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
 
  {/* Crushed Lateral / Antonio Display Headline */}
  <div className="space-y-1 mb-2">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[10px] font-bold tracking-[0.032em] uppercase text-[#000000] inline-block">
+ <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#e85729] text-[10px] font-bold tracking-[0.032em] uppercase text-[#000000] inline-block">
  SEARCH RADAR EMPTY
  </span>
  <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000] leading-none mt-1">

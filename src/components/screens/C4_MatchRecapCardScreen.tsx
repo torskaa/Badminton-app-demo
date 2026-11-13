@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Share2, Check, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 
 export const C4_MatchRecapCardScreen: React.FC = () => {
  const { player, navigateTo, language } = useApp();
@@ -13,17 +14,14 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader
- title={language === 'th' ? 'การ์ดสรุปผลนักกีฬา' : 'Athlete Recap Card'}
- showBack
- />
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
  {/* Banner Label */}
  <div className="text-center px-2 space-y-1">
  <div className="flex items-center justify-center gap-2 mb-1">
- <span className="px-3 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] inline-block">
+ <span className="px-3 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#7cd7a0] text-[#000000] inline-block">
  {language === 'th' ? 'พร้อมแชร์ลงสตอรี่' : 'Story Share Ready'}
  </span>
  <span className="text-[10px] font-bold text-[#000000]/60 uppercase">
@@ -41,7 +39,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
  </div>
 
  {/* Modern Athlete Card */}
- <div className="w-full rounded-[36px] bg-[#ffd731] p-4 text-[#000000]">
+ <div className="w-full rounded-[36px] bg-[#7cd7a0] p-4 text-[#000000]">
  {/* Top row: OVR, Position, Tier */}
  <div className="flex items-start justify-between">
  <div>
@@ -56,10 +54,12 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
  </div>
  </div>
 
- {/* Shuttlecock Avatar Sticker */}
- <div className="w-16 h-16 rounded-[20px] bg-[#ffffff] flex items-center justify-center text-3xl">
- 🏸
- </div>
+ {/* Athlete Doodle Character Sticker */}
+ <DoodleAvatar
+ preset="karn"
+ size="lg"
+ ringClass="border-2 border-[#000000] shadow-xs"
+ />
  </div>
 
  {/* Athlete Name */}
@@ -94,7 +94,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
  <span className="text-[9px] font-bold text-[#000000]/60 uppercase block tracking-[0.032em]">TAC</span>
  <span className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">{player.skillRadar.tactics}</span>
  </div>
- <div className="p-2 rounded-[16px] bg-[#55db9c] text-[#000000] font-black ">
+ <div className="p-2 rounded-[16px] bg-[#7cd7a0] text-[#000000] font-black ">
  <span className="text-[9px] uppercase block tracking-[0.032em]">STREAK</span>
  <span className="font-['Antonio',sans-serif] text-xl font-black">{player.streakWeeks}W</span>
  </div>
@@ -116,7 +116,7 @@ export const C4_MatchRecapCardScreen: React.FC = () => {
  >
  {copiedLink ? (
  <>
- <Check className="w-4 h-4 stroke-[3] text-[#55db9c] shrink-0" />
+ <Check className="w-4 h-4 stroke-[3] text-[#7cd7a0] shrink-0" />
  <span className="whitespace-nowrap">{language === 'th' ? 'คัดลอกลิงก์สตอรี่แล้ว!' : 'COPIED FOR STORY!'}</span>
  </>
  ) : (

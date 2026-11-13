@@ -86,7 +86,7 @@ export const MOOD_LEVELS: MoodConfig[] = [
  thaiLabel: 'พลังเต็ม',
  badge: 'Dynamic & Power',
  badgeTh: 'พลังและจังหวะเร็ว',
- color: '#ffd731',
+ color: '#e85729',
  bgColor: 'bg-[#fef9c3]',
  cardBg: 'bg-[#3b2a4a]',
  headline: 'You feel active. Time for dynamic workouts and higher intensity.',
@@ -104,7 +104,7 @@ export const MOOD_LEVELS: MoodConfig[] = [
  thaiLabel: 'บีสต์โหมด',
  badge: 'Peak Performance',
  badgeTh: 'ขีดสุดสมรรถนะ',
- color: '#fb4903',
+ color: '#e85729',
  bgColor: 'bg-[#ffedd5]',
  cardBg: 'bg-[#40201d]',
  headline: 'You are on fire! Let’s push limits with maximum power.',
@@ -188,7 +188,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  <path
  d="M 50,115 Q 100,145 150,115"
  fill="none"
- stroke="#fb4903"
+ stroke="#e85729"
  strokeWidth="7"
  strokeLinecap="round"
  />
@@ -332,7 +332,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  {/* Spiky Sun Rays */}
  <polygon
  points="100,10 115,35 142,18 145,45 175,40 162,65 190,75 168,95 192,115 165,125 178,152 148,148 145,178 120,162 100,185 80,162 55,178 52,148 22,152 35,125 8,115 32,95 10,75 38,65 25,40 55,45 58,18 85,35"
- fill="#ffd731"
+ fill="#e85729"
  stroke="#000000"
  strokeWidth="4"
  />
@@ -362,7 +362,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  strokeLinecap="round"
  />
  <line x1="175" y1="70" x2="190" y2="55" stroke="#000000" strokeWidth="3" />
- <ellipse cx="196" cy="48" rx="8" ry="11" fill="none" stroke="#fb4903" strokeWidth="2.5" />
+ <ellipse cx="196" cy="48" rx="8" ry="11" fill="none" stroke="#e85729" strokeWidth="2.5" />
  </svg>
  </motion.div>
  );
@@ -382,12 +382,12 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  {/* Lightning / Fire Aura */}
  <path
  d="M 100,15 Q 130,5 125,35 Q 165,25 150,60 Q 185,75 160,110 Q 185,145 140,165 Q 100,195 60,165 Q 15,145 40,110 Q 15,75 50,60 Q 35,25 75,35 Z"
- fill="#fb4903"
+ fill="#e85729"
  stroke="#000000"
  strokeWidth="4"
  />
  {/* Golden Shuttlecock Core */}
- <circle cx="100" cy="135" r="28" fill="#ffd731" stroke="#000000" strokeWidth="3.5" />
+ <circle cx="100" cy="135" r="28" fill="#e85729" stroke="#000000" strokeWidth="3.5" />
  {/* Badminton Feathers on top */}
  <polygon points="75,115 100,45 125,115" fill="#ffffff" stroke="#000000" strokeWidth="3" />
  <line x1="88" y1="115" x2="100" y2="45" stroke="#000000" strokeWidth="2" />
@@ -456,11 +456,11 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  <h2 className="text-lg font-black text-[#000000] leading-tight">
  {isThai ? (
  <>
- {playerName}, วันนี้คุณ<span className="font-serif italic font-normal underline decoration-[#ffd731] decoration-2">รู้สึกอย่างไร</span>บ้าง?
+ {playerName}, วันนี้คุณ<span className="font-serif italic font-normal underline decoration-[#e85729] decoration-2">รู้สึกอย่างไร</span>บ้าง?
  </>
  ) : (
  <>
- {playerName}, how do you <span className="font-serif italic font-normal underline decoration-[#ffd731] decoration-2">feel right</span> now?
+ {playerName}, how do you <span className="font-serif italic font-normal underline decoration-[#e85729] decoration-2">feel right</span> now?
  </>
  )}
  </h2>
@@ -542,7 +542,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  <p className="text-[11px] text-[#000000]/80 font-bold leading-relaxed">
  {isThai ? currentConfig.description : (currentConfig.descriptionEn || currentConfig.description)}
  </p>
- <div className="pt-1 flex items-center justify-center gap-1 text-[10px] text-[#fb4903] font-bold">
+ <div className="pt-1 flex items-center justify-center gap-1 text-[10px] text-[#e85729] font-bold">
  <span>{isThai ? '🏸 โฟกัส:' : '🏸 Focus:'}</span>
  <span>{isThai ? currentConfig.badmintonFocus : (currentConfig.badmintonFocusEn || currentConfig.badmintonFocus)}</span>
  </div>
@@ -558,7 +558,7 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  className="w-full py-3 rounded-[1600px] bg-[#000000] text-[#ffffff] hover:bg-[#222222] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-transform shadow-md"
  >
  <span>{isThai ? 'ค้นหาการฝึกซ้อมตามพลังงาน' : "Let's find workout"}</span>
- <Check className="w-4 h-4 text-[#55db9c]" />
+ <Check className="w-4 h-4 text-[#7cd7a0]" />
  </button>
  </div>
  </motion.div>

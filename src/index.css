@@ -3,16 +3,27 @@
 @theme {
   --color-carbon: #000000;
   --color-paper-white: #ffffff;
-  --color-sky-wash: #dceeff;
-  --color-concrete-gray: #cccccc;
-  --color-soft-mist: #e9e9e9;
+  --color-sky-wash: #f4f8fb;
+  --color-concrete-gray: #e5e7eb;
+  --color-soft-mist: #f3f4f6;
 
-  --color-electric-blue: #4da2ff;
-  --color-mint-pop: #55db9c;
-  --color-lavender: #e9ccff;
-  --color-ember: #fb4903;
-  --color-sunburst: #ffd731;
-  --color-voltage-violet: #5c4ade;
+  /* Primary Brand Green (Exact match from user image #7cd7a0 / #55db9c) */
+  --color-primary-green: oklch(0.80 0.135 152);
+  --color-primary-green-dark: oklch(0.48 0.14 152);
+  --color-primary-green-light: oklch(0.96 0.04 152);
+
+  /* Signature Brand Orange (Exact match from user image badge #e85729) */
+  --color-accent-orange: oklch(0.63 0.20 38);
+  --color-accent-orange-dark: oklch(0.52 0.20 38);
+  --color-accent-orange-light: oklch(0.96 0.04 38);
+
+  /* Harmonized semantic aliases for backward compatibility */
+  --color-mint-pop: #7cd7a0;
+  --color-ember: #e85729;
+  --color-electric-blue: #7cd7a0;
+  --color-lavender: #f0fdf4;
+  --color-sunburst: #e85729;
+  --color-voltage-violet: #15803d;
 
   --font-display: 'Antonio', 'Lateral', sans-serif;
   --font-headline: 'Bricolage Grotesque', sans-serif;
@@ -25,7 +36,9 @@
 
 body {
   font-family: 'IBM Plex Sans Thai', 'Plus Jakarta Sans', -apple-system, sans-serif;
-  background-color: #dceeff;
+  background-color: #f6f9f6;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.065) 1px, transparent 1px);
+  background-size: 16px 16px;
   color: #000000;
   -webkit-tap-highlight-color: transparent;
   -webkit-font-smoothing: antialiased;
@@ -33,6 +46,53 @@ body {
   overflow-x: hidden;
   text-underline-position: from-font;
   text-decoration-skip-ink: auto;
+}
+
+/* Subtle Doodle Sketchbook dot-grid canvas preserving clean UI hierarchy */
+#root .bg-\[\#f4f8fb\] {
+  background-color: #f6f9f6;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.065) 1px, transparent 1px);
+  background-size: 16px 16px;
+}
+
+/* Mobile Safe-Area Top Clearance balanced for rounded phone viewport */
+.app-header-safe {
+  padding-top: max(env(safe-area-inset-top, 0px), 24px);
+}
+
+/* ==========================================================================
+   INTERACTIVE CTA & CLICKABLE TILE CONTRAST (Solid 2px Ink + Thick Shadow)
+   Static containers, badges, [data-filter] pills, & .footer-navbar stay clean
+   ========================================================================== */
+#root button[class*="rounded-[1600px]"]:not(.no-doodle):not(.footer-navbar button):not([data-filter] button):not(.filter-pill) {
+  border: 2px solid #000000 !important;
+  box-shadow: 2.5px 3.5px 0px #000000 !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+
+#root button[class*="rounded-[1600px]"][class*="bg-[#000000]"]:not(.no-doodle):not(.footer-navbar button):not([data-filter] button):not(.filter-pill) {
+  border: 2px solid #000000 !important;
+  box-shadow: 2.5px 3.5px 0px #7cd7a0 !important;
+}
+
+#root button[class*="rounded-[1600px]"]:not(.no-doodle):not(.footer-navbar button):not([data-filter] button):not(.filter-pill):active {
+  transform: translate(1.5px, 2px) !important;
+  box-shadow: 1px 1px 0px #000000 !important;
+}
+
+#root .doodle-cta,
+#root button[class*="rounded-[22px]"],
+#root button[class*="rounded-[24px]"] {
+  border: 2px solid #000000 !important;
+  box-shadow: 3px 4px 0px #000000 !important;
+  transition: transform 0.12s ease, box-shadow 0.12s ease !important;
+}
+
+#root .doodle-cta:active,
+#root button[class*="rounded-[22px]"]:active,
+#root button[class*="rounded-[24px]"]:active {
+  transform: translate(1.5px, 2px) !important;
+  box-shadow: 1px 1.5px 0px #000000 !important;
 }
 
 /* Principle 15: Inputs at 16px on mobile to prevent iOS Safari auto-zoom */
@@ -43,9 +103,18 @@ body {
 }
 
 /* Headings & body wrapping per better-typography */
-h1, h2, h3, h4, h5, h6 {
+html:not([lang="th"]) h1,
+html:not([lang="th"]) h2,
+html:not([lang="th"]) h3,
+html:not([lang="th"]) h4,
+html:not([lang="th"]) h5,
+html:not([lang="th"]) h6 {
   text-wrap: balance;
   letter-spacing: -0.015em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-wrap: balance;
 }
 
 p {
@@ -61,145 +130,30 @@ data,
 }
 
 /* ==========================================================================
-   THAI TYPOGRAPHY: 100% IBM PLEX SANS THAI ACROSS ALL COMPONENTS & HEADINGS
+   THAI TYPOGRAPHY: 100% IBM PLEX SANS THAI + NATURAL 0 LETTER-SPACING
    ========================================================================== */
 html[lang="th"],
 html[lang="th"] body,
 html[lang="th"] *,
 html[lang="th"] *::before,
-html[lang="th"] *::after,
-html.font-thai,
-html.font-thai body,
-html.font-thai *,
-html.font-thai *::before,
-html.font-thai *::after,
-.font-thai,
-.font-thai * {
-  font-family: 'IBM Plex Sans Thai', -apple-system, BlinkMacSystemFont, sans-serif !important;
+html[lang="th"] *::after {
+  font-family: 'IBM Plex Sans Thai', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  letter-spacing: 0em !important;
 }
 
-/* Monospace numbers/code exception in Thai */
-html[lang="th"] .font-mono,
-html[lang="th"] pre,
-html[lang="th"] code,
-html.font-thai .font-mono,
-html.font-thai pre,
-html.font-thai code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+/* IBM Plex Sans Thai is loaded up to weight 700; prevent faux-bold glyph widening */
+html[lang="th"] .font-black,
+html[lang="th"] .font-extrabold {
+  font-weight: 700 !important;
 }
 
-/* SVG text labels in Thai */
-html[lang="th"] svg text,
-html.font-thai svg text {
-  font-family: 'IBM Plex Sans Thai', sans-serif !important;
-}
-
-/* ==========================================================================
-   ENGLISH TYPOGRAPHY: Plus Jakarta Sans for body + Antonio for display
-   ========================================================================== */
-html[lang="en"],
-html[lang="en"] body,
-html.font-eng,
-html.font-eng body {
-  font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
-}
-
-html[lang="en"] [class*="Antonio"],
-html[lang="en"] .lateral-display,
-html.font-eng [class*="Antonio"],
-html.font-eng .lateral-display {
-  font-family: 'Antonio', 'Lateral', sans-serif !important;
-}
-
-html[lang="en"] .font-mono,
-html[lang="en"] pre,
-html[lang="en"] code,
-html.font-eng .font-mono,
-html.font-eng pre,
-html.font-eng code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
-}
-
-/* Modern Clean Token System - Borderless elevated cards */
-.slush-card {
-  border: none !important;
-  border-radius: 28px;
-  background-color: #ffffff;
-  box-shadow: 0 4px 16px -2px rgba(0, 0, 0, 0.06);
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.15s ease;
-}
-
-/* Slush Pill Button: 1600px radius */
-.slush-pill {
-  border-radius: 1600px !important;
-  letter-spacing: 0.032em;
-  font-weight: 700;
-  transition: transform 0.15s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease;
-}
-.slush-pill:hover {
-  transform: translateY(-1px);
-}
-.slush-pill:active {
-  transform: scale(0.96);
-}
-
-/* Slush Primary CTA: ALWAYS Carbon Black fill or Outlined Black only (NEVER Blue #4da2ff) */
-.slush-cta-primary {
-  background-color: #000000 !important;
-  color: #ffffff !important;
-  border: 1px solid #000000 !important;
-  border-radius: 1600px !important;
-  font-weight: 700;
-  letter-spacing: 0.032em;
-}
-.slush-cta-primary:hover {
-  background-color: #1a1a1a !important;
-}
-.slush-cta-primary:active {
-  transform: scale(0.97);
-}
-
-/* Outlined CTA */
-.slush-cta-outline {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-  border: 1px solid #000000 !important;
-  border-radius: 1600px !important;
-  font-weight: 700;
-  letter-spacing: 0.032em;
-}
-.slush-cta-outline:hover {
-  background-color: #f2f2f2 !important;
-}
-.slush-cta-outline:active {
-  transform: scale(0.97);
-}
-
-/* Lateral Crushed Sculptural Display Text (0.75-0.80 line height) */
-.lateral-display {
-  font-family: 'Antonio', 'Lateral', sans-serif;
-  font-weight: 800;
-  line-height: 0.78 !important;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-}
-
-/* Marquee infinite scroll */
-@keyframes marquee {
-  0% { transform: translateX(0%); }
-  100% { transform: translateX(-50%); }
-}
-
-.animate-marquee {
-  display: flex;
-  width: 200%;
-  animation: marquee 22s linear infinite;
-}
-
-.no-scrollbar::-webkit-scrollbar {
+/* Custom Scrollbar for sleek mobile experience */
+::-webkit-scrollbar {
+  width: 0px;
+  height: 0px;
   display: none;
 }
-.no-scrollbar {
+* {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }

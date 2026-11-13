@@ -15,7 +15,7 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
  const [isDesktopFullScreen, setIsDesktopFullScreen] = useState(false);
 
  return (
- <div className="h-[100dvh] w-full flex flex-col items-center justify-center relative bg-[#dceeff] select-none  overflow-hidden">
+ <div className="h-[100dvh] w-full flex flex-col items-center justify-center relative bg-[#f0f4f8] select-none  overflow-hidden">
  {/* Background Ambience (Desktop Only Subtle Texture) */}
  <div className="hidden md:block absolute inset-0 bg-radial from-[#ffffff]/40 via-transparent to-[#000000]/5 pointer-events-none" />
 
@@ -27,8 +27,8 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
  : 'h-[100dvh] w-full md:h-[92vh] md:max-h-[920px] md:max-w-[430px] md:rounded-[36px] md:border-2 md:border-[#000000] md:shadow-[0_20px_50px_rgba(0,0,0,0.2)] bg-[#ffffff]'
  }`}
  >
- {/* Real Mobile App Content Canvas with Safe Area Top Handling */}
- <div className="flex-1 w-full min-h-0 overflow-hidden flex flex-col relative bg-[#ffffff] text-[#000000] pt-[env(safe-area-inset-top,0px)]">
+ {/* Real Mobile App Content Canvas (each header handles 44px status-bar/safe-area inset with matching fill) */}
+ <div className="flex-1 w-full min-h-0 overflow-hidden flex flex-col relative bg-[#ffffff] text-[#000000]">
  {children}
  </div>
  </main>
@@ -45,17 +45,17 @@ export const DeviceFrame: React.FC<DeviceFrameProps> = ({ children }) => {
  className="w-8 h-8 rounded-[1600px] flex items-center justify-center hover:bg-[#ffffff]/20 transition-transform active:scale-90 cursor-pointer"
  title={isSoundEnabled ? 'Sound FX: ON' : 'Sound FX: MUTED'}
  >
- {isSoundEnabled ? <Volume2 className="w-4 h-4 text-[#55db9c]" /> : <VolumeX className="w-4 h-4 text-[#ffffff]/40" />}
+ {isSoundEnabled ? <Volume2 className="w-4 h-4 text-[#7cd7a0]" /> : <VolumeX className="w-4 h-4 text-[#ffffff]/40" />}
  </button>
 
  {/* Screen Switcher Modal Button */}
  <button
  type="button"
  onClick={() => setIsSwitcherOpen(true)}
- className="flex items-center gap-1.5 px-3 py-1.5 rounded-[1600px] bg-[#ffffff] text-[#000000] hover:bg-[#ffd731] transition-transform active:scale-95 cursor-pointer font-bold tracking-[0.032em]"
+ className="flex items-center gap-1.5 px-3 py-1.5 rounded-[1600px] bg-[#ffffff] text-[#000000] hover:bg-[#7cd7a0] transition-transform active:scale-95 cursor-pointer font-bold tracking-[0.032em]"
  title="Open Screen Navigator"
  >
- <Compass className="w-3.5 h-3.5 text-[#5c4ade]" />
+ <Compass className="w-3.5 h-3.5 text-[#15803d]" />
  <span>Screen Directory</span>
  </button>
 

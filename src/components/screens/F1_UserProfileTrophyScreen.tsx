@@ -18,10 +18,14 @@ import {
  MapPin,
  Clock,
  Sparkles,
+ Settings,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 import { ProSubscriptionModal } from '../common/ProSubscriptionModal';
+import { AppSettingsModal } from '../common/AppSettingsModal';
+import { DoodleAvatar, resolveDoodlePreset } from '../common/DoodleAvatar';
 import { playCoinSound, playSelectSound } from '../../utils/retroAudio';
 
 export interface PastMatchResult {
@@ -32,6 +36,7 @@ export interface PastMatchResult {
  nameEn?: string;
  tier: string;
  club: string;
+ avatars: string[];
  };
  courtName: string;
  courtNameTh?: string;
@@ -44,6 +49,7 @@ export interface PastMatchResult {
  partnerName?: string;
  partnerNameTh?: string;
  partnerNameEn?: string;
+ partnerAvatar?: string;
  scores: { set: number; userScore: number; opponentScore: number }[];
  finalScore: string;
  durationMin: number;
@@ -54,6 +60,14 @@ export interface PastMatchResult {
  highlightShotEn?: string;
 }
 
+const AVATARS = {
+ ohm: 'ohm',
+ bank: 'bank',
+ top: 'top',
+ ploy: 'ploy',
+ meen: 'meen',
+};
+
 const INITIAL_PAST_MATCHES: PastMatchResult[] = [
  {
  id: 'match_01',
@@ -63,6 +77,7 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
  nameEn: 'Ohm Machinegun',
  tier: 'Diamond League',
  club: 'Rama 9 Smashers',
+ avatars: [AVATARS.ohm],
  },
  courtName: 'Winner Arena Badminton Rama 9 (Court 3)',
  courtNameTh: 'วินเนอร์ อารีน่า พระราม 9 (คอร์ท 3)',
@@ -93,10 +108,12 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
  nameEn: 'Bank & Top',
  tier: 'Gold League',
  club: 'BKK Weekend Shuttlers',
+ avatars: [AVATARS.bank, AVATARS.top],
  },
  partnerName: 'พลอย จอมหยอด',
- partnerNameTh: 'พลอย จอมหยอด',
- partnerNameEn: 'Ploy Net Master',
+ partnerNameTh: 'พลอย',
+ partnerNameEn: 'Ploy',
+ partnerAvatar: AVATARS.ploy,
  courtName: 'สนามแบดอินฟินิตี้ หทัยราษฎร์',
  courtNameTh: 'สนามแบดอินฟินิตี้ หทัยราษฎร์',
  courtNameEn: 'Infinity Badminton Hathairat',
@@ -125,6 +142,7 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
  nameEn: 'Art Speedster',
  tier: 'Diamond League',
  club: 'Rama 9 Smashers',
+ avatars: [AVATARS.top],
  },
  courtName: 'Sport Refresh ลำลูกกา คลอง 4',
  courtNameTh: 'สปอร์ต รีเฟรช ลำลูกกา คลอง 4 (คอร์ท 5)',
@@ -150,15 +168,17 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
  {
  id: 'match_04',
  opponent: {
- name: 'มีน แบ็กแฮนด์ & นัท',
- nameTh: 'มีน แบ็กแฮนด์ & นัท',
+ name: 'มีน & นัท',
+ nameTh: 'มีน & นัท',
  nameEn: 'Meen & Nat',
  tier: 'Silver League',
  club: 'Rama 9 Smashers',
+ avatars: [AVATARS.meen, AVATARS.bank],
  },
  partnerName: 'โอห์ม ปืนกล',
- partnerNameTh: 'โอห์ม ปืนกล',
- partnerNameEn: 'Ohm Machinegun',
+ partnerNameTh: 'โอห์ม',
+ partnerNameEn: 'Ohm',
+ partnerAvatar: AVATARS.ohm,
  courtName: '71 Sport Club เอกมัย-ปรีดี',
  courtNameTh: '71 สปอร์ตคลับ เอกมัย-ปรีดี (คอร์ท 2)',
  courtNameEn: '71 Sport Club Ekkamai-Pridi (Court 2)',
@@ -181,11 +201,242 @@ const INITIAL_PAST_MATCHES: PastMatchResult[] = [
  },
 ];
 
+const FaceAvatar: React.FC<{
+ src?: string;
+ label: string;
+ className?: string;
+ accentClass?: string;
+}> = ({ src, label, className = 'w-11 h-11', accentClass = 'border-[#000000]' }) => {
+ const preset = resolveDoodlePreset(src || label);
+ return (
+ <DoodleAvatar
+ preset={preset}
+ seed={label}
+ className={className}
+ ringClass={`border-2 ${accentClass} shadow-xs`}
+ />
+ );
+};
+
+interface MatchFaceOffCardProps {
+ match: PastMatchResult;
+ userDisplayName: string;
+ userAvatarUrl: string;
+ isThai: boolean;
+ isExpanded: boolean;
+ onToggleExpand: () => void;
+ onAnalyze?: () => void;
+ surfaceClass?: string;
+}
+
+const MatchFaceOffCard: React.FC<MatchFaceOffCardProps> = ({
+ match,
+ userDisplayName,
+ userAvatarUrl,
+ isThai,
+ isExpanded,
+ onToggleExpand,
+ onAnalyze,
+ surfaceClass = 'bg-[#ffffff] border border-[#000000]/10',
+}) => {
+ const isWin = match.result === 'win';
+ const isDoubles = match.matchType === 'Doubles';
+ const userShortName = userDisplayName.split(' ')[0] || (isThai ? 'คุณ' : 'You');
+ const partnerShortName = isThai
+ ? (match.partnerNameTh || match.partnerName || 'คู่หู')
+ : (match.partnerNameEn || match.partnerName || 'Partner');
+ const teamALabel = isDoubles ? `${userShortName} & ${partnerShortName}` : userShortName;
+ const teamBLabel = isThai
+ ? (match.opponent.nameTh || match.opponent.name)
+ : (match.opponent.nameEn || match.opponent.name);
+
+ const tierLabel = isThai
+ ? match.opponent.tier
+ .replace('Diamond League', 'ลีกไดมอนด์')
+ .replace('Platinum League', 'ลีกแพลทินัม')
+ .replace('Gold League', 'ลีกโกลด์')
+ .replace('Silver League', 'ลีกซิลเวอร์')
+ .replace('Bronze League', 'ลีกบรอนซ์')
+ : match.opponent.tier;
+
+ const scoreDisplay = match.finalScore.replace('-', ':');
+ const setSummary = match.scores.map((s) => `${s.userScore}-${s.opponentScore}`).join(' · ');
+
+ return (
+ <div className={`rounded-[24px] p-4 space-y-3 shadow-xs transition-all ${surfaceClass}`}>
+ {/* Top Row: Date + Format on left, Result Badge on right */}
+ <div className="flex items-center justify-between gap-2">
+ <div className="flex items-center gap-1.5 text-[11px] font-medium text-[#000000]/60 min-w-0 truncate">
+ <Calendar className="w-3 h-3 text-[#000000]/45 shrink-0" />
+ <span className="truncate">{isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}</span>
+ </div>
+ <span
+ className={`px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold shrink-0 whitespace-nowrap ${
+ isWin ? 'bg-[#7cd7a0] text-[#000000]' : 'bg-[#e85729] text-[#ffffff]'
+ }`}
+ >
+ {isWin ? (isThai ? 'ชนะ' : 'WIN') : (isThai ? 'แพ้' : 'LOSS')}
+ </span>
+ </div>
+
+ {/* Centerpiece: Football-Style 2-Sided Matchup */}
+ <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 py-1">
+ {/* Left Side: User Team */}
+ <div className="flex flex-col items-center text-center min-w-0">
+ {isDoubles ? (
+ <div className="flex items-center justify-center -space-x-2.5">
+ <FaceAvatar
+ src={userAvatarUrl}
+ label={userShortName}
+ className="w-10 h-10 z-10"
+ accentClass="border-[#ffffff] ring-2 ring-[#7cd7a0] bg-[#e8f7ee]"
+ />
+ <FaceAvatar
+ src={match.partnerAvatar}
+ label={partnerShortName}
+ className="w-10 h-10"
+ accentClass="border-[#ffffff] ring-2 ring-[#7cd7a0] bg-[#e8f7ee]"
+ />
+ </div>
+ ) : (
+ <FaceAvatar
+ src={userAvatarUrl}
+ label={userShortName}
+ className="w-12 h-12"
+ accentClass="border-[#7cd7a0] bg-[#e8f7ee]"
+ />
+ )}
+ <span className="text-xs font-bold text-[#000000] truncate w-full mt-1.5 leading-snug">
+ {teamALabel}
+ </span>
+ <span className="text-[10px] font-medium text-[#000000]/55 truncate w-full">
+ {isThai ? 'ทีมเรา' : 'You'}
+ </span>
+ </div>
+
+ {/* Center: Clean Scoreboard Pill */}
+ <div className="bg-[#f4f8fb] rounded-[20px] px-3.5 py-2 text-center min-w-[96px] flex flex-col items-center justify-center">
+ <div className="flex items-center gap-1 text-[9px] font-bold text-[#000000]/65 whitespace-nowrap">
+ <span className={`w-1.5 h-1.5 rounded-full ${isWin ? 'bg-[#15803d]' : 'bg-[#e85729]'}`} />
+ <span>{isThai ? (isDoubles ? 'ประเภทคู่' : 'ประเภทเดี่ยว') : match.matchType}</span>
+ </div>
+ <div className="text-2xl font-bold text-[#000000] tabular-nums leading-tight mt-0.5 whitespace-nowrap">
+ {scoreDisplay}
+ </div>
+ <div className="text-[10px] font-semibold text-[#000000]/60 tabular-nums whitespace-nowrap mt-0.5">
+ {setSummary}
+ </div>
+ </div>
+
+ {/* Right Side: Opponent Team */}
+ <div className="flex flex-col items-center text-center min-w-0">
+ {isDoubles && match.opponent.avatars.length > 1 ? (
+ <div className="flex items-center justify-center -space-x-2.5">
+ <FaceAvatar
+ src={match.opponent.avatars[0]}
+ label={teamBLabel}
+ className="w-10 h-10 z-10"
+ accentClass="border-[#ffffff] ring-1 ring-[#000000]/15 bg-[#f4f8fb]"
+ />
+ <FaceAvatar
+ src={match.opponent.avatars[1]}
+ label={teamBLabel}
+ className="w-10 h-10"
+ accentClass="border-[#ffffff] ring-1 ring-[#000000]/15 bg-[#f4f8fb]"
+ />
+ </div>
+ ) : (
+ <FaceAvatar
+ src={match.opponent.avatars[0]}
+ label={teamBLabel}
+ className="w-12 h-12"
+ accentClass="border-[#000000]/15 bg-[#f4f8fb]"
+ />
+ )}
+ <span className="text-xs font-bold text-[#000000] truncate w-full mt-1.5 leading-snug">
+ {teamBLabel}
+ </span>
+ <span className="text-[10px] font-medium text-[#000000]/55 truncate w-full">
+ {tierLabel}
+ </span>
+ </div>
+ </div>
+
+ {/* Bottom Footer: Venue + Compact Stats Toggle */}
+ <div className="pt-2 border-t border-[#000000]/8 flex items-center justify-between gap-2">
+ <div className="flex items-center gap-1 text-[10px] font-medium text-[#000000]/60 min-w-0 truncate">
+ <MapPin className="w-3 h-3 text-[#e85729] shrink-0" />
+ <span className="truncate">{isThai ? (match.courtNameTh || match.courtName) : (match.courtNameEn || match.courtName)}</span>
+ </div>
+ <button
+ type="button"
+ onClick={onToggleExpand}
+ className="px-2.5 py-1 rounded-[1600px] bg-[#f4f8fb] border border-[#000000]/15 text-[10px] font-bold text-[#000000] flex items-center gap-1 cursor-pointer shrink-0 whitespace-nowrap hover:bg-[#e9e9e9]"
+ >
+ <span>{isExpanded ? (isThai ? 'ย่อลง' : 'Hide') : (isThai ? 'ดูสถิติ' : 'Stats')}</span>
+ {isExpanded ? <ChevronUp className="w-3 h-3 shrink-0" /> : <ChevronDown className="w-3 h-3 shrink-0" />}
+ </button>
+ </div>
+
+ {/* Expandable Telemetry Drawer */}
+ {isExpanded && (
+ <div className="p-3 rounded-[18px] bg-[#f4f8fb] space-y-2 text-[10px]">
+ <div className="grid grid-cols-3 gap-2 text-center">
+ <div className="p-2 rounded-[12px] bg-[#ffffff]">
+ <span className="text-[9px] font-bold text-[#000000]/55 block whitespace-nowrap">
+ {isThai ? 'สปีดตบ' : 'Top Smash'}
+ </span>
+ <span className="text-xs font-bold text-[#000000] whitespace-nowrap tabular-nums">
+ ⚡ {match.highestSmashKmh} km/h
+ </span>
+ </div>
+ <div className="p-2 rounded-[12px] bg-[#ffffff]">
+ <span className="text-[9px] font-bold text-[#000000]/55 block whitespace-nowrap">
+ {isThai ? 'เวลาแข่ง' : 'Duration'}
+ </span>
+ <span className="text-xs font-bold text-[#000000] whitespace-nowrap tabular-nums">
+ ⏱️ {match.durationMin} {isThai ? 'นาที' : 'min'}
+ </span>
+ </div>
+ <div className="p-2 rounded-[12px] bg-[#7cd7a0]">
+ <span className="text-[9px] font-bold text-[#000000]/70 block whitespace-nowrap">
+ {isThai ? 'EXP ที่ได้' : 'EXP'}
+ </span>
+ <span className="text-xs font-bold text-[#000000] whitespace-nowrap tabular-nums">
+ +{match.expGained} EXP
+ </span>
+ </div>
+ </div>
+ <div className="p-2 rounded-[12px] bg-[#ffffff] flex items-center justify-between gap-2">
+ <div className="flex items-center gap-1.5 min-w-0 flex-1">
+ <Sparkles className="w-3.5 h-3.5 text-[#15803d] shrink-0" />
+ <span className="truncate font-medium text-[#000000]/80">
+ <strong>{isThai ? 'ไฮไลต์:' : 'Highlight:'}</strong>{' '}
+ {isThai ? (match.highlightShotTh || match.highlightShot) : (match.highlightShotEn || match.highlightShot)}
+ </span>
+ </div>
+ {onAnalyze && (
+ <button
+ type="button"
+ onClick={onAnalyze}
+ className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold hover:bg-[#333333] cursor-pointer active:scale-95 transition-transform whitespace-nowrap shrink-0"
+ >
+ {isThai ? 'วิเคราะห์ช็อต' : 'Analyze'}
+ </button>
+ )}
+ </div>
+ </div>
+ )}
+ </div>
+ );
+};
+
 export const F1_UserProfileTrophyScreen: React.FC = () => {
  const { player, navigateTo, booking, gainExp, language } = useApp();
  const isThai = language === 'th';
  const [activeTab, setActiveTab] = useState<'card' | 'matches' | 'trophies' | 'gear'>('card');
  const [isProModalOpen, setIsProModalOpen] = useState(false);
+ const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
  // Local state for past match results
  const [matches, setMatches] = useState<PastMatchResult[]>(INITIAL_PAST_MATCHES);
@@ -217,6 +468,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  name: isThai ? 'แชมป์ สแมชไฟเออร์' : 'Champ Smashfire',
  tier: 'Diamond League',
  club: 'Bangkok Clash Arena',
+ avatars: [AVATARS.ohm],
  },
  courtName: isThai ? 'สแมช อารีน่า พระราม 9 (คอร์ท 1)' : 'Smash Arena Rama 9 (Court 1)',
  date: isThai ? 'วันนี้ เมื่อสักครู่' : 'Today Just now',
@@ -238,11 +490,25 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#dceeff] text-[#000000]">
- <MobileHeader title={isThai ? 'โปรไฟล์นักกีฬา & ตู้เหรียญรางวัล' : 'Athlete Profile & Trophies'} />
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f4f8fb] text-[#000000]">
+ <MobileHeader
+ rightSlot={
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ setIsSettingsOpen(true);
+ }}
+ className="px-3 py-1.5 rounded-[1600px] bg-[#ffffff] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 flex items-center gap-1 cursor-pointer hover:bg-[#f4f8fb]"
+ >
+ <Settings className="w-3.5 h-3.5 shrink-0" />
+ <span>{isThai ? 'ตั้งค่า' : 'Settings'}</span>
+ </button>
+ }
+ />
 
- {/* Segmented Tab Bar (Paper white with 1px black border, 1600px pills) */}
- <div className="px-4 py-3 flex items-center gap-1.5 bg-[#ffffff] shrink-0 overflow-x-auto no-scrollbar">
+ {/* Segmented Tab Bar (Filter tabs stay clean without heavy CTA borders) */}
+ <div data-filter="true" className="px-5 py-3 flex items-center gap-1.5 bg-[#ffffff] shrink-0 overflow-x-auto no-scrollbar">
  <button
  type="button"
  onClick={() => {
@@ -272,8 +538,8 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  >
  <span>{isThai ? 'ผลการแข่ง' : 'Match Results'}</span>
  <span
- className={`px-1.5 py-0.2 rounded-full text-[10px] font-black ${
- activeTab === 'matches' ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#000000] text-[#ffffff]'
+ className={`px-1.5 py-0.5 rounded-full text-[10px] font-black whitespace-nowrap shrink-0 ${
+ activeTab === 'matches' ? 'bg-[#7cd7a0] text-[#000000]' : 'bg-[#000000] text-[#ffffff]'
  }`}
  >
  {matches.length}
@@ -313,400 +579,305 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </button>
  </div>
 
- <div className="p-4 space-y-4">
+ <div className="px-5 pt-4 space-y-4">
  {activeTab === 'card' && (
- <div className="space-y-3.5 w-full">
- {/* Athlete Identity Trading Card */}
- <div className="w-full rounded-[32px] bg-[#ffd731] shadow-lg p-4 text-[#000000]">
- <div className="flex items-center justify-between pb-2 mb-2 ">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-black uppercase tracking-wider">
- {isThai ? 'การ์ดข้อมูลนักกีฬา' : 'ATHLETE CARD'}
- </span>
- <span className="text-[10px] font-bold text-[#000000]/70">
- {isThai ? 'ยืนยันตัวตนแล้ว' : 'SMASH VERIFIED'}
- </span>
- </div>
-
- <div className="flex items-start justify-between">
- <div>
- <div className="font-['Antonio',sans-serif] text-6xl font-black leading-none">
- 85
- </div>
- <div className="text-[11px] font-bold tracking-[0.032em] uppercase mt-0.5">
- {isThai ? 'คะแนนรวม · สแมชโปร' : 'OVR · SMASH PRO'}
- </div>
- <span className="inline-block mt-1 px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[9px] font-bold tracking-[0.032em]">
+ <div className="space-y-4 w-full">
+ {/* Athlete Identity Card Section */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title={isThai ? 'การ์ดข้อมูลนักกีฬา' : 'ATHLETE IDENTITY CARD'}
+ badge={isThai ? 'ยืนยันตัวตนแล้ว' : 'SMASH VERIFIED'}
+ badgeVariant="dark"
+ />
+ <div className="w-full rounded-[32px] bg-[#7cd7a0] shadow-sm p-5 text-[#000000]">
+ <div className="flex items-center justify-between gap-3">
+ <div className="flex items-center gap-3 min-w-0">
+ <DoodleAvatar
+ preset="karn"
+ size="lg"
+ ringClass="border-2 border-[#000000] shadow-xs"
+ />
+ <div className="min-w-0">
+ <h3 className="text-xl font-bold text-[#000000] leading-snug truncate">
+ {isThai ? (player.nameTh || 'กานต์ ธนวัฒน์') : (player.nameEn || 'Karn Tanawat')}
+ </h3>
+ <p className="text-xs text-[#000000]/75 font-medium truncate">
+ {isThai ? (player.playstyleTh || 'สายบุกตบสแมชดุดัน') : (player.playstyleEn || player.playstyle)}
+ </p>
+ <span className="inline-block mt-1 px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold whitespace-nowrap">
  {isThai ? 'ลีกไดมอนด์' : 'DIAMOND LEAGUE'}
  </span>
  </div>
-
- <img
- src={player.avatarUrl}
- alt="Player Avatar"
- className="w-16 h-16 rounded-[20px] object-cover shadow-xs bg-[#ffffff]"
- />
  </div>
 
- <div className="text-center mt-3 pt-2.5 ">
- <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000]">
- {isThai ? (player.nameTh || 'กานต์ ธนวัฒน์') : (player.nameEn || 'Karn Tanawat')}
- </h3>
- <p className="text-xs text-[#000000]/80 font-bold">
- {isThai ? `สไตล์การเล่น: ${player.playstyleTh || 'สายบุกตบสแมชดุดัน'}` : `Playstyle: ${player.playstyleEn || player.playstyle}`}
- </p>
+ <div className="text-right shrink-0">
+ <div className="text-4xl font-bold leading-none tabular-nums text-[#000000]">
+ 85
+ </div>
+ <div className="text-[10px] font-bold text-[#000000]/70 mt-1 whitespace-nowrap">
+ {isThai ? 'คะแนนรวม' : 'OVR RATING'}
+ </div>
+ </div>
  </div>
 
  {/* Stat Pills */}
- <div className="grid grid-cols-3 gap-2 mt-3 pt-2.5 text-center">
- <div className="p-2 rounded-[16px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">
- {isThai ? 'พลัง' : 'POW'}
+ <div className="grid grid-cols-3 gap-2 mt-4 text-center">
+ <div className="p-2.5 rounded-[16px] bg-[#ffffff] shadow-xs">
+ <div className="text-[10px] font-bold text-[#000000]/60 whitespace-nowrap">
+ {isThai ? 'พลังตบ' : 'POW'}
  </div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
+ <div className="text-lg font-bold text-[#000000] tabular-nums leading-tight mt-0.5">
  {player.skillRadar.power}
  </div>
  </div>
- <div className="p-2 rounded-[16px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">
- {isThai ? 'สปีด' : 'SPD'}
+ <div className="p-2.5 rounded-[16px] bg-[#ffffff] shadow-xs">
+ <div className="text-[10px] font-bold text-[#000000]/60 whitespace-nowrap">
+ {isThai ? 'ความเร็ว' : 'SPD'}
  </div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
+ <div className="text-lg font-bold text-[#000000] tabular-nums leading-tight mt-0.5">
  {player.skillRadar.speed}
  </div>
  </div>
- <div className="p-2 rounded-[16px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-[0.032em]">
+ <div className="p-2.5 rounded-[16px] bg-[#ffffff] shadow-xs">
+ <div className="text-[10px] font-bold text-[#000000]/60 whitespace-nowrap">
  {isThai ? 'คุมลูก' : 'CTL'}
  </div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
+ <div className="text-lg font-bold text-[#000000] tabular-nums leading-tight mt-0.5">
  {player.skillRadar.control}
  </div>
  </div>
  </div>
  </div>
-
- {/* NEW SECTION: ประวัติผลการแข่งขันล่าสุด (PAST MATCH RESULTS FROM LOCAL STATE) */}
- <div className="w-full p-4 rounded-[28px] bg-[#ffffff] space-y-3 shadow-sm">
- <div className="flex items-center justify-between pb-2 ">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-[1600px] bg-[#dceeff] flex items-center justify-center text-[#000000]">
- <Swords className="w-4 h-4" />
- </div>
- <div>
- <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wider text-[#000000] leading-none">
- {isThai ? 'ประวัติการแข่งขัน' : 'PAST MATCHES'}
- </h4>
- <p className="text-[10px] text-[#000000]/65 font-bold mt-0.5">
- {isThai ? 'บันทึกผลการแข่งขันล่าสุดและสถิติคอร์ท' : 'Recent match results & court stats'}
- </p>
- </div>
  </div>
 
+ {/* PAST MATCH RESULTS Section */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title={isThai ? 'ประวัติการแข่งขัน' : 'PAST MATCHES'}
+ subtitle={isThai ? 'บันทึกผลการแข่งขันล่าสุดและสถิติคอร์ท' : 'Recent match results & court stats'}
+ rightSlot={
  <button
  type="button"
  onClick={() => {
  playSelectSound();
  setActiveTab('matches');
  }}
- className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] text-[10px] font-bold uppercase tracking-[0.032em] flex items-center gap-1 hover:bg-[#333333] cursor-pointer shadow-xs active:scale-95 transition-all"
+ className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] text-[10px] font-bold uppercase tracking-[0.032em] flex items-center gap-1 hover:bg-[#333333] cursor-pointer shadow-xs active:scale-95 transition-all whitespace-nowrap shrink-0"
  >
  <span>{isThai ? 'ดูทั้งหมด' : 'See all'}</span>
- <ChevronRight className="w-3 h-3" />
+ <ChevronRight className="w-3 h-3 shrink-0" />
  </button>
- </div>
+ }
+ />
 
- {/* Local State Quick Stats Strip */}
+ <div className="w-full p-4 rounded-[28px] bg-[#ffffff] space-y-3 shadow-sm">
+ {/* Quick Stats Strip */}
  <div className="grid grid-cols-3 gap-2 text-center">
- <div className="p-2 rounded-[16px] bg-[#dceeff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">
+ <div className="p-2 rounded-[16px] bg-[#f4f8fb]">
+ <div className="text-[9px] font-bold uppercase text-[#000000]/60 whitespace-nowrap">
  {isThai ? 'อัตราชนะ' : 'WIN RATE'}
  </div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
+ <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight tabular-nums whitespace-nowrap">
  {winRatePercentage}%
  </div>
- <div className="text-[9px] text-[#000000]/70 font-semibold">
- {isThai ? `ชนะ ${winsCount} - แพ้ ${totalMatchesCount - winsCount}` : `${winsCount}W - ${totalMatchesCount - winsCount}L`}
+ <div className="text-[9px] text-[#000000]/70 font-semibold whitespace-nowrap">
+ {isThai ? `ชนะ ${winsCount} · แพ้ ${totalMatchesCount - winsCount}` : `${winsCount}W · ${totalMatchesCount - winsCount}L`}
  </div>
  </div>
- <div className="p-2 rounded-[16px] bg-[#ffd731] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/70 tracking-wider">
+ <div className="p-2 rounded-[16px] bg-[#7cd7a0]">
+ <div className="text-[9px] font-bold uppercase text-[#000000]/70 whitespace-nowrap">
  {isThai ? 'EXP รวม' : 'TOTAL EXP'}
  </div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
+ <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight tabular-nums whitespace-nowrap">
  +{totalExpFromMatches}
  </div>
- <div className="text-[9px] text-[#000000]/80 font-semibold">{totalMatchesCount} {isThai ? 'แมตช์' : 'Matches'}</div>
+ <div className="text-[9px] text-[#000000]/80 font-semibold whitespace-nowrap">
+ {totalMatchesCount} {isThai ? 'แมตช์' : 'Matches'}
  </div>
- <div className="p-2 rounded-[16px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold uppercase text-[#000000]/60 tracking-wider">
+ </div>
+ <div className="p-2 rounded-[16px] bg-[#f4f8fb]">
+ <div className="text-[9px] font-bold uppercase text-[#000000]/60 whitespace-nowrap">
  {isThai ? 'สปีดตบสูงสุด' : 'TOP SMASH'}
  </div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight">
+ <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000] leading-tight tabular-nums whitespace-nowrap">
  {Math.max(...matches.map((m) => m.highestSmashKmh))} km/h
  </div>
- <div className="text-[9px] text-[#55db9c] font-bold">
+ <div className="text-[9px] text-[#15803d] font-bold whitespace-nowrap">
  {isThai ? 'สถิติความเร็ว' : 'Speed Record'}
  </div>
  </div>
  </div>
 
- {/* Render List of Past Match Results */}
- <div className="space-y-2.5 pt-1">
- {matches.slice(0, 3).map((match) => {
- const isExpanded = expandedMatchId === match.id;
- const isWin = match.result === 'win';
-
- return (
- <div
+ {/* Football-Style Match Face-Off Cards */}
+ <div className="space-y-3 pt-1">
+ {matches.slice(0, 3).map((match) => (
+ <MatchFaceOffCard
  key={match.id}
- className="rounded-[20px] bg-[#f8fbff] p-3 space-y-2 transition-all hover:bg-[#edf5ff] shadow-xs"
- >
- {/* Top Row: Date, Result badge, Match Type */}
- <div className="flex items-center justify-between text-[10px]">
- <div className="flex items-center gap-1.5 font-bold text-[#000000]/70">
- <Calendar className="w-3 h-3 text-[#000000]/60" />
- <span>{isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}</span>
- </div>
- <div className="flex items-center gap-1.5">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-bold uppercase text-[#000000]/80">
- {isThai ? (match.matchType.toLowerCase().includes('single') ? 'ประเภทเดี่ยว' : 'ประเภทคู่') : match.matchType}
- </span>
- <span
- className={`px-2.5 py-0.5 rounded-[1600px] text-[9px] font-black uppercase ${
- isWin ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#fb4903] text-[#ffffff]'
- }`}
- >
- {isWin ? (isThai ? 'ชนะ' : 'WIN') : (isThai ? 'แพ้' : 'LOSS')} · {match.finalScore}
- </span>
- </div>
- </div>
-
- {/* Opponent & Matchup Info */}
- <div className="flex items-start justify-between gap-2 pt-1 ">
- <div className="min-w-0 flex-1">
- <div className="flex items-center gap-1.5">
- <span className="text-[11px] font-bold text-[#000000]/50 uppercase tracking-wider">VS</span>
- <span className="font-['Antonio',sans-serif] text-base font-black text-[#000000] tracking-wide truncate">
- {isThai ? (match.opponent.nameTh || match.opponent.name) : (match.opponent.nameEn || match.opponent.name)}
- </span>
- </div>
- <div className="flex items-center gap-2 mt-0.5 text-[10px] text-[#000000]/70 font-semibold flex-wrap">
- <span className="px-2 py-0.5 rounded-full bg-[#ffd731] text-[9px] font-black text-[#000000]">
- {isThai ? match.opponent.tier.replace('Diamond League', 'ลีกไดมอนด์').replace('Platinum League', 'ลีกแพลทินัม').replace('Gold League', 'ลีกโกลด์').replace('Silver League', 'ลีกซิลเวอร์').replace('Bronze League', 'ลีกบรอนซ์') : match.opponent.tier}
- </span>
- <span>{match.opponent.club}</span>
- {match.partnerName && (
- <span className="text-[#5c4ade]">· {isThai ? `คู่กับ ${match.partnerNameTh || match.partnerName}` : `with ${match.partnerNameEn || match.partnerName}`}</span>
- )}
- </div>
- <div className="flex items-center gap-1 mt-1 text-[10px] text-[#000000]/60 font-medium truncate">
- <MapPin className="w-3 h-3 shrink-0" />
- <span className="truncate">{isThai ? (match.courtNameTh || match.courtName) : (match.courtNameEn || match.courtName)}</span>
- </div>
- </div>
-
- {/* Final Score Big Display */}
- <div className="text-right shrink-0">
- <div className="font-['Antonio',sans-serif] text-2xl font-black text-[#000000] leading-none">
- {match.finalScore}
- </div>
- <button
- type="button"
- onClick={() => {
+ match={match}
+ userDisplayName={isThai ? (player.nameTh || 'กานต์ ธนวัฒน์') : (player.nameEn || 'Karn Tanawat')}
+ userAvatarUrl={player.avatarUrl}
+ isThai={isThai}
+ isExpanded={expandedMatchId === match.id}
+ onToggleExpand={() => {
  playSelectSound();
- setExpandedMatchId(isExpanded ? null : match.id);
+ setExpandedMatchId(expandedMatchId === match.id ? null : match.id);
  }}
- className="mt-1 text-[9px] font-bold uppercase text-[#000000] underline flex items-center justify-end gap-0.5 cursor-pointer"
- >
- <span>{isExpanded ? (isThai ? 'ย่อ' : 'Collapse') : (isThai ? 'ดูเซ็ต' : 'Sets')}</span>
- {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
- </button>
- </div>
- </div>
-
- {/* Set-by-Set Score Chips */}
- <div className="flex items-center gap-1.5 pt-1">
- <span className="text-[9px] font-bold text-[#000000]/60 uppercase">
- {isThai ? 'คะแนนเซ็ต:' : 'Set Scores:'}
- </span>
- <div className="flex items-center gap-1.5 flex-wrap">
- {match.scores.map((s) => (
- <span
- key={s.set}
- className={`px-2 py-0.5 rounded-[8px] text-[10px] font-mono font-bold ${
- s.userScore > s.opponentScore
- ? 'bg-[#ffffff] text-[#000000] font-black'
- : 'bg-[#eeeeee] text-[#000000]/70'
- }`}
- >
- {isThai ? `เซ็ต ${s.set}: ${s.userScore}–${s.opponentScore}` : `S${s.set}: ${s.userScore}-${s.opponentScore}`}
- </span>
+ onAnalyze={() => navigateTo('C3')}
+ surfaceClass="bg-[#f8fbff] border border-[#000000]/8"
+ />
  ))}
  </div>
- </div>
 
- {/* Expanded Set & Performance Telemetry */}
- {isExpanded && (
- <div className="mt-2 pt-2 bg-[#ffffff] p-2.5 rounded-[16px] space-y-2 text-[10px]">
- <div className="grid grid-cols-3 gap-2 text-center">
- <div className="p-1.5 rounded-[10px] bg-[#dceeff] ">
- <span className="text-[8px] font-bold text-[#000000]/60 uppercase block">
- {isThai ? 'ความเร็วสแมช' : 'Top Smash'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
- ⚡ {match.highestSmashKmh} {isThai ? 'กม./ชม.' : 'km/h'}
- </span>
- </div>
- <div className="p-1.5 rounded-[10px] bg-[#dceeff] ">
- <span className="text-[8px] font-bold text-[#000000]/60 uppercase block">
- {isThai ? 'ระยะเวลาแข่ง' : 'Duration'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
- ⏱️ {match.durationMin} {isThai ? 'นาที' : 'min'}
- </span>
- </div>
- <div className="p-1.5 rounded-[10px] bg-[#ffd731] ">
- <span className="text-[8px] font-bold text-[#000000]/70 uppercase block">
- {isThai ? 'EXP ที่ได้รับ' : 'EXP Gained'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black text-[#000000]">
- +{match.expGained} EXP
- </span>
- </div>
- </div>
- <div className="text-[10px] font-medium text-[#000000]/80 bg-[#f4f7fb] p-2 rounded-[12px] flex items-center gap-1.5">
- <Sparkles className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
- <span><strong>{isThai ? 'ไฮไลต์ช็อตสำคัญ:' : 'Highlight Shot:'}</strong> {isThai ? (match.highlightShotTh || match.highlightShot) : (match.highlightShotEn || match.highlightShot)}</span>
- </div>
- </div>
- )}
- </div>
- );
- })}
- </div>
-
- {/* Action: Simulate New Match Button to demonstrate live local state */}
- <div className="pt-2 flex items-center gap-2">
+ {/* Action: Simulate New Match Button */}
+ <div className="pt-1 flex items-center gap-2">
  <button
  type="button"
  onClick={handleSimulateNewMatch}
- className="flex-1 py-2.5 px-3 rounded-[1600px] bg-[#ffd731] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 hover:bg-[#ffe266] active:scale-95 transition-transform cursor-pointer text-[#000000]"
+ className="flex-1 py-2.5 px-3 rounded-[1600px] bg-[#7cd7a0] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 hover:bg-[#6ecb93] active:scale-95 transition-transform cursor-pointer text-[#000000] whitespace-nowrap"
  >
- <Plus className="w-3.5 h-3.5 text-[#000000]" />
- <span>{isThai ? '+ จำลองบันทึกผลแข่งใหม่' : '+ Simulate New Match'}</span>
+ <Plus className="w-3.5 h-3.5 text-[#000000] shrink-0" />
+ <span className="whitespace-nowrap">{isThai ? 'จำลองบันทึกผลแข่งใหม่' : 'Simulate New Match'}</span>
  </button>
  </div>
  </div>
+ </div>
 
- {/* My Active Booking Pass (Real User Flow) */}
+ {/* My Active Booking Pass Section */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title={isThai ? 'บัตรเข้าคอร์ทของฉัน' : 'MY ACTIVE PASS'}
+ badge={isThai ? 'พร้อมใช้งาน' : 'READY'}
+ badgeVariant="green"
+ />
  <div
  onClick={() => navigateTo('B4')}
- className="w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#e9ccff] transition-all space-y-2"
+ className="doodle-cta w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#e8f7ee] transition-all flex items-center justify-between gap-3"
  >
- <div className="flex items-center justify-between pb-1 text-[10px]">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#dceeff] font-black uppercase text-[#000000]">
- {isThai ? 'บัตรเข้าสนาม' : 'ACTIVE PASS'}
- </span>
- <span className="font-bold text-[#55db9c]">● {isThai ? 'พร้อมใช้งาน' : 'Ready'}</span>
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-[1600px] bg-[#55db9c] flex items-center justify-center font-bold text-[#000000]">
+ <div className="flex items-center gap-3 min-w-0 flex-1">
+ <div className="w-10 h-10 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center font-bold text-[#000000] shrink-0">
  <QrCode className="w-5 h-5" />
  </div>
- <div>
- <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- บัตรเข้าคอร์ทของฉัน
+ <div className="min-w-0 flex-1">
+ <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
+ {booking.court?.name || 'สแมช อารีน่า พระราม 9'}
  </div>
- <div className="text-[10px] text-[#000000]/70 font-bold">
- {booking.court?.name || 'สแมช อารีน่า พระราม 9'} · คอร์ท {booking.selectedCourtNumber || 3}
+ <div className="text-[10px] text-[#000000]/70 font-bold truncate">
+ {isThai ? `คอร์ท ${booking.selectedCourtNumber || 3} · แสดง QR เพื่อเปิดไฟสนาม` : `Court ${booking.selectedCourtNumber || 3} · Scan QR at check-in`}
  </div>
  </div>
  </div>
- <ChevronRight className="w-4 h-4 text-[#000000]" />
+ <ChevronRight className="w-4 h-4 text-[#000000] shrink-0" />
  </div>
  </div>
 
- {/* Wearable Sync Callout */}
+ {/* Wearable Sync Section */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title={isThai ? 'เชื่อมต่ออุปกรณ์สวมใส่' : 'SMART WEARABLE'}
+ badge="164 BPM · 480 kcal"
+ badgeVariant="soft"
+ />
  <div
  onClick={() => navigateTo('F2')}
- className="w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#ffd731] transition-all space-y-2"
+ className="doodle-cta w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#e8f7ee] transition-all flex items-center justify-between gap-3"
  >
- <div className="flex items-center justify-between pb-1 text-[10px]">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#4da2ff] text-[#000000] font-black uppercase">
- เชื่อมต่ออุปกรณ์ · SMART WEARABLE
- </span>
- <span className="font-bold text-[#000000]/60">164 BPM · 480 kcal</span>
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-[1600px] bg-[#4da2ff] flex items-center justify-center font-bold text-[#000000]">
+ <div className="flex items-center gap-3 min-w-0 flex-1">
+ <div className="w-10 h-10 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center font-bold text-[#000000] shrink-0">
  <Watch className="w-5 h-5" />
  </div>
- <div>
- <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
+ <div className="min-w-0 flex-1">
+ <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
  APPLE WATCH & GARMIN SYNC
  </div>
- <div className="text-[10px] text-[#000000]/70 font-bold">
- ซิงค์ชีพจรและเผาผลาญแคลอรี่เป็นแต้ม EXP
+ <div className="text-[10px] text-[#000000]/70 font-bold truncate">
+ {isThai ? 'ซิงค์ชีพจรและเผาผลาญแคลอรี่เป็นแต้ม EXP' : 'Sync heart rate & calories to EXP'}
  </div>
  </div>
  </div>
- <ChevronRight className="w-4 h-4 text-[#000000]" />
+ <ChevronRight className="w-4 h-4 text-[#000000] shrink-0" />
  </div>
  </div>
 
- {/* Edit DNA & Settings */}
+ {/* Edit DNA & Settings Section */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title={isThai ? 'ตั้งค่าความถนัดนักกีฬา' : 'PLAYSTYLE DNA'}
+ badge={isThai ? 'แก้ไขได้' : 'EDITABLE'}
+ badgeVariant="soft"
+ />
  <div
  onClick={() => navigateTo('A2')}
- className="w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#e9e9e9] transition-all space-y-2"
+ className="doodle-cta w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#e9e9e9] transition-all flex items-center justify-between gap-3"
  >
- <div className="flex items-center justify-between pb-1 text-[10px]">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#e9ccff] font-black uppercase text-[#000000]">
- {isThai ? 'ตั้งค่าความถนัด' : 'PLAYSTYLE DNA'}
- </span>
- <span className="font-bold text-[#000000]/60">{isThai ? 'แก้ไขข้อมูล' : 'Edit'}</span>
- </div>
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
- <div className="w-10 h-10 rounded-[1600px] bg-[#e9ccff] flex items-center justify-center font-bold text-[#000000]">
+ <div className="flex items-center gap-3 min-w-0 flex-1">
+ <div className="w-10 h-10 rounded-[1600px] bg-[#e8f7ee] flex items-center justify-center font-bold text-[#000000] shrink-0">
  <UserCog className="w-5 h-5" />
  </div>
- <div>
- <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {isThai ? 'แก้ไขข้อมูลนักกีฬา & สไตล์การเล่น' : 'Edit Athlete DNA & Playstyle'}
+ <div className="min-w-0 flex-1">
+ <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
+ {isThai ? 'แก้ไขสไตล์การเล่น & มือถนัด' : 'Edit Athlete DNA & Playstyle'}
  </div>
- <div className="text-[10px] text-[#000000]/70 font-bold">
+ <div className="text-[10px] text-[#000000]/70 font-bold truncate">
  {isThai ? 'ปรับสายตบ, มือกุมแร็กเก็ต, และเป้าหมายฝึกฝน' : 'Customize playstyle, grip hand, and goals'}
  </div>
  </div>
  </div>
- <ChevronRight className="w-4 h-4 text-[#000000]" />
+ <ChevronRight className="w-4 h-4 text-[#000000] shrink-0" />
  </div>
  </div>
 
- {/* Pro Membership Monetization Shortcut */}
+ {/* App Settings & Language Card */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title={isThai ? 'ตั้งค่าแอป & ภาษา' : 'APP SETTINGS & LANGUAGE'}
+ badge={language.toUpperCase()}
+ badgeVariant="dark"
+ />
+ <div
+ onClick={() => {
+ playSelectSound();
+ setIsSettingsOpen(true);
+ }}
+ className="doodle-cta w-full p-4 rounded-[28px] bg-[#ffffff] cursor-pointer hover:bg-[#e8f7ee] transition-all flex items-center justify-between gap-3"
+ >
+ <div className="flex items-center gap-3 min-w-0 flex-1">
+ <div className="w-10 h-10 rounded-[1600px] bg-[#f4f8fb] border border-[#000000] flex items-center justify-center font-bold text-[#000000] shrink-0">
+ <Settings className="w-5 h-5" />
+ </div>
+ <div className="min-w-0 flex-1">
+ <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
+ {isThai ? 'เปลี่ยนภาษา TH/EN & เสียงเอฟเฟกต์' : 'Language TH/EN & Sound Settings'}
+ </div>
+ <div className="text-[10px] text-[#000000]/70 font-bold truncate">
+ {isThai ? 'สลับภาษาไทย-อังกฤษ ตั้งค่าเสียงและการซิงค์ออฟไลน์' : 'Switch language, retro audio & offline sync'}
+ </div>
+ </div>
+ </div>
+ <ChevronRight className="w-4 h-4 text-[#000000] shrink-0" />
+ </div>
+ </div>
+
+ {/* Pro Membership Section */}
+ <div className="space-y-1.5 w-full">
+ <SectionHeader
+ title="SMASH PRO MEMBER"
+ badge={isThai ? '฿199 / เดือน' : '฿199 / MO'}
+ badgeVariant="orange"
+ />
  <div
  onClick={() => {
  setIsProModalOpen(true);
  playCoinSound();
  }}
- className="w-full p-4 rounded-[28px] bg-[#ffd731] cursor-pointer hover:bg-[#ffe266] transition-all space-y-2"
+ className="doodle-cta w-full p-4 rounded-[28px] bg-[#7cd7a0] cursor-pointer hover:bg-[#6ecb93] transition-all flex items-center justify-between gap-3"
  >
- <div className="flex items-center justify-between pb-1 text-[10px]">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffd731] font-black uppercase">
- {isThai ? 'สมาชิกสิทธิพิเศษ' : 'PRO PASS'}
- </span>
- <span className="font-black text-[#000000]">{isThai ? '฿199 / เดือน' : '฿199 / mo'}</span>
- </div>
- <div className="flex items-center justify-between gap-3">
  <div className="flex items-center gap-3 min-w-0 flex-1">
- <div className="w-10 h-10 rounded-[1600px] bg-[#000000] text-[#ffd731] flex items-center justify-center font-bold shrink-0">
+ <div className="w-10 h-10 rounded-[1600px] bg-[#000000] text-[#e85729] flex items-center justify-center font-bold shrink-0">
  <Crown className="w-5 h-5" />
  </div>
  <div className="min-w-0 flex-1">
  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
- SMASH PRO MEMBER
+ {isThai ? 'สิทธิพิเศษสมาชิก PRO' : 'PRO ATHLETE PERKS'}
  </div>
  <div className="text-[10px] text-[#000000]/80 font-bold truncate">
  {isThai ? 'ลดค่าคอร์ท 10% · สแกน AI ไม่จำกัด' : '10% off courts · Unlimited AI Scans'}
@@ -719,23 +890,23 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  </div>
 
- {/* Quick Action Buttons (Black fill and outlined black) */}
+ {/* Quick Action Buttons */}
  <div className="w-full grid grid-cols-2 gap-2">
  <button
  type="button"
  onClick={() => navigateTo('D1')}
  className="p-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] border border-[#000000] hover:bg-[#e9e9e9] whitespace-nowrap"
  >
- <Crosshair className="w-3.5 h-3.5 text-[#5c4ade]" />
- <span>{isThai ? 'เรดาร์โค้ช AI' : 'COACH RADAR (D1)'}</span>
+ <Crosshair className="w-3.5 h-3.5 text-[#15803d] shrink-0" />
+ <span>{isThai ? 'เรดาร์โค้ช AI' : 'COACH RADAR'}</span>
  </button>
  <button
  type="button"
  onClick={() => navigateTo('B1')}
  className="p-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#000000] text-[#ffffff] border border-[#000000] hover:bg-[#1a1a1a] whitespace-nowrap"
  >
- <Calendar className="w-3.5 h-3.5" />
- <span>{isThai ? 'จองสนามแบด' : 'BOOK COURTS (B1)'}</span>
+ <Calendar className="w-3.5 h-3.5 shrink-0" />
+ <span>{isThai ? 'จองสนามแบด' : 'BOOK COURTS'}</span>
  </button>
  </div>
  </div>
@@ -744,52 +915,48 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  {/* DEDICATED FULL TAB: ผลการแข่ง (MATCHES) */}
  {activeTab === 'matches' && (
  <div className="space-y-4">
- {/* Header / Summary Card */}
- <div className="p-4 rounded-[28px] bg-[#ffffff] shadow-sm space-y-3">
- <div className="flex items-center justify-between pb-2 ">
- <div>
- <h4 className="font-['Antonio',sans-serif] text-lg font-black uppercase tracking-wider text-[#000000] leading-tight">
- {isThai ? 'ประวัติผลการแข่งขันทั้งหมด' : 'ALL MATCH HISTORY'}
- </h4>
- <p className="text-[10px] text-[#000000]/70 font-bold">
- {isThai ? 'แมตช์ที่บันทึกในระบบ' : 'Recorded matches in system'}
- </p>
- </div>
- {/* CTA Action button keeps solid black border */}
+ {/* Summary Section */}
+ <div className="space-y-1.5">
+ <SectionHeader
+ title={isThai ? 'ประวัติผลการแข่งขันทั้งหมด' : 'ALL MATCH HISTORY'}
+ subtitle={isThai ? 'แมตช์ที่บันทึกในระบบ' : 'Recorded matches in system'}
+ rightSlot={
  <button
  type="button"
  onClick={handleSimulateNewMatch}
- className="px-3 py-1.5 rounded-[1600px] bg-[#55db9c] text-[#000000] border-2 border-[#000000] text-xs font-black uppercase tracking-wide flex items-center gap-1 hover:bg-[#46c288] active:scale-95 transition-transform cursor-pointer shadow-xs"
+ className="px-3 py-1.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] border border-[#000000] text-xs font-black uppercase tracking-wide flex items-center gap-1 hover:bg-[#46c288] active:scale-95 transition-transform cursor-pointer shadow-xs whitespace-nowrap shrink-0"
  >
- <Plus className="w-3.5 h-3.5" />
+ <Plus className="w-3.5 h-3.5 shrink-0" />
  <span>{isThai ? 'เพิ่มผลแข่ง' : 'Add Match'}</span>
  </button>
- </div>
+ }
+ />
 
+ <div className="p-4 rounded-[28px] bg-[#ffffff] shadow-sm space-y-3">
  {/* Big Stat Summary */}
  <div className="grid grid-cols-4 gap-2 text-center">
- <div className="p-2 rounded-[16px] bg-[#dceeff] shadow-xs">
- <div className="text-[8px] font-bold uppercase text-[#000000]/60">{isThai ? 'แมตช์ทั้งหมด' : 'TOTAL'}</div>
- <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">{matches.length}</div>
+ <div className="p-2 rounded-[16px] bg-[#f4f8fb]">
+ <div className="text-[8px] font-bold uppercase text-[#000000]/60 whitespace-nowrap">{isThai ? 'ทั้งหมด' : 'TOTAL'}</div>
+ <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tabular-nums">{matches.length}</div>
  </div>
- <div className="p-2 rounded-[16px] bg-[#55db9c]/30 shadow-xs">
- <div className="text-[8px] font-bold uppercase text-[#000000]/60">{isThai ? 'ชนะ' : 'WINS'}</div>
- <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">{winsCount}</div>
+ <div className="p-2 rounded-[16px] bg-[#7cd7a0]/30">
+ <div className="text-[8px] font-bold uppercase text-[#000000]/60 whitespace-nowrap">{isThai ? 'ชนะ' : 'WINS'}</div>
+ <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tabular-nums">{winsCount}</div>
  </div>
- <div className="p-2 rounded-[16px] bg-[#fb4903]/20 shadow-xs">
- <div className="text-[8px] font-bold uppercase text-[#000000]/60">{isThai ? 'แพ้' : 'LOSSES'}</div>
- <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">
+ <div className="p-2 rounded-[16px] bg-[#e85729]/20">
+ <div className="text-[8px] font-bold uppercase text-[#000000]/60 whitespace-nowrap">{isThai ? 'แพ้' : 'LOSSES'}</div>
+ <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tabular-nums">
  {matches.length - winsCount}
  </div>
  </div>
- <div className="p-2 rounded-[16px] bg-[#ffd731] shadow-xs">
- <div className="text-[8px] font-bold uppercase text-[#000000]/70">WIN RATE</div>
- <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000]">{winRatePercentage}%</div>
+ <div className="p-2 rounded-[16px] bg-[#7cd7a0]">
+ <div className="text-[8px] font-bold uppercase text-[#000000]/70 whitespace-nowrap">WIN RATE</div>
+ <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tabular-nums">{winRatePercentage}%</div>
  </div>
  </div>
 
  {/* Filter Pills */}
- <div className="flex items-center gap-1.5 pt-1 overflow-x-auto no-scrollbar">
+ <div data-filter="true" className="flex items-center gap-1.5 pt-1 overflow-x-auto no-scrollbar">
  {(
  [
  { id: 'all', label: isThai ? `ทั้งหมด (${matches.length})` : `All (${matches.length})` },
@@ -806,15 +973,16 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  playSelectSound();
  setMatchFilter(f.id);
  }}
- className={`px-2.5 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-wider transition-all border whitespace-nowrap cursor-pointer ${
+ className={`px-3 py-1 rounded-[1600px] text-[10px] font-bold uppercase tracking-wider transition-all border whitespace-nowrap shrink-0 cursor-pointer ${
  matchFilter === f.id
- ? 'bg-[#000000] text-[#ffffff] border-[#000000] shadow-xs'
+ ? 'bg-[#000000] text-[#ffffff] border-[#000000]'
  : 'bg-[#ffffff] text-[#000000] border-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
  {f.label}
  </button>
  ))}
+ </div>
  </div>
  </div>
 
@@ -825,174 +993,22 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <p className="text-xs font-bold text-[#000000]/60">ไม่พบข้อมูลแมตช์ในหมวดหมู่นี้</p>
  </div>
  ) : (
- filteredMatches.map((match) => {
- const isExpanded = expandedMatchId === match.id;
- const isWin = match.result === 'win';
-
- return (
- <div
+ filteredMatches.map((match) => (
+ <MatchFaceOffCard
  key={match.id}
- className="p-4 rounded-[28px] bg-[#ffffff] space-y-3 transition-all shadow-sm hover:shadow-md"
- >
- {/* Top Bar: Match Date & Badges */}
- <div className="flex items-center justify-between pb-2 ">
- <div className="flex items-center gap-1.5 text-xs font-bold text-[#000000]/70">
- <Clock className="w-3.5 h-3.5" />
- <span>{isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}</span>
- </div>
- <div className="flex items-center gap-1.5">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] text-[10px] font-bold uppercase text-[#000000]">
- {match.matchType}
- </span>
- <span
- className={`px-3 py-0.5 rounded-[1600px] text-[10px] font-black uppercase ${
- isWin ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#fb4903] text-[#ffffff]'
- }`}
- >
- {isWin ? (isThai ? 'ชนะ' : 'VICTORY') : (isThai ? 'แพ้' : 'DEFEAT')}
- </span>
- </div>
- </div>
-
- {/* Opponent Info and Main Scoreboard */}
- <div className="flex items-center justify-between gap-3">
- <div className="min-w-0 flex-1">
- <div className="text-[10px] font-bold text-[#000000]/50 uppercase tracking-wider">
- {isThai ? 'คู่ต่อสู้' : 'OPPONENT'}
- </div>
- <h4 className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tracking-wide truncate">
- {isThai ? (match.opponent.nameTh || match.opponent.name) : (match.opponent.nameEn || match.opponent.name)}
- </h4>
- <div className="flex items-center gap-1.5 mt-1 text-[11px] text-[#000000]/70 font-semibold flex-wrap">
- <span className="px-2 py-0.2 rounded-full bg-[#ffd731] text-[9px] font-black">
- {match.opponent.tier}
- </span>
- <span>{match.opponent.club}</span>
- </div>
- {match.partnerName && (
- <div className="text-[10px] text-[#5c4ade] font-bold mt-0.5">
- {isThai ? `คู่หูร่วมทีม: ${match.partnerNameTh || match.partnerName}` : `Partner: ${match.partnerNameEn || match.partnerName}`}
- </div>
- )}
- <div className="text-[10px] text-[#000000]/60 font-medium flex items-center gap-1 mt-1 truncate">
- <MapPin className="w-3 h-3 shrink-0" />
- <span className="truncate">{isThai ? (match.courtNameTh || match.courtName) : (match.courtNameEn || match.courtName)}</span>
- </div>
- </div>
-
- {/* Final Score Pill */}
- <div className="text-center p-3 rounded-[20px] bg-[#dceeff] shadow-xs min-w-[76px] shrink-0">
- <div className="text-[9px] font-bold text-[#000000]/60 uppercase">{isThai ? 'สกอร์รวม' : 'SCORE'}</div>
- <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#000000] leading-none my-0.5">
- {match.finalScore}
- </div>
- <div className="text-[9px] font-bold text-[#000000]/70">{match.durationMin} {isThai ? 'นาที' : 'min'}</div>
- </div>
- </div>
-
- {/* Set By Set Breakdown */}
- <div className="p-2.5 rounded-[18px] bg-[#f8fbff] shadow-xs space-y-2">
- <div className="flex items-center justify-between text-[10px] font-bold text-[#000000]/70">
- <span>{isThai ? 'ผลการแข่งขันแต่ละเซ็ต' : 'SET SCORES'}</span>
- <button
- type="button"
- onClick={() => {
+ match={match}
+ userDisplayName={isThai ? (player.nameTh || 'กานต์ ธนวัฒน์') : (player.nameEn || 'Karn Tanawat')}
+ userAvatarUrl={player.avatarUrl}
+ isThai={isThai}
+ isExpanded={expandedMatchId === match.id}
+ onToggleExpand={() => {
  playSelectSound();
- setExpandedMatchId(isExpanded ? null : match.id);
+ setExpandedMatchId(expandedMatchId === match.id ? null : match.id);
  }}
- className="text-[#000000] underline flex items-center gap-0.5 cursor-pointer"
- >
- <span>{isExpanded ? (isThai ? 'ซ่อนรายละเอียด' : 'Hide') : (isThai ? 'ดูเทเลเมทรี' : 'View Stats')}</span>
- {isExpanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
- </button>
- </div>
-
- <div className="grid grid-cols-3 gap-2">
- {match.scores.map((s) => {
- const setWon = s.userScore > s.opponentScore;
- return (
- <div
- key={s.set}
- className={`p-2 rounded-[14px] text-center ${
- setWon ? 'bg-[#55db9c]/25' : 'bg-[#ffffff]'
- }`}
- >
- <div className="text-[9px] font-bold text-[#000000]/60 uppercase">{isThai ? `เซ็ต ${s.set}` : `Set ${s.set}`}</div>
- <div className="font-['Antonio',sans-serif] text-lg font-black text-[#000000]">
- {s.userScore} - {s.opponentScore}
- </div>
- <div className="text-[8px] font-bold uppercase mt-0.5">
- {setWon ? (isThai ? 'ชนะ' : 'WON') : (isThai ? 'แพ้' : 'LOST')}
- </div>
- </div>
- );
- })}
- </div>
- </div>
-
- {/* Expandable Match Analytics & Telemetry */}
- {isExpanded && (
- <div className="p-3 rounded-[20px] bg-[#fffbed] shadow-xs space-y-2.5 text-[11px]">
- <div className="flex items-center justify-between pb-1">
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase text-[#000000]">
- {isThai ? 'สถิติการเล่นและความเร็วลูก' : 'SMASH METRICS'}
- </span>
- <span className="font-bold text-[#55db9c] text-[10px]">VERIFIED</span>
- </div>
-
- <div className="grid grid-cols-3 gap-2 text-center">
- <div className="p-2 rounded-[14px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
- {isThai ? 'ลูกตบเร็วสุด' : 'TOP SMASH'}
- </div>
- <div className="font-['Antonio',sans-serif] text-base font-black text-[#000000]">
- ⚡ {match.highestSmashKmh} km/h
- </div>
- </div>
- <div className="p-2 rounded-[14px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
- {isThai ? 'ระยะเวลา' : 'DURATION'}
- </div>
- <div className="font-['Antonio',sans-serif] text-base font-black text-[#000000]">
- ⏱️ {match.durationMin} {isThai ? 'น.' : 'm'}
- </div>
- </div>
- <div className="p-2 rounded-[14px] bg-[#ffffff] shadow-xs">
- <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
- {isThai ? 'EXP ได้รับ' : 'EXP'}
- </div>
- <div className="font-['Antonio',sans-serif] text-base font-black text-[#000000]">
- +{match.expGained} EXP
- </div>
- </div>
- </div>
-
- <div className="p-2.5 rounded-[14px] bg-[#ffffff] shadow-xs flex items-center justify-between">
- <div className="flex items-center gap-2">
- <Sparkles className="w-4 h-4 text-[#ffd731] shrink-0" />
- <div>
- <div className="text-[9px] font-bold text-[#000000]/60 uppercase">
- {isThai ? 'ช็อตไฮไลต์ประจำแมตช์' : 'HIGHLIGHT SHOT'}
- </div>
- <div className="font-bold text-xs text-[#000000]">
- {isThai ? (match.highlightShotTh || match.highlightShot) : (match.highlightShotEn || match.highlightShot)}
- </div>
- </div>
- </div>
- {/* CTA button preserves solid black border */}
- <button
- type="button"
- onClick={() => navigateTo('C3')}
- className="px-2.5 py-1 rounded-[1600px] bg-[#000000] text-[#ffffff] border-2 border-[#000000] text-[9px] font-bold uppercase tracking-wider hover:bg-[#333333] cursor-pointer shadow-xs active:scale-95 transition-transform"
- >
- {isThai ? 'ตรวจวิเคราะห์ช็อต' : 'Analyze Motion'}
- </button>
- </div>
- </div>
- )}
- </div>
- );
- })
+ onAnalyze={() => navigateTo('C3')}
+ surfaceClass="bg-[#ffffff] shadow-sm"
+ />
+ ))
  )}
  </div>
  </div>
@@ -1000,6 +1016,11 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
 
  {activeTab === 'trophies' && (
  <div className="space-y-3">
+ <SectionHeader
+ title={isThai ? 'ตู้เหรียญรางวัลเกียรติยศ' : 'TROPHY & BADGE CASE'}
+ badge={`${player.badges.filter((b) => b.unlocked).length}/${player.badges.length}`}
+ badgeVariant="green"
+ />
  <div className="grid grid-cols-2 gap-3">
  {player.badges.map((b) => (
  <div
@@ -1009,11 +1030,11 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  }`}
  >
  <div>
- <div className="flex items-center justify-between mb-2">
- <div className="w-10 h-10 rounded-[1600px] bg-[#ffd731] text-[#000000] flex items-center justify-center font-bold shadow-xs">
+ <div className="flex items-center justify-between gap-2 mb-2">
+ <div className="w-10 h-10 rounded-[1600px] bg-[#7cd7a0] text-[#000000] flex items-center justify-center font-bold shadow-xs shrink-0">
  <Award className="w-5 h-5" />
  </div>
- <span className="text-[9px] font-bold uppercase tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] shadow-xs">
+ <span className="text-[9px] font-bold uppercase tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] shadow-xs whitespace-nowrap shrink-0">
  {b.rarity}
  </span>
  </div>
@@ -1027,8 +1048,8 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
 
  <div className="mt-3 pt-2 flex items-center justify-between text-[10px] font-bold">
- <span className={b.unlocked ? 'text-[#000000]' : 'text-[#000000]/50'}>
- {b.unlocked ? (isThai ? '✓ ปลดล็อกแล้ว (+100 EXP)' : '✓ Unlocked (+100 EXP)') : `${b.progress}/${b.maxProgress}`}
+ <span className={b.unlocked ? 'text-[#000000] whitespace-nowrap' : 'text-[#000000]/50 whitespace-nowrap'}>
+ {b.unlocked ? (isThai ? '✓ ปลดล็อก (+100 EXP)' : '✓ Unlocked (+100 EXP)') : `${b.progress}/${b.maxProgress}`}
  </span>
  </div>
  </div>
@@ -1038,27 +1059,28 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  )}
 
  {activeTab === 'gear' && (
- <div className="p-5 rounded-[28px] bg-[#ffffff] shadow-sm space-y-4">
- <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wider text-[#000000]">
- {isThai ? 'สเปกอุปกรณ์ไม้แบด' : 'RACKET & STRING SPEC'}
- </h4>
-
- <div className="space-y-2.5">
- <div className="p-3 rounded-[20px] bg-[#dceeff] shadow-xs flex items-center justify-between">
- <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'รุ่นไม้แบด:' : 'Racket Model:'}</span>
- <span className="text-xs font-bold font-mono">{player.racket.model}</span>
+ <div className="space-y-1.5">
+ <SectionHeader
+ title={isThai ? 'สเปกอุปกรณ์ไม้แบด' : 'RACKET & STRING SPEC'}
+ badge="PRO SETUP"
+ badgeVariant="green"
+ />
+ <div className="p-5 rounded-[28px] bg-[#ffffff] shadow-sm space-y-2.5">
+ <div className="p-3 rounded-[20px] bg-[#f4f8fb] flex items-center justify-between gap-2">
+ <span className="text-xs text-[#000000]/70 font-bold whitespace-nowrap">{isThai ? 'รุ่นไม้แบด:' : 'Racket Model:'}</span>
+ <span className="text-xs font-bold font-mono truncate">{player.racket.model}</span>
  </div>
- <div className="p-3 rounded-[20px] bg-[#dceeff] shadow-xs flex items-center justify-between">
- <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'น้ำหนัก / กริป:' : 'Weight / Grip:'}</span>
- <span className="text-xs font-bold font-mono">{player.racket.weightGrip}</span>
+ <div className="p-3 rounded-[20px] bg-[#f4f8fb] flex items-center justify-between gap-2">
+ <span className="text-xs text-[#000000]/70 font-bold whitespace-nowrap">{isThai ? 'น้ำหนัก / กริป:' : 'Weight / Grip:'}</span>
+ <span className="text-xs font-bold font-mono whitespace-nowrap">{player.racket.weightGrip}</span>
  </div>
- <div className="p-3 rounded-[20px] bg-[#dceeff] shadow-xs flex items-center justify-between">
- <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'ความตึงเอ็น:' : 'Tension:'}</span>
- <span className="text-xs font-bold text-[#5c4ade] font-mono">{player.racket.stringTension}</span>
+ <div className="p-3 rounded-[20px] bg-[#f4f8fb] flex items-center justify-between gap-2">
+ <span className="text-xs text-[#000000]/70 font-bold whitespace-nowrap">{isThai ? 'ความตึงเอ็น:' : 'Tension:'}</span>
+ <span className="text-xs font-bold text-[#15803d] font-mono whitespace-nowrap">{player.racket.stringTension}</span>
  </div>
- <div className="p-3 rounded-[20px] bg-[#dceeff] shadow-xs flex items-center justify-between">
- <span className="text-xs text-[#000000]/70 font-bold">{isThai ? 'ประเภทเอ็น:' : 'String Type:'}</span>
- <span className="text-xs font-bold">{player.racket.stringType}</span>
+ <div className="p-3 rounded-[20px] bg-[#f4f8fb] flex items-center justify-between gap-2">
+ <span className="text-xs text-[#000000]/70 font-bold whitespace-nowrap">{isThai ? 'ประเภทเอ็น:' : 'String Type:'}</span>
+ <span className="text-xs font-bold truncate">{player.racket.stringType}</span>
  </div>
  </div>
  </div>
@@ -1069,6 +1091,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <ProSubscriptionModal
  isOpen={isProModalOpen}
  onClose={() => setIsProModalOpen(false)}
+ />
+ <AppSettingsModal
+ isOpen={isSettingsOpen}
+ onClose={() => setIsSettingsOpen(false)}
  />
  </div>
  );

@@ -23,14 +23,14 @@ export const F2_WearableSyncScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader title="WEARABLE COMPANION" subtitle="Apple Watch & Health Telemetry" showBack />
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
 
- <div className="p-4 space-y-3.5 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
+ <div className="px-5 pt-4 space-y-3.5 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
  {/* Connection Status Box (Paper White, 1px solid black border, 28px radius) */}
  <div className="p-4 rounded-[28px] bg-[#ffffff] flex items-center justify-between">
  <div className="flex items-center gap-3">
- <div className="w-12 h-12 rounded-[1600px] bg-[#4da2ff] flex items-center justify-center font-bold text-[#000000]">
+ <div className="w-12 h-12 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center font-bold text-[#000000]">
  <Watch className="w-6 h-6" />
  </div>
  <div>
@@ -38,7 +38,7 @@ export const F2_WearableSyncScreen: React.FC = () => {
  <span className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wide text-[#000000]">
  APPLE WATCH ULTRA 2
  </span>
- <span className="w-2.5 h-2.5 rounded-full bg-[#55db9c] animate-pulse" />
+ <span className="w-2.5 h-2.5 rounded-full bg-[#7cd7a0] animate-pulse" />
  </div>
  <div className="text-[10px] font-bold tracking-[0.032em] text-[#000000]/70 uppercase">
  BLE CONNECTED · 100HZ REALTIME
@@ -60,10 +60,10 @@ export const F2_WearableSyncScreen: React.FC = () => {
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-2.5">
  <div className="flex items-center justify-between text-xs">
  <span className="font-['Antonio',sans-serif] text-sm font-black uppercase flex items-center gap-1.5 tracking-wide text-[#000000]">
- <Heart className="w-4 h-4 text-[#ff5c34] fill-[#ff5c34] animate-pulse" />
+ <Heart className="w-4 h-4 text-[#e85729] fill-[#e85729] animate-pulse" />
  <span>CARDIAC RHYTHM (164 BPM)</span>
  </span>
- <span className="text-[10px] font-bold uppercase px-3 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] tracking-[0.032em]">
+ <span className="text-[10px] font-bold uppercase px-3 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] tracking-[0.032em] whitespace-nowrap shrink-0">
  ANAEROBIC ZONE
  </span>
  </div>
@@ -74,12 +74,12 @@ export const F2_WearableSyncScreen: React.FC = () => {
  <path
  d="M 0 30 Q 20 30 30 30 L 40 10 L 48 50 L 56 15 L 64 35 L 72 30 L 120 30 L 130 8 L 138 52 L 146 12 L 154 35 L 162 30 L 220 30 L 230 10 L 238 50 L 246 15 L 254 35 L 262 30 L 300 30"
  fill="none"
- stroke="#55db9c"
+ stroke="#7cd7a0"
  strokeWidth="2.5"
  strokeLinecap="round"
  />
  </svg>
- <div className="absolute right-3 top-2 text-[10px] font-bold text-[#55db9c] tracking-[0.032em]">
+ <div className="absolute right-3 top-2 text-[10px] font-bold text-[#7cd7a0] tracking-[0.032em]">
  PEAK 182 BPM
  </div>
  </div>
@@ -87,7 +87,7 @@ export const F2_WearableSyncScreen: React.FC = () => {
 
  {/* 3 Metric Cards (Six-color sticker palette applied as a shared set) */}
  <div className="grid grid-cols-3 gap-2.5">
- <div className="p-3.5 rounded-[24px] bg-[#ff5c34] text-[#ffffff] text-center">
+ <div className="p-3.5 rounded-[24px] bg-[#e85729] text-[#ffffff] text-center">
  <Heart className="w-4 h-4 mx-auto mb-1 fill-[#ffffff]" />
  <div className="font-['Antonio',sans-serif] text-2xl font-black leading-none">
  {wearableMetrics.heartRateBpm}
@@ -95,15 +95,15 @@ export const F2_WearableSyncScreen: React.FC = () => {
  <div className="text-[9px] font-bold uppercase tracking-[0.032em] mt-1 text-[#ffffff]/80">AVG BPM</div>
  </div>
 
- <div className="p-3.5 rounded-[24px] bg-[#ffd731] text-[#000000] text-center">
- <Flame className="w-4 h-4 mx-auto mb-1 text-[#000000] fill-[#000000]" />
+ <div className="p-3.5 rounded-[24px] bg-[#e8f7ee] text-[#000000] text-center">
+ <Flame className="w-4 h-4 mx-auto mb-1 text-[#e85729] fill-[#e85729]" />
  <div className="font-['Antonio',sans-serif] text-2xl font-black leading-none">
  {wearableMetrics.caloriesBurned}
  </div>
  <div className="text-[9px] font-bold uppercase tracking-[0.032em] mt-1 text-[#000000]/70">KCAL BURN</div>
  </div>
 
- <div className="p-3.5 rounded-[24px] bg-[#55db9c] text-[#000000] text-center">
+ <div className="p-3.5 rounded-[24px] bg-[#7cd7a0] text-[#000000] text-center">
  <Footprints className="w-4 h-4 mx-auto mb-1 text-[#000000]" />
  <div className="font-['Antonio',sans-serif] text-2xl font-black leading-none">
  {wearableMetrics.distanceKm}
@@ -115,7 +115,7 @@ export const F2_WearableSyncScreen: React.FC = () => {
  {/* Convert Calories to EXP Card */}
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-3">
  <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-[1600px] bg-[#ffd731] flex items-center justify-center text-[#000000]">
+ <div className="w-8 h-8 rounded-[1600px] bg-[#e85729] flex items-center justify-center text-[#ffffff]">
  <Zap className="w-4 h-4 fill-[#000000]" />
  </div>
  <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
@@ -140,7 +140,7 @@ export const F2_WearableSyncScreen: React.FC = () => {
  >
  {wearableMetrics.expConverted ? (
  <>
- <CheckCircle2 className="w-4 h-4 text-[#55db9c] shrink-0" />
+ <CheckCircle2 className="w-4 h-4 text-[#7cd7a0] shrink-0" />
  <span className="whitespace-nowrap">CLAIMED +240 EXP</span>
  </>
  ) : (
@@ -152,7 +152,7 @@ export const F2_WearableSyncScreen: React.FC = () => {
  </button>
 
  {justConverted && (
- <div className="p-2.5 rounded-[1600px] bg-[#55db9c] text-[#000000] text-center text-xs font-bold whitespace-nowrap">
+ <div className="p-2.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-center text-xs font-bold whitespace-nowrap">
  🎉 +{Math.round(wearableMetrics.caloriesBurned / 2)} EXP CLAIMED TO PROFILE!
  </div>
  )}

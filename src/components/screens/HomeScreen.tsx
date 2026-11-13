@@ -28,7 +28,6 @@ import {
  Footprints,
  Play,
  SlidersHorizontal,
- User,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { CourtFacility } from '../../types';
@@ -37,6 +36,8 @@ import { EnergyMoodModal, MoodEnergyLevel, MOOD_LEVELS } from '../common/EnergyM
 import { ProgressRingsWidget } from '../common/ProgressRingsWidget';
 import { WeeklyCalendarWidget } from '../common/WeeklyCalendarWidget';
 import { WorkoutDetailModal, WorkoutDetailData } from '../common/WorkoutDetailModal';
+import { SectionHeader } from '../common/SectionHeader';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 
 // Workouts mapped to energy levels (VibeMove style)
 const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
@@ -271,20 +272,20 @@ export const HomeScreen: React.FC = () => {
 
  // 8 Services Matrix (Grid 4x2) per design.md specification
   const servicesMatrix = [
-    { id: 'srv_courts', label: 'Find Courts', thai: 'ค้นหาสนาม', icon: '🏸', screen: 'MAP', color: 'bg-[#55db9c]' },
-    { id: 'srv_groups', label: 'Find Groups', thai: 'หาก๊วน', icon: '👥', screen: 'E1', color: 'bg-[#ffd731]', badge: '28' },
-    { id: 'srv_create', label: 'Create Party', thai: 'สร้างก๊วน', icon: '➕', screen: 'E2', color: 'bg-[#4da2ff]' },
-    { id: 'srv_tools', label: 'Club Tools', thai: 'กล่องเครื่องมือ', icon: '🛠️', screen: 'CLUB_TOOLS', color: 'bg-[#e9ccff]', badge: 'HOT' },
-    { id: 'srv_coach', label: 'Find Coach', thai: 'หาโค้ชสอน', icon: '🎯', screen: 'D1', color: 'bg-[#55db9c]' },
-    { id: 'srv_tourn', label: 'Tournaments', thai: 'ทัวร์นาเมนต์', icon: '🏆', screen: 'E4', color: 'bg-[#ffd731]' },
-    { id: 'srv_activity', label: 'Activities', thai: 'กิจกรรมเด่น', icon: '⚡', screen: 'D2', color: 'bg-[#fb4903]', badge: 'NEW' },
-    { id: 'srv_quiz', label: 'Level Quiz', thai: 'วัดระดับฝีมือ', icon: '📝', screen: 'A2', color: 'bg-[#5c4ade]', badge: 'NEW' },
+    { id: 'srv_courts', label: 'Find Courts', thai: 'ค้นหาสนาม', icon: '🏸', screen: 'MAP', color: 'bg-[#7cd7a0]' },
+    { id: 'srv_groups', label: 'Find Groups', thai: 'หาก๊วน', icon: '👥', screen: 'E1', color: 'bg-[#7cd7a0]', badge: '28' },
+    { id: 'srv_create', label: 'Create Party', thai: 'สร้างก๊วน', icon: '➕', screen: 'E2', color: 'bg-[#7cd7a0]' },
+    { id: 'srv_tools', label: 'Club Tools', thai: 'กล่องเครื่องมือ', icon: '🛠️', screen: 'CLUB_TOOLS', color: 'bg-[#e8f7ee]', badge: 'HOT' },
+    { id: 'srv_coach', label: 'Find Coach', thai: 'หาโค้ชสอน', icon: '🎯', screen: 'D1', color: 'bg-[#7cd7a0]' },
+    { id: 'srv_tourn', label: 'Tournaments', thai: 'ทัวร์นาเมนต์', icon: '🏆', screen: 'E4', color: 'bg-[#7cd7a0]' },
+    { id: 'srv_activity', label: 'Activities', thai: 'กิจกรรมเด่น', icon: '⚡', screen: 'D2', color: 'bg-[#e85729]', badge: 'NEW' },
+    { id: 'srv_quiz', label: 'Level Quiz', thai: 'วัดระดับฝีมือ', icon: '📝', screen: 'A2', color: 'bg-[#15803d]', badge: 'NEW' },
   ];
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000] overflow-y-auto overscroll-contain no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000] overflow-y-auto overscroll-contain no-scrollbar pb-28">
  {/* 1. Grab-Signature Header Nav Bar (Exact Grab App Layout from Reference Screenshot) */}
- <div className="bg-[#004d2c] text-[#ffffff] px-4 pt-4 pb-3 shadow-sm relative z-30">
+ <div className="bg-[#004d2c] text-[#ffffff] app-header-safe px-5 pb-4 shadow-sm relative z-30">
  <div className="flex items-center gap-3">
  {/* A. QR / Barcode Scanner Squircle Button */}
  <button
@@ -342,7 +343,7 @@ export const HomeScreen: React.FC = () => {
  <div className="absolute top-12 left-0 right-0 z-50 bg-[#ffffff] rounded-[24px] p-3 shadow-2xl space-y-2 animate-in fade-in zoom-in-95 text-[#000000]">
  <div className="flex items-center justify-between pb-2 text-[10px]">
  <span className="font-black uppercase tracking-wider text-[#000000] flex items-center gap-1">
- <Sparkles className="w-3 h-3 text-[#5c4ade]" />
+ <Sparkles className="w-3 h-3 text-[#15803d]" />
  {isThai ? 'คำค้นหายอดนิยม' : 'Trending Searches'}
  </span>
  <button
@@ -366,7 +367,7 @@ export const HomeScreen: React.FC = () => {
  setSearchQuery(tag);
  setIsSearchSuggestionsOpen(false);
  }}
- className="px-3 py-1 rounded-[1600px] bg-[#dceeff] text-[10px] font-bold hover:bg-[#c2e2ff] shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#f4f8fb] text-[10px] font-bold hover:bg-[#c2e2ff] shadow-xs"
  >
  {tag}
  </button>
@@ -383,39 +384,29 @@ export const HomeScreen: React.FC = () => {
  playCoinSound();
  navigateTo('FINANCE');
  }}
- className="w-9 h-9 rounded-full bg-gradient-to-br from-[#ffd731] via-[#f59e0b] to-[#d97706] flex items-center justify-center text-[#ffffff] font-black text-sm shadow-xs cursor-pointer active:scale-[0.96] transition-transform shrink-0"
+ className="w-9 h-9 rounded-full bg-gradient-to-br from-[#7cd7a0] via-[#f59e0b] to-[#d97706] flex items-center justify-center text-[#ffffff] font-black text-sm shadow-xs cursor-pointer active:scale-[0.96] transition-transform shrink-0"
  title={isThai ? 'เหรียญสแมชเพย์' : 'SmashRewards (120 Coins)'}
  >
  <span className="font-['Antonio',sans-serif] text-base drop-shadow-xs font-black">G</span>
  </button>
 
- {/* D. Circular Profile Avatar Button */}
+ {/* D. Circular Doodle Profile Avatar Button */}
  <button
  type="button"
  onClick={() => {
  playSelectSound();
  navigateTo('F1');
  }}
- className="w-9 h-9 rounded-full bg-[#dceeff] border-2 border-[#ffffff] overflow-hidden flex items-center justify-center cursor-pointer active:scale-[0.96] transition-transform shrink-0 shadow-xs relative"
+ className="rounded-full overflow-hidden flex items-center justify-center cursor-pointer active:scale-[0.96] transition-transform shrink-0 shadow-xs"
  title={isThai ? 'โปรไฟล์ผู้ใช้' : 'User Profile'}
  >
- {player.avatarUrl ? (
- <img
- src={player.avatarUrl}
- alt={player.name}
- className="w-full h-full object-cover"
- />
- ) : (
- <div className="w-full h-full bg-[#00b14f] flex items-center justify-center text-[#ffffff]">
- <User className="w-5 h-5 fill-current" />
- </div>
- )}
+ <DoodleAvatar preset="karn" size="sm" className="w-9 h-9" ringClass="border-2 border-[#ffffff]" />
  </button>
  </div>
  </div>
 
  {/* Dual Quick Info Cards (Matching Grab reference: View Balance / Ride to) */}
- <div className="px-4 pt-3">
+ <div className="px-5 pt-4">
  <div className="grid grid-cols-2 gap-3">
  {/* Card 1: View Balance / SmashPay Wallet */}
  <div
@@ -423,7 +414,7 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('FINANCE');
  }}
- className="p-3 rounded-[20px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2 cursor-pointer hover:shadow-md active:scale-[0.96] transition-all"
+ className="doodle-cta p-3 rounded-[20px] bg-[#ffffff] flex items-center justify-between gap-2 cursor-pointer transition-all"
  >
  <div className="min-w-0">
  <span className="text-[10px] text-[#000000]/60 font-semibold block leading-tight truncate">
@@ -438,7 +429,7 @@ export const HomeScreen: React.FC = () => {
  ฿1,250.00
  </span>
  </div>
- <div className="w-8 h-8 rounded-full bg-[#55db9c]/20 flex items-center justify-center text-base shrink-0">
+ <div className="w-8 h-8 rounded-full bg-[#7cd7a0]/20 flex items-center justify-center text-base shrink-0">
  💳
  </div>
  </div>
@@ -449,10 +440,10 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  navigateTo('B4');
  }}
- className="p-3 rounded-[20px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2 cursor-pointer hover:shadow-md active:scale-[0.96] transition-all"
+ className="doodle-cta p-3 rounded-[20px] bg-[#ffffff] flex items-center justify-between gap-2 cursor-pointer transition-all"
  >
  <div className="min-w-0">
- <span className="text-[10px] text-[#fb4903] font-black block leading-tight truncate">
+ <span className="text-[10px] text-[#e85729] font-black block leading-tight truncate">
  {isThai ? 'นัดหมายถัดไป' : 'Next Match'}
  </span>
  <div className="flex items-center gap-1 mt-1">
@@ -464,7 +455,7 @@ export const HomeScreen: React.FC = () => {
  {isThai ? 'วันนี้ 19:00 · คอร์ท 3' : 'Today 19:00 · Court 3'}
  </span>
  </div>
- <div className="w-8 h-8 rounded-full bg-[#ffd731]/20 flex items-center justify-center text-base shrink-0">
+ <div className="w-8 h-8 rounded-full bg-[#e85729]/15 flex items-center justify-center text-base shrink-0">
  🏸
  </div>
  </div>
@@ -488,11 +479,11 @@ export const HomeScreen: React.FC = () => {
             playSelectSound();
             navigateTo('E1');
           }}
-          className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs relative"
+          className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs whitespace-nowrap"
         >
           <span>👥</span>
           <span>{isThai ? 'หาก๊วน' : 'Find Groups'}</span>
-          <span className="px-2 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black">
+          <span className="px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[9px] font-black shrink-0 whitespace-nowrap">
             28
           </span>
         </button>
@@ -509,11 +500,11 @@ export const HomeScreen: React.FC = () => {
  <h2 className="text-lg font-black leading-tight text-[#ffffff] font-['Antonio',sans-serif] uppercase tracking-wide">
  {isThai ? (
  <>
- ยังไม่แน่ใจว่าจะ<span className="font-serif italic font-normal text-[#ffd731] underline decoration-[#ffd731] decoration-1">ฝึกซ้อม</span>อะไร<span className="font-serif italic font-normal text-[#55db9c] underline decoration-[#55db9c] decoration-1">วันนี้</span>?
+ ยังไม่แน่ใจว่าจะ<span className="font-serif italic font-normal text-[#e85729] underline decoration-[#e85729] decoration-1">ฝึกซ้อม</span>อะไร<span className="font-serif italic font-normal text-[#7cd7a0] underline decoration-[#7cd7a0] decoration-1">วันนี้</span>?
  </>
  ) : (
  <>
- Not sure <span className="font-serif italic font-normal text-[#ffd731] underline decoration-[#ffd731] decoration-1">what</span> you want to <span className="font-serif italic font-normal text-[#55db9c] underline decoration-[#55db9c] decoration-1">train</span> today?
+ Not sure <span className="font-serif italic font-normal text-[#e85729] underline decoration-[#e85729] decoration-1">what</span> you want to <span className="font-serif italic font-normal text-[#7cd7a0] underline decoration-[#7cd7a0] decoration-1">train</span> today?
  </>
  )}
  </h2>
@@ -534,23 +525,23 @@ export const HomeScreen: React.FC = () => {
                   playSmashSound();
                 }}
                 title="น้องสแมชชี่ (Smashy) #15"
-                className="relative w-16 h-16 rounded-2xl overflow-hidden bg-[#162722] border-2 border-[#ffd731] shadow-lg cursor-pointer group active:scale-[0.96] transition-transform"
+                className="relative w-16 h-16 rounded-2xl overflow-hidden bg-[#162722] border-2 border-[#7cd7a0] shadow-lg cursor-pointer group active:scale-[0.96] transition-transform"
               >
                 <img
                   src="/assets/aistudio/Gemini_Generated_Image_b3fgwrb3fgwrb3fg_9069fb4e.jpeg"
                   alt="Smashy Badminton Hero #15"
                   className="w-full h-full object-cover object-[51%_22%] scale-110 group-hover:scale-125 transition-transform duration-300"
                 />
-                <div className="absolute top-0 right-0 bg-[#fb4903] text-white text-[8px] font-black px-1 rounded-bl-md">
+                <div className="absolute top-0 right-0 bg-[#e85729] text-white text-[8px] font-black px-1 rounded-bl-md">
                   #15
                 </div>
-                <div className="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-xs py-0.2 text-center text-[7.5px] font-black text-[#ffd731] uppercase tracking-wider">
+                <div className="absolute bottom-0 inset-x-0 bg-black/70 backdrop-blur-xs py-0.2 text-center text-[7.5px] font-black text-[#e85729] uppercase tracking-wider">
                   SMASHY
                 </div>
               </button>
               <div className="mt-1 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#55db9c] animate-pulse" />
-                <span className="text-[8.5px] font-extrabold uppercase text-[#ffd731] tracking-wide">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#7cd7a0] animate-pulse" />
+                <span className="text-[8.5px] font-extrabold uppercase text-[#e85729] tracking-wide">
                   CO-PILOT
                 </span>
               </div>
@@ -560,7 +551,7 @@ export const HomeScreen: React.FC = () => {
               <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-md">
                 <polygon
                   points="50,5 57,18 71,9 72,23 87,20 81,33 95,38 84,48 96,58 82,63 89,76 74,74 72,89 60,81 50,92 40,81 28,89 26,74 11,76 18,63 4,58 16,48 5,38 19,33 13,20 28,23 29,9 43,18"
-                  fill="#ffd731"
+                  fill="#e85729"
                   stroke="#000000"
                   strokeWidth="2.5"
                 />
@@ -584,26 +575,20 @@ export const HomeScreen: React.FC = () => {
  playSelectSound();
  setIsEnergyModalOpen(true);
  }}
- className="w-full py-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f0f0f0] text-[#000000] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-transform shadow-xs"
+ className="w-full py-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f0f0f0] text-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-transform shadow-sm"
  >
- <span>{isThai ? 'ค้นหาโปรแกรมซ้อมที่ตรงใจคุณ' : 'Match My Training Session'}</span>
- <span className="text-[10px] text-[#000000]/60 font-bold">
- ({isThai ? activeMoodConfig.thaiLabel : activeMoodConfig.label})
- </span>
+ <span>{isThai ? 'ค้นหาการฝึกที่ใช่' : 'Find my match'}</span>
  </button>
  </div>
  </div>
 
- {/* 3. SERVICES MATRIX (Grid 4x2 - 8 Services per design.md 4.1) */}
+ {/* 3. SERVICES MATRIX (Grid 4x2) */}
     <div className="space-y-2">
-      <div className="flex items-center justify-between">
-        <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
-          {isThai ? 'บริการทั้งหมด (8 รายการ)' : 'Services Matrix (8)'}
-        </h2>
-        <span className="text-[10px] font-bold text-[#000000]/60">
-          {isThai ? 'ครบครันทุกเรื่องแบด' : 'All-in-One'}
-        </span>
-      </div>
+      <SectionHeader
+        title={isThai ? 'บริการทั้งหมด (8 รายการ)' : 'Services Matrix (8)'}
+        badge={isThai ? 'ครบครันทุกเรื่องแบด' : 'All-in-One'}
+        badgeVariant="soft"
+      />
 
       {/* 4x2 Grid of 1:1 Squircles */}
       <div className="grid grid-cols-4 gap-3">
@@ -618,7 +603,7 @@ export const HomeScreen: React.FC = () => {
             className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-[0.96] transition-all cursor-pointer relative"
           >
             {srv.badge && (
-              <span className="absolute -top-1 right-1 px-2 py-0.2 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[8px] font-black shadow-xs">
+              <span className="absolute -top-1 right-1 px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[8px] font-black shadow-xs whitespace-nowrap shrink-0">
                 {srv.badge}
               </span>
             )}
@@ -627,8 +612,8 @@ export const HomeScreen: React.FC = () => {
             >
               {srv.icon}
             </div>
-            <div className="text-center">
-              <span className="text-[10px] font-black text-[#000000] block leading-tight">
+            <div className="text-center w-full">
+              <span className="text-[10px] font-black text-[#000000] block leading-tight truncate whitespace-nowrap">
                 {isThai ? srv.thai : srv.label}
               </span>
             </div>
@@ -680,8 +665,8 @@ export const HomeScreen: React.FC = () => {
  onSeeActivityClick={() => navigateTo('F2')}
  />
 
- {/* 5. VIEW SELECTOR TABS (Well-proportioned switcher to keep layout clean & balanced) */}
- <div className="flex items-center gap-2 p-1 rounded-[1600px] bg-[#ffffff] shadow-xs">
+ {/* 5. VIEW SELECTOR TABS (Clean filter tabs without heavy CTA borders) */}
+ <div data-filter="true" className="flex items-center gap-2 p-1 rounded-[1600px] bg-[#ffffff] shadow-xs">
  <button
  type="button"
  onClick={() => {
@@ -728,33 +713,33 @@ export const HomeScreen: React.FC = () => {
  </button>
  </div>
 
- {/* TAB 1: TODAY'S SESSIONS (Fits your mood today - Video 00:02 & 00:11 layout) */}
+ {/* TAB 1: TODAY'S SESSIONS */}
  {activeSubTab === 'today' && (
- <div className="space-y-3">
- <div className="flex items-center justify-between">
- <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
- {isThai ? 'เซสชันที่เหมาะกับคุณ' : 'Fits your mood today'}
- </h2>
+ <div className="space-y-2.5">
+ <SectionHeader
+ title={isThai ? 'เซสชันที่เหมาะกับคุณ' : 'Fits your mood today'}
+ rightSlot={
  <button
  type="button"
  onClick={() => {
  playSelectSound();
  setIsEnergyModalOpen(true);
  }}
- className="text-xs font-bold text-[#fb4903] hover:underline flex items-center gap-1 cursor-pointer"
+ className="text-xs font-bold text-[#e85729] hover:underline flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
  >
  <span>{isThai ? 'เปลี่ยนอารมณ์' : 'Change my mood'}</span>
- <ChevronRight className="w-3.5 h-3.5" />
+ <ChevronRight className="w-3.5 h-3.5 shrink-0" />
  </button>
- </div>
+ }
+ />
 
- {/* Large Prominent Hero Session Card (Video 00:11 Style) */}
+ {/* Large Prominent Hero Session Card */}
  <div
  onClick={() => {
  playSelectSound();
  setIsWorkoutDetailOpen(true);
  }}
- className="w-full bg-[#ffffff] rounded-[28px] overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer space-y-3"
+ className="w-full bg-[#ffffff] rounded-[28px] overflow-hidden shadow-md hover:shadow-lg transition-all cursor-pointer"
  >
  {/* Media Preview Container with Overlay Controls */}
  <div className="relative w-full aspect-[16/10] bg-[#243b34] overflow-hidden">
@@ -766,9 +751,9 @@ export const HomeScreen: React.FC = () => {
  <div className="absolute inset-0 bg-gradient-to-t from-[#000000]/80 via-transparent to-[#000000]/30 pointer-events-none" />
 
  {/* Top Badge & Heart */}
- <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
- <span className="px-3 py-1 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff]  text-[9px] font-bold flex items-center gap-1">
- <Flame className="w-3 h-3 text-[#fb4903]" />
+ <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2">
+ <span className="px-3 py-1 rounded-[1600px] bg-[#000000]/75 backdrop-blur-xs text-[#ffffff] text-[10px] font-bold flex items-center gap-1 whitespace-nowrap shrink-0">
+ <Flame className="w-3 h-3 text-[#e85729] shrink-0" />
  <span>{isThai ? currentWorkout.intensityLabelTh : currentWorkout.intensityLabelEn}</span>
  </span>
 
@@ -779,17 +764,18 @@ export const HomeScreen: React.FC = () => {
  playCoinSound();
  setIsHeroWorkoutFavorited(!isHeroWorkoutFavorited);
  }}
- className="w-8 h-8 rounded-full bg-[#ffffff]/90 backdrop-blur-xs border border-[#000000] flex items-center justify-center cursor-pointer hover:scale-110 active:scale-90 transition-transform shadow-xs"
+ className="w-8 h-8 rounded-full bg-[#ffffff]/90 backdrop-blur-xs border border-[#000000] flex items-center justify-center cursor-pointer hover:scale-110 active:scale-90 transition-transform shadow-xs shrink-0"
+ aria-label="Favorite session"
  >
  <Heart
  className={`w-4 h-4 transition-colors ${
- isHeroWorkoutFavorited ? 'fill-[#fb4903] text-[#fb4903]' : 'text-[#000000]'
+ isHeroWorkoutFavorited ? 'fill-[#e85729] text-[#e85729]' : 'text-[#000000]'
  }`}
  />
  </button>
  </div>
 
- {/* Center "Start Training" Button - PRIMARY CTA KEEPS BORDER */}
+ {/* Center "Start Training" Button */}
  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-center">
  <button
  type="button"
@@ -799,38 +785,40 @@ export const HomeScreen: React.FC = () => {
  gainExp(50, isThai ? `เริ่มการฝึกซ้อม: ${currentWorkout.titleTh}` : `Start training: ${currentWorkout.titleEn}`);
  navigateTo('C1');
  }}
- className="w-full py-3 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff5a1a] text-[#ffffff] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-transform shadow-md"
+ className="w-full py-3 rounded-[1600px] bg-[#e85729] hover:bg-[#ff5a1a] text-[#ffffff] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-transform shadow-md whitespace-nowrap"
  >
- <Play className="w-3.5 h-3.5 fill-current" />
- <span>{isThai ? 'เริ่มการฝึกซ้อม' : 'Start training'}</span>
+ <Play className="w-3.5 h-3.5 fill-current shrink-0" />
+ <span className="whitespace-nowrap">{isThai ? 'เริ่มการฝึกซ้อม' : 'Start training'}</span>
  </button>
  </div>
  </div>
 
- {/* Session Text Details below Media */}
- <div className="p-4 pt-0 space-y-2">
- <div className="flex items-start justify-between gap-2">
- <h3 className="font-['Antonio',sans-serif] text-base font-black text-[#000000] uppercase tracking-wide leading-tight line-clamp-1">
+ {/* Clean Session Text Details below Media */}
+ <div className="p-4 space-y-2">
+ <div className="flex items-center justify-between gap-2">
+ <h3 className="text-[15px] font-extrabold text-[#000000] leading-snug truncate">
  {isThai ? currentWorkout.titleTh : currentWorkout.titleEn}
  </h3>
- <span className="text-xs font-black text-[#000000] bg-[#ffd731] px-2 py-1 rounded-full shrink-0 shadow-xs">
+ <span className="text-[11px] font-black text-[#000000] bg-[#7cd7a0] px-2.5 py-0.5 rounded-[1600px] shrink-0 whitespace-nowrap tabular-nums">
  ★ {currentWorkout.rating}
  </span>
  </div>
 
- <div className="flex items-center gap-2 text-xs font-semibold text-[#000000]/70">
- <Clock className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
- <span>{isThai ? currentWorkout.scheduleTh : currentWorkout.scheduleEn}</span>
- <span>·</span>
+ <div className="flex items-center gap-1.5 text-xs font-semibold text-[#000000]/70 truncate">
+ <Clock className="w-3.5 h-3.5 text-[#15803d] shrink-0" />
+ <span className="whitespace-nowrap">{isThai ? currentWorkout.scheduleTh : currentWorkout.scheduleEn}</span>
+ <span aria-hidden="true">·</span>
  <span className="truncate">{isThai ? currentWorkout.courtNameTh : currentWorkout.courtNameEn}</span>
  </div>
 
- {/* Tags */}
- <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-1">
- {((isThai ? currentWorkout.tagsTh : currentWorkout.tagsEn) || currentWorkout.tags).map((tag, tIdx) => (
+ {/* Concise 3-Tag Metadata Row (Single-line, clean spacing) */}
+ <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar pt-0.5">
+ {((isThai ? currentWorkout.tagsTh : currentWorkout.tagsEn) || currentWorkout.tags)
+ .slice(0, 3)
+ .map((tag, tIdx) => (
  <span
  key={tIdx}
- className="px-3 py-1 rounded-[1600px] bg-[#dceeff] text-[#000000] text-[9px] font-bold shrink-0 whitespace-nowrap shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#f4f8fb] text-[#000000] text-[10px] font-semibold leading-normal shrink-0 whitespace-nowrap"
  >
  {tag}
  </span>
@@ -850,23 +838,23 @@ export const HomeScreen: React.FC = () => {
 
  {/* TAB 3: COURTS VIEW (16:9 Badminton Courts Feed) */}
  {activeSubTab === 'courts' && (
- <div className="space-y-3 animate-in fade-in">
- <div className="flex items-center justify-between">
- <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif]">
- {isThai ? 'สนามใกล้คุณ' : 'Courts Near You'}
- </h2>
+ <div className="space-y-2.5 animate-in fade-in">
+ <SectionHeader
+ title={isThai ? 'สนามใกล้คุณ' : 'Courts Near You'}
+ rightSlot={
  <button
  type="button"
  onClick={() => {
  playSelectSound();
  navigateTo('MAP');
  }}
- className="px-3 py-1 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[11px] font-bold flex items-center gap-1 cursor-pointer active:scale-[0.96] transition-all shadow-xs whitespace-nowrap shrink-0"
  >
- <span>{isThai ? 'ดูคอร์ทว่างบนแผนที่' : 'Explore Nearby Courts'}</span>
- <ChevronRight className="w-3.5 h-3.5" />
+ <span>{isThai ? 'ดูคอร์ทว่างบนแผนที่' : 'Explore Map'}</span>
+ <ChevronRight className="w-3.5 h-3.5 shrink-0" />
  </button>
- </div>
+ }
+ />
 
  <div className="space-y-3">
  {courts.length === 0 ? (
@@ -894,7 +882,7 @@ export const HomeScreen: React.FC = () => {
  />
 
  <div className="absolute top-2.5 left-2.5 flex items-center gap-2">
- <span className="px-2 py-1 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[9px] font-black shadow-xs">
+ <span className="px-2 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[9px] font-black shadow-xs">
  {isThai ? 'เปิดจอง' : 'Available'}
  </span>
                   <span className="px-2 py-1 rounded-[1600px] bg-[#000000]/65 text-[#ffffff] text-[8px] font-bold backdrop-blur-xs shadow-xs">
@@ -910,13 +898,13 @@ export const HomeScreen: React.FC = () => {
  <Heart
  className={`w-3.5 h-3.5 transition-colors ${
  favoriteCourtIds.includes(court.id)
- ? 'fill-[#fb4903] text-[#fb4903]'
+ ? 'fill-[#e85729] text-[#e85729]'
  : 'text-[#000000]'
  }`}
  />
  </button>
 
- <div className="absolute bottom-2.5 right-2.5 px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] text-xs font-black shadow-xs">
+ <div className="absolute bottom-2.5 right-2.5 px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-xs font-black shadow-xs">
  ฿{court.pricePerHour}/{isThai ? 'ชม.' : 'hr'}
  </div>
  </div>
@@ -951,25 +939,19 @@ export const HomeScreen: React.FC = () => {
  </div>
  )}
 
- {/* 6. Compact Live Simulator Bar (Convenient testing triggers for notification banners) */}
- <div className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm space-y-2">
- <div className="flex items-center justify-between text-[10px]">
- <div className="flex items-center gap-2">
- <span className="w-2 h-2 rounded-full bg-[#55db9c] animate-pulse" />
- <span className="font-['Antonio',sans-serif] font-black uppercase tracking-wider text-[#000000]">
- {isThai ? '⚡ จำลองเหตุการณ์สด' : '⚡ LIVE EVENTS SIMULATOR'}
- </span>
- </div>
- <span className="font-bold text-[#fb4903]">
- {isThai ? `⏱️ แมตช์ถัดไป ${formatCountdown(countdownSeconds)}` : `⏱️ Next match in ${formatCountdown(countdownSeconds)}`}
- </span>
- </div>
-
- <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
+ {/* 6. Compact Live Simulator Section */}
+ <div className="space-y-1.5">
+ <SectionHeader
+ title={isThai ? '⚡ จำลองเหตุการณ์สด' : '⚡ LIVE EVENTS SIMULATOR'}
+ badge={isThai ? `⏱️ แมตช์ถัดไป ${formatCountdown(countdownSeconds)}` : `⏱️ Next ${formatCountdown(countdownSeconds)}`}
+ badgeVariant="orange"
+ />
+ <div className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm">
+ <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
  <button
  type="button"
  onClick={triggerSampleInvite}
- className="px-3 py-1 rounded-[1600px] bg-[#ffd731] hover:bg-[#ffe366] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] hover:bg-[#6ecb93] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>⚔️</span>
  <span>{isThai ? 'เพื่อนท้าแข่ง' : 'Match Invite'}</span>
@@ -978,7 +960,7 @@ export const HomeScreen: React.FC = () => {
  <button
  type="button"
  onClick={triggerSampleBookingConfirmation}
- className="px-3 py-1 rounded-[1600px] bg-[#55db9c] hover:bg-[#6be4ab] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] hover:bg-[#6be4ab] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>🎫</span>
  <span>{isThai ? 'จองคอร์ทสำเร็จ' : 'Booking Confirmed'}</span>
@@ -987,7 +969,7 @@ export const HomeScreen: React.FC = () => {
  <button
  type="button"
  onClick={triggerSampleCountdownAlert}
- className="px-3 py-1 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff6122] text-[#ffffff] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#e85729] hover:bg-[#ff6122] text-[#ffffff] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>⏱️</span>
  <span>{isThai ? 'เตือนแมตช์ใกล้เริ่ม' : 'Upcoming Match'}</span>
@@ -996,11 +978,12 @@ export const HomeScreen: React.FC = () => {
  <button
  type="button"
  onClick={triggerSamplePartyUpdate}
- className="px-3 py-1 rounded-[1600px] bg-[#e9ccff] hover:bg-[#dfb3ff] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
+ className="px-3 py-1 rounded-[1600px] bg-[#e8f7ee] hover:bg-[#dfb3ff] text-[#000000] border border-[#000000] text-[10px] font-black tracking-wide flex items-center gap-1 shrink-0 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
  >
  <span>👥</span>
  <span>{isThai ? 'อัปเดตก๊วนสด' : 'Party Update'}</span>
  </button>
+ </div>
  </div>
  </div>
  </div>

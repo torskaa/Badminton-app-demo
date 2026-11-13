@@ -86,7 +86,7 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
  cx="22"
  cy="22"
  r={radius}
- className="stroke-[#55db9c] transition-all duration-1000 ease-out"
+ className="stroke-[#7cd7a0] transition-all duration-1000 ease-out"
  strokeWidth="4"
  strokeDasharray={circumference}
  strokeDashoffset={circumference - (stepsPct / 100) * circumference}
@@ -131,7 +131,7 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
  cx="22"
  cy="22"
  r={radius}
- className="stroke-[#fb4903] transition-all duration-1000 ease-out"
+ className="stroke-[#e85729] transition-all duration-1000 ease-out"
  strokeWidth="4"
  strokeDasharray={circumference}
  strokeDashoffset={circumference - (caloriesPct / 100) * circumference}
@@ -140,7 +140,7 @@ export const ProgressRingsWidget: React.FC<ProgressRingsWidgetProps> = ({
  />
  </svg>
  <div className="absolute inset-0 flex items-center justify-center">
- <Flame className="w-4 h-4 text-[#fb4903]" />
+ <Flame className="w-4 h-4 text-[#e85729]" />
  </div>
  </div>
 

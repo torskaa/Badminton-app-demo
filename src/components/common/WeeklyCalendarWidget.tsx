@@ -218,7 +218,7 @@ export const WeeklyCalendarWidget: React.FC = () => {
  {/* Header - Single Language Only */}
  <div className="flex items-center justify-between">
  <h2 className="text-sm font-black text-[#000000] uppercase tracking-wide font-['Antonio',sans-serif] flex items-center gap-1.5">
- <CalendarIcon className="w-4 h-4 text-[#fb4903]" />
+ <CalendarIcon className="w-4 h-4 text-[#e85729]" />
  <span>{isThai ? 'ตารางกิจกรรมสัปดาห์นี้' : 'Weekly Schedule'}</span>
  </h2>
  <span className="text-[10px] font-bold text-[#000000]/60">
@@ -240,7 +240,7 @@ export const WeeklyCalendarWidget: React.FC = () => {
  }}
  className={`flex-1 min-w-[46px] py-2 px-1 rounded-[18px] border border-[#000000] shadow-xs flex flex-col items-center justify-center transition-all cursor-pointer active:scale-95 ${
  isSelected
- ? 'bg-[#fb4903] text-[#ffffff] font-black shadow-sm scale-102 border-transparent'
+ ? 'bg-[#e85729] text-[#ffffff] font-black shadow-sm scale-102 border-transparent'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#f0f0f0]'
  }`}
  >
@@ -267,13 +267,13 @@ export const WeeklyCalendarWidget: React.FC = () => {
  key={session.id}
  className="p-3 rounded-[24px] bg-[#ffffff] shadow-sm flex items-center justify-between gap-2.5 hover:shadow-md transition-all"
  >
- <div className="w-10 h-10 rounded-[16px] bg-[#dceeff] flex items-center justify-center text-lg shrink-0">
+ <div className="w-10 h-10 rounded-[16px] bg-[#f4f8fb] flex items-center justify-center text-lg shrink-0">
  {session.icon}
  </div>
 
  <div className="min-w-0 flex-1 space-y-0.5">
  <div className="flex items-center gap-1.5 text-[10px] text-[#000000]/60 font-bold truncate">
- <Clock className="w-3 h-3 text-[#5c4ade]" />
+ <Clock className="w-3 h-3 text-[#15803d]" />
  <span>{session.timeRange}</span>
  <span>·</span>
  <span className="truncate">{isThai ? session.courtNameTh : session.courtNameEn}</span>
@@ -286,7 +286,7 @@ export const WeeklyCalendarWidget: React.FC = () => {
  <div className="flex items-center gap-2 text-[10px] text-[#000000]/70 font-semibold truncate">
  <span>{isThai ? `ผู้สอน: ${session.trainerTh}` : `Trainer: ${session.trainerEn}`}</span>
  <span>·</span>
- <span className="text-[#fb4903] font-bold">
+ <span className="text-[#e85729] font-bold">
  {session.attendeeCount} {isThai ? 'คน' : 'players'}
  </span>
  </div>
@@ -297,7 +297,7 @@ export const WeeklyCalendarWidget: React.FC = () => {
  onClick={() => handleToggleJoin(session.id)}
  className={`px-3 py-1.5 rounded-[1600px] border border-[#000000] text-xs font-black uppercase tracking-wider transition-all cursor-pointer active:scale-95 shrink-0 whitespace-nowrap flex items-center gap-1 ${
  session.joined
- ? 'bg-[#55db9c] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#000000] text-[#ffffff] hover:bg-[#222222]'
  }`}
  >

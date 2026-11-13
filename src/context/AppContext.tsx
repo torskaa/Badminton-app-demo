@@ -43,6 +43,17 @@ import {
   toggleAudioMute,
 } from '../utils/retroAudio';
 import { Language, TRANSLATIONS } from '../utils/i18n';
+import { useOnlineStatus } from '../hooks/useOnlineStatus';
+import {
+  CACHE_KEYS,
+  CourtMapCacheData,
+  PlayerMatchCacheData,
+  QuestsDrillsCacheData,
+  clearAllOfflineCaches,
+  getCacheOverview,
+  readCache,
+  writeCache,
+} from '../utils/offlineCache';
 
 interface ExpGainPayload {
   amount: number;
@@ -60,6 +71,7 @@ interface AppContextType {
   // Navigation
   currentScreen: ScreenId;
   navigateTo: (screen: ScreenId, direction?: 'forward' | 'backward') => void;
+  goBack: () => void;
   navDirection: 'forward' | 'backward';
   activeTab: MainTab;
   setActiveTab: (tab: MainTab) => void;
@@ -148,6 +160,14 @@ interface AppContextType {
   triggerSampleBookingConfirmation: () => void;
   triggerSampleCountdownAlert: () => void;
   triggerSamplePartyUpdate: () => void;
+
+  // Offline Connectivity & Local Cache Sync
+  isOnline: boolean;
+  justReconnected: boolean;
+  hasPendingSync: boolean;
+  lastSyncedAt: number | null;
+  refreshOfflineCache: () => void;
+  resetOfflineCache: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -162,6 +182,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   };
 
   const [currentScreen, setCurrentScreen] = useState<ScreenId>('HOME');
+  const [historyStack, setHistoryStack] = useState<ScreenId[]>(['HOME']);
   const [navDirection, setNavDirection] = useState<'forward' | 'backward'>('forward');
   const [activeTab, setActiveTabState] = useState<MainTab>('home');
   const [isDeviceFrameEnabled, setIsDeviceFrameEnabled] = useState<boolean>(true);
@@ -174,6 +195,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   // Screen Loading & Transition Skeleton State
   const [isScreenLoading, setIsScreenLoading] = useState<boolean>(false);
+
+  const { isOnline, justReconnected } = useOnlineStatus();
+  const [hasPendingSync, setHasPendingSync] = useState<boolean>(() => getCacheOverview().hasPendingSync);
+  const [lastSyncedAt, setLastSyncedAt] = useState<number | null>(() => {
+    const overview = getCacheOverview();
+    return overview.questsSyncedAt || overview.courtMapSyncedAt || overview.matchSyncedAt || Date.now();
+  });
 
   const simulateDataFetch = (durationMs = 500) => {
     setIsScreenLoading(true);
@@ -226,13 +254,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Break UI Stress-Testing Mode (Demo / Worst case / Empty / One)
   const [dataMode, setDataMode] = useState<'demo' | 'worst' | 'empty' | 'one'>('demo');
 
-  // Player State
-  const [player, setPlayer] = useState<PlayerProfile>(INITIAL_PLAYER);
+  // Player State (Rehydrated from localStorage for offline match/EXP continuity)
+  const [player, setPlayer] = useState<PlayerProfile>(() => {
+    const cached = readCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH);
+    return cached?.player && cached.player.id ? cached.player : INITIAL_PLAYER;
+  });
   const [expCelebration, setExpCelebration] = useState<ExpGainPayload | null>(null);
 
-  // Court Booking State
-  const [courts] = useState<CourtFacility[]>(COURTS_DATA);
-  const [selectedCourt, setSelectedCourt] = useState<CourtFacility>(COURTS_DATA[0]);
+  // Court Booking State (Rehydrated from localStorage for offline Court Map access)
+  const [courts, setCourts] = useState<CourtFacility[]>(() => {
+    const cached = readCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP);
+    return cached?.courts && cached.courts.length > 0 ? cached.courts : COURTS_DATA;
+  });
+  const [selectedCourt, setSelectedCourt] = useState<CourtFacility>(() => {
+    const cachedMatch = readCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH);
+    const cachedMap = readCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP);
+    const preferredId = cachedMatch?.selectedCourtId || cachedMap?.selectedCourtId;
+    const pool = cachedMap?.courts && cachedMap.courts.length > 0 ? cachedMap.courts : COURTS_DATA;
+    return pool.find((c) => c.id === preferredId) || pool[0];
+  });
 
   // Derived fixtures for stress testing (swapped at data boundary per break-ui rule)
   const activePlayer = dataMode === 'worst' ? WORST_CASE_PLAYER : dataMode === 'one' ? ONE_ITEM_PLAYER : player;
@@ -267,51 +307,63 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     bookingRef: 'BK-SMA-8921',
   });
 
-  // Match Scoring State
-  const [match, setMatch] = useState<MatchScoreState>({
-    playerAName: 'กานต์ & โอห์ม',
-    playerBName: 'อาร์ท & ท็อป',
-    isDoubles: true,
-    scoreA: 19,
-    scoreB: 18,
-    setsWonA: 1,
-    setsWonB: 0,
-    currentSet: 2,
-    pastSets: [{ set: 1, scoreA: 21, scoreB: 17 }],
-    server: 'A',
-    serviceBox: 'left',
-    isMatchFinished: false,
-    shotHistory: [
-      {
-        id: 'shot_1',
-        pointNumber: 35,
-        team: 'A',
-        shotType: 'Smash',
-        timestamp: '19:42',
-        zone: 'mid-right',
-      },
-      {
-        id: 'shot_2',
-        pointNumber: 36,
-        team: 'B',
-        shotType: 'Drop',
-        timestamp: '19:43',
-        zone: 'front-left',
-      },
-      {
-        id: 'shot_3',
-        pointNumber: 37,
-        team: 'A',
-        shotType: 'Smash',
-        timestamp: '19:44',
-        zone: 'back-right',
-      },
-    ],
+  // Match Scoring State (Rehydrated from localStorage so scores persist if connection drops mid-match)
+  const [match, setMatch] = useState<MatchScoreState>(() => {
+    const cached = readCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH);
+    if (cached?.match && typeof cached.match.scoreA === 'number') {
+      return cached.match;
+    }
+    return {
+      playerAName: 'กานต์ & โอห์ม',
+      playerBName: 'อาร์ท & ท็อป',
+      isDoubles: true,
+      scoreA: 19,
+      scoreB: 18,
+      setsWonA: 1,
+      setsWonB: 0,
+      currentSet: 2,
+      pastSets: [{ set: 1, scoreA: 21, scoreB: 17 }],
+      server: 'A',
+      serviceBox: 'left',
+      isMatchFinished: false,
+      shotHistory: [
+        {
+          id: 'shot_1',
+          pointNumber: 35,
+          team: 'A',
+          shotType: 'Smash',
+          timestamp: '19:42',
+          zone: 'mid-right',
+        },
+        {
+          id: 'shot_2',
+          pointNumber: 36,
+          team: 'B',
+          shotType: 'Drop',
+          timestamp: '19:43',
+          zone: 'front-left',
+        },
+        {
+          id: 'shot_3',
+          pointNumber: 37,
+          team: 'A',
+          shotType: 'Smash',
+          timestamp: '19:44',
+          zone: 'back-right',
+        },
+      ],
+    };
   });
 
-  // Quests & Drills State
-  const [quests, setQuests] = useState<Quest[]>(INITIAL_QUESTS);
-  const [drills, setDrills] = useState<AIDrill[]>(AI_DRILLS);
+  // Quests & Drills State (Rehydrated from localStorage for offline access & claim persistence)
+  const [quests, setQuests] = useState<Quest[]>(() => {
+    const cached = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+    return cached?.quests && cached.quests.length > 0 ? cached.quests : INITIAL_QUESTS;
+  });
+  const [drills, setDrills] = useState<AIDrill[]>(() => {
+    const cached = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+    return cached?.drills && cached.drills.length > 0 ? cached.drills : AI_DRILLS;
+  });
 
   // Guilds & Leaderboard State
   const [guilds] = useState<GuildGroup[]>(GUILDS_DATA);
@@ -343,13 +395,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     F1: 50, F2: 51,
   };
 
-  // Helpers
-  const navigateTo = (screen: ScreenId, direction?: 'forward' | 'backward') => {
-    playSelectSound();
-    const dir = direction || (SCREEN_ORDER[screen] < SCREEN_ORDER[currentScreen] ? 'backward' : 'forward');
-    setNavDirection(dir);
-    setCurrentScreen(screen);
-    // sync bottom tab
+  const syncTabForScreen = (screen: ScreenId) => {
     if (screen === 'HOME') {
       setActiveTabState('home');
     } else if (screen === 'MAP' || ['B1', 'B2', 'B3', 'B4'].includes(screen)) {
@@ -361,6 +407,47 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     } else if (screen === 'F1' || screen === 'F2' || ['D1', 'D2', 'D3'].includes(screen)) {
       setActiveTabState('profile');
     }
+  };
+
+  // Helpers
+  const navigateTo = (screen: ScreenId, direction?: 'forward' | 'backward') => {
+    playSelectSound();
+    if (screen !== currentScreen) {
+      const dir = direction || (SCREEN_ORDER[screen] < SCREEN_ORDER[currentScreen] ? 'backward' : 'forward');
+      setNavDirection(dir);
+      setHistoryStack((prev) => {
+        if (screen === 'HOME') return ['HOME'];
+        if (prev[prev.length - 1] === screen) return prev;
+        return [...prev.slice(-15), screen];
+      });
+      setCurrentScreen(screen);
+    }
+    syncTabForScreen(screen);
+  };
+
+  const getFallbackParentScreen = (screen: ScreenId): ScreenId => {
+    if (['A2'].includes(screen)) return 'A1';
+    if (['B2', 'B3', 'B4'].includes(screen)) return 'B1';
+    if (['C2', 'C3', 'C4'].includes(screen)) return 'C1';
+    if (['D2', 'D3'].includes(screen)) return 'D1';
+    if (['E2', 'E3', 'E4'].includes(screen)) return 'E1';
+    if (['F2'].includes(screen)) return 'F1';
+    return 'HOME';
+  };
+
+  const goBack = () => {
+    playSelectSound();
+    let target: ScreenId = 'HOME';
+    if (historyStack.length > 1) {
+      target = historyStack[historyStack.length - 2];
+      setHistoryStack((prev) => prev.slice(0, -1));
+    } else {
+      target = getFallbackParentScreen(currentScreen);
+      setHistoryStack(target === 'HOME' ? ['HOME'] : ['HOME', target]);
+    }
+    setNavDirection('backward');
+    setCurrentScreen(target);
+    syncTabForScreen(target);
   };
 
   const setActiveTab = (tab: MainTab) => {
@@ -743,6 +830,135 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => clearTimeout(timer);
   }, []);
 
+  // Persist Player, Live Match & Selected Court whenever updated
+  React.useEffect(() => {
+    const now = Date.now();
+    const pending = !isOnline;
+    writeCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH, {
+      player,
+      match,
+      selectedCourtId: selectedCourt.id,
+      lastSyncedAt: now,
+      pendingSync: pending,
+    });
+    if (pending) {
+      setHasPendingSync(true);
+    } else {
+      setLastSyncedAt(now);
+    }
+  }, [player, match, selectedCourt.id, isOnline]);
+
+  // Persist Quests & Drills whenever updated
+  React.useEffect(() => {
+    const existing = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+    const now = Date.now();
+    const pending = !isOnline;
+    writeCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS, {
+      quests,
+      drills,
+      activeTab: existing?.activeTab || 'quests',
+      lastSyncedAt: now,
+      pendingSync: pending,
+    });
+    if (pending) {
+      setHasPendingSync(true);
+    } else {
+      setLastSyncedAt(now);
+    }
+  }, [quests, drills, isOnline]);
+
+  // Persist Court Map dataset whenever online or courts change
+  React.useEffect(() => {
+    const existing = readCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP);
+    const now = Date.now();
+    writeCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP, {
+      courts,
+      selectedCourtId: existing?.selectedCourtId || selectedCourt.id,
+      activeFilter: existing?.activeFilter ?? null,
+      searchQuery: existing?.searchQuery ?? '',
+      onlyBookable: existing?.onlyBookable ?? false,
+      showPricePerHour: existing?.showPricePerHour ?? true,
+      sheetState: existing?.sheetState ?? 'peek',
+      pan: existing?.pan ?? { x: 0, y: 0 },
+      zoom: existing?.zoom ?? 1.05,
+      lastSyncedAt: isOnline ? now : (existing?.lastSyncedAt || now),
+    });
+  }, [courts, selectedCourt.id, isOnline]);
+
+  // Auto-clear pending sync flag when connection is restored
+  React.useEffect(() => {
+    if (!isOnline) return;
+    const now = Date.now();
+    const existingQuests = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+    if (existingQuests?.pendingSync) {
+      writeCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS, {
+        ...existingQuests,
+        lastSyncedAt: now,
+        pendingSync: false,
+      });
+    }
+    const existingMatch = readCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH);
+    if (existingMatch?.pendingSync) {
+      writeCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH, {
+        ...existingMatch,
+        lastSyncedAt: now,
+        pendingSync: false,
+      });
+    }
+    setHasPendingSync(false);
+    setLastSyncedAt(now);
+  }, [isOnline]);
+
+  const refreshOfflineCache = () => {
+    const now = Date.now();
+    if (isOnline) {
+      setCourts(COURTS_DATA);
+    }
+    const existingMap = readCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP);
+    writeCache<CourtMapCacheData>(CACHE_KEYS.COURT_MAP, {
+      courts: isOnline ? COURTS_DATA : courts,
+      selectedCourtId: existingMap?.selectedCourtId || selectedCourt.id,
+      activeFilter: existingMap?.activeFilter ?? null,
+      searchQuery: existingMap?.searchQuery ?? '',
+      onlyBookable: existingMap?.onlyBookable ?? false,
+      showPricePerHour: existingMap?.showPricePerHour ?? true,
+      sheetState: existingMap?.sheetState ?? 'peek',
+      pan: existingMap?.pan ?? { x: 0, y: 0 },
+      zoom: existingMap?.zoom ?? 1.05,
+      lastSyncedAt: now,
+    });
+    const existingQuests = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
+    writeCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS, {
+      quests,
+      drills,
+      activeTab: existingQuests?.activeTab || 'quests',
+      lastSyncedAt: now,
+      pendingSync: !isOnline,
+    });
+    writeCache<PlayerMatchCacheData>(CACHE_KEYS.PLAYER_MATCH, {
+      player,
+      match,
+      selectedCourtId: selectedCourt.id,
+      lastSyncedAt: now,
+      pendingSync: !isOnline,
+    });
+    setLastSyncedAt(now);
+    if (isOnline) {
+      setHasPendingSync(false);
+    }
+  };
+
+  const resetOfflineCache = () => {
+    clearAllOfflineCaches();
+    setPlayer(INITIAL_PLAYER);
+    setCourts(COURTS_DATA);
+    setSelectedCourt(COURTS_DATA[0]);
+    setQuests(INITIAL_QUESTS);
+    setDrills(AI_DRILLS);
+    setHasPendingSync(false);
+    setLastSyncedAt(Date.now());
+  };
+
   return (
     <AppContext.Provider
       value={{
@@ -751,6 +967,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         t,
         currentScreen,
         navigateTo,
+        goBack,
         navDirection,
         activeTab,
         setActiveTab,
@@ -808,6 +1025,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         triggerSampleBookingConfirmation,
         triggerSampleCountdownAlert,
         triggerSamplePartyUpdate,
+        isOnline,
+        justReconnected,
+        hasPendingSync,
+        lastSyncedAt,
+        refreshOfflineCache,
+        resetOfflineCache,
       }}
     >
       {children}

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Sparkles, RefreshCw, Zap, Trophy, Play, Users, ArrowRight, ShieldCheck, Swords } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 
 export const E3_AISmartMatchmakerScreen: React.FC = () => {
  const { navigateTo, gainExp, language } = useApp();
@@ -52,44 +54,27 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader
- title={language === 'th' ? 'ระบบจัดทีม & จับคู่ผู้เล่น' : 'Smart Matchmaker'}
- showBack
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
+
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
+ {/* Matchmaker Intro */}
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'จัดทีมสลับมือ 50/50 สมดุล' : 'FAIR PLAY MATCHMAKING'}
+ subtitle={language === 'th'
+ ? 'จัดคู่ตามคะแนนเรดาร์ทักษะ หมดปัญหาเกมขาด'
+ : 'Radar-balanced pairings for close games'}
+ badge={language === 'th' ? 'สมดุล MMR' : 'MMR BALANCED'}
+ badgeVariant="orange"
  />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
- {/* Matchmaker Banner Card */}
- <div className="rounded-[32px] p-5 bg-[#ffffff] space-y-1">
- <div className="flex items-center gap-2 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#5c4ade] text-[#ffffff] ">
- {language === 'th' ? 'สมดุลเรดาร์ทักษะ' : 'Radar Balancing'}
- </span>
- <span className="text-xs font-bold text-[#000000]/60">
- {language === 'th' ? 'ระบบปรับสมดุล MMR' : 'MMR Skill Equalizer'}
- </span>
- </div>
- <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase leading-tight tracking-tight text-[#000000]">
- {language === 'th' ? 'จัดทีมสลับมือ 50/50 สมดุล' : 'FAIR PLAY MATCHMAKING'}
- </h2>
- <p className="text-xs text-[#000000]/70 font-medium">
- {language === 'th'
- ? 'จัดทีมสลับมือแบบสมดุล หมดปัญหามือห่าง เกมขาด ด้วยอัลกอริทึมคะแนนเรดาร์'
- : 'Balanced team pairings to ensure close, competitive games with zero mismatch.'}
- </p>
- </div>
-
  {/* Balance Score Card */}
- <div className="p-4 rounded-[26px] flex items-center justify-between bg-[#55db9c] text-[#000000]">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-1.5 py-0.1 rounded-[1600px] text-[8px] font-black uppercase tracking-[0.032em] bg-[#000000] text-[#ffffff]">
- {language === 'th' ? 'ดัชนีความสมดุล' : 'BALANCE'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide">
+ <div className="p-4 rounded-[26px] flex items-center justify-between gap-2 bg-[#7cd7a0] text-[#000000]">
+ <div className="min-w-0">
+ <span className="font-['Antonio',sans-serif] text-base font-black uppercase tracking-wide block truncate">
  {currentPairing.balanceScore}
  </span>
- </div>
  <p className="text-[10px] text-[#000000]/80 font-bold">
  {language === 'th' ? 'โอกาสชนะใกล้เคียง 50/50 สูงสุด' : 'Both teams have equal 50/50 win probabilities'}
  </p>
@@ -98,17 +83,18 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
  <button
  type="button"
  onClick={handleShuffle}
- className="px-3 py-1.5 rounded-[1600px] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] shrink-0"
+ className="px-3 py-1.5 rounded-[1600px] border border-[#000000] text-xs font-bold uppercase tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] shrink-0 whitespace-nowrap"
  >
- <RefreshCw className="w-3.5 h-3.5" />
+ <RefreshCw className="w-3.5 h-3.5 shrink-0" />
  <span>{language === 'th' ? 'สลับคู่ใหม่' : 'Re-shuffle'}</span>
  </button>
+ </div>
  </div>
 
  {/* Balanced Teams Display */}
  <div className="grid grid-cols-2 gap-3">
  {/* Team A */}
- <div className="rounded-[28px] p-4 bg-[#ffd731] space-y-2.5">
+ <div className="rounded-[28px] p-4 bg-[#7cd7a0] space-y-2.5">
  <div className="flex items-center justify-between pb-1 ">
  <div>
  <span className="text-[9px] font-bold uppercase block text-[#000000]/70">
@@ -124,16 +110,19 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
  </div>
  <div className="space-y-2">
  {currentPairing.teamA.map((p, i) => (
- <div key={i} className="p-2.5 rounded-[18px] bg-[#ffffff] text-xs">
+ <div key={i} className="p-2.5 rounded-[18px] bg-[#ffffff] text-xs flex items-center gap-2">
+ <DoodleAvatar seed={p.name} size="xs" />
+ <div className="min-w-0">
  <span className="font-bold block truncate text-[#000000]">{p.name}</span>
- <span className="text-[10px] text-[#000000]/60 block">{p.role}</span>
+ <span className="text-[10px] text-[#000000]/60 block truncate">{p.role}</span>
+ </div>
  </div>
  ))}
  </div>
  </div>
 
  {/* Team B */}
- <div className="rounded-[28px] p-4 bg-[#e9ccff] space-y-2.5">
+ <div className="rounded-[28px] p-4 bg-[#e8f7ee] space-y-2.5">
  <div className="flex items-center justify-between pb-1 ">
  <div>
  <span className="text-[9px] font-bold uppercase block text-[#000000]/70">
@@ -149,9 +138,12 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
  </div>
  <div className="space-y-2">
  {currentPairing.teamB.map((p, i) => (
- <div key={i} className="p-2.5 rounded-[18px] bg-[#ffffff] text-xs">
+ <div key={i} className="p-2.5 rounded-[18px] bg-[#ffffff] text-xs flex items-center gap-2">
+ <DoodleAvatar seed={p.name} size="xs" />
+ <div className="min-w-0">
  <span className="font-bold block truncate text-[#000000]">{p.name}</span>
- <span className="text-[10px] text-[#000000]/60 block">{p.role}</span>
+ <span className="text-[10px] text-[#000000]/60 block truncate">{p.role}</span>
+ </div>
  </div>
  ))}
  </div>

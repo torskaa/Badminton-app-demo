@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { Zap, Sparkles, Video, Crown, Dumbbell, Shield, ArrowRight, Award } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 import { ProSubscriptionModal } from '../common/ProSubscriptionModal';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 import { playCoinSound } from '../../utils/retroAudio';
 
 export const D1_AICoachDashboardScreen: React.FC = () => {
@@ -51,14 +53,14 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  }).join(' ');
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#dceeff] text-[#000000]">
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#f4f8fb] text-[#000000]">
  <MobileHeader />
 
- <div className="p-4 space-y-4">
+ <div className="px-5 pt-4 pb-6 space-y-4">
  {/* Main Body Page Title & Short Description */}
  <div className="space-y-1">
  <div className="flex items-center gap-2">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#5c4ade] text-[#ffffff] ">
+ <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#15803d] text-[#ffffff] ">
  {language === 'th' ? 'เรดาร์ทักษะ & โค้ช' : 'COACHING & SKILL RADAR'}
  </span>
  <span className="text-[11px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
@@ -76,38 +78,23 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  </div>
 
  {/* 1. Athlete Banner Profile Card */}
- <div className="rounded-[32px] p-4 bg-[#ffffff] space-y-3">
- {/* Subheader */}
- <div className="flex items-center justify-between pb-2 ">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] ">
- {language === 'th' ? 'ข้อมูลนักกีฬา' : 'ATHLETE PROFILE'}
- </span>
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'ระดับเทียร์ & ข้อมูลผู้เล่น' : 'ATHLETE IDENTITY & TIER'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th'
- ? 'ระดับฝีมือปัจจุบัน สถิติสตรีคชนะต่อเนื่อง และเลเวลนักกีฬา'
- : 'Your current skill tier, active win streak, and athlete level'}
- </p>
- </div>
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] shrink-0">
- {player.tier} TIER
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'ข้อมูลนักกีฬา & เทียร์' : 'ATHLETE IDENTITY & TIER'}
+ subtitle={language === 'th' ? 'ระดับฝีมือ สถิติชนะต่อเนื่อง และเลเวลปัจจุบัน' : 'Current skill tier, active win streak, and athlete level'}
+ badge={`${player.tier} TIER`}
+ badgeVariant="green"
+ />
 
+ <div className="rounded-[32px] p-4 bg-[#ffffff]">
  <div className="flex items-center justify-between">
  <div className="flex items-center gap-3">
- <div className="w-14 h-14 rounded-[20px] overflow-hidden bg-[#e9ccff] shrink-0">
- <img
- src={player.avatarUrl}
- alt={player.name}
- className="w-full h-full object-cover"
+ <DoodleAvatar
+ preset="karn"
+ size="lg"
+ className="w-14 h-14"
+ ringClass="border-2 border-[#000000] shadow-xs"
  />
- </div>
  <div>
  <h2 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
  {player.name}
@@ -123,28 +110,30 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
 
  <div className="text-right">
  <span className="text-[10px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">Level</span>
- <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#5c4ade] leading-none">
+ <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#15803d] leading-none">
  {player.level}
+ </div>
  </div>
  </div>
  </div>
  </div>
 
  {/* 2. Smash Pro Upgrade Banner */}
- <div className="rounded-[28px] p-4 bg-[#ffd731] space-y-2">
- {/* Subheader */}
- <div className="flex items-center justify-between pb-1.5 ">
- <div className="flex items-center gap-1.5">
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'สมาชิก SMASH PRO' : 'PRO ATHLETE MEMBERSHIP'}
+ subtitle={language === 'th' ? 'ส่วนลดค่าคอร์ท 10% · วิเคราะห์วิดีโอ AI ไม่จำกัด' : '10% court discount · Unlimited AI video scans'}
+ badge={language === 'th' ? '฿199/เดือน' : '฿199/mo'}
+ badgeVariant="orange"
+ />
+
+ <div className="rounded-[28px] p-4 bg-[#7cd7a0] space-y-2.5">
+ <div className="flex items-center gap-2">
  <Crown className="w-4 h-4 text-[#000000] shrink-0" />
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#000000] text-[#ffffff] ">
- {language === 'th' ? 'สิทธิพิเศษ PRO' : 'PRO BENEFITS'}
- </span>
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'อัปเกรดเป็นสมาชิก PRO' : 'PRO ATHLETE MEMBERSHIP'}
- </span>
- </div>
- <span className="text-[10px] font-bold text-[#000000]/80">
- {language === 'th' ? '฿199/เดือน' : '฿199/mo'}
+ <span className="text-xs font-bold text-[#000000]">
+ {language === 'th'
+ ? 'ส่วนลดค่าคอร์ท 10% ทุกสนาม · สแกนวิดีโอ AI ไม่จำกัดครั้ง'
+ : '10% court discount · Unlimited AI computer vision scans'}
  </span>
  </div>
  <p className="text-[10px] text-[#000000]/80 font-bold">
@@ -172,36 +161,29 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  </button>
  </div>
  </div>
+ </div>
 
  {/* 3. 5-Axis Skill Radar Card */}
- <div className="rounded-[32px] p-4 bg-[#ffffff] space-y-2">
- {/* Subheader */}
- <div className="flex items-center justify-between pb-2 ">
- <div className="text-left">
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] ">
- {language === 'th' ? 'เรดาร์วัดผล 5 มิติ' : '5-AXIS RADAR'}
- </span>
- <h3 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wide text-[#000000]">
- {language === 'th' ? 'เรดาร์ประเมินทักษะรอบด้าน' : 'ATHLETIC SKILL RADAR'}
- </h3>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th'
- ? 'คำนวณจากสถิติแข่งขัน 30 วัน: พลังตบ (POW), สปีด (SPD), คุมลูก (CTL), ความอึด (STA), แท็กติก (TAC)'
- : 'Calculated from 30-day match statistics: Power, Speed, Control, Stamina, Tactics'}
- </p>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'เรดาร์ประเมินทักษะ 5 มิติ' : 'ATHLETIC SKILL RADAR'}
+ subtitle={language === 'th'
+ ? 'พลังตบ · สปีด · คุมลูก · ความอึด · แท็กติก (30 วันล่าสุด)'
+ : 'Power · Speed · Control · Stamina · Tactics (Last 30D)'}
+ rightSlot={
  <button
  type="button"
  onClick={() => setShowPastComparison((prev) => !prev)}
  className="px-3 py-1 rounded-[1600px] text-[10px] font-bold tracking-[0.032em] cursor-pointer transition-transform active:scale-95 border border-[#000000] bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] shrink-0 whitespace-nowrap"
  >
  {showPastComparison
- ? (language === 'th' ? '✓ เปิดสถิติ 30 วัน' : '✓ Past 30D Active')
- : (language === 'th' ? 'ดูสถิติ 30 วัน' : 'Show Past 30D')}
+ ? (language === 'th' ? '✓ เปิดเทียบ 30 วัน' : '✓ Past 30D')
+ : (language === 'th' ? 'เทียบสถิติ 30 วัน' : 'Show 30D')}
  </button>
- </div>
+ }
+ />
+
+ <div className="rounded-[32px] p-4 bg-[#ffffff] space-y-2">
 
  {/* SVG Radar Chart */}
  <div className="w-full flex justify-center py-2">
@@ -254,7 +236,7 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  <polygon
  points={currentPolygon}
  fill="rgba(77, 162, 255, 0.28)"
- stroke="#5c4ade"
+ stroke="#15803d"
  strokeWidth={2.5}
  />
 
@@ -267,7 +249,7 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  cx={pt.x}
  cy={pt.y}
  r={4}
- fill="#ffd731"
+ fill="#e85729"
  stroke="#000000"
  strokeWidth={1.5}
  />
@@ -301,8 +283,8 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
 
  {/* Quick Legend */}
  <div className="flex items-center justify-center gap-4 text-[11px] font-bold pt-2 ">
- <div className="flex items-center gap-1.5 text-[#5c4ade]">
- <span className="w-2.5 h-2.5 rounded-[1600px] bg-[#5c4ade] " />
+ <div className="flex items-center gap-1.5 text-[#15803d]">
+ <span className="w-2.5 h-2.5 rounded-[1600px] bg-[#15803d] " />
  <span>{language === 'th' ? 'ฟอร์มปัจจุบัน' : 'Current Form'}</span>
  </div>
  {showPastComparison && (
@@ -313,28 +295,20 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  )}
  </div>
  </div>
+ </div>
 
  {/* 4. Head Coach Advice */}
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'จุดแข็ง & คำแนะนำแท็กติก' : 'STRENGTHS & TACTICAL ADVICE'}
+ subtitle={language === 'th'
+ ? 'สรุปจุดเด่นล่าสุด พร้อมทางลัดฝึกซ้อมและสแกน AI'
+ : 'Key strengths breakdown with training shortcuts'}
+ badge={language === 'th' ? 'โค้ชวิเคราะห์' : 'COACH AI'}
+ badgeVariant="green"
+ />
+
  <div className="rounded-[28px] p-4 space-y-2.5 bg-[#ffffff]">
- {/* Subheader */}
- <div className="pb-2 ">
- <div className="flex items-center gap-2 mb-0.5">
- <span className="w-6 h-6 rounded-[1600px] bg-[#55db9c] text-[#000000] flex items-center justify-center font-bold">
- <Sparkles className="w-3.5 h-3.5" />
- </span>
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] ">
- {language === 'th' ? 'บทวิเคราะห์จากโค้ช' : 'COACH DIAGNOSTICS'}
- </span>
- <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'จุดแข็ง & คำแนะนำเชิงแท็กติก' : 'STRENGTHS & TACTICAL ADVICE'}
- </h4>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th'
- ? 'สรุปจุดเด่นและข้อผิดพลาดล่าสุด พร้อมทางลัดสู่แบบฝึกซ้อมและสแกนกล้อง AI'
- : 'Key strengths and weakness breakdown with training shortcuts'}
- </p>
- </div>
 
  <p className="text-xs text-[#000000]/80 leading-relaxed font-medium">
  {language === 'th'
@@ -358,11 +332,12 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  onClick={() => navigateTo('D3')}
  className="py-3 px-3 rounded-[1600px] font-bold text-xs border border-[#000000] flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] uppercase tracking-[0.032em] whitespace-nowrap"
  >
- <Video className="w-4 h-4 text-[#5c4ade] shrink-0" />
+ <Video className="w-4 h-4 text-[#15803d] shrink-0" />
  <span className="whitespace-nowrap">
  {language === 'th' ? 'สแกนวิดีโอ AI (D3)' : 'VISION SCAN (D3)'}
  </span>
  </button>
+ </div>
  </div>
  </div>
  </div>

@@ -37,20 +37,20 @@ export const ExpCelebrationModal: React.FC = () => {
                 <motion.div
                   animate={{ y: [0, -4, 0], rotate: [-2, 2, -2] }}
                   transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
-                  className="w-20 h-20 rounded-full overflow-hidden bg-[#243b34] p-0.5 border-3 border-[#ffd731] shadow-xl relative"
+                  className="w-20 h-20 rounded-full overflow-hidden bg-[#243b34] p-0.5 border-3 border-[#e85729] shadow-xl relative"
                 >
                   <img
                     src="/assets/aistudio/Gemini_Generated_Image_b3fgwrb3fgwrb3fg_9069fb4e.jpeg"
                     alt="Smashy Cheering"
                     className="w-full h-full object-cover object-[51%_22%] scale-110"
                   />
-                  <div className="absolute top-0 right-0 bg-[#fb4903] text-white text-[8px] font-black px-1.5 rounded-bl-md">
+                  <div className="absolute top-0 right-0 bg-[#e85729] text-white text-[8px] font-black px-1.5 rounded-bl-md">
                     #15
                   </div>
                 </motion.div>
 
                 {/* Floating Star / Trophy Badge */}
-                <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#ffd731] text-black flex items-center justify-center shadow-md">
+                <div className="absolute -bottom-1 -right-1 w-7 h-7 rounded-full bg-[#e85729] text-black flex items-center justify-center shadow-md">
                   {expCelebration.newLevel ? (
                     <Trophy className="w-4 h-4 stroke-[2.5]" />
                   ) : (
@@ -59,7 +59,7 @@ export const ExpCelebrationModal: React.FC = () => {
                 </div>
               </div>
             ) : (
-              <div className="w-16 h-16 rounded-3xl bg-[#ffd731] text-black flex items-center justify-center mx-auto mb-3 rotate-[-6deg] hover:rotate-3 transition-transform shadow-xs">
+              <div className="w-16 h-16 rounded-3xl bg-[#e85729] text-black flex items-center justify-center mx-auto mb-3 rotate-[-6deg] hover:rotate-3 transition-transform shadow-xs">
                 {expCelebration.newLevel ? (
                   <Trophy className="w-9 h-9 stroke-[2.4]" />
                 ) : expCelebration.badgeUnlocked ? (
@@ -73,7 +73,7 @@ export const ExpCelebrationModal: React.FC = () => {
             {/* Celebration titles with Crushed Display Font */}
             {expCelebration.newLevel ? (
               <div>
-                <div className="text-[11px] font-extrabold uppercase text-[#5c4ade] mb-0.5 tracking-wide flex items-center justify-center gap-1">
+                <div className="text-[11px] font-extrabold uppercase text-[#15803d] mb-0.5 tracking-wide flex items-center justify-center gap-1">
                   <Sparkles className="w-3 h-3 fill-current" />
                   LEVEL UP!
                 </div>
@@ -86,8 +86,8 @@ export const ExpCelebrationModal: React.FC = () => {
               </div>
             ) : (
               <div>
-                <div className="text-[11px] font-extrabold uppercase text-[#fb4903] mb-0.5 tracking-wide flex items-center justify-center gap-1">
-                  <Sparkles className="w-3 h-3 fill-current text-[#ffd731]" />
+                <div className="text-[11px] font-extrabold uppercase text-[#e85729] mb-0.5 tracking-wide flex items-center justify-center gap-1">
+                  <Sparkles className="w-3 h-3 fill-current text-[#e85729]" />
                   REWARD EARNED
                 </div>
                 <h3 className="font-['Antonio',sans-serif] text-4xl font-extrabold text-black uppercase leading-none tracking-tight">
@@ -97,10 +97,10 @@ export const ExpCelebrationModal: React.FC = () => {
             )}
 
             {/* Reason card */}
-            <div className="my-2.5 py-2 px-3 rounded-2xl bg-[#dceeff] text-xs text-black shadow-xs">
+            <div className="my-2.5 py-2 px-3 rounded-2xl bg-[#f4f8fb] text-xs text-black shadow-xs">
               <p className="font-bold text-[11.5px] leading-snug">{expCelebration.source}</p>
               {expCelebration.badgeUnlocked && (
-                <p className="text-[#fb4903] font-extrabold text-[10.5px] mt-1 flex items-center justify-center gap-1">
+                <p className="text-[#e85729] font-extrabold text-[10.5px] mt-1 flex items-center justify-center gap-1">
                   <Award className="w-3.5 h-3.5" />
                   <span>Unlocked Badge: {expCelebration.badgeUnlocked}</span>
                 </p>
@@ -129,7 +129,7 @@ export const ExpCelebrationModal: React.FC = () => {
             {/* Level progress bar */}
             <div className="w-full bg-[#e9e9e9] rounded-full h-2.5 mb-3.5 overflow-hidden p-0.5">
               <div
-                className="bg-[#55db9c] h-full rounded-full transition-all duration-500"
+                className="bg-[#7cd7a0] h-full rounded-full transition-all duration-500"
                 style={{
                   width: `${Math.min(100, (player.currentExp / player.nextLevelExp) * 100)}%`,
                 }}

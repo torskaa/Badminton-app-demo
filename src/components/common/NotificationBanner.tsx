@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { AppNotification } from '../../types';
+import { DoodleAvatar } from './DoodleAvatar';
 import { playSelectSound } from '../../utils/retroAudio';
 
 export const NotificationBanner: React.FC = () => {
@@ -82,11 +83,11 @@ export const NotificationBanner: React.FC = () => {
     switch (type) {
       case 'court_booking':
         return {
-          badgeBg: 'bg-[#55db9c]',
+          badgeBg: 'bg-[#7cd7a0]',
           badgeText: 'text-[#000000]',
           badgeLabel: isThai ? 'ยืนยันการจองคอร์ท' : 'COURT CONFIRMED',
           icon: <Calendar className="w-4 h-4 text-[#000000]" />,
-          borderAccent: 'border-l-4 border-l-[#55db9c]',
+          borderAccent: 'border-l-4 border-l-[#7cd7a0]',
         };
       case 'match_invite':
         return {
@@ -98,19 +99,19 @@ export const NotificationBanner: React.FC = () => {
         };
       case 'match_countdown':
         return {
-          badgeBg: 'bg-[#fb4903]',
+          badgeBg: 'bg-[#e85729]',
           badgeText: 'text-[#ffffff]',
           badgeLabel: isThai ? 'การแจ้งเตือนแมตช์' : 'UPCOMING MATCH',
           icon: <Clock className="w-4 h-4 text-[#ffffff]" />,
-          borderAccent: 'border-l-4 border-l-[#fb4903]',
+          borderAccent: 'border-l-4 border-l-[#e85729]',
         };
       case 'party_update':
         return {
-          badgeBg: 'bg-[#e9ccff]',
+          badgeBg: 'bg-[#e8f7ee]',
           badgeText: 'text-[#000000]',
           badgeLabel: isThai ? 'อัปเดตก๊วน' : 'PARTY UPDATE',
           icon: <Users className="w-4 h-4 text-[#000000]" />,
-          borderAccent: 'border-l-4 border-l-[#5c4ade]',
+          borderAccent: 'border-l-4 border-l-[#15803d]',
         };
       case 'reward_exp':
         return {
@@ -122,7 +123,7 @@ export const NotificationBanner: React.FC = () => {
         };
       default:
         return {
-          badgeBg: 'bg-[#dceeff]',
+          badgeBg: 'bg-[#f4f8fb]',
           badgeText: 'text-[#000000]',
           badgeLabel: isThai ? 'การแจ้งเตือน' : 'ALERT',
           icon: <Sparkles className="w-4 h-4 text-[#000000]" />,
@@ -142,7 +143,7 @@ export const NotificationBanner: React.FC = () => {
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: -80, opacity: 0, scale: 0.96 }}
           transition={{ type: 'spring', stiffness: 420, damping: 30 }}
-          className="absolute top-2 left-2 right-2 z-50 pointer-events-auto select-none"
+          className="absolute top-[max(env(safe-area-inset-top,0px),24px)] left-5 right-5 z-50 pointer-events-auto select-none"
         >
           <div
             onClick={handleBannerClick}
@@ -190,10 +191,10 @@ export const NotificationBanner: React.FC = () => {
 
               {/* If metadata has avatar */}
               {currentNotification.metadata?.inviterAvatar && (
-                <img
-                  src={currentNotification.metadata.inviterAvatar}
-                  alt="Inviter"
-                  className="w-10 h-10 rounded-[14px] object-cover shrink-0 bg-[#e9ccff]"
+                <DoodleAvatar
+                  seed={currentNotification.title}
+                  size="sm"
+                  ringClass="border-2 border-[#000000] shadow-xs"
                 />
               )}
             </div>
@@ -223,7 +224,7 @@ export const NotificationBanner: React.FC = () => {
                   className="px-3 py-1 rounded-[1600px] bg-[#000000] hover:bg-[#222222] text-[#ffffff] border-2 border-[#000000] text-[10px] font-black uppercase tracking-wider flex items-center gap-1 cursor-pointer active:scale-95 transition-transform shadow-xs"
                 >
                   <span>{currentNotification.actions?.primaryLabel || (isThai ? 'ดูรายละเอียด' : 'View Details')}</span>
-                  <Check className="w-3 h-3 text-[#55db9c]" />
+                  <Check className="w-3 h-3 text-[#7cd7a0]" />
                 </button>
               </div>
             </div>

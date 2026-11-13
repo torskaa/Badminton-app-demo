@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, Clock, Flame, Heart, Play, Share2, Sparkles, Trophy, Users, X, Zap, Check } from 'lucide-react';
 import { playCoinSound, playSelectSound, playSmashSound } from '../../utils/retroAudio';
 import { useApp } from '../../context/AppContext';
+import { DoodleAvatar } from './DoodleAvatar';
 
 export interface WorkoutDetailData {
  id: string;
@@ -112,7 +113,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  playSelectSound();
  onChangeMoodClick();
  }}
- className="text-[11px] font-bold text-[#fb4903] hover:underline cursor-pointer whitespace-nowrap"
+ className="text-[11px] font-bold text-[#e85729] hover:underline cursor-pointer whitespace-nowrap"
  >
  {isThai ? 'เปลี่ยนอารมณ์ >' : 'Change my mood >'}
  </button>
@@ -140,7 +141,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  {/* Top Controls on Video: Rating & Heart */}
  <div className="relative z-10 flex items-center justify-between">
  <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000]/70 backdrop-blur-xs text-[#ffffff] -[#ffffff]/30 text-[9px] font-bold flex items-center gap-1">
- <Flame className="w-3 h-3 text-[#fb4903]" />
+ <Flame className="w-3 h-3 text-[#e85729]" />
  <span>{intensityLabel}</span>
  </span>
 
@@ -151,7 +152,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  >
  <Heart
  className={`w-4 h-4 transition-colors ${
- isFavorite ? 'fill-[#fb4903] text-[#fb4903]' : 'text-[#000000]'
+ isFavorite ? 'fill-[#e85729] text-[#e85729]' : 'text-[#000000]'
  }`}
  />
  </button>
@@ -171,7 +172,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  <button
  type="button"
  onClick={handleStart}
- className="w-full py-3 rounded-[1600px] bg-[#fb4903] hover:bg-[#ff5a1a] text-[#ffffff] border-2 border-[#000000] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-transform shadow-lg"
+ className="w-full py-3 rounded-[1600px] bg-[#e85729] hover:bg-[#ff5a1a] text-[#ffffff] text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer active:scale-98 transition-transform shadow-lg"
  >
  <Play className="w-4 h-4 fill-current" />
  <span>{isThai ? 'เริ่มการฝึกซ้อม' : 'Start training'}</span>
@@ -186,7 +187,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  </h3>
 
  <div className="flex items-center gap-2 text-xs font-bold text-[#000000]/75">
- <Clock className="w-3.5 h-3.5 text-[#5c4ade]" />
+ <Clock className="w-3.5 h-3.5 text-[#15803d]" />
  <span>{schedule}</span>
  <span>·</span>
  <span className="truncate">{courtName}</span>
@@ -201,7 +202,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  {tags.map((tag, idx) => (
  <span
  key={idx}
- className="px-2.5 py-0.5 rounded-[1600px] bg-[#dceeff] text-[#000000] text-[10px] font-bold shrink-0 whitespace-nowrap shadow-xs"
+ className="px-2.5 py-0.5 rounded-[1600px] bg-[#f4f8fb] text-[#000000] text-[10px] font-bold shrink-0 whitespace-nowrap shadow-xs"
  >
  {tag}
  </span>
@@ -211,11 +212,7 @@ export const WorkoutDetailModal: React.FC<WorkoutDetailModalProps> = ({
  {/* Trainer / Host Pill Card */}
  <div className="p-2.5 rounded-[20px] bg-[#f8fbff] shadow-xs flex items-center justify-between gap-2.5 mt-2">
  <div className="flex items-center gap-2.5 min-w-0">
- <img
- src={workout.trainerAvatar}
- alt={workout.trainerName}
- className="w-9 h-9 rounded-[14px] object-cover shrink-0"
- />
+ <DoodleAvatar seed={workout.trainerName} size="sm" className="w-9 h-9" />
  <div className="min-w-0">
  <p className="font-bold text-xs text-[#000000] truncate">{workout.trainerName}</p>
  <p className="text-[10px] text-[#000000]/60 font-semibold truncate">{trainerRole}</p>

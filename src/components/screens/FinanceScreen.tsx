@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
  Plus,
+ ArrowLeft,
  ArrowRightLeft,
  ChevronRight,
  ArrowDownLeft,
@@ -9,15 +10,14 @@ import {
  CheckCircle2,
  X,
  Wallet,
- Settings,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { FINANCE_TRANSACTIONS } from '../../data/mockData';
 import { playCoinSound, playSelectSound } from '../../utils/retroAudio';
-import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 
 export const FinanceScreen: React.FC = () => {
- const { gainExp, navigateTo, t, language } = useApp();
+ const { gainExp, navigateTo, goBack, t, language } = useApp();
   const isThai = language === 'th';
  const [walletBalance, setWalletBalance] = useState(1250);
  const [payLaterBalance] = useState(0);
@@ -49,36 +49,50 @@ export const FinanceScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
- {/* 1. Header Card in Slush CI with 1px Solid Black Border */}
- <div className="bg-[#ffffff] text-[#000000] px-4 pt-4 pb-12 relative">
- <div className="flex items-center justify-between mb-2">
- <div className="flex items-center gap-2">
- <span className="w-8 h-8 rounded-[1600px] bg-[#ffd731] flex items-center justify-center text-base">
- 🪙
- </span>
- <h1 className="text-2xl font-black text-[#000000] font-['Antonio',sans-serif] tracking-wide uppercase">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
+ {/* 1. Clean Header Card with Back Navigation */}
+ <div className="bg-[#ffffff] text-[#000000] app-header-safe px-5 pb-12 relative">
+ <div className="flex items-start justify-between gap-2.5 min-w-0">
+ <div className="flex items-start gap-3 min-w-0 flex-1">
+ <button
+ type="button"
+ onClick={goBack}
+ className="w-8 h-8 mt-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000]/20 shadow-xs flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e8f7ee] active:scale-90 transition-transform"
+ aria-label="Back"
+ title={isThai ? 'ย้อนกลับ' : 'Back'}
+ >
+ <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+ </button>
+ <div className="min-w-0 flex-1">
+ <h1 className="text-xl font-black text-[#000000] font-['Antonio',sans-serif] tracking-wide uppercase leading-[1.1] truncate">
  {t.financeHeader}
  </h1>
- </div>
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[9px] font-black uppercase">
- {t.zeroFeesBadge}
- </span>
- </div>
-
- <p className="text-xs text-[#000000]/70 font-bold max-w-[280px]">
+ <p className="text-xs text-[#000000]/70 font-normal leading-snug mt-0.5 max-w-[185px]">
  {t.financeHeaderSub}
  </p>
  </div>
+ </div>
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ setIsTopUpModalOpen(true);
+ }}
+ className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer hover:brightness-95"
+ >
+ {isThai ? '+ เติมเงิน' : '+ Top up'}
+ </button>
+ </div>
+ </div>
 
  {/* 2. Floating Dual Cards: SmashPay Wallet & PayLater */}
- <div className="px-4 -mt-8 z-10">
+ <div className="px-5 -mt-8 z-10">
  <div className="grid grid-cols-2 gap-3">
  {/* Card 1: SmashPay Wallet */}
  <div className="bg-[#ffffff] rounded-[28px] p-4 shadow-sm flex flex-col justify-between h-34 relative overflow-hidden">
  <div>
  <div className="text-[11px] font-bold text-[#000000]/60 flex items-center gap-1.5">
- <Wallet className="w-3.5 h-3.5 text-[#5c4ade]" />
+ <Wallet className="w-3.5 h-3.5 text-[#15803d]" />
  <span className="truncate">{t.walletTitle}</span>
  </div>
  <div className="font-['Antonio',sans-serif] text-2xl font-black text-[#000000] mt-1">
@@ -86,7 +100,7 @@ export const FinanceScreen: React.FC = () => {
  </div>
  </div>
 
- <div className="h-4 w-full rounded-[1600px] bg-[#dceeff] " />
+ <div className="h-4 w-full rounded-[1600px] bg-[#f4f8fb] " />
  </div>
 
  {/* Card 2: PayLater */}
@@ -94,7 +108,7 @@ export const FinanceScreen: React.FC = () => {
  <div>
  <div className="text-[11px] font-bold text-[#000000]/60 flex items-center justify-between">
  <span className="truncate">{t.payLaterTitle}</span>
- <span className="px-1.5 py-0.2 rounded-[1600px] bg-[#ffd731] text-[#000000] text-[8px] font-black">
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[8px] font-black whitespace-nowrap shrink-0">
  {t.creditBadge}
  </span>
  </div>
@@ -103,7 +117,7 @@ export const FinanceScreen: React.FC = () => {
  </div>
  </div>
 
- <div className="h-4 w-full rounded-[1600px] bg-[#e9ccff] " />
+ <div className="h-4 w-full rounded-[1600px] bg-[#e8f7ee] " />
  </div>
  </div>
 
@@ -134,24 +148,21 @@ export const FinanceScreen: React.FC = () => {
  </div>
 
  {/* 3. Recommended for you (Grab-Style Slush Cards Carousel) */}
- <div className="px-4 mt-6 space-y-3">
- <div className="flex items-center justify-between">
- <h2 className="text-base font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide">
- {t.recommendedTitle}
- </h2>
- <span className="text-[10px] font-black px-2 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] ">
- {isThai ? 'สิทธิพิเศษ' : 'DEALS'}
- </span>
- </div>
+ <div className="px-4 mt-6 space-y-2.5">
+ <SectionHeader
+ title={t.recommendedTitle}
+ badge={isThai ? 'สิทธิพิเศษ' : 'DEALS'}
+ badgeVariant="green"
+ />
 
- <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 -mx-4 px-4 snap-x">
+ <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 snap-x scroll-smooth">
  {/* Promo Card 1: {isThai ? 'เริ่มต้นใช้งาน SmashPay Wallet' : 'Get started with SmashPay Wallet'} (Matches Grab reference image) */}
  <div
  onClick={() => {
  playCoinSound();
  setIsTopUpModalOpen(true);
  }}
- className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#55db9c] text-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
+ className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#7cd7a0] text-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
  >
  <div>
  <div className="flex items-center justify-between mb-1">
@@ -179,7 +190,7 @@ export const FinanceScreen: React.FC = () => {
  playCoinSound();
  setIsTopUpModalOpen(true);
  }}
- className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#ffd731] text-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
+ className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#e85729] text-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
  >
  <div>
  <div className="flex items-center justify-between mb-1">
@@ -207,7 +218,7 @@ export const FinanceScreen: React.FC = () => {
  playSelectSound();
  navigateTo('B1');
  }}
- className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#e9ccff] text-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
+ className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#e8f7ee] text-[#000000] flex flex-col justify-between h-44 shadow-sm snap-start cursor-pointer hover:opacity-95 transition-all"
  >
  <div>
  <div className="flex items-center justify-between mb-1">
@@ -239,10 +250,10 @@ export const FinanceScreen: React.FC = () => {
  >
  <div>
  <div className="flex items-center justify-between mb-1">
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffd731] text-[9px] font-black uppercase">
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#e85729] text-[9px] font-black uppercase">
  PRO PASS
  </span>
- <span className="text-[10px] font-bold text-[#5c4ade]">฿199/เดือน</span>
+ <span className="text-[10px] font-bold text-[#15803d]">฿199/เดือน</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
  {isThai ? 'แพ็กเกจสมาชิก Smash Pro' : 'Smash Pro Member Pass'}
@@ -260,26 +271,26 @@ export const FinanceScreen: React.FC = () => {
  </div>
 
  {/* 4. Recent Transactions Statement */}
- <div className="px-4 mt-6">
- <div className="flex items-center justify-between mb-3">
- <h2 className="text-base font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide">
- {t.recentTxTitle}
- </h2>
+ <div className="px-4 mt-6 space-y-2">
+ <SectionHeader
+ title={t.recentTxTitle}
+ rightSlot={
  <button
  type="button"
- className="text-xs font-bold text-[#000000] flex items-center gap-0.5 hover:underline"
+ className="text-xs font-bold text-[#000000] flex items-center gap-0.5 hover:underline whitespace-nowrap shrink-0 cursor-pointer"
  >
  <span>{t.viewAllTx}</span>
- <ChevronRight className="w-3.5 h-3.5" />
+ <ChevronRight className="w-3.5 h-3.5 shrink-0" />
  </button>
- </div>
+ }
+ />
 
  <div className="bg-[#ffffff] rounded-[28px] p-2.5 shadow-xs ">
  {transactions.map((tx) => (
- <div key={tx.id} className="p-3 flex items-center justify-between gap-3 hover:bg-[#dceeff]/30 transition-colors rounded-[20px]">
+ <div key={tx.id} className="p-3 flex items-center justify-between gap-3 hover:bg-[#f4f8fb]/30 transition-colors rounded-[20px]">
  <div className="flex items-center gap-3 min-w-0">
  <div className={`w-9 h-9 rounded-[1600px] flex items-center justify-center shrink-0 ${
- tx.type === 'credit' ? 'bg-[#55db9c] text-[#000000]' : 'bg-[#ffd731] text-[#000000]'
+ tx.type === 'credit' ? 'bg-[#7cd7a0] text-[#000000]' : 'bg-[#e85729] text-[#000000]'
  }`}>
  {tx.type === 'credit' ? <ArrowDownLeft className="w-4 h-4 stroke-[2.5]" /> : <ArrowUpRight className="w-4 h-4 stroke-[2.5]" />}
  </div>
@@ -313,7 +324,7 @@ export const FinanceScreen: React.FC = () => {
  <div className="w-full max-w-sm rounded-t-[32px] sm:rounded-[32px] bg-[#ffffff] p-5 shadow-2xl space-y-4 text-[#000000]">
  <div className="flex items-center justify-between pb-3">
  <div className="flex items-center gap-2">
- <span className="w-8 h-8 rounded-[1600px] bg-[#ffd731] flex items-center justify-center">
+ <span className="w-8 h-8 rounded-[1600px] bg-[#e85729] flex items-center justify-center">
  <Wallet className="w-4 h-4 text-[#000000]" />
  </span>
  <h3 className="font-['Antonio',sans-serif] font-black text-base uppercase tracking-tight text-[#000000]">
@@ -331,7 +342,7 @@ export const FinanceScreen: React.FC = () => {
 
  {topUpSuccess ? (
  <div className="py-6 text-center space-y-2">
- <div className="w-16 h-16 mx-auto rounded-[1600px] bg-[#55db9c] flex items-center justify-center">
+ <div className="w-16 h-16 mx-auto rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center">
  <CheckCircle2 className="w-8 h-8 text-[#000000] stroke-[2.5]" />
  </div>
  <h4 className="font-['Antonio',sans-serif] text-2xl font-black uppercase text-[#000000]">

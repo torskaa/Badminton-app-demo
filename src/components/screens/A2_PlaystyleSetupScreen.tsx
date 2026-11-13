@@ -24,28 +24,28 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  title: 'สายตบพิฆาต (Smash Hunter)',
  desc: 'เน้นบุกต่อเนื่อง จัมป์ตบหนักหน่วง ตัดสินแต้มเร็ว',
  icon: Zap,
- color: '#ffd731',
+ color: '#e85729',
  },
  {
  id: 'Net Control Wizard' as const,
  title: 'สายหยอดคุมเชิง (Net Wizard)',
  desc: 'ควบคุมจังหวะ วางลูกเลียดเน็ต บีบให้คู่แข่งยกสูง',
  icon: Crosshair,
- color: '#4da2ff',
+ color: '#7cd7a0',
  },
  {
  id: 'Defensive Wall' as const,
  title: 'สายรับกำแพงเหล็ก (Defensive Wall)',
  desc: 'เหนียวแน่น ดักทุกลูก สวนลูกดรายฟ์เปลี่ยนรับเป็นรุก',
  icon: Shield,
- color: '#55db9c',
+ color: '#7cd7a0',
  },
  {
  id: 'All-Rounder' as const,
  title: 'สายสมดุลรอบด้าน (All-Rounder)',
  desc: 'เล่นได้ทุกตำแหน่ง วางลูกแม่นยำ ปรับเกมตามคู่แข่ง',
  icon: Target,
- color: '#e9ccff',
+ color: '#e8f7ee',
  },
  ];
 
@@ -76,18 +76,14 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader
- title={language === 'th' ? 'ตั้งค่า DNA นักกีฬา' : 'ATHLETE DNA SETUP'}
- subtitle={language === 'th' ? 'สร้างสไตล์การเล่นและสายความถนัด' : 'Custom Playstyle Archetype'}
- showBack
- />
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
  {/* Intro Card */}
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-1">
  <div className="flex items-center gap-2 mb-1">
- <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase">
+ <span className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase">
  {language === 'th' ? 'ตั้งค่าตัวละคร' : 'Character Setup'}
  </span>
  <span className="text-xs text-[#000000]/70 font-bold">+150 EXP Reward</span>
@@ -130,7 +126,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  onClick={() => setHand('Right')}
  className={`py-2.5 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-transform active:scale-95 cursor-pointer border border-[#000000] ${
  hand === 'Right'
- ? 'bg-[#ffd731] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -141,7 +137,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  onClick={() => setHand('Left')}
  className={`py-2.5 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-transform active:scale-95 cursor-pointer border border-[#000000] ${
  hand === 'Left'
- ? 'bg-[#ffd731] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -167,7 +163,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  onClick={() => setPlaystyle(item.id)}
  className={`p-3.5 rounded-[24px] transition-transform active:scale-98 cursor-pointer flex items-center justify-between ${
  isSelected
- ? 'bg-[#ffd731] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -214,7 +210,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  onClick={() => setGoal(g.id)}
  className={`py-2 px-3 rounded-[1600px] text-left text-xs font-bold tracking-[0.032em] transition-all cursor-pointer border border-[#000000] flex items-center justify-between ${
  isSelected
- ? 'bg-[#55db9c] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -241,7 +237,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  onClick={() => setSelectedTier(t.tier)}
  className={`p-3 rounded-[20px] text-left border border-[#000000] transition-all cursor-pointer ${
  isSelected
- ? 'bg-[#e9ccff] text-[#000000]'
+ ? 'bg-[#e8f7ee] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >

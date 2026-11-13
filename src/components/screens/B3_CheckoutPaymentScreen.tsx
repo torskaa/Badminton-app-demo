@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { UploadCloud, CheckCircle2, Zap, Copy, Clock, ArrowRight, Check } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 
 export const B3_CheckoutPaymentScreen: React.FC = () => {
  const { booking, selectedCourt, gainExp, navigateTo, language } = useApp();
@@ -33,28 +34,20 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader title={language === 'th' ? 'ชำระเงินผ่านพร้อมเพย์' : 'PromptPay Checkout'} showBack />
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
  {/* Booking Summary Card */}
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'รายละเอียดคอร์ท & วันเวลา' : 'COURT PASS DETAILS'}
+ subtitle={language === 'th' ? 'ตรวจสอบสนาม วันที่ และหมายเลขคอร์ท' : 'Verify facility, date, and court number'}
+ badge="Step 2/2"
+ badgeVariant="soft"
+ />
+
  <div className="rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
- <div className="flex items-start justify-between pb-2 ">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000]">
- {language === 'th' ? 'สรุปรายการจอง' : 'BOOKING SUMMARY'}
- </span>
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'รายละเอียดคอร์ท & วันเวลา' : 'COURT PASS DETAILS'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'ตรวจสอบสนาม วันที่ และหมายเลขคอร์ทก่อนชำระเงิน' : 'Verify facility, date, and court number before payment'}
- </p>
- </div>
- <span className="text-[10px] font-bold text-[#000000]/60 uppercase">Step 2/2</span>
- </div>
 
  <div className="flex items-start justify-between">
  <div>
@@ -76,38 +69,32 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
  </div>
  </div>
 
- <div className="p-3 rounded-[20px] bg-[#ffd731] text-xs font-bold text-[#000000] flex items-center justify-between">
+ <div className="p-3 rounded-[20px] bg-[#7cd7a0] text-xs font-bold text-[#000000] flex items-center justify-between">
  <span className="flex items-center gap-1.5">
  <Zap className="w-4 h-4 fill-current text-[#000000]" />
  <span>{language === 'th' ? 'รับโบนัส EXP เมื่อชำระเงิน' : 'Loot Drop Reward on Payment'}</span>
  </span>
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em]">
+ <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px] font-bold tracking-[0.032em] whitespace-nowrap shrink-0">
  +100 EXP
  </span>
  </div>
  </div>
+ </div>
 
  {/* PromptPay QR Code Card */}
- <div className="rounded-[28px] p-5 text-center space-y-3.5 bg-[#ffffff] text-[#000000]">
- <div className="flex items-center justify-between pb-2 text-left">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] ">
- {language === 'th' ? 'ช่องทางชำระเงิน' : 'PAYMENT'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'คิวอาร์โค้ดพร้อมเพย์' : 'THAI QR PAYMENT'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'สแกนด้วยแอปพลิเคชันธนาคารทุกแห่งในไทย' : 'Scan via any Thai mobile banking app'}
- </p>
- </div>
- <span className="flex items-center gap-1 text-[#fb4903] text-xs font-bold shrink-0">
- <Clock className="w-3.5 h-3.5" />
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'คิวอาร์โค้ดพร้อมเพย์' : 'THAI QR PAYMENT'}
+ subtitle={language === 'th' ? 'สแกนด้วยแอปธนาคารทุกแห่งในไทย' : 'Scan via any Thai mobile banking app'}
+ rightSlot={
+ <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[10px] font-bold whitespace-nowrap shrink-0">
+ <Clock className="w-3 h-3" />
  <span>10:00</span>
  </span>
- </div>
+ }
+ />
+
+ <div className="rounded-[28px] p-5 text-center space-y-3.5 bg-[#ffffff] text-[#000000]">
 
  {/* QR Box */}
  <div className="w-44 h-44 bg-[#ffffff] rounded-[24px] mx-auto p-3 flex flex-col items-center justify-center">
@@ -147,7 +134,7 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
  className="p-1.5 rounded-[1600px] border border-[#000000] bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] transition-colors cursor-pointer"
  title={language === 'th' ? 'คัดลอกเบอร์พร้อมเพย์' : 'Copy PromptPay Number'}
  >
- {copiedPromptPay ? <Check className="w-3.5 h-3.5 text-[#55db9c]" /> : <Copy className="w-3.5 h-3.5" />}
+ {copiedPromptPay ? <Check className="w-3.5 h-3.5 text-[#7cd7a0]" /> : <Copy className="w-3.5 h-3.5" />}
  </button>
  </div>
  {copiedPromptPay && (
@@ -157,39 +144,29 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
  )}
  </div>
  </div>
+ </div>
 
  {/* Upload Bank Slip Box */}
- <div className="rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
- <div className="flex items-center justify-between pb-1.5 ">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] ">
- {language === 'th' ? 'ยืนยันการโอน' : 'SLIP VERIFY'}
- </span>
- <h4 className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'อัปโหลดสลิปโอนเงิน' : 'UPLOAD TRANSFER SLIP'}
- </h4>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'สแกนตรวจสอบความถูกต้องและออกบัตรเข้าสนาม' : 'Scan & verify slip to unlock your digital court pass'}
- </p>
- </div>
- <span className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'ตรวจทันที' : 'Instant'}
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'อัปโหลดสลิปโอนเงิน' : 'UPLOAD TRANSFER SLIP'}
+ subtitle={language === 'th' ? 'ตรวจสอบความถูกต้องและออกบัตรเข้าสนาม' : 'Verify slip to unlock your digital court pass'}
+ badge={language === 'th' ? 'ตรวจทันที' : 'INSTANT'}
+ badgeVariant="green"
+ />
 
+ <div className="rounded-[28px] p-4 bg-[#ffffff]">
  <div
  onClick={handleSimulateSlipUpload}
- className={`-dashed rounded-[20px] p-4 text-center cursor-pointer transition-all ${
+ className={`border border-dashed rounded-[20px] p-4 text-center cursor-pointer transition-all ${
  verificationDone
- ? '-[#000000] bg-[#55db9c]'
- : '-[#000000] hover:bg-[#e9e9e9] bg-[#ffffff]'
+ ? 'border-[#000000] bg-[#7cd7a0]'
+ : 'border-[#000000] hover:bg-[#e9e9e9] bg-[#ffffff]'
  }`}
  >
  {isVerifying ? (
  <div className="flex flex-col items-center gap-2 py-2">
- <div className="w-6 h-6 -transparent rounded-full animate-spin" />
+ <div className="w-6 h-6 border-2 border-[#000000] border-t-transparent rounded-full animate-spin" />
  <span className="text-xs font-bold text-[#000000]">
  {language === 'th' ? 'กำลังตรวจสอบความถูกต้องของสลิป...' : 'Verifying transfer slip...'}
  </span>
@@ -212,6 +189,7 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
  </span>
  </div>
  )}
+ </div>
  </div>
  </div>
 

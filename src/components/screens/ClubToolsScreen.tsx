@@ -2,13 +2,16 @@ import React, { useState } from 'react';
 import {
  RotateCcw,
  ArrowRight,
+ ArrowLeft,
  Shuffle,
  Share2,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { SectionHeader } from '../common/SectionHeader';
+import { playSelectSound } from '../../utils/retroAudio';
 
 export const ClubToolsScreen: React.FC = () => {
- const { navigateTo, gainExp, t, language } = useApp();
+ const { navigateTo, goBack, gainExp, t, language } = useApp();
  const [activeTool, setActiveTool] = useState<'menu' | 'scoreboard' | 'randomizer' | 'tactic' | 'calc'>('menu');
 
  // 1. Scoreboard v2 State
@@ -46,35 +49,56 @@ export const ClubToolsScreen: React.FC = () => {
  const costPerPerson = playerCount > 0 ? Math.ceil(totalExpense / playerCount) : 0;
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
- {/* Header in Slush CI */}
- <div className="bg-[#ffffff] px-4 pt-4 pb-3 flex items-center justify-between sticky top-0 z-20 shadow-xs">
- <div>
- <div className="flex items-center gap-2">
- <h1 className="text-xl font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
+ {/* Header matching clean Image 2 style across all screens */}
+ <div className="bg-[#ffffff] app-header-safe px-5 pb-4 border-b border-[#000000]/10 sticky top-0 z-20 select-none">
+ <div className="flex items-start justify-between gap-2.5 min-w-0">
+ <div className="flex items-start gap-3 min-w-0 flex-1">
+ <button
+ type="button"
+ onClick={() => (activeTool !== 'menu' ? setActiveTool('menu') : goBack())}
+ className="w-8 h-8 mt-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000]/20 shadow-xs flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e8f7ee] active:scale-90 transition-transform"
+ aria-label="Back"
+ title={language === 'th' ? 'ย้อนกลับ' : 'Back'}
+ >
+ <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+ </button>
+ <div className="min-w-0 flex-1">
+ <h1 className="text-xl font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide leading-[1.1] truncate">
  {t.clubToolsHeader}
  </h1>
- <span className="px-2 py-0.5 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[9px] font-black uppercase">
- {t.newBadge} V2
- </span>
- </div>
- <p className="text-[11px] text-[#000000]/60 font-bold">
+ <p className="text-xs text-[#000000]/70 font-normal leading-snug mt-0.5 max-w-[185px]">
  {t.clubToolsHeaderSub}
  </p>
  </div>
-
- {activeTool !== 'menu' && (
+ </div>
+ {activeTool === 'menu' ? (
  <button
  type="button"
- onClick={() => setActiveTool('menu')}
- className="px-3 py-1.5 rounded-[1600px] bg-[#ffffff] text-xs font-bold text-[#000000] border border-[#000000] hover:bg-[#e9e9e9] transition-colors cursor-pointer whitespace-nowrap"
+ onClick={() => {
+ playSelectSound();
+ navigateTo('E2');
+ }}
+ className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer hover:brightness-95"
  >
- {t.backToMenu}
+ {language === 'th' ? 'นัดก๊วน →' : 'RSVP →'}
+ </button>
+ ) : (
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ setActiveTool('menu');
+ }}
+ className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#ffffff] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer hover:bg-[#f4f8fb]"
+ >
+ {language === 'th' ? 'เมนูรวม' : 'All Tools'}
  </button>
  )}
  </div>
+ </div>
 
- <div className="p-4 space-y-4">
+ <div className="px-5 pt-4 pb-6 space-y-4">
  {/* Menu View: 4 Symmetrical 1:1 Aspect Cards with 1px Solid Black Border */}
  {activeTool === 'menu' && (
  <>
@@ -82,12 +106,12 @@ export const ClubToolsScreen: React.FC = () => {
  {/* Tool 1: Scoreboard v2 */}
  <div
  onClick={() => setActiveTool('scoreboard')}
- className="bg-[#ffffff] rounded-[28px] p-4 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square active:scale-98 relative group"
+ className="doodle-cta bg-[#ffffff] rounded-[28px] p-4 transition-all cursor-pointer flex flex-col justify-between aspect-square relative group"
  >
- <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[9px] font-black">
+ <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[9px] font-black">
  {t.hotBadge}
  </span>
- <div className="w-12 h-12 rounded-[20px] bg-[#ffd731] flex items-center justify-center text-2xl shadow-xs">
+ <div className="w-12 h-12 rounded-[20px] bg-[#7cd7a0] flex items-center justify-center text-2xl shadow-xs">
  🔢
  </div>
  <div>
@@ -103,12 +127,12 @@ export const ClubToolsScreen: React.FC = () => {
  {/* Tool 2: Team Randomizer v2 */}
  <div
  onClick={() => setActiveTool('randomizer')}
- className="bg-[#ffffff] rounded-[28px] p-4 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square active:scale-98 relative group"
+ className="doodle-cta bg-[#ffffff] rounded-[28px] p-4 transition-all cursor-pointer flex flex-col justify-between aspect-square relative group"
  >
- <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[9px] font-black">
+ <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[9px] font-black">
  {t.hotBadge}
  </span>
- <div className="w-12 h-12 rounded-[20px] bg-[#55db9c] flex items-center justify-center text-2xl shadow-xs">
+ <div className="w-12 h-12 rounded-[20px] bg-[#7cd7a0] flex items-center justify-center text-2xl shadow-xs">
  🎲
  </div>
  <div>
@@ -124,12 +148,12 @@ export const ClubToolsScreen: React.FC = () => {
  {/* Tool 3: Tactic Board */}
  <div
  onClick={() => setActiveTool('tactic')}
- className="bg-[#ffffff] rounded-[28px] p-4 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square active:scale-98 relative group"
+ className="doodle-cta bg-[#ffffff] rounded-[28px] p-4 transition-all cursor-pointer flex flex-col justify-between aspect-square relative group"
  >
- <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[9px] font-black">
+ <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[9px] font-black">
  {t.newBadge}
  </span>
- <div className="w-12 h-12 rounded-[20px] bg-[#4da2ff] flex items-center justify-center text-2xl shadow-xs">
+ <div className="w-12 h-12 rounded-[20px] bg-[#7cd7a0] flex items-center justify-center text-2xl shadow-xs">
  📋
  </div>
  <div>
@@ -145,12 +169,12 @@ export const ClubToolsScreen: React.FC = () => {
  {/* Tool 4: Group Cost Calc */}
  <div
  onClick={() => setActiveTool('calc')}
- className="bg-[#ffffff] rounded-[28px] p-4 shadow-xs hover:shadow-md transition-all cursor-pointer flex flex-col justify-between aspect-square active:scale-98 relative group"
+ className="doodle-cta bg-[#ffffff] rounded-[28px] p-4 transition-all cursor-pointer flex flex-col justify-between aspect-square relative group"
  >
- <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#fb4903] text-[#ffffff] text-[9px] font-black">
+ <span className="absolute top-3 right-3 px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[9px] font-black">
  {t.hotBadge}
  </span>
- <div className="w-12 h-12 rounded-[20px] bg-[#e9ccff] flex items-center justify-center text-2xl shadow-xs">
+ <div className="w-12 h-12 rounded-[20px] bg-[#e8f7ee] flex items-center justify-center text-2xl shadow-xs">
  🧮
  </div>
  <div>
@@ -165,19 +189,15 @@ export const ClubToolsScreen: React.FC = () => {
  </div>
 
  {/* Quick Sparring & RSVP Shortcuts */}
- <div className="bg-[#ffffff] rounded-[28px] p-4 space-y-3">
- <div className="flex items-center justify-between">
- <span className="text-xs font-black uppercase tracking-wider text-[#000000] font-['Antonio',sans-serif]">
- {t.quickClubTitle}
- </span>
- <span className="text-[10px] text-[#000000]/60 font-bold">Bangkok Hub</span>
- </div>
+ <div className="space-y-1.5">
+ <SectionHeader title={t.quickClubTitle} badge="Bangkok Hub" badgeVariant="soft" />
+ <div className="bg-[#ffffff] rounded-[28px] p-4">
 
  <div className="grid grid-cols-2 gap-2">
  <button
  type="button"
  onClick={() => navigateTo('E2')}
- className="p-3 rounded-[20px] bg-[#dceeff]/40 border border-[#000000] text-left hover:bg-[#dceeff] transition-colors cursor-pointer"
+ className="p-3 rounded-[20px] bg-[#f4f8fb]/40 border border-[#000000] text-left hover:bg-[#f4f8fb] transition-colors cursor-pointer"
  >
  <span className="text-lg">🏸</span>
  <div className="font-bold text-xs text-[#000000] mt-1">{t.fridaySquad}</div>
@@ -187,12 +207,13 @@ export const ClubToolsScreen: React.FC = () => {
  <button
  type="button"
  onClick={() => navigateTo('E4')}
- className="p-3 rounded-[20px] bg-[#ffd731]/30 border border-[#000000] text-left hover:bg-[#ffd731]/50 transition-colors cursor-pointer"
+ className="p-3 rounded-[20px] bg-[#7cd7a0]/30 border border-[#000000] text-left hover:bg-[#7cd7a0]/50 transition-colors cursor-pointer"
  >
  <span className="text-lg">🏅</span>
  <div className="font-bold text-xs text-[#000000] mt-1">{t.seasonLeaderboard}</div>
  <div className="text-[10px] text-[#000000]/60 font-bold">{t.seasonLeaderboardSub}</div>
  </button>
+ </div>
  </div>
  </div>
  </>
@@ -208,14 +229,14 @@ export const ClubToolsScreen: React.FC = () => {
  {t.toolScoreboard}
  </h2>
  </div>
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] text-[10px] font-black whitespace-nowrap">
+ <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black whitespace-nowrap">
  {t.scorerSet} {setNumber} ({t.scorerBestOf})
  </span>
  </div>
 
  <div className="grid grid-cols-2 gap-3 text-center">
  {/* Team A */}
- <div className={`p-4 rounded-[24px] transition-all ${server === 'A' ? 'bg-[#55db9c]' : 'bg-[#dceeff]/30'}`}>
+ <div className={`p-4 rounded-[24px] transition-all ${server === 'A' ? 'bg-[#7cd7a0]' : 'bg-[#f4f8fb]/30'}`}>
  <div className="text-xs font-bold text-[#000000] flex items-center justify-center gap-1.5">
  <span className="font-black font-['Antonio',sans-serif] uppercase tracking-wide">{t.teamA}</span>
  {server === 'A' && <span className="w-2 h-2 rounded-[1600px] bg-[#000000] animate-pulse" />}
@@ -248,7 +269,7 @@ export const ClubToolsScreen: React.FC = () => {
  </div>
 
  {/* Team B */}
- <div className={`p-4 rounded-[24px] transition-all ${server === 'B' ? 'bg-[#55db9c]' : 'bg-[#dceeff]/30'}`}>
+ <div className={`p-4 rounded-[24px] transition-all ${server === 'B' ? 'bg-[#7cd7a0]' : 'bg-[#f4f8fb]/30'}`}>
  <div className="text-xs font-bold text-[#000000] flex items-center justify-center gap-1.5">
  <span className="font-black font-['Antonio',sans-serif] uppercase tracking-wide">{t.teamB}</span>
  {server === 'B' && <span className="w-2 h-2 rounded-[1600px] bg-[#000000] animate-pulse" />}
@@ -322,7 +343,7 @@ export const ClubToolsScreen: React.FC = () => {
  setShuffleCount((c) => c + 1);
  gainExp(20, language === 'th' ? 'สุ่มจับคู่ก๊วนสมดุล' : 'Balanced match shuffled');
  }}
- className="px-3 py-1.5 rounded-[1600px] bg-[#55db9c] text-[#000000] border border-[#000000] text-xs font-bold flex items-center gap-1 hover:bg-[#45c98c] active:scale-95 transition-all shadow-xs cursor-pointer whitespace-nowrap"
+ className="px-3 py-1.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] border border-[#000000] text-xs font-bold flex items-center gap-1 hover:bg-[#45c98c] active:scale-95 transition-all shadow-xs cursor-pointer whitespace-nowrap"
  >
  <Shuffle className="w-3.5 h-3.5" />
  <span>{t.shuffleBtn}</span>
@@ -331,7 +352,7 @@ export const ClubToolsScreen: React.FC = () => {
 
  <div className="grid grid-cols-2 gap-3">
  {/* Team 1 */}
- <div className="p-3.5 rounded-[24px] bg-[#55db9c]/30 space-y-2">
+ <div className="p-3.5 rounded-[24px] bg-[#7cd7a0]/30 space-y-2">
  <div className="flex items-center justify-between text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
  <span>TEAM A (OVR 84)</span>
  <span className="text-[10px]">{t.court1}</span>
@@ -349,7 +370,7 @@ export const ClubToolsScreen: React.FC = () => {
  </div>
 
  {/* Team 2 */}
- <div className="p-3.5 rounded-[24px] bg-[#ffd731]/30 space-y-2">
+ <div className="p-3.5 rounded-[24px] bg-[#7cd7a0]/30 space-y-2">
  <div className="flex items-center justify-between text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
  <span>TEAM B (OVR 83)</span>
  <span className="text-[10px]">{t.court1}</span>
@@ -367,7 +388,7 @@ export const ClubToolsScreen: React.FC = () => {
  </div>
  </div>
 
- <div className="p-3 rounded-[20px] bg-[#dceeff] flex items-center justify-between text-xs">
+ <div className="p-3 rounded-[20px] bg-[#f4f8fb] flex items-center justify-between text-xs">
  <span className="font-bold text-[#000000]/70">{t.balanceRate}:</span>
  <span className="font-black text-[#000000]">✓ 98% ({t.balanceDesc})</span>
  </div>
@@ -407,7 +428,7 @@ export const ClubToolsScreen: React.FC = () => {
  </div>
 
  {/* Tactical Badminton Court Graphic */}
- <div className="relative w-full h-64 rounded-[28px] bg-[#55db9c] p-3 flex flex-col justify-between overflow-hidden shadow-inner ">
+ <div className="relative w-full h-64 rounded-[28px] bg-[#7cd7a0] p-3 flex flex-col justify-between overflow-hidden shadow-inner ">
  <div className="absolute top-1/2 left-0 right-0 h-1 bg-[#000000] opacity-80" />
  <div className="absolute top-1/4 left-0 right-0 h-0.5 bg-[#000000] opacity-50" />
  <div className="absolute bottom-1/4 left-0 right-0 h-0.5 bg-[#000000] opacity-50" />
@@ -415,10 +436,10 @@ export const ClubToolsScreen: React.FC = () => {
 
  {/* Team B */}
  <div className="relative z-10 flex justify-around">
- <div className="w-8 h-8 rounded-[1600px] bg-[#fb4903] text-[#ffffff] flex items-center justify-center font-black text-xs shadow-md">
+ <div className="w-8 h-8 rounded-[1600px] bg-[#e85729] text-[#ffffff] flex items-center justify-center font-black text-xs shadow-md">
  B1
  </div>
- <div className="w-8 h-8 rounded-[1600px] bg-[#fb4903] text-[#ffffff] flex items-center justify-center font-black text-xs shadow-md">
+ <div className="w-8 h-8 rounded-[1600px] bg-[#e85729] text-[#ffffff] flex items-center justify-center font-black text-xs shadow-md">
  B2
  </div>
  </div>
@@ -430,10 +451,10 @@ export const ClubToolsScreen: React.FC = () => {
 
  {/* Team A */}
  <div className={`relative z-10 flex ${formation === 'attack' ? 'flex-col items-center gap-4' : 'justify-around'}`}>
- <div className="w-8 h-8 rounded-[1600px] bg-[#4da2ff] text-[#000000] flex items-center justify-center font-black text-xs shadow-md">
+ <div className="w-8 h-8 rounded-[1600px] bg-[#7cd7a0] text-[#000000] flex items-center justify-center font-black text-xs shadow-md">
  A1
  </div>
- <div className="w-8 h-8 rounded-[1600px] bg-[#4da2ff] text-[#000000] flex items-center justify-center font-black text-xs shadow-md">
+ <div className="w-8 h-8 rounded-[1600px] bg-[#7cd7a0] text-[#000000] flex items-center justify-center font-black text-xs shadow-md">
  A2
  </div>
  </div>
@@ -455,7 +476,7 @@ export const ClubToolsScreen: React.FC = () => {
  {t.calcHeader}
  </h2>
  </div>
- <span className="text-xs font-bold text-[#000000] px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] ">
+ <span className="text-xs font-bold text-[#000000] px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] ">
  {t.equalSplit}
  </span>
  </div>
@@ -527,7 +548,7 @@ export const ClubToolsScreen: React.FC = () => {
  </div>
 
  {/* Split Result Card in Slush CI */}
- <div className="p-4 rounded-[24px] bg-[#ffd731] text-center space-y-1">
+ <div className="p-4 rounded-[24px] bg-[#7cd7a0] text-center space-y-1">
  <span className="text-[11px] font-bold text-[#000000] uppercase tracking-wide">
  {t.totalExpenseLabel}: ฿{totalExpense}
  </span>

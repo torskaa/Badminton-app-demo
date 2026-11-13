@@ -29,7 +29,7 @@ const Bone: React.FC<{
  */
 const HomeSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
  {/* 1. Header Card */}
  <div className="bg-[#ffffff] px-4 pt-3 pb-12 space-y-3 relative">
  <div className="flex items-center justify-between gap-2.5">
@@ -147,7 +147,7 @@ const HomeSkeleton: React.FC = () => {
  </div>
 
  {/* Cards Row */}
- <div className="flex gap-3 overflow-hidden -mx-4 px-4">
+ <div className="flex gap-3 overflow-hidden">
  <div className="w-[280px] shrink-0 bg-[#ffffff] rounded-[28px] p-4 space-y-3">
  <div className="flex justify-between">
  <Bone className="h-4 w-28" rounded="rounded-[1600px]" />
@@ -202,7 +202,7 @@ const HomeSkeleton: React.FC = () => {
  */
 const ProfileSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
  {/* Header bar */}
  <div className="px-4 py-3 bg-[#ffffff] flex items-center justify-between">
  <Bone className="h-6 w-44" />
@@ -219,7 +219,7 @@ const ProfileSkeleton: React.FC = () => {
 
  <div className="p-4 space-y-4">
  {/* Athlete Trading Card (Gold with black border) */}
- <div className="w-full rounded-[32px] bg-[#ffd731]/80 p-4 space-y-3">
+ <div className="w-full rounded-[32px] bg-[#e85729]/80 p-4 space-y-3">
  <div className="flex items-center justify-between pb-2 ">
  <Bone className="h-4 w-32" rounded="rounded-[1600px]" />
  <Bone className="h-3 w-20" />
@@ -328,7 +328,7 @@ const ProfileSkeleton: React.FC = () => {
  */
 const MapSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col relative bg-[#dceeff] text-[#000000]  overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col relative bg-[#f4f8fb] text-[#000000]  overflow-hidden">
  {/* 1. Map Canvas Placeholder with vector grid lines & pins */}
  <div className="absolute inset-0 w-full h-full bg-[#e8f3fc] overflow-hidden">
  {/* Abstract vector land shapes */}
@@ -337,14 +337,14 @@ const MapSkeleton: React.FC = () => {
  <div className="absolute bottom-40 left-12 w-48 h-48 rounded-full bg-[#d1fae5]/60 animate-pulse" />
 
  {/* Road Grid lines */}
- <div className="absolute top-0 bottom-0 left-1/2 w-3 bg-[#ffd731]/30" />
+ <div className="absolute top-0 bottom-0 left-1/2 w-3 bg-[#e85729]/30" />
  <div className="absolute top-1/3 left-0 right-0 h-2 bg-[#ffffff]/80" />
  <div className="absolute top-2/3 left-0 right-0 h-2.5 bg-[#ffffff]/80" />
 
  {/* Pulsing User Location Marker */}
  <div className="absolute top-[48%] left-[49%] -translate-x-1/2 -translate-y-1/2">
- <div className="w-8 h-8 rounded-full bg-[#5c4ade]/30 animate-ping absolute inset-0" />
- <div className="w-6 h-6 rounded-full bg-[#5c4ade] relative flex items-center justify-center">
+ <div className="w-8 h-8 rounded-full bg-[#e85729]/30 animate-ping absolute inset-0" />
+ <div className="w-6 h-6 rounded-full bg-[#e85729] relative flex items-center justify-center">
  <div className="w-2 h-2 rounded-full bg-[#ffffff]" />
  </div>
  </div>
@@ -352,21 +352,21 @@ const MapSkeleton: React.FC = () => {
  {/* Map Pin Skeletons */}
  <div className="absolute top-[32%] left-[30%] flex flex-col items-center">
  <Bone className="w-12 h-5 shadow-sm" rounded="rounded-[1600px]" />
- <div className="w-7 h-7 rounded-full bg-[#55db9c] flex items-center justify-center -mt-1">
+ <div className="w-7 h-7 rounded-full bg-[#7cd7a0] flex items-center justify-center -mt-1">
  <span className="text-[10px]">🏸</span>
  </div>
  </div>
 
  <div className="absolute top-[28%] right-[25%] flex flex-col items-center">
  <Bone className="w-12 h-5 shadow-sm" rounded="rounded-[1600px]" />
- <div className="w-7 h-7 rounded-full bg-[#55db9c] flex items-center justify-center -mt-1">
+ <div className="w-7 h-7 rounded-full bg-[#7cd7a0] flex items-center justify-center -mt-1">
  <span className="text-[10px]">🏸</span>
  </div>
  </div>
 
  <div className="absolute top-[58%] right-[20%] flex flex-col items-center">
  <Bone className="w-12 h-5 shadow-sm" rounded="rounded-[1600px]" />
- <div className="w-7 h-7 rounded-full bg-[#55db9c] flex items-center justify-center -mt-1">
+ <div className="w-7 h-7 rounded-full bg-[#7cd7a0] flex items-center justify-center -mt-1">
  <span className="text-[10px]">🏸</span>
  </div>
  </div>
@@ -435,7 +435,7 @@ const MapSkeleton: React.FC = () => {
  */
 const FinanceSkeleton: React.FC = () => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto no-scrollbar pb-28">
  <div className="bg-[#ffffff] px-4 pt-4 pb-12 space-y-2">
  <div className="flex items-center justify-between">
  <Bone className="h-7 w-48" />
@@ -469,7 +469,7 @@ const FinanceSkeleton: React.FC = () => {
  {/* Recommended for you */}
  <div className="px-4 mt-6 space-y-3">
  <Bone className="h-5 w-48" />
- <div className="flex gap-3 overflow-hidden -mx-4 px-4">
+ <div className="flex gap-3 overflow-hidden">
  <div className="w-[240px] shrink-0 p-4 rounded-[28px] bg-[#ffffff] h-40 flex flex-col justify-between">
  <Bone className="h-4 w-24" rounded="rounded-[1600px]" />
  <Bone className="h-5 w-36" />
@@ -493,7 +493,7 @@ const FinanceSkeleton: React.FC = () => {
  */
 const GenericSkeleton: React.FC<{ message?: string }> = ({ message }) => {
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  p-4 space-y-4 overflow-y-auto no-scrollbar pb-28">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  p-4 space-y-4 overflow-y-auto no-scrollbar pb-28">
  <div className="bg-[#ffffff] p-4 rounded-[28px] space-y-3">
  <div className="flex justify-between items-center">
  <Bone className="h-6 w-48" />

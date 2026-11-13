@@ -263,12 +263,12 @@ export const GameCompanionWidget: React.FC = () => {
               <div className="absolute top-1/2 -right-1.5 -translate-y-1/2 w-3 h-3 bg-[#ffffff] rotate-45" />
 
               <div className="flex items-center gap-1 mb-0.5">
-                <span className="w-2 h-2 rounded-full bg-[#00B14F] animate-ping" />
-                <span className="text-[10px] font-black uppercase tracking-wider text-[#00B14F]">
+                <span className="w-2 h-2 rounded-full bg-[#7cd7a0] animate-ping" />
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#7cd7a0]">
                   SMASHY #15
                 </span>
                 <span className="text-[9px] text-neutral-600 font-bold ml-auto flex items-center gap-0.5">
-                  <Sparkles className="w-2.5 h-2.5 text-[#ffd731] fill-[#ffd731]" />
+                  <Sparkles className="w-2.5 h-2.5 text-[#e85729] fill-[#e85729]" />
                   GUIDE
                 </span>
               </div>
@@ -299,10 +299,10 @@ export const GameCompanionWidget: React.FC = () => {
               setIsBubbleDismissed(false);
             }}
             aria-label="Open Smashy Badminton Companion"
-            className="relative w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#00B14F] via-[#ffd731] to-[#fb4903] shadow-2xl cursor-pointer active:scale-90 transition-transform group flex items-center justify-center"
+            className="relative w-14 h-14 rounded-full p-0.5 bg-gradient-to-tr from-[#7cd7a0] via-[#e85729] to-[#e85729] shadow-2xl cursor-pointer active:scale-90 transition-transform group flex items-center justify-center"
           >
             {/* Pulsing ring aura */}
-            <span className="absolute inset-0 rounded-full bg-[#ffd731]/40 animate-ping opacity-60 pointer-events-none" />
+            <span className="absolute inset-0 rounded-full bg-[#e85729]/40 animate-ping opacity-60 pointer-events-none" />
 
             {/* Inner Avatar Container with Precise Mascot Face Crop */}
             <div className="w-full h-full rounded-full overflow-hidden bg-[#243b34] relative">
@@ -314,12 +314,12 @@ export const GameCompanionWidget: React.FC = () => {
             </div>
 
             {/* Floating Level / Number Badge */}
-            <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#fb4903] text-white text-[9px] font-black uppercase tracking-wider shadow-md">
+            <span className="absolute -top-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#e85729] text-white text-[9px] font-black uppercase tracking-wider shadow-md">
               #15
             </span>
 
             {/* Live Indicator Dot */}
-            <span className="absolute -bottom-0.5 -left-0.5 w-3.5 h-3.5 rounded-full bg-[#00B14F] border-2 border-white flex items-center justify-center">
+            <span className="absolute -bottom-0.5 -left-0.5 w-3.5 h-3.5 rounded-full bg-[#7cd7a0] border-2 border-white flex items-center justify-center">
               <span className="w-1.5 h-1.5 rounded-full bg-white" />
             </span>
           </button>
@@ -372,7 +372,7 @@ export const GameCompanionWidget: React.FC = () => {
                       alt="Smashy Hero"
                       className="w-full h-full object-cover object-[51%_22%] scale-110"
                     />
-                    <div className="absolute bottom-0 inset-x-0 bg-black/60 backdrop-blur-xs py-0.5 text-center text-[8px] font-black uppercase text-[#ffd731] tracking-wider">
+                    <div className="absolute bottom-0 inset-x-0 bg-black/60 backdrop-blur-xs py-0.5 text-center text-[8px] font-black uppercase text-[#e85729] tracking-wider">
                       HERO #15
                     </div>
                   </motion.div>
@@ -380,10 +380,10 @@ export const GameCompanionWidget: React.FC = () => {
                   {/* Character Bio & Vitality */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 mb-1">
-                      <span className="px-2 py-0.5 rounded-full bg-[#ffd731] text-black text-[10px] font-black uppercase tracking-wider">
+                      <span className="px-2 py-0.5 rounded-full bg-[#e85729] text-black text-[10px] font-black uppercase tracking-wider">
                         LVL 10 COMPANION
                       </span>
-                      <span className="text-[10px] text-[#55db9c] font-bold flex items-center gap-0.5">
+                      <span className="text-[10px] text-[#7cd7a0] font-bold flex items-center gap-0.5">
                         <Sparkles className="w-3 h-3 fill-current" />
                         AI CO-PILOT
                       </span>
@@ -404,7 +404,7 @@ export const GameCompanionWidget: React.FC = () => {
                 {/* High-Five Mini-Game Banner */}
                 <div className="mt-3.5 pt-3 border-t border-white/10 flex items-center justify-between gap-2">
                   <div className="text-[11px] leading-tight">
-                    <div className="font-bold text-[#ffd731] flex items-center gap-1">
+                    <div className="font-bold text-[#e85729] flex items-center gap-1">
                       <Trophy className="w-3 h-3" />
                       {isThai ? 'เควสต์ไฮไฟว์ประจำวัน' : 'Daily High-Five Quest'}
                     </div>
@@ -422,7 +422,7 @@ export const GameCompanionWidget: React.FC = () => {
                     className={`px-3 py-1.5 rounded-[1600px] text-xs font-black uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer border border-[#000000] active:scale-95 shadow-md ${
                       hasHighFivedToday
                         ? 'bg-neutral-800 text-neutral-400 border-neutral-700'
-                        : 'bg-[#ffd731] hover:bg-[#ffe169] text-black'
+                        : 'bg-[#e85729] hover:bg-[#ffe169] text-black'
                     }`}
                   >
                     <motion.span
@@ -444,7 +444,7 @@ export const GameCompanionWidget: React.FC = () => {
                       exit={{ opacity: 0 }}
                       className="mt-2 p-2 rounded-xl bg-white text-black text-[11px] font-bold flex items-center gap-1.5 shadow-md"
                     >
-                      <Sparkles className="w-3.5 h-3.5 text-[#fb4903] shrink-0" />
+                      <Sparkles className="w-3.5 h-3.5 text-[#e85729] shrink-0" />
                       <span className="flex-1">{cheerReaction}</span>
                       <button
                         type="button"
@@ -468,7 +468,7 @@ export const GameCompanionWidget: React.FC = () => {
                   }}
                   className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
                     activeTab === 'tutorial'
-                      ? 'bg-[#f8f9fa] text-[#00B14F] border-b-2 border-[#00B14F]'
+                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
                       : 'text-neutral-600 hover:text-neutral-800'
                   }`}
                 >
@@ -484,11 +484,11 @@ export const GameCompanionWidget: React.FC = () => {
                   }}
                   className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
                     activeTab === 'tips'
-                      ? 'bg-[#f8f9fa] text-[#00B14F] border-b-2 border-[#00B14F]'
+                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
                       : 'text-neutral-600 hover:text-neutral-800'
                   }`}
                 >
-                  <Flame className="w-3 h-3 text-[#fb4903]" />
+                  <Flame className="w-3 h-3 text-[#e85729]" />
                   <span>{isThai ? 'ทริคสแมช' : 'Tips'}</span>
                 </button>
 
@@ -500,11 +500,11 @@ export const GameCompanionWidget: React.FC = () => {
                   }}
                   className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
                     activeTab === 'quests'
-                      ? 'bg-[#f8f9fa] text-[#00B14F] border-b-2 border-[#00B14F]'
+                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
                       : 'text-neutral-600 hover:text-neutral-800'
                   }`}
                 >
-                  <Trophy className="w-3 h-3 text-[#ffd731]" />
+                  <Trophy className="w-3 h-3 text-[#e85729]" />
                   <span>{isThai ? 'เควสต์' : 'Quests'}</span>
                 </button>
 
@@ -516,11 +516,11 @@ export const GameCompanionWidget: React.FC = () => {
                   }}
                   className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
                     activeTab === 'cheer'
-                      ? 'bg-[#f8f9fa] text-[#00B14F] border-b-2 border-[#00B14F]'
+                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
                       : 'text-neutral-600 hover:text-neutral-800'
                   }`}
                 >
-                  <Smile className="w-3 h-3 text-[#5c4ade]" />
+                  <Smile className="w-3 h-3 text-[#15803d]" />
                   <span>{isThai ? 'คุยเล่น' : 'Cheer'}</span>
                 </button>
               </div>
@@ -547,7 +547,7 @@ export const GameCompanionWidget: React.FC = () => {
                           key={item.id}
                           className="p-3 rounded-2xl bg-white shadow-xs flex items-start gap-3 hover:shadow-md transition-shadow"
                         >
-                          <div className="w-9 h-9 rounded-xl bg-[#00B14F]/10 text-[#00B14F] flex items-center justify-center shrink-0 mt-0.5">
+                          <div className="w-9 h-9 rounded-xl bg-[#7cd7a0]/10 text-[#7cd7a0] flex items-center justify-center shrink-0 mt-0.5">
                             <Icon className="w-4 h-4" />
                           </div>
                           <div className="flex-1 min-w-0">
@@ -555,7 +555,7 @@ export const GameCompanionWidget: React.FC = () => {
                               <h4 className="text-xs font-bold text-black">
                                 {isThai ? item.titleTh : item.titleEn}
                               </h4>
-                              <span className="text-[10px] font-extrabold text-[#00B14F] bg-[#00B14F]/10 px-1.5 py-0.2 rounded-md">
+                              <span className="text-[10px] font-extrabold text-[#15803d] bg-[#7cd7a0]/20 px-1.5 py-0.5 rounded-md whitespace-nowrap shrink-0">
                                 +{item.expReward} XP
                               </span>
                             </div>
@@ -588,8 +588,8 @@ export const GameCompanionWidget: React.FC = () => {
                 {/* ================================================= */}
                 {activeTab === 'tips' && (
                   <div className="space-y-2.5">
-                    <div className="p-2.5 rounded-2xl bg-[#ffd731]/15 text-black text-xs font-bold flex items-center gap-2">
-                      <Flame className="w-4 h-4 text-[#fb4903] shrink-0" />
+                    <div className="p-2.5 rounded-2xl bg-[#e85729]/15 text-black text-xs font-bold flex items-center gap-2">
+                      <Flame className="w-4 h-4 text-[#e85729] shrink-0" />
                       <span>{isThai ? 'เคล็ดลับเสริมพลังตีแบดจากน้องสแมชชี่ #15' : 'Smashy #15 Pro Badminton Masterclass'}</span>
                     </div>
 
@@ -599,7 +599,7 @@ export const GameCompanionWidget: React.FC = () => {
                         className="p-3 rounded-2xl bg-white shadow-xs space-y-1.5"
                       >
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-[#fb4903]/10 text-[#fb4903]">
+                          <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-[#e85729]/10 text-[#e85729]">
                             {tip.badge}
                           </span>
                           <span className="text-[10px] text-neutral-600 font-semibold">
@@ -627,13 +627,13 @@ export const GameCompanionWidget: React.FC = () => {
                         <span className="text-xs font-bold text-black">
                           {isThai ? 'เลเวลผู้เล่นปัจจุบัน' : 'Player Level'}
                         </span>
-                        <span className="text-xs font-black text-[#00B14F]">
+                        <span className="text-xs font-black text-[#7cd7a0]">
                           LVL {player.level}
                         </span>
                       </div>
                       <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden">
                         <div
-                          className="bg-[#00B14F] h-full rounded-full transition-all duration-300"
+                          className="bg-[#7cd7a0] h-full rounded-full transition-all duration-300"
                           style={{
                             width: `${Math.min(100, (player.currentExp / player.nextLevelExp) * 100)}%`,
                           }}
@@ -831,7 +831,7 @@ export const GameCompanionWidget: React.FC = () => {
                   }}
                   className="flex-1 py-2.5 px-3 rounded-[1600px] bg-black text-white hover:bg-neutral-800 text-xs font-bold uppercase tracking-wider border border-black flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-transform shadow-xs"
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#55db9c]" />
+                  <CheckCircle2 className="w-3.5 h-3.5 text-[#7cd7a0]" />
                   <span>{isThai ? 'ปิดหน้าต่าง' : 'Got it!'}</span>
                 </button>
               </div>

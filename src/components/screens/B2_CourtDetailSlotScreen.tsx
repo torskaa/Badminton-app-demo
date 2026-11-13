@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star, MapPin, Zap, ArrowRight, Bookmark, Share2 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 import { CourtSlot } from '../../types';
 
 export const B2_CourtDetailSlotScreen: React.FC = () => {
@@ -54,7 +55,7 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
  <MobileHeader title={selectedCourt.name} showBack />
 
  <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-6">
@@ -72,7 +73,7 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  type="button"
  onClick={() => setIsBookmarked(!isBookmarked)}
  className={`w-9 h-9 rounded-[1600px] border border-[#000000] flex items-center justify-center transition-all cursor-pointer ${
- isBookmarked ? 'bg-[#ffd731] text-[#000000]' : 'bg-[#ffffff] text-[#000000]'
+ isBookmarked ? 'bg-[#7cd7a0] text-[#000000]' : 'bg-[#ffffff] text-[#000000]'
  }`}
  >
  <Bookmark className="w-4 h-4 fill-current" />
@@ -88,10 +89,10 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  {/* Bottom badge overlay */}
  <div className="absolute bottom-4 left-4 right-4 text-[#ffffff] bg-[#000000]/75 p-3 rounded-[24px] ">
  <div className="flex items-center gap-2 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#55db9c] text-[#000000] text-[10px] font-black uppercase">
+ <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black uppercase">
  {language === 'th' ? 'มาตรฐาน BWF' : 'BWF Standard'}
  </span>
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] text-[10px] font-black uppercase flex items-center gap-1">
+ <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black uppercase flex items-center gap-1">
  <Zap className="w-3 h-3 fill-current" />
  <span>+100 EXP BONUS</span>
  </span>
@@ -108,45 +109,34 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  <div className="grid grid-cols-3 gap-2">
  <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
  <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'พื้นสนาม' : 'Court Floor'}</span>
- <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#55db9c] inline-block mt-1">
+ <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
  Taraflex
  </span>
  </div>
  <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
  <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'ระบบแอร์' : 'Air Condition'}</span>
- <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#4da2ff] inline-block mt-1">
+ <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
  24°C Comfort
  </span>
  </div>
  <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
  <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'ระบบไฟ' : 'Pro Lighting'}</span>
- <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#ffd731] inline-block mt-1">
+ <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
  500 Lux
  </span>
  </div>
  </div>
 
  {/* Availability Calendar Day Selector */}
- <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-2.5">
- <div className="flex items-center justify-between pb-2 ">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] ">
- {language === 'th' ? 'เลือกวันที่' : 'PLAY DATE'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'ตารางรอบสัปดาห์นี้' : 'THIS WEEK SCHEDULE'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'เลือกวันที่ต้องการเข้าใช้บริการสนาม' : 'Select your desired play date'}
- </p>
- </div>
- <span className="text-xs font-bold text-[#5c4ade]">
- {language === 'th' ? 'พฤศจิกายน 2026' : 'Nov 2026'}
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'ตารางรอบสัปดาห์นี้' : 'THIS WEEK SCHEDULE'}
+ subtitle={language === 'th' ? 'เลือกวันที่ต้องการเข้าใช้บริการสนาม' : 'Select your desired play date'}
+ badge={language === 'th' ? 'พฤศจิกายน 2026' : 'Nov 2026'}
+ badgeVariant="soft"
+ />
 
+ <div className="p-4 rounded-[28px] bg-[#ffffff]">
  <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
  {daysOfWeek.map((item, idx) => {
  const isSelected = selectedDayIndex === idx;
@@ -168,23 +158,19 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  })}
  </div>
  </div>
+ </div>
 
  {/* Court Number Pill Selector */}
- <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-2.5">
- <div className="pb-1.5 ">
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#4da2ff] text-[#000000] ">
- {language === 'th' ? 'หมายเลขคอร์ท' : 'COURT NUMBER'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'เลือกคอร์ทแข่งขัน (1 - 4)' : 'SELECT COURT (1 - 4)'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'ทุกคอร์ทปูพื้นยาง BWF Taraflex พร้อมระบบแอร์และไฟส่องสว่าง 500 Lux' : 'All courts feature certified Taraflex flooring with AC & 500 Lux lighting'}
- </p>
- </div>
- <div className="grid grid-cols-4 gap-2 pt-1">
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'เลือกคอร์ทแข่งขัน (1 - 4)' : 'SELECT COURT (1 - 4)'}
+ subtitle={language === 'th' ? 'พื้นยาง BWF Taraflex · แอร์และไฟ 500 Lux' : 'BWF Taraflex · AC & 500 Lux lighting'}
+ badge="BWF Taraflex"
+ badgeVariant="green"
+ />
+
+ <div className="p-4 rounded-[28px] bg-[#ffffff]">
+ <div className="grid grid-cols-4 gap-2">
  {[1, 2, 3, 4].map((cNum) => {
  const isSelected = selectedCourtNum === cNum;
  return (
@@ -192,9 +178,9 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  type="button"
  key={cNum}
  onClick={() => setSelectedCourtNum(cNum)}
- className={`py-2 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-all cursor-pointer border border-[#000000] ${
+ className={`py-2 px-2 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-all cursor-pointer border border-[#000000] whitespace-nowrap ${
  isSelected
- ? 'bg-[#ffd731] text-[#000000]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
@@ -204,24 +190,16 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  })}
  </div>
  </div>
+ </div>
 
  {/* Time Slots List */}
  <div className="space-y-2">
- <div className="flex items-center justify-between text-xs px-1">
- <div>
- <div className="flex items-center gap-1.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#55db9c] text-[#000000] ">
- {language === 'th' ? 'ช่วงเวลาที่เปิดจอง' : 'TIME SLOTS'}
- </span>
- <span className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'เลือกรอบเวลาที่ต้องการเล่น' : 'AVAILABLE TIME SLOTS'}
- </span>
- </div>
- </div>
- <span className="text-[#000000]/60 font-bold">
- {language === 'th' ? 'เลือกได้หลาย ชม.' : 'Multi-hours allowed'}
- </span>
- </div>
+ <SectionHeader
+ title={language === 'th' ? 'เลือกรอบเวลาที่ต้องการเล่น' : 'AVAILABLE TIME SLOTS'}
+ subtitle={language === 'th' ? 'แตะเลือกรอบชั่วโมงที่ว่างอยู่' : 'Tap open hourly slots below'}
+ badge={language === 'th' ? 'เลือกได้หลาย ชม.' : 'Multi-hours'}
+ badgeVariant="soft"
+ />
 
  <div className="grid grid-cols-2 gap-2">
  {AVAILABLE_SLOTS.map((slot) => {
@@ -234,8 +212,8 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  !slot.isAvailable
  ? 'opacity-40 cursor-not-allowed bg-[#cccccc]'
  : isSelected
- ? 'bg-[#ffd731] text-[#000000]'
- : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9ccff]'
+ ? 'bg-[#7cd7a0] text-[#000000]'
+ : 'bg-[#ffffff] text-[#000000] hover:bg-[#e8f7ee]'
  }`}
  >
  <div className="flex items-center justify-between mb-1">

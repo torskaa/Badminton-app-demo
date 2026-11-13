@@ -2,35 +2,33 @@ import React from 'react';
 import { Trophy, Flame, Zap, Award, BarChart3, Share2, ArrowRight } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
+import { SectionHeader } from '../common/SectionHeader';
 
 export const C2_PostMatchSummaryScreen: React.FC = () => {
  const { match, player, navigateTo, language } = useApp();
  const isWinner = match.winner === 'A' || match.scoreA >= match.scoreB;
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#dceeff] text-[#000000]  overflow-hidden">
- <MobileHeader
- title={language === 'th' ? 'สรุปผลการแข่งขัน' : 'Match Victory Summary'}
- showBack
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <MobileHeader showBack />
+
+ <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
+ {/* Victory Trophy Header */}
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'ผลการแข่งขัน' : 'MATCH OUTCOME'}
+ subtitle={language === 'th' ? 'สรุปผู้ชนะและบันทึกสถิติแมตช์ล่าสุด' : 'Final match result and recorded score'}
+ badge={language === 'th' ? 'บันทึกแล้ว' : 'RECORDED'}
+ badgeVariant="green"
  />
 
- <div className="p-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
- {/* Victory Trophy Header */}
- <div className="text-center pt-1 rounded-[32px] p-5 bg-[#ffffff] space-y-2">
- <div className="flex items-center justify-between pb-2 ">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] ">
- {language === 'th' ? 'ผลการแข่งขัน' : 'MATCH OUTCOME'}
- </span>
- <span className="text-[10px] text-[#000000]/60 font-bold uppercase">
- {language === 'th' ? 'บันทึกสถิติเรียบร้อย' : 'Recorded'}
- </span>
- </div>
+ <div className="text-center rounded-[32px] p-5 bg-[#ffffff] space-y-2">
 
- <div className="w-16 h-16 rounded-[1600px] mx-auto mb-1 flex items-center justify-center bg-[#ffd731] text-[#000000]">
+ <div className="w-16 h-16 rounded-[1600px] mx-auto mb-1 flex items-center justify-center bg-[#7cd7a0] text-[#000000]">
  <Trophy className="w-8 h-8 stroke-[2.3]" />
  </div>
 
- <span className="px-3 py-0.5 rounded-[1600px] text-[10px] font-bold tracking-[0.032em] uppercase bg-[#55db9c] text-[#000000] inline-block mb-1">
+ <span className="px-3 py-0.5 rounded-[1600px] text-[10px] font-bold tracking-[0.032em] uppercase bg-[#7cd7a0] text-[#000000] inline-block mb-1">
  {isWinner
  ? (language === 'th' ? 'ชัยชนะของแมตช์!' : 'MATCH VICTORY!')
  : (language === 'th' ? 'จบการแข่งขัน' : 'MATCH COMPLETED')}
@@ -44,25 +42,23 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
  {match.playerAName} vs {match.playerBName}
  </p>
  </div>
+ </div>
 
  {/* Final Sets Score Breakdown Card */}
- <div className="rounded-[32px] p-5 text-center bg-[#ffffff] space-y-3">
- <div className="flex items-center justify-between pb-2 ">
- <div className="flex items-center gap-1.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#dceeff] text-[#000000] ">
- {language === 'th' ? 'สรุปคะแนนเซ็ต' : 'SET BREAKDOWN'}
- </span>
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'ผลการปะทะทั้ง 3 เซ็ต' : 'FINAL SETS BREAKDOWN'}
- </span>
- </div>
- <span className="text-[10px] text-[#000000]/60 font-bold">Best of 3</span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'สรุปคะแนนเซ็ต' : 'FINAL SETS BREAKDOWN'}
+ subtitle={language === 'th' ? 'ผลการปะทะทั้ง 3 เซ็ต' : 'Match score breakdown'}
+ badge="Best of 3"
+ badgeVariant="soft"
+ />
+
+ <div className="rounded-[32px] p-5 text-center bg-[#ffffff]">
 
  <div className="flex items-center justify-center gap-8 py-1">
  <div className="text-center">
  <div className="text-xs font-bold text-[#000000]/70">{match.playerAName}</div>
- <div className="font-['Antonio',sans-serif] text-6xl font-black text-[#5c4ade] mt-1 leading-none">
+ <div className="font-['Antonio',sans-serif] text-6xl font-black text-[#15803d] mt-1 leading-none">
  {match.setsWonA || 2}
  </div>
  </div>
@@ -75,37 +71,27 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
  </div>
  </div>
  </div>
+ </div>
 
  {/* EXP Reward Card */}
- <div className="rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
- {/* Subheader */}
- <div className="flex items-center justify-between pb-2 ">
- <div>
- <div className="flex items-center gap-1.5 mb-0.5">
- <span className="px-2 py-0.2 rounded-[1600px] text-[9px] font-bold uppercase tracking-[0.032em] bg-[#ffd731] text-[#000000] ">
- {language === 'th' ? 'รางวัล & EXP' : 'REWARDS & EXP'}
- </span>
- <span className="font-['Antonio',sans-serif] text-xs font-black uppercase tracking-wider text-[#000000]">
- {language === 'th' ? 'สรุปแต้มค่าประสบการณ์ที่ได้รับ' : 'MATCH LOOT & EXP REWARDS'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th'
- ? 'โบนัสแข่งจบ โบนัสสตรีค 3 สัปดาห์ และแต้มตบ Smash สำเร็จ'
- : 'Completion bonus, 3-week active streak, and smash specialist rewards'}
- </p>
- </div>
- <span className="px-3 py-0.5 rounded-[1600px] bg-[#ffd731] text-[#000000] text-xs font-black tracking-[0.032em] shrink-0">
- +250 EXP Total
- </span>
- </div>
+ <div className="space-y-2">
+ <SectionHeader
+ title={language === 'th' ? 'รางวัล & EXP ที่ได้รับ' : 'MATCH LOOT & EXP REWARDS'}
+ subtitle={language === 'th'
+ ? 'โบนัสแข่งจบ สตรีค 3 สัปดาห์ และแต้ม Smash'
+ : 'Completion bonus, 3-week streak & smash rewards'}
+ badge="+250 EXP"
+ badgeVariant="green"
+ />
+
+ <div className="rounded-[28px] p-4 bg-[#ffffff]">
 
  <div className="space-y-1.5 text-xs">
  <div className="flex items-center justify-between p-3 rounded-[16px] bg-[#ffffff]">
  <span className="font-bold text-[#000000]">
  {language === 'th' ? 'รางวัลการแข่งขันจบแมตช์' : 'Match Play Completion Reward'}
  </span>
- <span className="font-black text-[#5c4ade]">+150 EXP</span>
+ <span className="font-black text-[#15803d]">+150 EXP</span>
  </div>
  <div className="flex items-center justify-between p-3 rounded-[16px] bg-[#ffffff]">
  <span className="flex items-center gap-1.5 font-bold text-[#000000]">
@@ -120,7 +106,8 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
  <span className="font-bold text-[#000000]">
  {language === 'th' ? 'โบนัสคะแนนลูกตบพิฆาต' : 'Smash Winner Specialist Bonus'}
  </span>
- <span className="font-black text-[#55db9c]">+25 EXP</span>
+ <span className="font-black text-[#7cd7a0]">+25 EXP</span>
+ </div>
  </div>
  </div>
  </div>
@@ -143,7 +130,7 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
  onClick={() => navigateTo('C4')}
  className="py-3 px-3 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] border border-[#000000] transition-colors flex items-center justify-center gap-1.5 cursor-pointer bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] whitespace-nowrap"
  >
- <Share2 className="w-3.5 h-3.5 text-[#5c4ade] shrink-0" />
+ <Share2 className="w-3.5 h-3.5 text-[#15803d] shrink-0" />
  <span>{language === 'th' ? 'แชร์การ์ด (C4)' : 'SHARE RECAP (C4)'}</span>
  </button>
  <button

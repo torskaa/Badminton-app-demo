@@ -7,29 +7,30 @@ import {
  MessageSquare,
  Bell,
  Zap,
+ ArrowLeft,
  ArrowRight,
  SlidersHorizontal,
  X,
- Flame,
- Trophy,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
+import { DoodleAvatar } from '../common/DoodleAvatar';
 import { CourtFacility } from '../../types';
 import { CourtDiscoveryEmptyState } from '../common/CourtDiscoveryEmptyState';
+import { SectionHeader } from '../common/SectionHeader';
 
 export const B1_CourtDiscoveryScreen: React.FC = () => {
- const { courts, setSelectedCourt, updateBooking, navigateTo, player, setSparringModalPlayer, gainExp } = useApp();
+ const { courts, setSelectedCourt, updateBooking, navigateTo, goBack, player, setSparringModalPlayer, gainExp } = useApp();
  const [searchTerm, setSearchTerm] = useState('');
  const [activeCategory, setActiveCategory] = useState<'all' | 'badminton' | 'pickleball' | 'quickmatch' | 'tournaments'>('all');
  const [simulateEmpty, setSimulateEmpty] = useState(false);
  const [suggestToast, setSuggestToast] = useState(false);
 
  const categories = [
- { id: 'all', label: 'All', icon: '⚡', color: '#ffd731' },
- { id: 'badminton', label: 'Badminton', icon: '🏸', color: '#4da2ff' },
- { id: 'pickleball', label: 'Pickleball', icon: '🏓', color: '#55db9c' },
- { id: 'quickmatch', label: 'Quick Match', icon: '⚔️', color: '#e9ccff' },
- { id: 'tournaments', label: 'Tournaments', icon: '🏆', color: '#fb4903' },
+ { id: 'all', label: 'All', icon: '⚡', color: '#7cd7a0' },
+ { id: 'badminton', label: 'Badminton', icon: '🏸', color: '#7cd7a0' },
+ { id: 'pickleball', label: 'Pickleball', icon: '🏓', color: '#7cd7a0' },
+ { id: 'quickmatch', label: 'Quick Match', icon: '⚔️', color: '#e8f7ee' },
+ { id: 'tournaments', label: 'Tournaments', icon: '🏆', color: '#e85729' },
  ];
 
  const quickMatchPlayers = [
@@ -42,7 +43,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  status: 'พร้อมดวลตอนนี้ (คอร์ท 3)',
  winRate: 78,
  distance: '1.2 km',
- color: '#ffd731',
+ color: '#7cd7a0',
  },
  {
  id: 'p2',
@@ -53,7 +54,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  status: 'หาคู่ซ้อม Double Mix',
  winRate: 72,
  distance: '2.5 km',
- color: '#e9ccff',
+ color: '#e8f7ee',
  },
  {
  id: 'p3',
@@ -64,7 +65,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  status: 'ว่างซ้อมเสาร์นี้ 18:00',
  winRate: 81,
  distance: '3.1 km',
- color: '#55db9c',
+ color: '#7cd7a0',
  },
  ];
 
@@ -89,26 +90,31 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  });
 
  return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#dceeff] text-[#000000]">
- {/* 1. Header: User Avatar + Greeting + Chat & Notifications */}
- <div className="px-4 pt-4 pb-2 flex items-center justify-between">
- <div className="flex items-center gap-3">
+ <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#f4f8fb] text-[#000000]">
+ {/* 1. Header: Back Button + User Avatar + Greeting + Chat & Notifications */}
+ <div className="app-header-safe px-5 pb-3 flex items-center justify-between gap-2">
+ <div className="flex items-center gap-2.5 min-w-0 flex-1">
+ <button
+ type="button"
+ onClick={goBack}
+ className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e9e9e9] active:scale-90 transition-transform shadow-xs"
+ aria-label="Back"
+ title="Back"
+ >
+ <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+ </button>
  <div
  onClick={() => navigateTo('F1')}
- className="w-11 h-11 rounded-[1600px] p-0.5 bg-[#ffd731] cursor-pointer hover:scale-105 active:scale-95 transition-transform shrink-0"
+ className="cursor-pointer hover:scale-105 active:scale-95 transition-transform shrink-0"
  >
- <img
- src={player.avatarUrl}
- alt={player.name}
- className="w-full h-full rounded-[1600px] object-cover bg-white"
- />
+ <DoodleAvatar preset="karn" size="sm" ringClass="border-2 border-[#000000] shadow-xs" />
  </div>
- <div>
- <div className="text-[11px] text-[#000000]/70 font-bold tracking-[0.032em] flex items-center gap-1">
- <MapPin className="w-3.5 h-3.5 text-[#fb4903]" />
- <span>Bangkok · Rama 9</span>
+ <div className="min-w-0 flex-1">
+ <div className="text-[11px] text-[#000000]/70 font-bold tracking-[0.032em] flex items-center gap-1 truncate">
+ <MapPin className="w-3.5 h-3.5 text-[#e85729] shrink-0" />
+ <span className="truncate">Bangkok · Rama 9</span>
  </div>
- <div className="font-['Antonio',sans-serif] text-xl font-black uppercase tracking-tight leading-none mt-0.5">
+ <div className="font-['Antonio',sans-serif] text-lg font-black uppercase tracking-tight leading-none mt-0.5 truncate">
  Hi, {player.name}
  </div>
  </div>
@@ -119,7 +125,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  <button
  type="button"
  onClick={() => navigateTo('E1')}
- className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center transition-all cursor-pointer hover:bg-[#e9ccff] active:scale-95"
+ className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center transition-all cursor-pointer hover:bg-[#e8f7ee] active:scale-95"
  title="Guild Chat"
  >
  <MessageSquare className="w-4 h-4 text-[#000000]" />
@@ -127,11 +133,11 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  <button
  type="button"
  onClick={() => navigateTo('D2')}
- className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center transition-all cursor-pointer hover:bg-[#ffd731] active:scale-95 relative"
+ className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center transition-all cursor-pointer hover:bg-[#7cd7a0] active:scale-95 relative"
  title="Quest Alerts"
  >
  <Bell className="w-4 h-4 text-[#000000]" />
- <span className="w-2 h-2 rounded-full bg-[#fb4903] absolute top-1.5 right-1.5" />
+ <span className="w-2 h-2 rounded-full bg-[#e85729] absolute top-1.5 right-1.5" />
  </button>
  </div>
  </div>
@@ -164,7 +170,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
 
  {/* 3. Category Filter Horizontal Strip */}
  <div className="px-4 mt-3.5">
- <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+ <div data-filter="true" className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
  {categories.map((cat) => {
  const isActive = activeCategory === cat.id;
  return (
@@ -194,12 +200,12 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  >
  <div className="relative z-10 flex flex-col justify-between h-full">
  <div className="flex items-center justify-between mb-2">
- <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase flex items-center gap-1">
+ <span className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase flex items-center gap-1">
  <Zap className="w-3 h-3 fill-current text-[#000000]" />
  <span>20% OFF · PRIME TIME</span>
  </span>
  <div className="flex items-center gap-1 text-xs font-black text-[#000000]">
- <Star className="w-3.5 h-3.5 fill-[#ffd731] stroke-[#000000]" />
+ <Star className="w-3.5 h-3.5 fill-[#e85729] stroke-[#000000]" />
  <span>4.9 (128)</span>
  </div>
  </div>
@@ -245,7 +251,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  onClick={() => handleSelectCourt(courts[0])}
  className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
  >
- <div className="w-9 h-9 rounded-[1600px] bg-[#4da2ff] mx-auto mb-1 flex items-center justify-center font-bold text-base">
+ <div className="w-9 h-9 rounded-[1600px] bg-[#7cd7a0] mx-auto mb-1 flex items-center justify-center font-bold text-base">
  🏸
  </div>
  <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">จองคอร์ท</span>
@@ -256,7 +262,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  onClick={() => navigateTo('E3')}
  className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
  >
- <div className="w-9 h-9 rounded-[1600px] bg-[#ffd731] mx-auto mb-1 flex items-center justify-center font-bold text-base">
+ <div className="w-9 h-9 rounded-[1600px] bg-[#7cd7a0] mx-auto mb-1 flex items-center justify-center font-bold text-base">
  ⚔️
  </div>
  <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">จัดทีมก๊วน</span>
@@ -267,7 +273,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  onClick={() => navigateTo('C3')}
  className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
  >
- <div className="w-9 h-9 rounded-[1600px] bg-[#55db9c] mx-auto mb-1 flex items-center justify-center font-bold text-base">
+ <div className="w-9 h-9 rounded-[1600px] bg-[#7cd7a0] mx-auto mb-1 flex items-center justify-center font-bold text-base">
  📊
  </div>
  <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">ฮีทแมพสถิติ</span>
@@ -278,7 +284,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  onClick={() => navigateTo('E1')}
  className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
  >
- <div className="w-9 h-9 rounded-[1600px] bg-[#e9ccff] mx-auto mb-1 flex items-center justify-center font-bold text-base">
+ <div className="w-9 h-9 rounded-[1600px] bg-[#e8f7ee] mx-auto mb-1 flex items-center justify-center font-bold text-base">
  🏆
  </div>
  <span className="text-[10px] font-bold tracking-[0.032em] block truncate uppercase text-[#000000]">ก๊วนแข่ง</span>
@@ -286,23 +292,21 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  </div>
  </div>
 
- {/* 6. Quick Match Sparring Partners (Paper White + Multi-color Sticker Pills) */}
- <div className="px-4 mt-5">
- <div className="flex items-center justify-between mb-2.5">
- <div>
- <h2 className="font-['Antonio',sans-serif] text-base font-black tracking-tight uppercase text-[#000000]">
- Quick Match Sparring
- </h2>
- <p className="text-[11px] text-[#000000]/70 font-bold">แตะเพื่อส่งคำท้าดวลทันที</p>
- </div>
+ {/* 6. Quick Match Sparring Partners */}
+ <div className="px-4 mt-5 space-y-2.5">
+ <SectionHeader
+ title="Quick Match Sparring"
+ subtitle="แตะเพื่อส่งคำท้าดวลทันที"
+ rightSlot={
  <button
  type="button"
  onClick={() => navigateTo('E3')}
- className="text-xs font-bold tracking-[0.032em] text-[#000000] hover:underline cursor-pointer"
+ className="text-xs font-bold tracking-[0.032em] text-[#000000] hover:underline cursor-pointer whitespace-nowrap shrink-0"
  >
  ดูทั้งหมด →
  </button>
- </div>
+ }
+ />
 
  <div className="grid grid-cols-3 gap-2">
  {quickMatchPlayers.map((p) => (
@@ -318,7 +322,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  🏸
  </div>
  <h4 className="text-[11px] font-bold truncate leading-tight text-[#000000]">{p.name}</h4>
- <span className="inline-block px-2 py-0.5 rounded-[1600px] text-[9px] font-bold tracking-[0.032em] mt-1 bg-[#000000] text-[#ffffff] ">
+ <span className="inline-block px-2 py-0.5 rounded-[1600px] text-[9px] font-bold tracking-[0.032em] mt-1 bg-[#000000] text-[#ffffff] whitespace-nowrap">
  {p.ovr} OVR
  </span>
  </div>
@@ -326,29 +330,29 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  </div>
  </div>
 
- {/* 7. Available Arenas in Bangkok (Section Alternating to Paper White & Soft mist) */}
+ {/* 7. Available Arenas in Bangkok */}
  <div className="px-4 mt-5 space-y-3">
- <div className="flex items-center justify-between">
- <h2 className="font-['Antonio',sans-serif] text-base font-black tracking-tight uppercase text-[#000000]">
- Available Arenas in Bangkok
- </h2>
- <div className="flex items-center gap-2">
+ <SectionHeader
+ title="Available Arenas in Bangkok"
+ rightSlot={
+ <div className="flex items-center gap-2 shrink-0">
  <button
  type="button"
  onClick={() => setSimulateEmpty(!simulateEmpty)}
- className={`text-[10px] font-bold tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] border border-[#000000] cursor-pointer transition-colors ${
- simulateEmpty ? 'bg-[#fb4903] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+ className={`text-[10px] font-bold tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] border border-[#000000] cursor-pointer transition-colors whitespace-nowrap shrink-0 ${
+ simulateEmpty ? 'bg-[#e85729] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  title="สลับดูหน้าตาตอนไม่พบข้อมูล (Empty State)"
  >
- {simulateEmpty ? '✕ ปิดจำลอง Empty' : '🔍 ทดสอบ Empty State'}
+ {simulateEmpty ? '✕ ปิดจำลอง' : 'ทดสอบ Empty'}
  </button>
- <span className="text-xs text-[#000000]/60 font-bold">{filteredCourts.length} คอร์ท</span>
+ <span className="text-xs text-[#000000]/60 font-bold whitespace-nowrap">{filteredCourts.length} คอร์ท</span>
  </div>
- </div>
+ }
+ />
 
  {suggestToast && (
- <div className="p-3 rounded-[20px] bg-[#55db9c] text-xs font-bold text-[#000000] text-center animate-bounce">
+ <div className="p-3 rounded-[20px] bg-[#7cd7a0] text-xs font-bold text-[#000000] text-center animate-bounce">
  🎉 ได้รับข้อเสนอสนามใหม่เรียบร้อย! +30 EXP ถูกเพิ่มเข้าโปรไฟล์ของคุณแล้ว
  </div>
  )}
@@ -372,11 +376,11 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
  >
  <div className="min-w-0 flex-1">
  <div className="flex items-center gap-1.5 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[9px] font-bold tracking-[0.032em] uppercase bg-[#55db9c] text-[#000000] shrink-0 whitespace-nowrap">
+ <span className="px-2.5 py-0.5 rounded-[1600px] text-[9px] font-bold tracking-[0.032em] uppercase bg-[#7cd7a0] text-[#000000] shrink-0 whitespace-nowrap">
  {court.surfaceType}
  </span>
  <div className="flex items-center gap-0.5 text-[10px] font-black text-[#000000] shrink-0">
- <Star className="w-3.5 h-3.5 fill-[#ffd731] stroke-[#000000]" />
+ <Star className="w-3.5 h-3.5 fill-[#e85729] stroke-[#000000]" />
  <span>{court.rating}</span>
  </div>
  </div>
