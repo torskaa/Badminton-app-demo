@@ -26,142 +26,141 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  };
  };
 
- const currentStats = [
- { label: 'POW', full: language === 'th' ? 'พลังตบ' : 'Power', val: player.skillRadar.power },
- { label: 'SPD', full: language === 'th' ? 'สปีด' : 'Speed', val: player.skillRadar.speed },
- { label: 'CTL', full: language === 'th' ? 'การคุมลูก' : 'Control', val: player.skillRadar.control },
- { label: 'STA', full: language === 'th' ? 'ความอึด' : 'Stamina', val: player.skillRadar.stamina },
- { label: 'TAC', full: language === 'th' ? 'แท็กติก' : 'Tactics', val: player.skillRadar.tactics },
- ];
+  const currentStats = [
+    { label: language === 'th' ? 'ตบ' : 'POW', val: player.skillRadar.power },
+    { label: language === 'th' ? 'สปีด' : 'SPD', val: player.skillRadar.speed },
+    { label: language === 'th' ? 'คุม' : 'CTL', val: player.skillRadar.control },
+    { label: language === 'th' ? 'อึด' : 'STA', val: player.skillRadar.stamina },
+    { label: language === 'th' ? 'แผน' : 'TAC', val: player.skillRadar.tactics },
+  ];
 
- const pastStats = [
- { label: 'Power', val: player.pastRadar.power },
- { label: 'Speed', val: player.pastRadar.speed },
- { label: 'Control', val: player.pastRadar.control },
- { label: 'Stamina', val: player.pastRadar.stamina },
- { label: 'Tactics', val: player.pastRadar.tactics },
- ];
+  const pastStats = [
+    { label: 'Power', val: player.pastRadar.power },
+    { label: 'Speed', val: player.pastRadar.speed },
+    { label: 'Control', val: player.pastRadar.control },
+    { label: 'Stamina', val: player.pastRadar.stamina },
+    { label: 'Tactics', val: player.pastRadar.tactics },
+  ];
 
- const currentPolygon = currentStats.map((s, i) => {
- const pt = getPoint(s.val, i);
- return `${pt.x},${pt.y}`;
- }).join(' ');
+  const currentPolygon = currentStats.map((s, i) => {
+    const pt = getPoint(s.val, i);
+    return `${pt.x},${pt.y}`;
+  }).join(' ');
 
- const pastPolygon = pastStats.map((s, i) => {
- const pt = getPoint(s.val, i);
- return `${pt.x},${pt.y}`;
- }).join(' ');
+  const pastPolygon = pastStats.map((s, i) => {
+    const pt = getPoint(s.val, i);
+    return `${pt.x},${pt.y}`;
+  }).join(' ');
 
- return (
- <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28  bg-[#f4f8fb] text-[#000000]">
- <MobileHeader />
+  const isThai = language === 'th';
 
- <div className="px-5 pt-4 pb-6 space-y-4">
- {/* Main Body Page Title & Short Description */}
- <div className="space-y-1">
- <div className="flex items-center gap-2">
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#15803d] text-[#ffffff] ">
- {language === 'th' ? 'เรดาร์ทักษะ & โค้ช' : 'COACHING & SKILL RADAR'}
- </span>
- <span className="text-[11px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
- {language === 'th' ? 'ภาพรวมฟอร์มการเล่น' : 'PERFORMANCE OVERVIEW'}
- </span>
- </div>
- <h1 className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight leading-none text-[#000000]">
- {language === 'th' ? 'โค้ช & เรดาร์วัดทักษะ' : 'COACH & SKILL RADAR'}
- </h1>
- <p className="text-xs text-[#000000]/70 font-bold leading-relaxed">
- {language === 'th'
- ? 'ระบบวิเคราะห์ฟอร์มการเล่น 5 มิติ ติดตามพัฒนาการรายเดือน และแนะนำแบบฝึกซ้อมเฉพาะบุคคล'
- : '5-dimensional athletic performance analysis, monthly tracking, and personalized drills.'}
- </p>
- </div>
+  return (
+    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f4f8fb] text-[#000000]">
+      <MobileHeader />
 
- {/* 1. Athlete Banner Profile Card */}
- <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'ข้อมูลนักกีฬา & เทียร์' : 'ATHLETE IDENTITY & TIER'}
- subtitle={language === 'th' ? 'ระดับฝีมือ สถิติชนะต่อเนื่อง และเลเวลปัจจุบัน' : 'Current skill tier, active win streak, and athlete level'}
- badge={`${player.tier} TIER`}
- badgeVariant="green"
- />
+      <div className="px-5 pt-4 pb-6 space-y-4">
+        {/* Main Body Page Title & Short Description */}
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#15803d] text-[#ffffff]">
+              {isThai ? 'เรดาร์ทักษะและโค้ช' : 'COACHING & RADAR'}
+            </span>
+            <span className="text-[11px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
+              {isThai ? 'ภาพรวมฟอร์ม' : 'OVERVIEW'}
+            </span>
+          </div>
+          <h1 className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight leading-none text-[#000000]">
+            {isThai ? 'โค้ชและเรดาร์วัดทักษะ' : 'COACH & SKILL RADAR'}
+          </h1>
+          <p className="text-xs text-[#000000]/70 font-bold leading-relaxed">
+            {isThai
+              ? 'วิเคราะห์ทักษะ 5 ด้านพร้อมแนะนำแบบฝึกเฉพาะตัว'
+              : '5-axis performance analysis and personalized drills.'}
+          </p>
+        </div>
 
- <div className="rounded-[32px] p-4 bg-[#ffffff]">
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-3">
- <DoodleAvatar
- preset="karn"
- size="lg"
- className="w-14 h-14"
- ringClass="border-2 border-[#000000] shadow-xs"
- />
- <div>
- <h2 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
- {player.name}
- </h2>
- <p className="text-[11px] text-[#000000]/70 font-bold">
- {player.playstyle}
- </p>
- <span className="text-[11px] font-bold text-[#ff5c34]">
- 🔥 {player.streakWeeks}-Week Streak Active
- </span>
- </div>
- </div>
+        {/* 1. Athlete Banner Profile Card */}
+        <div className="space-y-2">
+          <SectionHeader
+            title={isThai ? 'ข้อมูลนักกีฬา' : 'ATHLETE PROFILE'}
+            subtitle={isThai ? 'ระดับฝีมือและสตรีคปัจจุบัน' : 'Skill tier and active streak'}
+            badge={isThai ? `ระดับ${player.tier}` : `${player.tier} TIER`}
+            badgeVariant="green"
+          />
 
- <div className="text-right">
- <span className="text-[10px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">Level</span>
- <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#15803d] leading-none">
- {player.level}
- </div>
- </div>
- </div>
- </div>
- </div>
+          <div className="rounded-[32px] p-4 bg-[#ffffff]">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <DoodleAvatar
+                  preset="karn"
+                  size="lg"
+                  className="w-14 h-14"
+                  ringClass="border-2 border-[#000000] shadow-xs"
+                />
+                <div>
+                  <h2 className="font-['Antonio',sans-serif] text-xl font-black uppercase leading-tight text-[#000000]">
+                    {player.name}
+                  </h2>
+                  <p className="text-[11px] text-[#000000]/70 font-bold">
+                    {isThai ? player.playstyleTh : player.playstyle}
+                  </p>
+                  <span className="text-[11px] font-bold text-[#ff5c34]">
+                    {isThai ? `🔥 สตรีค ${player.streakWeeks} สัปดาห์ติด` : `🔥 ${player.streakWeeks}-Week Streak`}
+                  </span>
+                </div>
+              </div>
 
- {/* 2. Smash Pro Upgrade Banner */}
- <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'สมาชิก SMASH PRO' : 'PRO ATHLETE MEMBERSHIP'}
- subtitle={language === 'th' ? 'ส่วนลดค่าคอร์ท 10% · วิเคราะห์วิดีโอ AI ไม่จำกัด' : '10% court discount · Unlimited AI video scans'}
- badge={language === 'th' ? '฿199/เดือน' : '฿199/mo'}
- badgeVariant="orange"
- />
+              <div className="text-right">
+                <span className="text-[10px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
+                  {isThai ? 'เลเวล' : 'Level'}
+                </span>
+                <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#15803d] leading-none">
+                  {player.level}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
- <div className="rounded-[28px] p-4 bg-[#7cd7a0] space-y-2.5">
- <div className="flex items-center gap-2">
- <Crown className="w-4 h-4 text-[#000000] shrink-0" />
- <span className="text-xs font-bold text-[#000000]">
- {language === 'th'
- ? 'ส่วนลดค่าคอร์ท 10% ทุกสนาม · สแกนวิดีโอ AI ไม่จำกัดครั้ง'
- : '10% court discount · Unlimited AI computer vision scans'}
- </span>
- </div>
- <p className="text-[10px] text-[#000000]/80 font-bold">
- {language === 'th'
- ? 'ส่วนลดค่าคอร์ท 10% ทุกสนามพันธมิตร · สแกนวิดีโอ AI วิเคราะห์ฟอร์มไม่จำกัดครั้ง'
- : '10% court booking discount · Unlimited AI computer vision video scans'}
- </p>
- <div className="pt-1 flex items-center justify-between">
- <span className="text-[11px] font-bold text-[#000000]">
- {player.tier === 'Pro'
- ? (language === 'th' ? 'สมาชิก PRO ใช้งานได้เต็มระบบ' : 'Pro membership active')
- : (language === 'th' ? 'ปลดล็อกสิทธิพิเศษนักกีฬาเต็มรูปแบบ' : 'Unlock full athlete privileges')}
- </span>
- <button
- type="button"
- onClick={() => {
- setIsProModalOpen(true);
- playCoinSound();
- }}
- className="px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] font-bold text-[11px] uppercase tracking-[0.032em] hover:bg-[#1a1a1a] transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
- >
- {player.tier === 'Pro'
- ? (language === 'th' ? 'ดูสถานะ PRO' : 'View Pro')
- : (language === 'th' ? 'อัปเกรด PRO' : 'Upgrade Pro')}
- </button>
- </div>
- </div>
- </div>
+        {/* 2. Smash Pro Upgrade Banner */}
+        <div className="space-y-2">
+          <SectionHeader
+            title={isThai ? 'สมาชิกสแมชโปร' : 'PRO MEMBERSHIP'}
+            subtitle={isThai ? 'ลดค่าคอร์ท 10% · สแกนท่าทางไม่จำกัด' : '10% court discount · Unlimited scans'}
+            badge={isThai ? '฿199/เดือน' : '฿199/mo'}
+            badgeVariant="orange"
+          />
+
+          <div className="rounded-[28px] p-4 bg-[#7cd7a0] space-y-2.5">
+            <div className="flex items-center gap-2">
+              <Crown className="w-4 h-4 text-[#000000] shrink-0" />
+              <span className="text-xs font-bold text-[#000000]">
+                {isThai
+                  ? 'ส่วนลดค่าคอร์ท 10% พร้อมวิเคราะห์วิดีโอไม่จำกัด'
+                  : '10% court booking discount & unlimited AI video scans'}
+              </span>
+            </div>
+            <div className="pt-1 flex items-center justify-between">
+              <span className="text-[11px] font-bold text-[#000000]">
+                {player.tier === 'Pro'
+                  ? (isThai ? 'สมาชิกโปรใช้งานเต็มระบบ' : 'Pro membership active')
+                  : (isThai ? 'ปลดล็อกสิทธิพิเศษนักกีฬา' : 'Unlock full athlete privileges')}
+              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsProModalOpen(true);
+                  playCoinSound();
+                }}
+                className="px-3.5 py-1.5 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] font-bold text-[11px] uppercase tracking-[0.032em] hover:bg-[#1a1a1a] transition-all cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
+              >
+                {player.tier === 'Pro'
+                  ? (isThai ? 'ดูสถานะโปร' : 'View Pro')
+                  : (isThai ? 'อัปเกรดโปร' : 'Upgrade Pro')}
+              </button>
+            </div>
+          </div>
+        </div>
 
  {/* 3. 5-Axis Skill Radar Card */}
  <div className="space-y-2">
@@ -297,49 +296,46 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
  </div>
  </div>
 
- {/* 4. Head Coach Advice */}
- <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'จุดแข็ง & คำแนะนำแท็กติก' : 'STRENGTHS & TACTICAL ADVICE'}
- subtitle={language === 'th'
- ? 'สรุปจุดเด่นล่าสุด พร้อมทางลัดฝึกซ้อมและสแกน AI'
- : 'Key strengths breakdown with training shortcuts'}
- badge={language === 'th' ? 'โค้ชวิเคราะห์' : 'COACH AI'}
- badgeVariant="green"
- />
+        {/* 4. Head Coach Advice */}
+        <div className="space-y-2">
+          <SectionHeader
+            title={isThai ? 'จุดแข็งและคำแนะนำ' : 'STRENGTHS & ADVICE'}
+            subtitle={isThai ? 'แนวทางฝึกซ้อมและวิเคราะห์ท่าทาง' : 'Key strengths & training shortcuts'}
+            badge={isThai ? 'โค้ชแนะนำ' : 'COACH AI'}
+            badgeVariant="green"
+          />
 
- <div className="rounded-[28px] p-4 space-y-2.5 bg-[#ffffff]">
+          <div className="rounded-[28px] p-4 space-y-2.5 bg-[#ffffff]">
+            <p className="text-xs text-[#000000]/80 leading-relaxed font-medium">
+              {isThai
+                ? 'พลังตบอยู่ในระดับสูง (342 km/h) ควรฝึกคุมลูกหน้าเน็ตและซ้อมจังหวะก้าวสัปดาห์ละ 2 ครั้ง'
+                : 'Smash power is strong (342 km/h); focus on net drop control with 2 weekly split-step drills.'}
+            </p>
 
- <p className="text-xs text-[#000000]/80 leading-relaxed font-medium">
- {language === 'th'
- ? 'พลังตบ Smash ของคุณอยู่ในระดับท็อป (Power 88 / 342 km/h) แต่ยังมีจุดที่ต้องพัฒนาในเรื่อง การตัดหยอดหน้าเน็ต (Control 76) แนะนำให้ฝึกซ้อม Split-step drills สัปดาห์ละ 2 ครั้งเพื่อลด Unforced errors'
- : 'Your smash power is in top tier (Power 88 / 342 km/h), but net drop control (Control 76) needs improvement. Recommended 2 weekly split-step drill sessions.'}
- </p>
-
- <div className="pt-1 grid grid-cols-2 gap-2">
- <button
- type="button"
- onClick={() => navigateTo('D2')}
- className="py-3 px-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 border border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-[#1a1a1a] cursor-pointer whitespace-nowrap"
- >
- <Dumbbell className="w-4 h-4 shrink-0" />
- <span className="whitespace-nowrap">
- {language === 'th' ? 'แบบฝึกซ้อม D2' : 'QUESTS & DRILLS (D2)'}
- </span>
- </button>
- <button
- type="button"
- onClick={() => navigateTo('D3')}
- className="py-3 px-3 rounded-[1600px] font-bold text-xs border border-[#000000] flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] uppercase tracking-[0.032em] whitespace-nowrap"
- >
- <Video className="w-4 h-4 text-[#15803d] shrink-0" />
- <span className="whitespace-nowrap">
- {language === 'th' ? 'สแกนวิดีโอ AI (D3)' : 'VISION SCAN (D3)'}
- </span>
- </button>
- </div>
- </div>
- </div>
+            <div className="pt-1 grid grid-cols-2 gap-2">
+              <button
+                type="button"
+                onClick={() => navigateTo('D2')}
+                className="py-3 px-3 rounded-[1600px] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 transition-transform active:scale-95 border border-[#000000] bg-[#000000] text-[#ffffff] hover:bg-[#1a1a1a] cursor-pointer whitespace-nowrap"
+              >
+                <Dumbbell className="w-4 h-4 shrink-0" />
+                <span className="whitespace-nowrap">
+                  {isThai ? 'ภารกิจและแบบฝึก' : 'QUESTS & DRILLS'}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => navigateTo('D3')}
+                className="py-3 px-3 rounded-[1600px] font-bold text-xs border border-[#000000] flex items-center justify-center gap-1.5 transition-colors cursor-pointer bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9] uppercase tracking-[0.032em] whitespace-nowrap"
+              >
+                <Video className="w-4 h-4 text-[#15803d] shrink-0" />
+                <span className="whitespace-nowrap">
+                  {isThai ? 'สแกนวิดีโอท่าตบ' : 'VISION SCAN'}
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
  </div>
 
  {/* Pro Membership Modal */}

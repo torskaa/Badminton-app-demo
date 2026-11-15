@@ -38,17 +38,19 @@ import { WeeklyCalendarWidget } from '../common/WeeklyCalendarWidget';
 import { WorkoutDetailModal, WorkoutDetailData } from '../common/WorkoutDetailModal';
 import { SectionHeader } from '../common/SectionHeader';
 import { DoodleAvatar } from '../common/DoodleAvatar';
+import { DailyStreakCard } from '../common/DailyStreakCard';
+import { GearCheckCard } from '../common/GearCheckCard';
 
 // Workouts mapped to energy levels (VibeMove style)
 const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  energized: {
  id: 'wk_energized_1',
  title: 'Strength & Jump Smash 340+ km/h',
- titleTh: 'พาวเวอร์สแมชความเร็วสูง 340+ km/h',
+ titleTh: 'พาวเวอร์สแมชความเร็วสูง',
  titleEn: 'Strength & Jump Smash 340+ km/h',
- subtitle: 'เจาะลึกจังหวะเทคตัวกระโดดตบสแมช และเร่งสปีดโต้กลับเร็วในแดนหน้า เหมาะกับผู้เล่นสายบุก',
- subtitleTh: 'เจาะลึกจังหวะเทคตัวกระโดดตบสแมช และเร่งสปีดโต้กลับเร็วในแดนหน้า เหมาะกับผู้เล่นสายบุก',
- subtitleEn: 'Master explosive jump smash mechanics and rapid net intercepts for aggressive attacking players.',
+ subtitle: 'ฝึกจังหวะกระโดดตบสแมชและเร่งสปีดแดนหน้า',
+ subtitleTh: 'ฝึกจังหวะกระโดดตบสแมชและเร่งสปีดแดนหน้า',
+ subtitleEn: 'Master jump smash timing and rapid net intercepts.',
  category: 'Smash Hunter',
  schedule: 'Today, 19:30 - 21:00',
  scheduleTh: 'วันนี้ 19:30 - 21:00 น.',
@@ -60,9 +62,9 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  tags: ['Energizing', 'Power', 'Smash Hunter', 'Diamond'],
  tagsTh: ['พลังเต็ม', 'สายตบ', 'นักกีฬาลีก', 'สปีดเร็ว'],
  tagsEn: ['Energizing', 'Power', 'Smash Hunter', 'Diamond'],
- trainerName: 'โค้ชกานต์ (OVR 85)',
+ trainerName: 'โค้ชกานต์ · ระดับ 85',
  trainerRole: 'National Certified Coach · Diamond Rank',
- trainerRoleTh: 'โค้ชระดับประเทศ · ระดับไดมอนด์',
+ trainerRoleTh: 'โค้ชระดับประเทศ',
  trainerRoleEn: 'National Certified Coach · Diamond Rank',
  trainerAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
  courtName: 'คอร์ท 3 สแมช อารีน่า พระราม 9',
@@ -78,9 +80,9 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  title: 'Flow Rally & Net Placement',
  titleTh: 'แรลลี่ผ่อนคลายและวางลูกหน้าเน็ต',
  titleEn: 'Flow Rally & Net Placement',
- subtitle: 'เน้นตีประคอง 30 ช็อตต่อเนื่อง ควบคุมวิถีลูกหยอดและลูกตัดเลียดเน็ต ไร้ความกดดันด้านแต้ม',
- subtitleTh: 'เน้นตีประคอง 30 ช็อตต่อเนื่อง ควบคุมวิถีลูกหยอดและลูกตัดเลียดเน็ต ไร้ความกดดันด้านแต้ม',
- subtitleEn: 'Focus on 30 continuous relaxed rallies, smooth drop shots, and mindful court movement.',
+ subtitle: 'ตีโต้ 30 ช็อตต่อเนื่อง เน้นลูกหยอดคุมจังหวะ',
+ subtitleTh: 'ตีโต้ 30 ช็อตต่อเนื่อง เน้นลูกหยอดคุมจังหวะ',
+ subtitleEn: 'Focus on relaxed 30-shot rallies and smooth net drops.',
  category: 'Mindful Flow',
  schedule: 'Today, 18:00 - 19:30',
  scheduleTh: 'วันนี้ 18:00 - 19:30 น.',
@@ -92,7 +94,7 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  tags: ['Calm', 'Mindful', 'Rally Flow', 'Drop Shot'],
  tagsTh: ['ผ่อนคลาย', 'สมาธิ', 'แรลลี่ยาว', 'ลูกหยอด'],
  tagsEn: ['Calm', 'Mindful', 'Rally Flow', 'Drop Shot'],
- trainerName: 'ครูแพรว (Certified Trainer)',
+ trainerName: 'ครูแพรว',
  trainerRole: 'Badminton Yoga Specialist',
  trainerRoleTh: 'ผู้เชี่ยวชาญโยคะแบดมินตัน',
  trainerRoleEn: 'Badminton Yoga Specialist',
@@ -108,11 +110,11 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  balanced: {
  id: 'wk_balanced_1',
  title: 'Tactical Mixed Doubles & Core Footwork',
- titleTh: 'แท็กติกเกมคู่ผสมและฟุตเวิร์ก 6 มุม',
+ titleTh: 'แท็กติกเกมคู่ผสมและฟุตเวิร์ก',
  titleEn: 'Tactical Mixed Doubles & Core Footwork',
- subtitle: 'เกมคู่ผสมมาตรฐาน ฝึกการยืนตำแหน่ง การส่งสัญญาณ และจังหวะสลับเกมรับเป็นเกมบุก',
- subtitleTh: 'เกมคู่ผสมมาตรฐาน ฝึกการยืนตำแหน่ง การส่งสัญญาณ และจังหวะสลับเกมรับเป็นเกมบุก',
- subtitleEn: 'Standard mixed doubles positioning, team rotation, and tactical transitions.',
+ subtitle: 'ฝึกการยืนตำแหน่งและการสลับเกมรับเป็นรุก',
+ subtitleTh: 'ฝึกการยืนตำแหน่งและการสลับเกมรับเป็นรุก',
+ subtitleEn: 'Doubles positioning, rotation, and defense-to-attack transitions.',
  category: 'Tactical Doubles',
  schedule: 'Today, 19:00 - 20:30',
  scheduleTh: 'วันนี้ 19:00 - 20:30 น.',
@@ -139,12 +141,12 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  },
  high_energy: {
  id: 'wk_high_1',
- title: 'Beast Mode Cardio & AI Speed Drills',
- titleTh: 'บีสต์โหมดคาร์ดิโอและสปีด AI เผาผลาญ 700 kcal',
- titleEn: 'Beast Mode Cardio & AI Speed Drills',
- subtitle: 'ซ้อมฟุตเวิร์ก 6 มุมด้วยระบบ AI สปีด 100% วิ่งไล่ลูกไม่ยั้ง เบิร์นไขมันเต็มเหนี่ยว',
- subtitleTh: 'ซ้อมฟุตเวิร์ก 6 มุมด้วยระบบ AI สปีด 100% วิ่งไล่ลูกไม่ยั้ง เบิร์นไขมันเต็มเหนี่ยว',
- subtitleEn: 'High intensity AI footwork drills, maximum court coverage, and massive 700+ kcal burn.',
+ title: 'Beast Mode Cardio & Speed Drills',
+ titleTh: 'คาร์ดิโอและสปีดฟุตเวิร์กเต็มพิกัด',
+ titleEn: 'Beast Mode Cardio & Speed Drills',
+ subtitle: 'ซ้อมฟุตเวิร์ก 6 มุมความเร็วสูง เผาผลาญเต็มที่',
+ subtitleTh: 'ซ้อมฟุตเวิร์ก 6 มุมความเร็วสูง เผาผลาญเต็มที่',
+ subtitleEn: 'High-intensity 6-corner footwork drills with 700+ kcal burn.',
  category: 'Beast Mode',
  schedule: 'Today, 20:30 - 22:00',
  scheduleTh: 'วันนี้ 20:30 - 22:00 น.',
@@ -153,16 +155,16 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  intensityLabel: 'Peak intensity',
  intensityLabelTh: 'ขีดสุดสมรรถนะ',
  intensityLabelEn: 'Peak intensity',
- tags: ['High Energy', '700 kcal', 'AI Footwork', 'Cardio'],
- tagsTh: ['บีสต์โหมด', 'เผาผลาญหนัก', 'สปีด AI', 'คาร์ดิโอ'],
- tagsEn: ['High Energy', '700 kcal', 'AI Footwork', 'Cardio'],
- trainerName: 'Smash AI Official Coach',
+ tags: ['High Energy', '700 kcal', 'Footwork', 'Cardio'],
+ tagsTh: ['เข้มข้นสูง', 'เผาผลาญหนัก', 'ฟุตเวิร์ก', 'คาร์ดิโอ'],
+ tagsEn: ['High Energy', '700 kcal', 'Footwork', 'Cardio'],
+ trainerName: 'โค้ชสแมช',
  trainerRole: 'Automated Real-time Sensor Coach',
- trainerRoleTh: 'โค้ชระบบเซนเซอร์ AI แบบเรียลไทม์',
- trainerRoleEn: 'Automated Real-time Sensor Coach',
+ trainerRoleTh: 'ระบบช่วยฝึกเรียลไทม์',
+ trainerRoleEn: 'Automated Real-time Coach',
  trainerAvatar: 'https://images.unsplash.com/photo-1570295999919-56ceb5ecca61?w=150&auto=format&fit=crop&q=80',
- courtName: 'คอร์ท 1 พื้นยาง BWF',
- courtNameTh: 'คอร์ท 1 พื้นยาง BWF',
+ courtName: 'คอร์ท 1 พื้นยางมาตรฐาน',
+ courtNameTh: 'คอร์ท 1 พื้นยางมาตรฐาน',
  courtNameEn: 'Court 1 BWF Taraflex',
  videoPreviewUrl: 'https://images.unsplash.com/photo-1517838277536-f5f99be501cd?w=700&auto=format&fit=crop&q=80',
  rating: '5.0',
@@ -174,9 +176,9 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  title: 'Badminton Mobility & Shoulder Recovery',
  titleTh: 'ยืดเหยียดผ่อนคลายและฟื้นฟูกล้ามเนื้อ',
  titleEn: 'Badminton Mobility & Shoulder Recovery',
- subtitle: 'คลายกล้ามเนื้อสะบัก ไหล่ และข้อมือ ด้วยท่ายืดเฉพาะทางของนักแบดมินตันอาชีพ',
- subtitleTh: 'คลายกล้ามเนื้อสะบัก ไหล่ และข้อมือ ด้วยท่ายืดเฉพาะทางของนักแบดมินตันอาชีพ',
- subtitleEn: 'Release muscle tightness in shoulders and wrists with pro mobility routines.',
+ subtitle: 'คลายกล้ามเนื้อไหล่และข้อมือหลังจบเกม',
+ subtitleTh: 'คลายกล้ามเนื้อไหล่และข้อมือหลังจบเกม',
+ subtitleEn: 'Release shoulder and wrist tightness with pro mobility drills.',
  category: 'Mobility & Recovery',
  schedule: 'Today, 18:30 - 19:30',
  scheduleTh: 'วันนี้ 18:30 - 19:30 น.',
@@ -188,7 +190,7 @@ const WORKOUT_SESSIONS_MAP: Record<MoodEnergyLevel, WorkoutDetailData> = {
  tags: ['Recovery', 'Stretching', 'Mobility', 'Flexibility'],
  tagsTh: ['ฟื้นฟู', 'ยืดเหยียด', 'กล้ามเนื้อ', 'ผ่อนคลาย'],
  tagsEn: ['Recovery', 'Stretching', 'Mobility', 'Flexibility'],
- trainerName: 'แอนนา (Sports Physiotherapist)',
+ trainerName: 'แอนนา · นักกายภาพ',
  trainerRole: 'Badminton Recovery Specialist',
  trainerRoleTh: 'นักกายภาพบำบัดกีฬาแบดมินตัน',
  trainerRoleEn: 'Badminton Recovery Specialist',
@@ -405,93 +407,49 @@ export const HomeScreen: React.FC = () => {
  </div>
  </div>
 
- {/* Dual Quick Info Cards (Matching Grab reference: View Balance / Ride to) */}
- <div className="px-5 pt-4">
- <div className="grid grid-cols-2 gap-3">
- {/* Card 1: View Balance / SmashPay Wallet */}
- <div
- onClick={() => {
- playSelectSound();
- navigateTo('FINANCE');
- }}
- className="doodle-cta p-3 rounded-[20px] bg-[#ffffff] flex items-center justify-between gap-2 cursor-pointer transition-all"
- >
- <div className="min-w-0">
- <span className="text-[10px] text-[#000000]/60 font-semibold block leading-tight truncate">
- {isThai ? 'ยอดเงินคงเหลือ' : 'View Balance'}
- </span>
- <div className="flex items-center gap-1 mt-1">
- <span className="text-xs font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
- {isThai ? 'กระเป๋าเงินสแมชเพย์' : 'SmashPay Wallet'}
- </span>
- </div>
- <span className="text-[11px] font-black text-[#004d2c] block font-['Antonio',sans-serif]">
- ฿1,250.00
- </span>
- </div>
- <div className="w-8 h-8 rounded-full bg-[#7cd7a0]/20 flex items-center justify-center text-base shrink-0">
- 💳
- </div>
- </div>
 
- {/* Card 2: Next Match / Ride to */}
- <div
- onClick={() => {
- playSelectSound();
- navigateTo('B4');
- }}
- className="doodle-cta p-3 rounded-[20px] bg-[#ffffff] flex items-center justify-between gap-2 cursor-pointer transition-all"
- >
- <div className="min-w-0">
- <span className="text-[10px] text-[#e85729] font-black block leading-tight truncate">
- {isThai ? 'นัดหมายถัดไป' : 'Next Match'}
- </span>
- <div className="flex items-center gap-1 mt-1">
- <span className="text-xs font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
- {isThai ? 'เมทริส ลาดพร้าว' : 'Metris Ladprao'}
- </span>
- </div>
- <span className="text-[10px] text-[#000000]/65 font-bold block truncate">
- {isThai ? 'วันนี้ 19:00 · คอร์ท 3' : 'Today 19:00 · Court 3'}
- </span>
- </div>
- <div className="w-8 h-8 rounded-full bg-[#e85729]/15 flex items-center justify-center text-base shrink-0">
- 🏸
- </div>
- </div>
- </div>
-      {/* Quick Action Dual Pills (Exact design.md 4.1) */}
-      <div className="grid grid-cols-2 gap-2 mt-3">
-        <button
-          type="button"
-          onClick={() => {
-            playSelectSound();
-            navigateTo('MAP');
-          }}
-          className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
-        >
-          <span>🏸</span>
-          <span>{isThai ? 'ค้นหาสนาม' : 'Find Courts'}</span>
-        </button>
-        <button
-          type="button"
-          onClick={() => {
-            playSelectSound();
-            navigateTo('E1');
-          }}
-          className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs whitespace-nowrap"
-        >
-          <span>👥</span>
-          <span>{isThai ? 'หาก๊วน' : 'Find Groups'}</span>
-          <span className="px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[9px] font-black shrink-0 whitespace-nowrap">
-            28
-          </span>
-        </button>
-      </div>
- </div>
-
- {/* Main Body with Clean Proportions (Faithful to VibeMove video 00:01 - 00:03) */}
+ {/* Main Body with Clean Proportions */}
  <div className="px-4 pt-4 space-y-4">
+ {/* 1. SERVICES MATRIX (Grid 4x2) */}
+    <div className="space-y-2">
+      <SectionHeader
+        title={isThai ? 'บริการทั้งหมด (8 รายการ)' : 'Services Matrix (8)'}
+        badge={isThai ? 'ครบครันทุกเรื่องแบด' : 'All-in-One'}
+        badgeVariant="soft"
+      />
+
+      {/* 4x2 Grid of 1:1 Squircles */}
+      <div className="grid grid-cols-4 gap-3">
+        {servicesMatrix.map((srv) => (
+          <button
+            key={srv.id}
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              navigateTo(srv.screen as any);
+            }}
+            className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-[0.96] transition-all cursor-pointer relative"
+          >
+            {srv.badge && (
+              <span className="absolute -top-1 right-1 px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[8px] font-black shadow-xs whitespace-nowrap shrink-0">
+                {srv.badge}
+              </span>
+            )}
+            <div
+              className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-1 ${srv.color}`}
+            >
+              {srv.icon}
+            </div>
+            <div className="text-center w-full">
+              <span className="text-[10px] font-black text-[#000000] block leading-tight truncate whitespace-nowrap">
+                {isThai ? srv.thai : srv.label}
+              </span>
+            </div>
+          </button>
+        ))}
+      </div>
+    </div>
+
  {/* 2. HERO VIBE CARD ("Not sure what you want to train today?") */}
  <div className="rounded-[28px] bg-[#243b34] text-[#ffffff] p-4 relative overflow-hidden shadow-lg flex flex-col justify-between space-y-4">
  {/* Top Row: Headings & Waving Mascot */}
@@ -510,8 +468,8 @@ export const HomeScreen: React.FC = () => {
  </h2>
  <p className="text-[11px] text-[#ffffff]/80 font-normal leading-relaxed pt-1">
  {isThai
- ? 'บอกความรู้สึกของคุณ แล้วเราจะแนะนำการฝึกซ้อมที่เข้ากับพลังงานและอารมณ์ของคุณ'
- : "Tell us how you feel, we'll recommend workouts matching your energy & mood."}
+ ? 'บอกความรู้สึกวันนี้ เพื่อรับแผนซ้อมที่เหมาะกับคุณ'
+ : 'Tell us how you feel to match today’s training.'}
  </p>
  </div>
 
@@ -524,7 +482,7 @@ export const HomeScreen: React.FC = () => {
                 onClick={() => {
                   playSmashSound();
                 }}
-                title="น้องสแมชชี่ (Smashy) #15"
+                title="น้องสแมชชี่"
                 className="relative w-16 h-16 rounded-2xl overflow-hidden bg-[#162722] border-2 border-[#7cd7a0] shadow-lg cursor-pointer group active:scale-[0.96] transition-transform"
               >
                 <img
@@ -582,57 +540,103 @@ export const HomeScreen: React.FC = () => {
  </div>
  </div>
 
- {/* 3. SERVICES MATRIX (Grid 4x2) */}
-    <div className="space-y-2">
-      <SectionHeader
-        title={isThai ? 'บริการทั้งหมด (8 รายการ)' : 'Services Matrix (8)'}
-        badge={isThai ? 'ครบครันทุกเรื่องแบด' : 'All-in-One'}
-        badgeVariant="soft"
-      />
+ {/* 3. Dual Quick Info Cards & Quick Action Pills (Between Training Hero & LINE Group) */}
+ <div className="space-y-3">
+ <div className="grid grid-cols-2 gap-3">
+ {/* Card 1: View Balance / SmashPay Wallet */}
+ <div
+ onClick={() => {
+ playSelectSound();
+ navigateTo('FINANCE');
+ }}
+ className="doodle-cta p-3 rounded-[20px] bg-[#ffffff] flex items-center justify-between gap-2 cursor-pointer transition-all"
+ >
+ <div className="min-w-0">
+ <span className="text-[10px] text-[#000000]/60 font-semibold block leading-tight truncate">
+ {isThai ? 'ยอดเงินคงเหลือ' : 'View Balance'}
+ </span>
+ <div className="flex items-center gap-1 mt-1">
+ <span className="text-xs font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
+ {isThai ? 'กระเป๋าเงินสแมชเพย์' : 'SmashPay Wallet'}
+ </span>
+ </div>
+ <span className="text-[11px] font-black text-[#004d2c] block font-['Antonio',sans-serif]">
+ ฿1,250.00
+ </span>
+ </div>
+ <div className="w-8 h-8 rounded-full bg-[#7cd7a0]/20 flex items-center justify-center text-base shrink-0">
+ 💳
+ </div>
+ </div>
 
-      {/* 4x2 Grid of 1:1 Squircles */}
-      <div className="grid grid-cols-4 gap-3">
-        {servicesMatrix.map((srv) => (
-          <button
-            key={srv.id}
-            type="button"
-            onClick={() => {
-              playSelectSound();
-              navigateTo(srv.screen as any);
-            }}
-            className="p-3 rounded-[22px] bg-[#ffffff] shadow-sm flex flex-col items-center justify-between aspect-square hover:shadow-md active:scale-[0.96] transition-all cursor-pointer relative"
-          >
-            {srv.badge && (
-              <span className="absolute -top-1 right-1 px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[8px] font-black shadow-xs whitespace-nowrap shrink-0">
-                {srv.badge}
-              </span>
-            )}
-            <div
-              className={`w-9 h-9 rounded-[1600px] flex items-center justify-center text-lg mt-1 ${srv.color}`}
-            >
-              {srv.icon}
-            </div>
-            <div className="text-center w-full">
-              <span className="text-[10px] font-black text-[#000000] block leading-tight truncate whitespace-nowrap">
-                {isThai ? srv.thai : srv.label}
-              </span>
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
+ {/* Card 2: Next Match / Ride to */}
+ <div
+ onClick={() => {
+ playSelectSound();
+ navigateTo('B4');
+ }}
+ className="doodle-cta p-3 rounded-[20px] bg-[#ffffff] flex items-center justify-between gap-2 cursor-pointer transition-all"
+ >
+ <div className="min-w-0">
+ <span className="text-[10px] text-[#e85729] font-black block leading-tight truncate">
+ {isThai ? 'นัดหมายถัดไป' : 'Next Match'}
+ </span>
+ <div className="flex items-center gap-1 mt-1">
+ <span className="text-xs font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
+ {isThai ? 'เมทริส ลาดพร้าว' : 'Metris Ladprao'}
+ </span>
+ </div>
+ <span className="text-[10px] text-[#000000]/65 font-bold block truncate">
+ {isThai ? 'วันนี้ 19:00 · คอร์ท 3' : 'Today 19:00 · Court 3'}
+ </span>
+ </div>
+ <div className="w-8 h-8 rounded-full bg-[#e85729]/15 flex items-center justify-center text-base shrink-0">
+ 🏸
+ </div>
+ </div>
+ </div>
 
-    {/* Line OpenChat Banner (Exact design.md 4.1) */}
+ {/* Quick Action Dual Pills */}
+ <div className="grid grid-cols-2 gap-2">
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ navigateTo('MAP');
+ }}
+ className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs"
+ >
+ <span>🏸</span>
+ <span>{isThai ? 'ค้นหาสนาม' : 'Find Courts'}</span>
+ </button>
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ navigateTo('E1');
+ }}
+ className="py-3 px-3 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-xs font-bold flex items-center justify-center gap-2 cursor-pointer active:scale-[0.96] transition-all shadow-xs whitespace-nowrap"
+ >
+ <span>👥</span>
+ <span>{isThai ? 'หาก๊วน' : 'Find Groups'}</span>
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[9px] font-black shrink-0 whitespace-nowrap">
+ 28
+ </span>
+ </button>
+ </div>
+ </div>
+
+    {/* Line OpenChat Banner */}
     <div className="rounded-[24px] bg-[#06c755] text-[#ffffff] p-4 relative overflow-hidden shadow-md flex items-center justify-between gap-3">
       <div className="space-y-1 max-w-[65%] min-w-0">
         <span className="px-2 py-1 rounded-[1600px] bg-[#000000]/20 text-[#ffffff] text-[9px] font-bold inline-block">
           {isThai ? 'ชุมชนคนตีแบด' : 'COMMUNITY'}
         </span>
         <h3 className="text-sm font-black leading-tight text-[#ffffff] font-['Antonio',sans-serif] uppercase tracking-wide truncate">
-          {isThai ? 'เข้าร่วม Line OpenChat แอปตีแบด' : 'Join Badminton Community OpenChat'}
+          {isThai ? 'เข้าร่วมกลุ่ม LINE คนตีแบด' : 'Join Badminton LINE Group'}
         </h3>
         <p className="text-[10px] text-[#ffffff]/95 font-medium line-clamp-2">
-          {isThai ? 'หาเพื่อนตีแบด แชร์โปรคอร์ท และนัดแมตช์สด 1,480 คน' : 'Find friends, share court discounts, and live matchmaking (1,480 players)'}
+          {isThai ? 'หาเพื่อนตีแบด แชร์โปรคอร์ท นัดแมตช์ 1,480 คน' : 'Find players, court deals & live matches (1,480)'}
         </p>
         <div className="pt-1">
           <button
@@ -643,16 +647,24 @@ export const HomeScreen: React.FC = () => {
             }}
             className="px-3 py-2 rounded-[1600px] bg-[#ffffff] hover:bg-[#f2f2f2] text-[#000000] border border-[#000000] text-[10px] font-bold cursor-pointer active:scale-[0.96] transition-all shadow-xs"
           >
-            {isThai ? 'เข้ากลุ่ม LINE' : 'Join LINE OpenChat'}
+            {isThai ? 'เข้ากลุ่ม LINE' : 'Join LINE Group'}
           </button>
         </div>
       </div>
-      {/* Line OpenChat QR Mascot Graphic */}
+      {/* Line QR Mascot Graphic */}
       <div className="w-16 h-16 shrink-0 bg-[#ffffff] p-2 rounded-[16px] shadow-sm flex flex-col items-center justify-center">
         <QrCode className="w-8 h-8 text-[#000000]" />
-        <span className="text-[7px] font-black text-[#000000] mt-1">OPENCHAT</span>
+        <span className="text-[7px] font-black text-[#000000] mt-1">
+          {isThai ? 'กลุ่ม LINE' : 'OPENCHAT'}
+        </span>
       </div>
     </div>
+
+ {/* Daily Drill Streak Tracker */}
+ <DailyStreakCard />
+
+ {/* Pre-Court Essentials Gear Check */}
+ <GearCheckCard />
 
  {/* 4. YOUR PROGRESS SECTION (3 Proportional Square Cards side-by-side) */}
  <ProgressRingsWidget
@@ -861,10 +873,10 @@ export const HomeScreen: React.FC = () => {
  <div className="p-6 rounded-[24px] bg-[#ffffff] text-center space-y-2">
  <div className="text-3xl">🏸</div>
  <p className="text-xs font-bold text-neutral-800">
- {isThai ? 'ไม่พบสนามในโหมดข้อมูลว่างเปล่า (Empty State)' : 'No courts available in Empty Data Mode'}
+ {isThai ? 'ไม่พบรายชื่อสนามในขณะนี้' : 'No courts available right now'}
  </p>
  <p className="text-[11px] text-neutral-500">
- {isThai ? 'สลับโหมดเป็น Demo หรือ Worst Case ที่แถบ Break-UI ด้านล่างเพื่อดูข้อมูล' : 'Switch data mode to Demo or Worst Case via testing controls'}
+ {isThai ? 'ลองเปลี่ยนตัวกรองหรือเปิดแผนที่เพื่อค้นหาสนามอื่น' : 'Try adjusting filters or explore the map'}
  </p>
  </div>
  ) : (
@@ -995,7 +1007,7 @@ export const HomeScreen: React.FC = () => {
  selectedMood={currentMood}
  onSelectMood={(mood) => {
  setCurrentMood(mood);
- gainExp(30, `อัปเดต Vibe: ${mood.toUpperCase()}`);
+ gainExp(30, isThai ? 'อัปเดตระดับพลังงานวันนี้แล้ว' : `Updated mood: ${mood.toUpperCase()}`);
  }}
  playerName={player.name}
  />

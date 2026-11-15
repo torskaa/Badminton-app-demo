@@ -49,7 +49,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
  enTitle: 'Welcome',
  thSub: 'ค้นหาสนาม จองคอร์ท และเก็บสถิติ',
  enSub: 'Find courts, book & track stats.',
- action: { thLabel: 'BWF Club', enLabel: 'BWF Club', variant: 'badge', badgeTone: 'soft' },
+ action: { thLabel: 'คลับแบด', enLabel: 'BWF Club', variant: 'badge', badgeTone: 'soft' },
  },
  A2: {
  thTitle: 'สไตล์เล่น',
@@ -91,12 +91,12 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
  enTitle: 'Scorer',
  thSub: 'นับแต้มสด บอกฝั่งเสิร์ฟและเก็บช็อต',
  enSub: 'Live scorer & shot analytics.',
- action: { thLabel: '● LIVE BWF', enLabel: '● LIVE BWF', variant: 'badge', badgeTone: 'orange' },
+ action: { thLabel: '● สด', enLabel: '● LIVE BWF', variant: 'badge', badgeTone: 'orange' },
  },
  C2: {
  thTitle: 'สรุปผล',
  enTitle: 'Summary',
- thSub: 'เช็กคะแนนรวม รางวัล EXP และไฮไลต์',
+ thSub: 'ดูคะแนนรวม รางวัล และไฮไลต์',
  enSub: 'Final score, EXP & highlights.',
  action: { thLabel: 'การ์ดผล →', enLabel: 'Recap →', target: 'C4', variant: 'cta' },
  },
@@ -124,16 +124,16 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
  D2: {
  thTitle: 'ภารกิจ',
  enTitle: 'Quests',
- thSub: 'ทำภารกิจและแบบฝึกเพื่อรับแต้ม EXP',
+ thSub: 'ทำภารกิจและแบบฝึกเพื่อรับคะแนน',
  enSub: 'Finish daily drills to earn EXP.',
- action: { thLabel: '+EXP รายวัน', enLabel: 'Daily EXP', variant: 'badge', badgeTone: 'soft' },
+ action: { thLabel: 'คะแนนรายวัน', enLabel: 'Daily EXP', variant: 'badge', badgeTone: 'soft' },
  },
  D3: {
  thTitle: 'สแกนวิดีโอ',
  enTitle: 'AI Video',
  thSub: 'ตรวจองศาท่าตบ ฟุตเวิร์กและสปีดลูก',
  enSub: 'Analyze smash angle & footwork.',
- action: { thLabel: 'AI Vision', enLabel: 'AI Vision', variant: 'badge', badgeTone: 'dark' },
+ action: { thLabel: 'สแกน AI', enLabel: 'AI Vision', variant: 'badge', badgeTone: 'dark' },
  },
  E1: {
  thTitle: 'ก๊วน',
@@ -159,9 +159,9 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
  E4: {
  thTitle: 'อันดับก๊วน',
  enTitle: 'Leaderboard',
- thSub: 'เช็กอันดับ Win Rate และคะแนนซีซัน',
+ thSub: 'อันดับอัตราชนะและคะแนนซีซัน',
  enSub: 'Squad win rates & season ranks.',
- action: { thLabel: 'Season 4', enLabel: 'Season 4', variant: 'badge', badgeTone: 'orange' },
+ action: { thLabel: 'ซีซัน 4', enLabel: 'Season 4', variant: 'badge', badgeTone: 'orange' },
  },
  F1: {
  thTitle: 'โปรไฟล์',
@@ -175,7 +175,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
  enTitle: 'Wearable',
  thSub: 'ซิงค์ชีพจรและแคลอรีจากสนามจริง',
  enSub: 'Sync heart rate & calories.',
- action: { thLabel: 'Health Sync', enLabel: 'Health Sync', variant: 'badge', badgeTone: 'soft' },
+ action: { thLabel: 'ซิงค์สุขภาพ', enLabel: 'Health Sync', variant: 'badge', badgeTone: 'soft' },
  },
  CLUB_TOOLS: {
  thTitle: 'เครื่องมือ',
@@ -189,7 +189,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
  enTitle: 'Finance',
  thSub: 'จัดการยอดเงิน เติมเครดิตและดูประวัติ',
  enSub: 'Wallet balance & court receipts.',
- action: { thLabel: '0% Fee', enLabel: '0% Fee', variant: 'badge', badgeTone: 'soft' },
+ action: { thLabel: 'ฟรีค่าธรรมเนียม', enLabel: '0% Fee', variant: 'badge', badgeTone: 'soft' },
  },
  };
 

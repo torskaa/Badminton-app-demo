@@ -54,6 +54,14 @@ import {
   readCache,
   writeCache,
 } from '../utils/offlineCache';
+import {
+  DrillStreakSummary,
+  calculateDrillStreakSummary,
+  loadDrillStreakDates,
+  persistDrillStreakDates,
+  recordDrillCompletedForToday,
+  seedDefaultStreakDates,
+} from '../utils/drillStreak';
 
 interface ExpGainPayload {
   amount: number;
@@ -118,13 +126,14 @@ interface AppContextType {
   addScorePoint: (team: 'A' | 'B', shotType?: any, errorReason?: any) => void;
   undoLastPoint: () => void;
   finishMatch: () => void;
-  startNewMatch: () => void;
+  startNewMatch: (options?: { playerAName?: string; playerBName?: string; isDoubles?: boolean }) => void;
 
   // Quests & AI Drills
   quests: Quest[];
   claimQuestReward: (questId: string) => void;
   drills: AIDrill[];
   completeDrill: (drillId: string) => void;
+  drillStreak: DrillStreakSummary;
 
   // Guild & Event
   guilds: GuildGroup[];
@@ -364,6 +373,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const cached = readCache<QuestsDrillsCacheData>(CACHE_KEYS.QUESTS_DRILLS);
     return cached?.drills && cached.drills.length > 0 ? cached.drills : AI_DRILLS;
   });
+  const [drillStreakDates, setDrillStreakDates] = useState<string[]>(() => loadDrillStreakDates());
+  const drillStreak = React.useMemo(
+    () => calculateDrillStreakSummary(drillStreakDates),
+    [drillStreakDates]
+  );
 
   // Guilds & Leaderboard State
   const [guilds] = useState<GuildGroup[]>(GUILDS_DATA);
@@ -628,16 +642,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       isMatchFinished: true,
       winner: prev.scoreA >= prev.scoreB ? 'A' : 'B',
     }));
-    // Award match EXP
-    gainExp(350, 'จบการแข่งขันแมตช์เต็ม (Match Finished)', 'Smash King Tier II');
+    const isThai = language === 'th';
+    gainExp(
+      350,
+      isThai ? 'จบการแข่งขันแมตช์เต็ม' : 'Match Finished',
+      isThai ? 'ราชาลูกตบ ขั้น 2' : 'Smash King Tier II'
+    );
     navigateTo('C2');
   };
 
-  const startNewMatch = () => {
+  const startNewMatch = (options?: { playerAName?: string; playerBName?: string; isDoubles?: boolean }) => {
     setMatch({
-      playerAName: 'กานต์ & โอห์ม',
-      playerBName: 'อาร์ท & ท็อป',
-      isDoubles: true,
+      playerAName: options?.playerAName || 'กานต์ & โอห์ม',
+      playerBName: options?.playerBName || 'อาร์ท & ท็อป',
+      isDoubles: options?.isDoubles ?? true,
       scoreA: 0,
       scoreB: 0,
       setsWonA: 0,
@@ -659,7 +677,11 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setQuests((prev) =>
       prev.map((item) => (item.id === questId ? { ...item, claimed: true } : item))
     );
-    gainExp(q.expReward, `สำเร็จภารกิจ: ${q.thaiTitle}`);
+    const isThai = language === 'th';
+    gainExp(
+      q.expReward,
+      isThai ? `สำเร็จภารกิจ: ${q.thaiTitle}` : `Quest Completed: ${q.title}`
+    );
   };
 
   const completeDrill = (drillId: string) => {
@@ -669,7 +691,12 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setDrills((prev) =>
       prev.map((item) => (item.id === drillId ? { ...item, completed: true } : item))
     );
-    gainExp(d.expReward, `สำเร็จการซ้อม AI Drill: ${d.thaiTitle}`);
+    setDrillStreakDates((prev) => recordDrillCompletedForToday(prev));
+    const isThai = language === 'th';
+    gainExp(
+      d.expReward,
+      isThai ? `สำเร็จการซ้อม: ${d.thaiTitle}` : `Drill Completed: ${d.title}`
+    );
   };
 
   const toggleEventRsvp = (userId: string) => {
@@ -701,7 +728,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     if (wearableMetrics.expConverted) return;
     const bonusExp = Math.round(wearableMetrics.caloriesBurned * 0.2); // 680 * 0.2 = 136 EXP
     setWearableMetrics((prev) => ({ ...prev, expConverted: true }));
-    gainExp(bonusExp, 'Smartwatch Health Sync (เบิร์น 680 แคลอรี่)');
+    const isThai = language === 'th';
+    gainExp(
+      bonusExp,
+      isThai
+        ? `ซิงค์สุขภาพจากนาฬิกา (เผาผลาญ ${wearableMetrics.caloriesBurned} แคลอรี่)`
+        : `Smartwatch Health Sync (${wearableMetrics.caloriesBurned} kcal burned)`
+    );
   };
 
   // Centralized Notification State
@@ -739,7 +772,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       metadata: {
         inviterName: isThai ? 'โค้ชอาร์ท' : 'Coach Art',
         inviterAvatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
-        inviterTier: 'DIAMOND',
+        inviterTier: isThai ? 'ไดมอนด์' : 'DIAMOND',
         matchTime: isThai ? '21:00 น.' : '21:00',
       },
       actions: {
@@ -955,6 +988,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setSelectedCourt(COURTS_DATA[0]);
     setQuests(INITIAL_QUESTS);
     setDrills(AI_DRILLS);
+    setDrillStreakDates(persistDrillStreakDates(seedDefaultStreakDates()));
     setHasPendingSync(false);
     setLastSyncedAt(Date.now());
   };
@@ -997,6 +1031,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         claimQuestReward,
         drills,
         completeDrill,
+        drillStreak,
         guilds,
         currentEvent,
         toggleEventRsvp,

@@ -75,23 +75,23 @@ export const ExpCelebrationModal: React.FC = () => {
               <div>
                 <div className="text-[11px] font-extrabold uppercase text-[#15803d] mb-0.5 tracking-wide flex items-center justify-center gap-1">
                   <Sparkles className="w-3 h-3 fill-current" />
-                  LEVEL UP!
+                  {isThai ? 'เลเวลอัป!' : 'LEVEL UP!'}
                 </div>
                 <h3 className="font-['Antonio',sans-serif] text-3xl font-extrabold text-black uppercase leading-tight tracking-tight">
-                  LEVEL {expCelebration.newLevel} REACHED
+                  {isThai ? `เลเวล ${expCelebration.newLevel} สำเร็จ` : `LEVEL ${expCelebration.newLevel} REACHED`}
                 </h3>
                 <p className="text-[11px] text-neutral-600 mt-0.5 font-medium">
-                  {isThai ? 'ปลดล็อกสถานะยอดนักแบดมินตัน!' : 'Court Master Tier Unlocked'}
+                  {isThai ? 'ปลดล็อกระดับนักกีฬาใหม่แล้ว!' : 'Court Master Tier Unlocked'}
                 </p>
               </div>
             ) : (
               <div>
                 <div className="text-[11px] font-extrabold uppercase text-[#e85729] mb-0.5 tracking-wide flex items-center justify-center gap-1">
                   <Sparkles className="w-3 h-3 fill-current text-[#e85729]" />
-                  REWARD EARNED
+                  {isThai ? 'ได้รับรางวัล' : 'REWARD EARNED'}
                 </div>
                 <h3 className="font-['Antonio',sans-serif] text-4xl font-extrabold text-black uppercase leading-none tracking-tight">
-                  +{expCelebration.amount} EXP
+                  {isThai ? `+${expCelebration.amount} คะแนน` : `+${expCelebration.amount} XP`}
                 </h3>
               </div>
             )}
@@ -102,7 +102,11 @@ export const ExpCelebrationModal: React.FC = () => {
               {expCelebration.badgeUnlocked && (
                 <p className="text-[#e85729] font-extrabold text-[10.5px] mt-1 flex items-center justify-center gap-1">
                   <Award className="w-3.5 h-3.5" />
-                  <span>Unlocked Badge: {expCelebration.badgeUnlocked}</span>
+                  <span>
+                    {isThai
+                      ? `ปลดล็อกเหรียญ: ${expCelebration.badgeUnlocked}`
+                      : `Unlocked Badge: ${expCelebration.badgeUnlocked}`}
+                  </span>
                 </p>
               )}
             </div>

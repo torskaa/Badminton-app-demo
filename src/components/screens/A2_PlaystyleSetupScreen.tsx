@@ -11,6 +11,7 @@ import { PlayerTier } from '../../types';
 
 export const A2_PlaystyleSetupScreen: React.FC = () => {
  const { player, updatePlayer, gainExp, navigateTo, language } = useApp();
+ const isThai = language === 'th';
 
  const [hand, setHand] = useState<'Right' | 'Left'>(player.dominantHand);
  const [playstyle, setPlaystyle] = useState(player.playstyle);
@@ -21,46 +22,62 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  const PLAYSTYLES = [
  {
  id: 'Attacking Smash Hunter' as const,
- title: 'สายตบพิฆาต (Smash Hunter)',
- desc: 'เน้นบุกต่อเนื่อง จัมป์ตบหนักหน่วง ตัดสินแต้มเร็ว',
+ title: isThai ? 'สายตบพิฆาต' : 'Smash Hunter',
+ desc: isThai ? 'เน้นบุกต่อเนื่อง ตบหนัก ปิดแต้มไว' : 'Relentless offense with steep jump smashes',
  icon: Zap,
  color: '#e85729',
  },
  {
  id: 'Net Control Wizard' as const,
- title: 'สายหยอดคุมเชิง (Net Wizard)',
- desc: 'ควบคุมจังหวะ วางลูกเลียดเน็ต บีบให้คู่แข่งยกสูง',
+ title: isThai ? 'สายหยอดคุมเชิง' : 'Net Control Wizard',
+ desc: isThai ? 'วางลูกเลียดเน็ต คุมจังหวะเกม' : 'Tight net drops to force weak lifts',
  icon: Crosshair,
  color: '#7cd7a0',
  },
  {
  id: 'Defensive Wall' as const,
- title: 'สายรับกำแพงเหล็ก (Defensive Wall)',
- desc: 'เหนียวแน่น ดักทุกลูก สวนลูกดรายฟ์เปลี่ยนรับเป็นรุก',
+ title: isThai ? 'สายรับกำแพงเหล็ก' : 'Defensive Wall',
+ desc: isThai ? 'รับเหนียวแน่น ดักสวนโต้กลับแม่นยำ' : 'Solid defense and quick counter-drives',
  icon: Shield,
  color: '#7cd7a0',
  },
  {
  id: 'All-Rounder' as const,
- title: 'สายสมดุลรอบด้าน (All-Rounder)',
- desc: 'เล่นได้ทุกตำแหน่ง วางลูกแม่นยำ ปรับเกมตามคู่แข่ง',
+ title: isThai ? 'สายสมดุลรอบด้าน' : 'All-Rounder',
+ desc: isThai ? 'เล่นได้ครบทุกตำแหน่ง ปรับเกมตามสถานการณ์' : 'Balanced positioning and smart shot placement',
  icon: Target,
  color: '#e8f7ee',
  },
  ];
 
  const GOALS = [
- { id: 'Smash Mastery' as const, label: '⚡ อัปสปีดลูกตบ (Power & Angle)' },
- { id: 'Lightning Footwork' as const, label: '👟 สปีดฟุตเวิร์กคล่องแคล่ว ทันทุกช็อต' },
- { id: 'Tactical Net Play' as const, label: '🎯 วางลูกหน้าเน็ตแม่นยำ ไม่เสียแต้มง่าย' },
- { id: 'Endurance' as const, label: '🫁 พลังปอดอึด ยืนระยะได้ครบ 3 เซต' },
+ { id: 'Smash Mastery' as const, label: isThai ? '⚡ อัปสปีดและมุมลูกตบ' : '⚡ Boost Smash Power & Angle' },
+ { id: 'Lightning Footwork' as const, label: isThai ? '👟 ฟุตเวิร์กไว ทันทุกช็อต' : '👟 Faster 6-Corner Footwork' },
+ { id: 'Tactical Net Play' as const, label: isThai ? '🎯 วางลูกหน้าเน็ตแม่นยำ' : '🎯 Sharper Tactical Net Play' },
+ { id: 'Endurance' as const, label: isThai ? '🫁 ยืนระยะอึดครบ 3 เซต' : '🫁 3-Set Stamina & Endurance' },
  ];
 
  const TIERS: { tier: PlayerTier; label: string; desc: string }[] = [
- { tier: 'Bronze', label: 'มือใหม่ (Beginner / N)', desc: 'หวดสัปดาห์ละ 1 ครั้ง' },
- { tier: 'Silver', label: 'ระดับกลาง (Intermediate / S, P-)', desc: 'ก๊วนประจำ ตีเบสิกคล่อง' },
- { tier: 'Gold', label: 'ระดับสูง (Advanced / P, P+)', desc: 'ทักษะแข่งขัน ฟุตเวิร์กดี' },
- { tier: 'Diamond', label: 'นักกีฬาลีก (Semi-Pro / C, B)', desc: 'ทัวร์นาเมนต์ สปีด 300+ km/h' },
+ {
+ tier: 'Bronze',
+ label: isThai ? 'มือใหม่' : 'Beginner',
+ desc: isThai ? 'ตีสัปดาห์ละ 1 ครั้ง' : 'Casual weekly play',
+ },
+ {
+ tier: 'Silver',
+ label: isThai ? 'ระดับกลาง' : 'Intermediate',
+ desc: isThai ? 'มีก๊วนประจำ ตีเบสิกคล่อง' : 'Regular squad games',
+ },
+ {
+ tier: 'Gold',
+ label: isThai ? 'ระดับสูง' : 'Advanced',
+ desc: isThai ? 'ทักษะแข่งขัน ฟุตเวิร์กดี' : 'Competitive footwork',
+ },
+ {
+ tier: 'Diamond',
+ label: isThai ? 'นักกีฬาลีก' : 'Semi-Pro',
+ desc: isThai ? 'สายทัวร์นาเมนต์ ตบแรง' : 'Tournament level',
+ },
  ];
 
  const handleSaveAndContinue = () => {
@@ -71,12 +88,12 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  primaryGoal: goal,
  tier: selectedTier,
  });
- gainExp(150, 'สร้างโปรไฟล์และตั้งค่าสไตล์การเล่นสำเร็จ');
+ gainExp(150, isThai ? 'บันทึกสไตล์การเล่นเรียบร้อย' : 'Saved player style profile');
  navigateTo('D1');
  };
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000] overflow-hidden">
  <MobileHeader showBack />
 
  <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-16">
@@ -84,17 +101,19 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-1">
  <div className="flex items-center gap-2 mb-1">
  <span className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase">
- {language === 'th' ? 'ตั้งค่าตัวละคร' : 'Character Setup'}
+ {isThai ? 'ตั้งค่าผู้เล่น' : 'Player Setup'}
  </span>
- <span className="text-xs text-[#000000]/70 font-bold">+150 EXP Reward</span>
+ <span className="text-xs text-[#000000]/70 font-bold">
+ {isThai ? '+150 คะแนน' : '+150 EXP'}
+ </span>
  </div>
  <h2 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000] leading-tight">
- {language === 'th' ? 'สร้างสไตล์ DNA นักกีฬาเฉพาะตัว' : 'CUSTOMIZE YOUR ATHLETE DNA'}
+ {isThai ? 'เลือกสไตล์การเล่นของคุณ' : 'BUILD YOUR PLAYSTYLE'}
  </h2>
  <p className="text-xs text-[#000000]/70 mt-1 font-medium leading-relaxed">
- {language === 'th'
- ? 'ระบบจะนำ Archetype นี้ไปวิเคราะห์เรดาร์ทักษะ 5 มิติ แนะนำคู่ซ้อม และจัด Drills ฝึกฝน'
- : 'Your archetype directly shapes your 5-axis skill radar, sparring recommendations, and custom drills.'}
+ {isThai
+ ? 'ใช้แนะนำคู่ซ้อมและโปรแกรมฝึกที่เหมาะกับคุณ'
+ : 'Used to personalize sparring matches and training drills.'}
  </p>
  </div>
 
@@ -102,14 +121,14 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-3">
  <div>
  <label className="text-[11px] font-bold uppercase tracking-[0.032em] block mb-1.5 text-[#000000]/70">
- Player Handle / ชื่อนักกีฬา
+ {isThai ? 'ชื่อนักกีฬา' : 'Player Name'}
  </label>
  <div className="relative">
  <input
  type="text"
  value={playerName}
  onChange={(e) => setPlayerName(e.target.value)}
- placeholder="เช่น Shuttle King, Beam BWF"
+ placeholder={isThai ? 'เช่น กานต์, บีม' : 'e.g. Karn, Beam'}
  className="w-full px-4 py-2.5 rounded-[1600px] text-xs font-bold tracking-[0.032em] bg-[#ffffff] text-[#000000] focus:outline-none"
  />
  <User className="w-4 h-4 absolute right-3.5 top-3 text-[#000000]/40" />
@@ -118,39 +137,39 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
 
  <div>
  <label className="text-[11px] font-bold uppercase tracking-[0.032em] block mb-1.5 text-[#000000]/70">
- Dominant Hand / มือข้างที่ถนัด
+ {isThai ? 'มือข้างที่ถนัด' : 'Dominant Hand'}
  </label>
  <div className="grid grid-cols-2 gap-2">
  <button
  type="button"
  onClick={() => setHand('Right')}
- className={`py-2.5 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-transform active:scale-95 cursor-pointer border border-[#000000] ${
+ className={`py-2.5 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-transform active:scale-95 cursor-pointer border border-[#000000] whitespace-nowrap ${
  hand === 'Right'
  ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
- 🖐️ Right-Handed (มือขวา)
+ {isThai ? '🖐️ มือขวา' : '🖐️ Right-Handed'}
  </button>
  <button
  type="button"
  onClick={() => setHand('Left')}
- className={`py-2.5 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-transform active:scale-95 cursor-pointer border border-[#000000] ${
+ className={`py-2.5 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] transition-transform active:scale-95 cursor-pointer border border-[#000000] whitespace-nowrap ${
  hand === 'Left'
  ? 'bg-[#7cd7a0] text-[#000000]'
  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
  }`}
  >
- 🤚 Left-Handed (มือซ้าย)
+ {isThai ? '🤚 มือซ้าย' : '🤚 Left-Handed'}
  </button>
  </div>
  </div>
  </div>
 
- {/* 4 Archetype Cards (Multi-color sticker cards with 1px black outline) */}
+ {/* 4 Archetype Cards */}
  <div className="space-y-2.5">
  <label className="text-[11px] font-bold uppercase tracking-[0.032em] block px-1 text-[#000000]/70">
- Playstyle Archetype / สไตล์การเล่น
+ {isThai ? 'สไตล์การเล่น' : 'Playstyle'}
  </label>
 
  <div className="space-y-2">
@@ -198,7 +217,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  {/* Primary Goals */}
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-2.5">
  <label className="text-[11px] font-bold uppercase tracking-[0.032em] block text-[#000000]/70">
- Target Focus / เป้าหมายหลักที่ต้องการพัฒนา
+ {isThai ? 'เป้าหมายหลัก' : 'Primary Goal'}
  </label>
  <div className="grid grid-cols-1 gap-1.5">
  {GOALS.map((g) => {
@@ -225,7 +244,7 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  {/* Player Tier Selection */}
  <div className="p-4 rounded-[28px] bg-[#ffffff] space-y-2.5">
  <label className="text-[11px] font-bold uppercase tracking-[0.032em] block text-[#000000]/70">
- Self-Assessed Skill Level / ระดับฝีมือปัจจุบัน
+ {isThai ? 'ระดับฝีมือปัจจุบัน' : 'Skill Level'}
  </label>
  <div className="grid grid-cols-2 gap-2">
  {TIERS.map((t) => {
@@ -253,13 +272,13 @@ export const A2_PlaystyleSetupScreen: React.FC = () => {
  <button
  type="button"
  onClick={handleSaveAndContinue}
- className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 border border-[#000000] transition-transform active:scale-98 cursor-pointer"
+ className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 border border-[#000000] transition-transform active:scale-98 cursor-pointer whitespace-nowrap"
  >
- <Sparkles className="w-4 h-4 fill-[#ffffff]" />
+ <Sparkles className="w-4 h-4 fill-[#ffffff] shrink-0" />
  <span>
- {language === 'th' ? 'บันทึก DNA และสร้างเรดาร์ทักษะ (+150 EXP)' : 'SAVE DNA & BUILD SKILL RADAR (+150 EXP)'}
+ {isThai ? 'บันทึกสไตล์และสร้างโปรไฟล์ (+150 คะแนน)' : 'SAVE STYLE & PROFILE (+150 EXP)'}
  </span>
- <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+ <ArrowRight className="w-4 h-4 stroke-[2.5] shrink-0" />
  </button>
  </div>
  </div>

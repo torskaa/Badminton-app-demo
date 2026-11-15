@@ -12,15 +12,16 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  const [selectedDayIndex, setSelectedDayIndex] = useState<number>(2); // S 12 Saturday
  const [isBookmarked, setIsBookmarked] = useState<boolean>(false);
 
- const daysOfWeek = [
- { day: 'T', date: 10, label: 'Thu' },
- { day: 'F', date: 11, label: 'Fri' },
- { day: 'S', date: 12, label: 'Sat' },
- { day: 'S', date: 13, label: 'Sun' },
- { day: 'M', date: 14, label: 'Mon' },
- { day: 'T', date: 15, label: 'Tue' },
- { day: 'W', date: 16, label: 'Wed' },
- ];
+  const isThai = language === 'th';
+  const daysOfWeek = [
+    { day: isThai ? 'พฤ.' : 'Thu', date: 10 },
+    { day: isThai ? 'ศ.' : 'Fri', date: 11 },
+    { day: isThai ? 'ส.' : 'Sat', date: 12 },
+    { day: isThai ? 'อา.' : 'Sun', date: 13 },
+    { day: isThai ? 'จ.' : 'Mon', date: 14 },
+    { day: isThai ? 'อ.' : 'Tue', date: 15 },
+    { day: isThai ? 'พ.' : 'Wed', date: 16 },
+  ];
 
  const AVAILABLE_SLOTS: CourtSlot[] = [
  { id: 's_17', courtNumber: selectedCourtNum, startTime: '17:00', endTime: '18:00', price: selectedCourt.pricePerHour, isAvailable: true },
@@ -89,85 +90,85 @@ export const B2_CourtDetailSlotScreen: React.FC = () => {
  {/* Bottom badge overlay */}
  <div className="absolute bottom-4 left-4 right-4 text-[#ffffff] bg-[#000000]/75 p-3 rounded-[24px] ">
  <div className="flex items-center gap-2 mb-1">
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black uppercase">
- {language === 'th' ? 'มาตรฐาน BWF' : 'BWF Standard'}
- </span>
- <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black uppercase flex items-center gap-1">
- <Zap className="w-3 h-3 fill-current" />
- <span>+100 EXP BONUS</span>
- </span>
- </div>
- <h1 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#ffffff] leading-tight">
- {selectedCourt.name}
- </h1>
- <p className="text-xs text-[#ffffff]/90 font-bold">{selectedCourt.location}</p>
- </div>
- </div>
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black uppercase">
+                {isThai ? 'มาตรฐานสากล' : 'BWF Standard'}
+              </span>
+              <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-black uppercase flex items-center gap-1">
+                <Zap className="w-3 h-3 fill-current" />
+                <span>{isThai ? '+100 โบนัส' : '+100 EXP BONUS'}</span>
+              </span>
+            </div>
+            <h1 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#ffffff] leading-tight">
+              {selectedCourt.name}
+            </h1>
+            <p className="text-xs text-[#ffffff]/90 font-bold">{selectedCourt.location}</p>
+          </div>
+        </div>
 
- <div className="p-4 space-y-4">
- {/* Amenities Strip */}
- <div className="grid grid-cols-3 gap-2">
- <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
- <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'พื้นสนาม' : 'Court Floor'}</span>
- <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
- Taraflex
- </span>
- </div>
- <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
- <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'ระบบแอร์' : 'Air Condition'}</span>
- <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
- 24°C Comfort
- </span>
- </div>
- <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
- <span className="text-xs font-bold block text-[#000000]">{language === 'th' ? 'ระบบไฟ' : 'Pro Lighting'}</span>
- <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
- 500 Lux
- </span>
- </div>
- </div>
+        <div className="p-4 space-y-4">
+          {/* Amenities Strip */}
+          <div className="grid grid-cols-3 gap-2">
+            <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
+              <span className="text-xs font-bold block text-[#000000]">{isThai ? 'พื้นสนาม' : 'Court Floor'}</span>
+              <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
+                {isThai ? 'พื้นยาง' : 'Taraflex'}
+              </span>
+            </div>
+            <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
+              <span className="text-xs font-bold block text-[#000000]">{isThai ? 'ระบบแอร์' : 'Air Condition'}</span>
+              <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
+                {isThai ? 'เย็น 24°C' : '24°C Comfort'}
+              </span>
+            </div>
+            <div className="p-3 rounded-[24px] bg-[#ffffff] text-center">
+              <span className="text-xs font-bold block text-[#000000]">{isThai ? 'ระบบไฟ' : 'Pro Lighting'}</span>
+              <span className="text-[10px] text-[#000000] font-bold px-2 py-0.5 rounded-[1600px] bg-[#7cd7a0] inline-block mt-1">
+                {isThai ? '500 ลักซ์' : '500 Lux'}
+              </span>
+            </div>
+          </div>
 
- {/* Availability Calendar Day Selector */}
- <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'ตารางรอบสัปดาห์นี้' : 'THIS WEEK SCHEDULE'}
- subtitle={language === 'th' ? 'เลือกวันที่ต้องการเข้าใช้บริการสนาม' : 'Select your desired play date'}
- badge={language === 'th' ? 'พฤศจิกายน 2026' : 'Nov 2026'}
- badgeVariant="soft"
- />
+          {/* Availability Calendar Day Selector */}
+          <div className="space-y-2">
+            <SectionHeader
+              title={isThai ? 'ตารางรอบสัปดาห์นี้' : 'THIS WEEK SCHEDULE'}
+              subtitle={isThai ? 'เลือกวันที่ต้องการเข้าเล่น' : 'Select your play date'}
+              badge={isThai ? 'พ.ย. 2026' : 'Nov 2026'}
+              badgeVariant="soft"
+            />
 
- <div className="p-4 rounded-[28px] bg-[#ffffff]">
- <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
- {daysOfWeek.map((item, idx) => {
- const isSelected = selectedDayIndex === idx;
- return (
- <button
- key={idx}
- type="button"
- onClick={() => setSelectedDayIndex(idx)}
- className={`flex-1 min-w-[42px] py-2 rounded-[20px] border border-[#000000] flex flex-col items-center justify-center transition-all cursor-pointer ${
- isSelected
- ? 'bg-[#000000] text-[#ffffff] font-black'
- : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
- }`}
- >
- <span className="text-[10px] font-bold opacity-80">{item.day}</span>
- <span className="text-sm font-black mt-0.5">{item.date}</span>
- </button>
- );
- })}
- </div>
- </div>
- </div>
+            <div className="p-4 rounded-[28px] bg-[#ffffff]">
+              <div className="flex items-center justify-between gap-1 overflow-x-auto no-scrollbar py-1">
+                {daysOfWeek.map((item, idx) => {
+                  const isSelected = selectedDayIndex === idx;
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      onClick={() => setSelectedDayIndex(idx)}
+                      className={`flex-1 min-w-[42px] py-2 rounded-[20px] border border-[#000000] flex flex-col items-center justify-center transition-all cursor-pointer ${
+                        isSelected
+                          ? 'bg-[#000000] text-[#ffffff] font-black'
+                          : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+                      }`}
+                    >
+                      <span className="text-[10px] font-bold opacity-80">{item.day}</span>
+                      <span className="text-sm font-black mt-0.5">{item.date}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
 
- {/* Court Number Pill Selector */}
- <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'เลือกคอร์ทแข่งขัน (1 - 4)' : 'SELECT COURT (1 - 4)'}
- subtitle={language === 'th' ? 'พื้นยาง BWF Taraflex · แอร์และไฟ 500 Lux' : 'BWF Taraflex · AC & 500 Lux lighting'}
- badge="BWF Taraflex"
- badgeVariant="green"
- />
+          {/* Court Number Pill Selector */}
+          <div className="space-y-2">
+            <SectionHeader
+              title={isThai ? 'เลือกคอร์ท (1 - 4)' : 'SELECT COURT (1 - 4)'}
+              subtitle={isThai ? 'พื้นยาง · แอร์เย็นและไฟสว่าง' : 'Taraflex · AC & 500 Lux lighting'}
+              badge={isThai ? 'พื้นยางมาตรฐาน' : 'Pro Court'}
+              badgeVariant="green"
+            />
 
  <div className="p-4 rounded-[28px] bg-[#ffffff]">
  <div className="grid grid-cols-4 gap-2">

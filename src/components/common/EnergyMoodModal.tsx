@@ -37,12 +37,12 @@ export const MOOD_LEVELS: MoodConfig[] = [
  cardBg: 'bg-[#2a233c]',
  headline: 'You feel a bit tight. Let’s loosen up and reset.',
  headlineTh: 'กล้ามเนื้อตึงล้า มายืดเหยียดและรีเซ็ตกัน',
- description: 'รู้สึกตึงล้าจากงานหรือการซ้อมหนัก เหมาะกับการวอร์มอัปยืดเส้น โฟกัสหัวไหล่ ข้อมือ และฟุตเวิร์กเบาๆ',
- descriptionEn: 'Muscles feel tight or tired. Best for gentle warm-ups, shoulder mobility, wrist release, and light footwork.',
- badmintonFocus: 'เซฟโต้ช้าๆ, ยืดหยุ่น, หยอดหน้าเน็ต',
+ description: 'กล้ามเนื้อตึงล้า เหมาะกับการวอร์มอัปยืดเส้นหัวไหล่ ข้อมือ และฟุตเวิร์กเบาๆ',
+ descriptionEn: 'Muscles feel tight. Best for gentle warm-ups, shoulder mobility, and light footwork.',
+ badmintonFocus: 'ตีโต้เบาๆ, ยืดเหยียด, หยอดหน้าเน็ต',
  badmintonFocusEn: 'Slow rally, flexibility, gentle net drops',
  recommendedType: 'Recovery & Flexibility Drill',
- recommendedTypeTh: 'การฝึกยืดเหยียดและฟื้นฟู',
+ recommendedTypeTh: 'ฝึกยืดเหยียดและฟื้นฟู',
  },
  {
  id: 'calm',
@@ -55,9 +55,9 @@ export const MOOD_LEVELS: MoodConfig[] = [
  cardBg: 'bg-[#2b3a35]',
  headline: 'You feel relaxed and grounded. Looking for mindful movement.',
  headlineTh: 'รู้สึกสงบและผ่อนคลาย พร้อมสำหรับการเคลื่อนไหวที่นุ่มนวล',
- description: 'คุณรู้สึกสงบ ผ่อนคลาย และมีสมาธิ เหมาะกับการตีแรลลี่ยาวๆ เซฟลูกข้ามแดน ควบคุมวิถีลูกโดยไม่เน้นความเร็ว',
- descriptionEn: 'Feeling calm and centered. Ideal for long continuous rallies, lift control, and consistent court positioning.',
- badmintonFocus: 'แรลลี่ 30 ช็อตต่อเนื่อง, คุมทิศทาง',
+ description: 'สมาธิดีและผ่อนคลาย เหมาะกับการตีแรลลี่ยาวๆ คุมทิศทางลูกอย่างนุ่มนวล',
+ descriptionEn: 'Feeling calm and centered. Ideal for long rallies, lift control, and steady court movement.',
+ badmintonFocus: 'แรลลี่ต่อเนื่อง, คุมทิศทาง',
  badmintonFocusEn: '30-shot rallies, precision placement',
  recommendedType: 'Flow Rally & Net Placement',
  recommendedTypeTh: 'แรลลี่ต่อเนื่องและวางลูกหน้าเน็ต',
@@ -73,8 +73,8 @@ export const MOOD_LEVELS: MoodConfig[] = [
  cardBg: 'bg-[#1e2e42]',
  headline: 'You feel focused. A good moment for controlled, full-body training.',
  headlineTh: 'มีสมาธิคงที่ เหมาะสำหรับการซ้อมแบบรอบด้าน',
- description: 'คุณมีสมาธิดีและพลังงานคงที่ เหมาะสำหรับการลงทีมคู่ ซ้อมเกมรับสลับเกมบุก เล่นตามแท็กติก',
- descriptionEn: 'Good focus and steady energy. Perfect for tactical doubles, transitioning between defense and offense.',
+ description: 'พลังคงที่และโฟกัสดี เหมาะกับการลงทีมคู่ ซ้อมเกมรับสลับบุกตามแผน',
+ descriptionEn: 'Good focus and steady energy. Perfect for tactical doubles and transitioning defense to attack.',
  badmintonFocus: 'เกมคู่ผสม, สลับรับบุก, ฟุตเวิร์ก 6 มุม',
  badmintonFocusEn: 'Tactical doubles, transition play, 6-corner footwork',
  recommendedType: 'Tactical Doubles & Drill Mix',
@@ -91,9 +91,9 @@ export const MOOD_LEVELS: MoodConfig[] = [
  cardBg: 'bg-[#3b2a4a]',
  headline: 'You feel active. Time for dynamic workouts and higher intensity.',
  headlineTh: 'ฟอร์มกำลังเข้าฝัก พร้อมระเบิดพลังและสปีด',
- description: 'กล้ามเนื้อพร้อมระเบิดพลัง อยากกระโดดตบสแมช วิ่งไล่เก็บทุกลูก และดวลแมตช์สปีดเร็วกับคู่แข่งฝีมือสูสี',
- descriptionEn: 'Muscles primed for high output. Ready for jump smashes, high-tempo exchanges, and intense sparring.',
- badmintonFocus: 'Jump Smash 340+ km/h, ดักหน้าเน็ต, สปีดสูง',
+ description: 'กล้ามเนื้อพร้อมเต็มที่ เหมาะกับลูกกระโดดตบและดวลแมตช์สปีดเร็ว',
+ descriptionEn: 'Muscles primed for high output. Ready for jump smashes and high-tempo sparring.',
+ badmintonFocus: 'กระโดดตบความเร็วสูง, ดักหน้าเน็ต, สปีดสูง',
  badmintonFocusEn: 'Jump smashes 340+ km/h, aggressive net intercepts, fast pace',
  recommendedType: 'High-Speed Sparring & Smash Battle',
  recommendedTypeTh: 'สปาร์ริ่งสปีดสูงและดวลลูกตบ',
@@ -109,12 +109,12 @@ export const MOOD_LEVELS: MoodConfig[] = [
  cardBg: 'bg-[#40201d]',
  headline: 'You are on fire! Let’s push limits with maximum power.',
  headlineTh: 'อะดรีนาลีนเต็มพิกัด พร้อมทลายขีดจำกัด',
- description: 'พร้อมลงแข่งขันจริง ซ้อม AI Drills สปีดเต็มพิกัด และเผาผลาญแคลอรี่ทะลุ 700+ กิโลแคลอรี',
- descriptionEn: 'Adrenaline pumping! Ready for full competitive intensity, AI speed drills, and 700+ kcal burn.',
- badmintonFocus: 'AI Footwork Speed Drill, แมตช์ 3 เซ็ต, คาร์ดิโอหนัก',
- badmintonFocusEn: 'AI footwork speed drill, full 3-set match, intense cardio',
+ description: 'พร้อมลงแข่งเต็มพิกัด ซ้อมความเร็วสูงสุดและเผาผลาญพลังงานเต็มแม็กซ์',
+ descriptionEn: 'Adrenaline pumping! Ready for full competitive intensity and high-calorie burn.',
+ badmintonFocus: 'ฟุตเวิร์กความเร็วสูง, แมตช์ 3 เซ็ต, คาร์ดิโอหนัก',
+ badmintonFocusEn: 'Footwork speed drill, full 3-set match, intense cardio',
  recommendedType: 'Tournament Intensity & Cardio Burn',
- recommendedTypeTh: 'ทัวร์นาเมนต์เต็มแม็กซ์และเบิร์นหนัก',
+ recommendedTypeTh: 'ทัวร์นาเมนต์เต็มแม็กซ์',
  },
 ];
 
@@ -535,8 +535,8 @@ export const EnergyMoodModal: React.FC<EnergyMoodModalProps> = ({
  >
  <div className="flex items-center justify-center gap-1.5 text-xs font-black text-[#000000]">
  <span>🎯 {isThai ? currentConfig.thaiLabel : currentConfig.label}</span>
- <span className="text-[10px] text-[#000000]/50 font-normal">
- ({isThai ? (currentConfig.recommendedTypeTh || currentConfig.recommendedType) : currentConfig.recommendedType})
+ <span className="text-[10px] text-[#000000]/55 font-bold">
+ · {isThai ? (currentConfig.recommendedTypeTh || currentConfig.recommendedType) : currentConfig.recommendedType}
  </span>
  </div>
  <p className="text-[11px] text-[#000000]/80 font-bold leading-relaxed">

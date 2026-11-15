@@ -1,5 +1,6 @@
 import React from 'react';
-import { RefreshCw, MapPin, Sparkles, Plus, ArrowRight } from 'lucide-react';
+import { RefreshCw, Plus } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 
 interface CourtDiscoveryEmptyStateProps {
  onResetFilters: () => void;
@@ -12,16 +13,19 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
  onSuggestCourt,
  searchTerm,
 }) => {
+ const { language } = useApp();
+ const isThai = language === 'th';
+
  return (
  <div className="w-full p-6 my-2 rounded-[28px] bg-[#ffffff] text-[#000000] text-center select-none flex flex-col items-center">
- {/* Whimsical Slush / Rainbow On-Brand Vector Illustration */}
+ {/* Whimsical On-Brand Vector Illustration */}
  <div className="relative w-44 h-36 flex items-center justify-center mb-3">
  {/* Floating Stars and Badges */}
  <div className="absolute top-1 left-2 w-7 h-7 rounded-[1600px] bg-[#e85729] flex items-center justify-center text-xs font-black shadow-xs rotate-[-12deg] animate-bounce">
  ★
  </div>
  <div className="absolute bottom-2 right-2 px-2 py-0.5 rounded-[1600px] bg-[#e8f7ee] text-[9px] font-bold tracking-[0.032em] text-[#000000] rotate-[8deg]">
- ? MISSING
+ {isThai ? 'ไม่พบ' : 'NONE'}
  </div>
 
  {/* Central Whimsical Searching Shuttlecock with Magnifying Glass SVG */}
@@ -82,20 +86,28 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
  </svg>
  </div>
 
- {/* Crushed Lateral / Antonio Display Headline */}
+ {/* Display Headline */}
  <div className="space-y-1 mb-2">
  <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#e85729] text-[10px] font-bold tracking-[0.032em] uppercase text-[#000000] inline-block">
- SEARCH RADAR EMPTY
+ {isThai ? 'ไม่พบสนาม' : 'NO MATCHES'}
  </span>
  <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000] leading-none mt-1">
- {searchTerm ? `NO COURTS FOR "${searchTerm}"` : 'NO COURTS FOUND IN THIS RADAR'}
+ {isThai
+ ? searchTerm
+ ? `ไม่พบสนาม "${searchTerm}"`
+ : 'ไม่พบสนามตามตัวกรอง'
+ : searchTerm
+ ? `NO COURTS FOR "${searchTerm}"`
+ : 'NO COURTS FOUND'}
  </h3>
- <p className="text-xs text-[#000000]/70 font-medium max-w-[280px] mx-auto leading-relaxed mt-1">
- ไม่พบคอร์ทแบดมินตันตามตัวกรองนี้ ลองปรับคำค้นหา หรือรีเซ็ตเพื่อค้นหา BWF Taraflex ทั้งหมดในกรุงเทพฯ
+ <p className="text-xs text-[#000000]/70 font-medium max-w-[260px] mx-auto leading-relaxed mt-1">
+ {isThai
+ ? 'ลองเปลี่ยนคำค้นหา หรือล้างตัวกรองเพื่อดูสนามทั้งหมด'
+ : 'Try adjusting your search or reset filters to view all arenas.'}
  </p>
  </div>
 
- {/* Action Buttons (Strict Rules: Black fill CTA or outlined black) */}
+ {/* Action Buttons */}
  <div className="w-full space-y-2 mt-2 pt-2 ">
  <button
  type="button"
@@ -103,7 +115,9 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
  className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 border border-[#000000] transition-transform active:scale-95 cursor-pointer shadow-sm group whitespace-nowrap"
  >
  <RefreshCw className="w-4 h-4 shrink-0 group-hover:rotate-180 transition-transform duration-300" />
- <span className="whitespace-nowrap">RESET ALL FILTERS</span>
+ <span className="whitespace-nowrap">
+ {isThai ? 'ล้างตัวกรองทั้งหมด' : 'RESET ALL FILTERS'}
+ </span>
  </button>
 
  <button
@@ -112,7 +126,9 @@ export const CourtDiscoveryEmptyState: React.FC<CourtDiscoveryEmptyStateProps> =
  className="w-full py-2.5 px-4 rounded-[1600px] bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 border border-[#000000] transition-transform active:scale-95 cursor-pointer whitespace-nowrap"
  >
  <Plus className="w-3.5 h-3.5 shrink-0" />
- <span className="whitespace-nowrap">SUGGEST A NEW COURT (+30 EXP)</span>
+ <span className="whitespace-nowrap">
+ {isThai ? 'แนะนำสนามใหม่ (+30 คะแนน)' : 'SUGGEST NEW COURT (+30 XP)'}
+ </span>
  </button>
  </div>
  </div>

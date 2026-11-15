@@ -1,5 +1,6 @@
 import React from 'react';
-import { Plus, Swords, Users, Sparkles, RefreshCw, ArrowRight } from 'lucide-react';
+import { Plus, Swords } from 'lucide-react';
+import { useApp } from '../../context/AppContext';
 
 interface GuildHubEmptyStateProps {
  onCreateGuild: () => void;
@@ -12,13 +13,16 @@ export const GuildHubEmptyState: React.FC<GuildHubEmptyStateProps> = ({
  onFindSparring,
  onReset,
 }) => {
+ const { language } = useApp();
+ const isThai = language === 'th';
+
  return (
  <div className="w-full p-6 my-2 rounded-[28px] bg-[#ffffff] text-[#000000] text-center select-none flex flex-col items-center">
- {/* Whimsical Slush / Rainbow On-Brand Vector Illustration */}
+ {/* Whimsical On-Brand Vector Illustration */}
  <div className="relative w-44 h-36 flex items-center justify-center mb-3">
  {/* Floating Sticker Badges */}
  <div className="absolute top-1 right-2 px-2.5 py-0.5 rounded-[1600px] bg-[#7cd7a0] text-[9px] font-bold tracking-[0.032em] text-[#000000] rotate-[6deg]">
- +50 EXP RSVP
+ {isThai ? '+50 คะแนน' : '+50 XP'}
  </div>
  <div className="absolute bottom-2 left-2 w-7 h-7 rounded-[1600px] bg-[#e85729] text-[#ffffff] flex items-center justify-center text-xs font-black shadow-xs rotate-[-10deg] animate-pulse">
  ⚡
@@ -91,20 +95,22 @@ export const GuildHubEmptyState: React.FC<GuildHubEmptyStateProps> = ({
  </svg>
  </div>
 
- {/* Crushed Lateral / Antonio Display Headline */}
+ {/* Display Headline */}
  <div className="space-y-1 mb-2">
  <span className="px-2.5 py-0.5 rounded-[1600px] bg-[#e8f7ee] text-[10px] font-bold tracking-[0.032em] uppercase text-[#000000] inline-block">
- GUILD TAVERN QUIET
+ {isThai ? 'ยังไม่มีก๊วนว่าง' : 'QUIET COURT'}
  </span>
  <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight text-[#000000] leading-none mt-1">
- NO SQUADS ACTIVE RIGHT NOW
+ {isThai ? 'ยังไม่มีก๊วนเปิดรับตอนนี้' : 'NO SQUADS ACTIVE'}
  </h3>
- <p className="text-xs text-[#000000]/70 font-medium max-w-[280px] mx-auto leading-relaxed mt-1">
- ยังไม่มีก๊วนที่เปิดรับสมาชิกในรอบนี้ มาร่วมเป็นกัปตันก๊วนคนแรก ชวนเพื่อนและให้ระบบช่วยหารค่าคอร์ทอัตโนมัติ
+ <p className="text-xs text-[#000000]/70 font-medium max-w-[260px] mx-auto leading-relaxed mt-1">
+ {isThai
+ ? 'ยังไม่มีก๊วนที่เปิดรับในรอบนี้ กดเปิดก๊วนใหม่เพื่อชวนเพื่อนลงคอร์ท'
+ : 'No open squads match right now. Host a new session and invite friends.'}
  </p>
  </div>
 
- {/* Action Buttons (Strict Rules: Black fill CTA or outlined black) */}
+ {/* Action Buttons */}
  <div className="w-full space-y-2 mt-2 pt-2 ">
  <button
  type="button"
@@ -112,7 +118,9 @@ export const GuildHubEmptyState: React.FC<GuildHubEmptyStateProps> = ({
  className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 border border-[#000000] transition-transform active:scale-95 cursor-pointer shadow-sm group whitespace-nowrap"
  >
  <Plus className="w-4 h-4 stroke-[3] shrink-0" />
- <span className="whitespace-nowrap">HOST SQUAD SESSION (+100 EXP)</span>
+ <span className="whitespace-nowrap">
+ {isThai ? 'เปิดก๊วนใหม่ (+100 คะแนน)' : 'HOST SQUAD (+100 XP)'}
+ </span>
  </button>
 
  <button
@@ -121,7 +129,9 @@ export const GuildHubEmptyState: React.FC<GuildHubEmptyStateProps> = ({
  className="w-full py-2.5 px-4 rounded-[1600px] bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-1.5 border border-[#000000] transition-transform active:scale-95 cursor-pointer whitespace-nowrap"
  >
  <Swords className="w-3.5 h-3.5 text-[#e85729] shrink-0" />
- <span className="whitespace-nowrap">FIND SPARRING DUEL (E3)</span>
+ <span className="whitespace-nowrap">
+ {isThai ? 'ค้นหาคู่ดวลฝีมือ' : 'FIND SPARRING PARTNER'}
+ </span>
  </button>
 
  {onReset && (
@@ -130,7 +140,7 @@ export const GuildHubEmptyState: React.FC<GuildHubEmptyStateProps> = ({
  onClick={onReset}
  className="text-[11px] text-[#000000]/60 hover:text-[#000000] font-bold tracking-[0.032em] pt-1 underline cursor-pointer whitespace-nowrap"
  >
- RESET GUILD FILTERS
+ {isThai ? 'ล้างตัวกรอง' : 'RESET FILTERS'}
  </button>
  )}
  </div>

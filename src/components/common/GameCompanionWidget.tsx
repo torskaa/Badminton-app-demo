@@ -39,20 +39,20 @@ export const MASCOT_IMAGE_URL = '/assets/aistudio/Gemini_Generated_Image_b3fgwrb
 
 // Cute conversational tips cycling in the speech bubble
 const COMPANION_SPEECHES_TH = [
-  'หวัดดีครับ! วันนี้มาซ้อมสแมชกันเถอะ 🏸',
-  'แตะที่หนูเพื่อดูทริค & เควสต์ประจำวัน! ✨',
-  'จำไว้นะครับ: ฟุตเวิร์ก 6 มุมช่วยให้ไม่เหนื่อย! 🏃💨',
-  'แตะแปะมือ High-Five รับ 30 EXP ฟรี! ✋',
-  'มีคอร์ทว่างใกล้ตัวคุณด้วยนะ แตะดูเลย! 🗺️',
-  'ตีแบดคู่ผสม? ยืนบุกหน้า-หลัง รับข้าง-ข้างนะ! 🤝',
-  'กำลังมองหาคู่ซ้อม? แวะไปที่แท็บก๊วนได้เลย! 👥',
+  'หวัดดีครับ! วันนี้มาซ้อมตบสแมชกันเถอะ 🏸',
+  'แตะดูทริคและภารกิจประจำวันได้เลย! ✨',
+  'ฟุตเวิร์ก 6 มุมช่วยให้ประหยัดแรงขึ้นนะ 🏃💨',
+  'แตะแปะมือรับ 30 คะแนนฟรีวันนี้! ✋',
+  'มีคอร์ทว่างใกล้คุณด้วยนะ แตะดูเลย! 🗺️',
+  'เล่นคู่: บุกยืนหน้า-หลัง รับยืนซ้าย-ขวา 🤝',
+  'หาเพื่อนซ้อม? แวะดูในหน้าก๊วนได้เลย 👥',
 ];
 
 const COMPANION_SPEECHES_EN = [
   "Hey there! Ready for some badminton today? 🏸",
   "Tap me for pro tips & daily missions! ✨",
   "Quick tip: Smooth 6-point footwork saves your stamina! 🏃💨",
-  "Tap to high-five me for +30 Daily EXP! ✋",
+  "Tap to high-five me for +30 Daily XP! ✋",
   "Looking for a court? Tap to view real-time slots! 🗺️",
   "Playing doubles? Attack front-back, defend side-by-side! 🤝",
   "Need sparring partners? Check out Guild Hub! 👥",
@@ -63,41 +63,45 @@ const PRO_TIPS = [
     id: 'tip_1',
     category: 'Smash Power',
     categoryTh: 'พลังลูกตบ',
-    title: 'เทคนิค Jump Smash 300+ km/h',
+    title: 'เทคนิคกระโดดตบเร็ว 300+ กม./ชม.',
     titleEn: 'Jump Smash 300+ km/h Mechanics',
-    desc: 'เทคตัวด้วยขาหลัง บิดสะโพก 45° แล้วเหวี่ยงแขนฟาดจุดสูงสุดของวงสวิง หักข้อมือสแน็ปหน้าเน็ตเพื่อให้วิถีลูกปักลงเร็วที่สุด',
-    descEn: 'Take off with your dominant rear foot, rotate hips 45°, and strike at the peak of your swing with a crisp wrist snap.',
+    desc: 'เทคตัวด้วยขาหลัง บิดสะโพก 45 องศา เหวี่ยงแขนฟาดจุดสูงสุดและหักข้อมือหน้าเน็ต',
+    descEn: 'Take off with your rear foot, rotate hips 45°, and snap the wrist at the peak of your swing.',
     badge: 'Pro Attack',
+    badgeTh: 'เกมบุก',
   },
   {
     id: 'tip_2',
     category: 'Footwork',
     categoryTh: 'ฟุตเวิร์ก 6 มุม',
-    title: 'สเต็ป Chassé คืนสู่กลางคอร์ท',
+    title: 'สเต็ปสไลด์คืนสู่กลางคอร์ท',
     titleEn: 'Chassé Step Recovery to Center',
-    desc: 'หลังตีช็อตทุกลูก ห้ามยืนแช่! ให้ใช้ก้าวสไลด์ชิด-ก้าว (Chassé) สปริงตัวกลับมาจุดกึ่งกลางคอร์ททันทีเพื่อเตรียมรับลูกต่อไป',
-    descEn: 'Never stand still after hitting! Use quick chassé slide steps to spring back to the court center ready for the next rally.',
+    desc: 'หลังตีช็อตทุกลูก ให้สไลด์ก้าวชิดคืนตำแหน่งกลางคอร์ททันทีเพื่อเตรียมรับลูกถัดไป',
+    descEn: 'Never stand still after hitting! Slide back to court center immediately for the next rally.',
     badge: 'Agility',
+    badgeTh: 'ความไว',
   },
   {
     id: 'tip_3',
     category: 'Doubles Tactics',
     categoryTh: 'กลยุทธ์เกมคู่',
-    title: 'การหมุนเวียนตำแหน่ง (Rotation)',
+    title: 'การหมุนเวียนตำแหน่งบุก-รับ',
     titleEn: 'Doubles Attack & Defense Rotation',
-    desc: 'เมื่อทีมเราได้บุกหรือหยอด ให้คนหน้าคุมเน็ต คนหลังคุมท้ายคอร์ท (หน้า-หลัง) แต่ถ้าถูกโยนลูกโด่งให้ถอยยืนข้างกัน (ซ้าย-ขวา)',
-    descEn: 'Front-back formation when attacking; switch to side-by-side defensive stance when defending high clears.',
+    desc: 'เมื่อทีมได้บุกให้ยืนหน้า-หลัง แต่ถ้าถูกโยนลูกโด่งให้ถอยยืนคู่ขนานซ้าย-ขวา',
+    descEn: 'Front-back formation when attacking; switch to side-by-side stance when defending high clears.',
     badge: 'Strategy',
+    badgeTh: 'กลยุทธ์',
   },
   {
     id: 'tip_4',
     category: 'Equipment',
-    categoryTh: 'อุปกรณ์ & เอ็น',
-    title: 'ความตึงเอ็นที่เหมาะกับสไตล์คุณ',
+    categoryTh: 'อุปกรณ์และเอ็น',
+    title: 'เลือกความตึงเอ็นให้เข้ามือ',
     titleEn: 'Optimal String Tension Guide',
-    desc: 'มือใหม่-ระดับกลาง แนะนำ 22-24 lbs เพื่อ Sweet Spot กว้างและแรงสปริง ส่วนระดับแข่งขันแนะนำ 26-28 lbs เพื่อการคอนโทรลแม่นยำ',
-    descEn: 'Beginners/intermediate should aim for 22-24 lbs for a larger sweet spot; tournament players prefer 26-28 lbs for precision control.',
+    desc: 'มือใหม่ถึงระดับกลางแนะนำ 22–24 ปอนด์ ส่วนสายแข่งขันแนะนำ 26–28 ปอนด์เพื่อคุมทิศทาง',
+    descEn: 'Beginners/intermediate aim for 22–24 lbs for sweet spot; tournament players prefer 26–28 lbs.',
     badge: 'Gear Pro',
+    badgeTh: 'อุปกรณ์',
   },
 ];
 
@@ -116,49 +120,49 @@ const TUTORIAL_CHAPTERS: Array<{
   {
     id: 'tut_book',
     icon: Compass,
-    titleTh: '1. จองคอร์ทแบบเซียน BWF',
+    titleTh: '1. จองคอร์ทมาตรฐานง่ายๆ',
     titleEn: '1. Book Pro Courts',
-    subtitleTh: 'ค้นหาคอร์ทมาตรฐาน มีแอร์ ที่จอดรถ พร้อมดูตารางเวลาว่างแบบเรียลไทม์',
-    subtitleEn: 'Find BWF-grade air-con courts with instant live slot availability.',
+    subtitleTh: 'ค้นหาสนามติดแอร์พร้อมดูตารางเวลาว่างแบบเรียลไทม์',
+    subtitleEn: 'Find air-con courts with instant live slot availability.',
     targetScreen: 'B1',
-    actionLabelTh: 'ลองค้นหาคอร์ท (B1)',
-    actionLabelEn: 'Find Courts (B1)',
+    actionLabelTh: 'ค้นหาคอร์ท',
+    actionLabelEn: 'Find Courts',
     expReward: 40,
   },
   {
     id: 'tut_score',
     icon: Zap,
-    titleTh: '2. กระดานนับแต้มแมตช์สด C1',
-    titleEn: '2. In-Match Scorer C1',
-    subtitleTh: 'บันทึกแต้มสดระหว่างตี เลือกลูกวินเนอร์/อันฟอร์สด์เออเรอร์ จบแมตช์รับ EXP ทันที',
-    subtitleEn: 'Live point tracker with winner/unforced error logs. Earn XP on match finish.',
+    titleTh: '2. กระดานนับแต้มแมตช์สด',
+    titleEn: '2. In-Match Live Scorer',
+    subtitleTh: 'บันทึกแต้มระหว่างตีและเก็บช็อตวินเนอร์เพื่อรับคะแนน',
+    subtitleEn: 'Live point tracker with shot logs. Earn XP on match finish.',
     targetScreen: 'C1',
-    actionLabelTh: 'เปิดตัวนับคะแนน (C1)',
-    actionLabelEn: 'Open Scorer (C1)',
+    actionLabelTh: 'เปิดตัวนับคะแนน',
+    actionLabelEn: 'Open Scorer',
     expReward: 50,
   },
   {
     id: 'tut_ai',
     icon: Play,
-    titleTh: '3. วิเคราะห์สปีดสแมชด้วย AI',
+    titleTh: '3. วิเคราะห์สปีดตบจากวิดีโอ',
     titleEn: '3. Video AI Shot Diagnostics',
-    subtitleTh: 'อัปโหลดคลิปวิดีโอเพื่อวัดความเร็วลูกสแมช (km/h) และมุมข้อศอกที่สมบูรณ์แบบ',
-    subtitleEn: 'Upload video clips to track smash velocity (km/h) and biomechanics.',
+    subtitleTh: 'อัปโหลดคลิปเพื่อวัดความเร็วลูกตบและมุมข้อศอก',
+    subtitleEn: 'Upload video clips to track smash velocity and swing angles.',
     targetScreen: 'D3',
-    actionLabelTh: 'ทดลอง AI วิเคราะห์ (D3)',
-    actionLabelEn: 'Try Video AI (D3)',
+    actionLabelTh: 'วิเคราะห์วิดีโอ',
+    actionLabelEn: 'Try Video AI',
     expReward: 60,
   },
   {
     id: 'tut_guild',
     icon: Heart,
-    titleTh: '4. จอยก๊วนแบด & หารค่าคอร์ท',
+    titleTh: '4. จอยก๊วนแบดและหารค่าคอร์ท',
     titleEn: '4. Join Guild & Split Bills',
-    subtitleTh: 'หาก๊วนตีแบดระดับเดียวกัน สแกนจ่ายพร้อมเพย์ และคำนวณค่าคอร์ทแฟร์ๆ อัตโนมัติ',
-    subtitleEn: 'Join matching skill groups and split court fees automatically via PromptPay.',
+    subtitleTh: 'หาก๊วนระดับเดียวกัน สแกนจ่ายพร้อมเพย์และหารค่าคอร์ทอัตโนมัติ',
+    subtitleEn: 'Join matching skill groups and split court fees via PromptPay.',
     targetScreen: 'E1',
-    actionLabelTh: 'ดูก๊วนแนะนำ (E1)',
-    actionLabelEn: 'View Guilds (E1)',
+    actionLabelTh: 'ดูก๊วนแนะนำ',
+    actionLabelEn: 'View Guilds',
     expReward: 40,
   },
 ];
@@ -200,7 +204,7 @@ export const GameCompanionWidget: React.FC = () => {
     playSmashSound();
     setTimeout(() => {
       playLevelUpSound();
-      gainExp(30, isThai ? 'ไฮไฟว์กับน้องสแมชชี่ประจำวัน (+30 EXP)' : 'Daily High-Five with Smashy (+30 EXP)');
+      gainExp(30, isThai ? 'ไฮไฟว์กับน้องสแมชชี่ประจำวัน (+30 คะแนน)' : 'Daily High-Five with Smashy (+30 XP)');
       setHasHighFivedToday(true);
       setIsHighFiveAnimating(false);
       setCheerReaction(isThai ? 'เย่! แปะมือสำเร็จ พลังบวกเต็มเปี่ยม พร้อมลงคอร์ทแล้ว!' : 'Awesome! High-five claimed, full energy to dominate!');
@@ -265,11 +269,11 @@ export const GameCompanionWidget: React.FC = () => {
               <div className="flex items-center gap-1 mb-0.5">
                 <span className="w-2 h-2 rounded-full bg-[#7cd7a0] animate-ping" />
                 <span className="text-[10px] font-black uppercase tracking-wider text-[#7cd7a0]">
-                  SMASHY #15
+                  {isThai ? 'น้องสแมชชี่' : 'SMASHY #15'}
                 </span>
                 <span className="text-[9px] text-neutral-600 font-bold ml-auto flex items-center gap-0.5">
                   <Sparkles className="w-2.5 h-2.5 text-[#e85729] fill-[#e85729]" />
-                  GUIDE
+                  {isThai ? 'คู่มือ' : 'GUIDE'}
                 </span>
               </div>
               <p className="text-[11px] font-semibold text-neutral-800 leading-tight">
@@ -373,7 +377,7 @@ export const GameCompanionWidget: React.FC = () => {
                       className="w-full h-full object-cover object-[51%_22%] scale-110"
                     />
                     <div className="absolute bottom-0 inset-x-0 bg-black/60 backdrop-blur-xs py-0.5 text-center text-[8px] font-black uppercase text-[#e85729] tracking-wider">
-                      HERO #15
+                      {isThai ? 'คู่หู #15' : 'HERO #15'}
                     </div>
                   </motion.div>
 
@@ -381,22 +385,22 @@ export const GameCompanionWidget: React.FC = () => {
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-1.5 mb-1">
                       <span className="px-2 py-0.5 rounded-full bg-[#e85729] text-black text-[10px] font-black uppercase tracking-wider">
-                        LVL 10 COMPANION
+                        {isThai ? 'คู่หูเลเวล 10' : 'LVL 10 COMPANION'}
                       </span>
                       <span className="text-[10px] text-[#7cd7a0] font-bold flex items-center gap-0.5">
                         <Sparkles className="w-3 h-3 fill-current" />
-                        AI CO-PILOT
+                        {isThai ? 'ผู้ช่วยส่วนตัว' : 'CO-PILOT'}
                       </span>
                     </div>
 
                     <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-wide leading-none text-white">
-                      {isThai ? 'น้องสแมชชี่ (SMASHY)' : 'SMASHY #15'}
+                      {isThai ? 'น้องสแมชชี่' : 'SMASHY #15'}
                     </h3>
 
                     <p className="text-[11px] text-white/80 font-medium leading-tight mt-1 line-clamp-2">
                       {isThai
-                        ? 'คู่หูนักแบดมินตันส่วนตัว พร้อมเควสต์ ทริกเทคนิค และช่วยนำทางในแอป!'
-                        : 'Your badminton in-game partner for pro tips, quests & app walkthroughs!'}
+                        ? 'คู่หูนักแบดส่วนตัว พร้อมเควสต์ ทริกเทคนิค และช่วยนำทาง'
+                        : 'Your badminton partner for pro tips, quests & guides!'}
                     </p>
                   </div>
                 </div>
@@ -410,8 +414,8 @@ export const GameCompanionWidget: React.FC = () => {
                     </div>
                     <div className="text-[10px] text-white/70">
                       {hasHighFivedToday
-                        ? (isThai ? 'รับไปแล้ว +30 EXP วันนี้!' : 'Claimed +30 EXP today!')
-                        : (isThai ? 'แตะแปะมือรับทันที +30 EXP' : 'Tap to high-five for +30 EXP')}
+                        ? (isThai ? 'รับไปแล้ว +30 คะแนนวันนี้' : 'Claimed +30 XP today!')
+                        : (isThai ? 'แตะแปะมือรับทันที +30 คะแนน' : 'Tap to high-five for +30 XP')}
                     </div>
                   </div>
 
@@ -556,7 +560,7 @@ export const GameCompanionWidget: React.FC = () => {
                                 {isThai ? item.titleTh : item.titleEn}
                               </h4>
                               <span className="text-[10px] font-extrabold text-[#15803d] bg-[#7cd7a0]/20 px-1.5 py-0.5 rounded-md whitespace-nowrap shrink-0">
-                                +{item.expReward} XP
+                                +{item.expReward} {isThai ? 'คะแนน' : 'XP'}
                               </span>
                             </div>
                             <p className="text-[11px] text-neutral-600 leading-tight mt-0.5">
@@ -590,7 +594,7 @@ export const GameCompanionWidget: React.FC = () => {
                   <div className="space-y-2.5">
                     <div className="p-2.5 rounded-2xl bg-[#e85729]/15 text-black text-xs font-bold flex items-center gap-2">
                       <Flame className="w-4 h-4 text-[#e85729] shrink-0" />
-                      <span>{isThai ? 'เคล็ดลับเสริมพลังตีแบดจากน้องสแมชชี่ #15' : 'Smashy #15 Pro Badminton Masterclass'}</span>
+                      <span>{isThai ? 'เคล็ดลับเสริมพลังจากน้องสแมชชี่' : 'Smashy Pro Badminton Masterclass'}</span>
                     </div>
 
                     {PRO_TIPS.map((tip) => (
@@ -600,7 +604,7 @@ export const GameCompanionWidget: React.FC = () => {
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-md bg-[#e85729]/10 text-[#e85729]">
-                            {tip.badge}
+                            {isThai ? tip.badgeTh : tip.badge}
                           </span>
                           <span className="text-[10px] text-neutral-600 font-semibold">
                             {isThai ? tip.categoryTh : tip.category}
@@ -628,7 +632,7 @@ export const GameCompanionWidget: React.FC = () => {
                           {isThai ? 'เลเวลผู้เล่นปัจจุบัน' : 'Player Level'}
                         </span>
                         <span className="text-xs font-black text-[#7cd7a0]">
-                          LVL {player.level}
+                          {isThai ? `เลเวล ${player.level}` : `LVL ${player.level}`}
                         </span>
                       </div>
                       <div className="w-full bg-neutral-200 h-2 rounded-full overflow-hidden">
@@ -640,8 +644,12 @@ export const GameCompanionWidget: React.FC = () => {
                         />
                       </div>
                       <div className="flex justify-between text-[10px] text-neutral-600 mt-1 font-semibold">
-                        <span>{player.currentExp} EXP</span>
-                        <span>{player.nextLevelExp} EXP เพื่อเลเวลถัดไป</span>
+                        <span>{player.currentExp} {isThai ? 'คะแนน' : 'XP'}</span>
+                        <span>
+                          {isThai
+                            ? `${player.nextLevelExp} คะแนน เพื่อเลเวลถัดไป`
+                            : `${player.nextLevelExp} XP to next level`}
+                        </span>
                       </div>
                     </div>
 
@@ -653,7 +661,7 @@ export const GameCompanionWidget: React.FC = () => {
                       <div className="flex items-center justify-between p-2 rounded-xl bg-neutral-50 border border-neutral-100">
                         <div className="text-[11px]">
                           <div className="font-bold text-black">{isThai ? 'จองคอร์ทวันนี้' : 'Book a court today'}</div>
-                          <div className="text-[10px] text-neutral-600">+50 EXP</div>
+                          <div className="text-[10px] text-neutral-600">{isThai ? '+50 คะแนน' : '+50 XP'}</div>
                         </div>
                         <button
                           type="button"
@@ -671,7 +679,7 @@ export const GameCompanionWidget: React.FC = () => {
                       <div className="flex items-center justify-between p-2 rounded-xl bg-neutral-50 border border-neutral-100">
                         <div className="text-[11px]">
                           <div className="font-bold text-black">{isThai ? 'นับคะแนนสด 1 แมตช์' : 'Log 1 Live Match'}</div>
-                          <div className="text-[10px] text-neutral-600">+75 EXP</div>
+                          <div className="text-[10px] text-neutral-600">{isThai ? '+75 คะแนน' : '+75 XP'}</div>
                         </div>
                         <button
                           type="button"
@@ -688,8 +696,8 @@ export const GameCompanionWidget: React.FC = () => {
 
                       <div className="flex items-center justify-between p-2 rounded-xl bg-neutral-50 border border-neutral-100">
                         <div className="text-[11px]">
-                          <div className="font-bold text-black">{isThai ? 'ฝึกซ้อม 3 ท่าทางโค้ช AI' : 'Complete 3 AI Drills'}</div>
-                          <div className="text-[10px] text-neutral-600">+100 EXP</div>
+                          <div className="font-bold text-black">{isThai ? 'ฝึกซ้อม 3 ท่าจากโค้ช' : 'Complete 3 Coach Drills'}</div>
+                          <div className="text-[10px] text-neutral-600">{isThai ? '+100 คะแนน' : '+100 XP'}</div>
                         </div>
                         <button
                           type="button"
@@ -725,7 +733,7 @@ export const GameCompanionWidget: React.FC = () => {
                       </h4>
                       <p className="text-[11px] text-neutral-600">
                         {isThai
-                          ? 'กดปุ่มด้านล่างเพื่อฟังเสียงเอฟเฟกต์ 8-bit และข้อความเสริมกำลังใจก่อนลงคอร์ท!'
+                          ? 'กดปุ่มด้านล่างเพื่อฟังเสียงเอฟเฟกต์และข้อความเสริมกำลังใจก่อนลงคอร์ท'
                           : 'Tap below for retro arcade sound effects and motivational boosts!'}
                       </p>
                     </div>
@@ -820,7 +828,7 @@ export const GameCompanionWidget: React.FC = () => {
                   className="flex-1 py-2.5 px-3 rounded-[1600px] bg-neutral-100 hover:bg-neutral-200 text-black text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-transform"
                 >
                   <Compass className="w-3.5 h-3.5" />
-                  <span>{isThai ? 'หน้าโค้ช AI (D1)' : 'AI Coach'}</span>
+                  <span>{isThai ? 'หน้าโค้ชส่วนตัว' : 'Coach Hub'}</span>
                 </button>
 
                 <button

@@ -9,7 +9,8 @@ interface ProSubscriptionModalProps {
 }
 
 export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOpen, onClose }) => {
- const { player, updatePlayer, gainExp } = useApp();
+ const { updatePlayer, gainExp, language } = useApp();
+ const isThai = language === 'th';
  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('yearly');
  const [paymentMethod, setPaymentMethod] = useState<'promptpay' | 'card'>('promptpay');
  const [isProcessing, setIsProcessing] = useState(false);
@@ -26,29 +27,33 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  updatePlayer({
  tier: 'Pro',
  });
- gainExp(300, 'สมัคร SmashAI Pro Member สำเร็จ!', 'Pro Athlete Status');
+ gainExp(
+ 300,
+ isThai ? 'อัปเกรดสมาชิกโปรสำเร็จ!' : 'Upgraded to Smash Pro!',
+ isThai ? 'นักกีฬาระดับโปร' : 'Pro Athlete Status'
+ );
  }, 1200);
  };
 
  const perks = [
  {
- title: 'Unlimited CV Smash Radar Scan',
- desc: 'วัดความเร็วลูกตบแบบ Computer Vision AI ไม่จำกัดจำนวนครั้ง',
+ title: isThai ? 'วัดความเร็วลูกตบไม่จำกัด' : 'Unlimited Smash Speed Scan',
+ desc: isThai ? 'ตรวจจับสปีดลูกตบด้วยกล้องอัจฉริยะไม่จำกัดครั้ง' : 'Computer Vision smash velocity analysis without limits',
  color: '#ffd731',
  },
  {
- title: 'ส่วนลดค่าคอร์ท 10% ทุกแมตช์',
- desc: 'ลดทันทีใน 48 สนามพันธมิตรทั่วกรุงเทพฯ และปริมณฑล',
+ title: isThai ? 'ส่วนลดค่าคอร์ท 10% ทุกแมตช์' : '10% Off Every Court Booking',
+ desc: isThai ? 'ลดทันทีในสนามพันธมิตรทั่วกรุงเทพฯ และปริมณฑล' : 'Instant discount across 48 partner arenas',
  color: '#55db9c',
  },
  {
- title: 'แผนซ้อม AI Drill & Diagnostics',
- desc: 'วิเคราะห์ Heatmap จุดอ่อนหลังแข่ง พร้อมคอร์สซ้อมเฉพาะบุคคล',
+ title: isThai ? 'แผนฝึกเจาะจงจุดอ่อน' : 'Personalized AI Drills & Diagnostics',
+ desc: isThai ? 'วิเคราะห์โซนเสียแต้มหลังแข่งพร้อมคอร์สแก้ทาง' : 'Post-match weakness heatmap & targeted training plans',
  color: '#e9ccff',
  },
  {
- title: 'Gold Verified Pro Badge & Card',
- desc: 'การ์ดนักกีฬาบัตรทอง และตราสัญลักษณ์ Pro บนลีดเดอร์บอร์ด',
+ title: isThai ? 'การ์ดนักกีฬาและตราระดับโปร' : 'Gold Verified Pro Badge & Card',
+ desc: isThai ? 'การ์ดนักกีฬาบัตรทองและตราสัญลักษณ์บนอันดับก๊วน' : 'Exclusive gold athlete card & leaderboard badge',
  color: '#4da2ff',
  },
  ];
@@ -62,10 +67,10 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  <div className="flex items-center gap-2">
  <span className="px-3 py-1 rounded-[1600px] bg-[#ffd731] text-[#000000] font-['Antonio',sans-serif] text-xs font-black tracking-[0.032em] uppercase flex items-center gap-1.5 shadow-xs">
  <Crown className="w-3.5 h-3.5 fill-[#000000]" />
- SMASHAI PRO
+ {isThai ? 'สมาชิกโปร' : 'SMASH PRO'}
  </span>
  <span className="text-[10px] font-bold tracking-[0.032em] uppercase text-[#000000]/60">
- MONETIZATION ENGINE
+ {isThai ? 'สิทธิพิเศษรายสมาชิก' : 'PRO MEMBERSHIP'}
  </span>
  </div>
  <button
@@ -83,10 +88,12 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  <Crown className="w-10 h-10 text-[#000000]" />
  </div>
  <div className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight text-[#000000]">
- WELCOME TO PRO!
+ {isThai ? 'ยินดีต้อนรับสู่ระดับโปร!' : 'WELCOME TO PRO!'}
  </div>
  <p className="text-xs text-[#000000]/80 font-bold max-w-[280px] mx-auto">
- คุณได้อัปเกรดเป็น <strong>SmashAI Pro Athlete</strong> เรียบร้อยแล้ว ได้รับโบนัส <strong>+300 EXP</strong> พร้อมส่วนลดคอร์ท 10% ทุกการจอง
+ {isThai
+ ? 'อัปเกรดเป็นสมาชิกโปรเรียบร้อย รับโบนัส +300 คะแนน พร้อมส่วนลดค่าคอร์ท 10%'
+ : 'Upgraded to Pro Athlete! You earned +300 XP bonus and 10% off all courts.'}
  </p>
  <div className="pt-4">
  <button
@@ -97,7 +104,7 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  }}
  className="w-full py-3.5 rounded-[1600px] bg-[#000000] text-[#ffffff] border border-[#000000] font-bold text-xs uppercase tracking-[0.032em] hover:bg-[#1a1a1a] transition-all cursor-pointer shadow-sm"
  >
- เริ่มใช้งานสิทธิพิเศษ PRO เลย
+ {isThai ? 'เริ่มใช้งานสิทธิพิเศษเลย' : 'START USING PRO PERKS'}
  </button>
  </div>
  </div>
@@ -105,12 +112,23 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  <>
  {/* Value Proposition Title */}
  <div className="mt-4">
- <h3 className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight leading-[0.88] text-[#000000]">
- ปลดล็อกพลัง AI <br />
- <span className="text-[#5c4ade]">SMASHAI PRO ATHLETE</span>
+ <h3 className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight leading-[0.92] text-[#000000]">
+ {isThai ? (
+ <>
+ ปลดล็อกฟีเจอร์พิเศษ <br />
+ <span className="text-[#5c4ade]">สมาชิกระดับโปร</span>
+ </>
+ ) : (
+ <>
+ UNLOCK PRO POWER <br />
+ <span className="text-[#5c4ade]">PRO ATHLETE</span>
+ </>
+ )}
  </h3>
  <p className="text-xs text-[#000000]/70 font-bold mt-2">
- ระบบสมาชิกสำหรับนักแบดมินตันยุคใหม่ ช่วยซ้อม พัฒนาฟอร์ม และลดค่าใช้จ่ายสนามจริง
+ {isThai
+ ? 'ตัวช่วยวิเคราะห์ฟอร์มการเล่นและรับส่วนลดสนามจริงทุกแมตช์'
+ : 'Train smarter with full analytics and instant court booking discounts.'}
  </p>
  </div>
 
@@ -128,8 +146,10 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  : 'text-[#000000] hover:bg-[#ffffff]/60'
  }`}
  >
- <span>รายปี (฿1,990/ปี)</span>
- <span className="text-[9px] text-[#55db9c] font-black">ประหยัด 17% (฿165/ด.)</span>
+ <span>{isThai ? 'รายปี (฿1,990/ปี)' : 'Annual (฿1,990/yr)'}</span>
+ <span className="text-[9px] text-[#55db9c] font-black">
+ {isThai ? 'ประหยัด 17% (฿165/ด.)' : 'Save 17% (฿165/mo)'}
+ </span>
  </button>
 
  <button
@@ -144,8 +164,10 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  : 'text-[#000000] hover:bg-[#ffffff]/60'
  }`}
  >
- <span>รายเดือน</span>
- <span className="text-[9px] text-[#000000]/60 font-bold">฿199 / เดือน</span>
+ <span>{isThai ? 'รายเดือน' : 'Monthly'}</span>
+ <span className="text-[9px] text-[#000000]/60 font-bold">
+ {isThai ? '฿199 / เดือน' : '฿199 / month'}
+ </span>
  </button>
  </div>
 
@@ -177,7 +199,7 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  {/* Payment Method Selector */}
  <div className="mt-4 pt-3 ">
  <div className="text-[10px] font-bold uppercase tracking-[0.032em] text-[#000000]/60 mb-2">
- เลือกช่องทางชำระเงิน (Real In-App Payment Flow)
+ {isThai ? 'เลือกช่องทางชำระเงิน' : 'Payment Method'}
  </div>
  <div className="grid grid-cols-2 gap-2">
  <button
@@ -190,7 +212,7 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  }`}
  >
  <QrCode className="w-4 h-4" />
- <span>PromptPay QR</span>
+ <span>{isThai ? 'พร้อมเพย์' : 'PromptPay QR'}</span>
  </button>
  <button
  type="button"
@@ -202,7 +224,7 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  }`}
  >
  <CreditCard className="w-4 h-4" />
- <span>Credit Card</span>
+ <span>{isThai ? 'บัตรเครดิต' : 'Credit Card'}</span>
  </button>
  </div>
  </div>
@@ -216,16 +238,20 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  className="w-full py-3.5 px-4 rounded-[1600px] bg-[#000000] text-[#ffffff] border-2 border-[#000000] font-bold text-xs uppercase tracking-[0.032em] flex items-center justify-center gap-2 hover:bg-[#1a1a1a] transition-all cursor-pointer active:scale-95 disabled:opacity-50 whitespace-nowrap shadow-sm"
  >
  {isProcessing ? (
- <span className="whitespace-nowrap">PROCESSING PAYMENT...</span>
+ <span className="whitespace-nowrap">{isThai ? 'กำลังดำเนินการ...' : 'PROCESSING PAYMENT...'}</span>
  ) : (
  <>
- <span className="whitespace-nowrap">CONFIRM PRO ({billingCycle === 'yearly' ? '฿1,990/YR' : '฿199/MO'})</span>
+ <span className="whitespace-nowrap">
+ {isThai
+ ? `ยืนยันสมัครโปร (${billingCycle === 'yearly' ? '฿1,990/ปี' : '฿199/ด.'})`
+ : `CONFIRM PRO (${billingCycle === 'yearly' ? '฿1,990/YR' : '฿199/MO'})`}
+ </span>
  <ArrowRight className="w-4 h-4 shrink-0" />
  </>
  )}
  </button>
  <p className="text-center text-[10px] text-[#000000]/50 font-bold mt-2">
- สามารถยกเลิกได้ทุกเมื่อผ่านหน้าการตั้งค่าบัญชี
+ {isThai ? 'ยกเลิกได้ทุกเมื่อผ่านหน้าการตั้งค่า' : 'Cancel anytime in app settings.'}
  </p>
  </div>
  </>

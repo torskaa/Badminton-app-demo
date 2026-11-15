@@ -10,30 +10,55 @@ import { useApp } from '../../context/AppContext';
 import { ScreenSwitcherModal } from '../common/ScreenSwitcherModal';
 
 export const A1_WelcomeScreen: React.FC = () => {
- const { navigateTo } = useApp();
+ const { navigateTo, language } = useApp();
+ const isThai = language === 'th';
  const [activeSlide, setActiveSlide] = useState<0 | 1 | 2>(0);
  const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
 
- const slides = [
+ const slides = isThai
+ ? [
+ {
+ title: 'สแมช',
+ tagline: 'ตีแบดได้ทุกวัน ไม่ต้องรอก๊วน',
+ subtitle: 'จับคู่คนตีแบดระดับเดียวกัน จองสนามมาตรฐาน และพัฒนาฝีมือกับโค้ชอัจฉริยะ',
+ badge: 'คอมมูนิตี้ตีแบด',
+ buttonText: 'เริ่มต้นใช้งาน',
+ },
+ {
+ title: 'จองคอร์ท',
+ tagline: 'เช็กคอร์ทว่างและจองได้ทันที',
+ subtitle: 'ไม่ต้องโทรถาม จองสนามทั่วกรุงเทพฯ จ่ายผ่านพร้อมเพย์และรับคะแนนเพิ่ม',
+ badge: 'สนามพื้นยางมาตรฐาน',
+ buttonText: 'สำรวจสนาม',
+ },
+ {
+ title: 'คว้าชัย',
+ tagline: 'บันทึกทุกแต้มแบบเรียลไทม์',
+ subtitle: 'สกอร์บอร์ดข้างสนาม วัดสปีดลูกตบ พร้อมโปรแกรมซ้อมเฉพาะตัว',
+ badge: 'วิเคราะห์เกมอัจฉริยะ',
+ buttonText: 'เข้าสู่สนาม',
+ },
+ ]
+ : [
  {
  title: 'SMASH',
  tagline: 'YOUR GAME. UNSTUCK.',
- subtitle: 'Connect with badminton players at your skill level. Book verified BWF Taraflex courts and level up with AI coaching.',
- badge: 'Badminton Community & AI',
+ subtitle: 'Match with players at your level, book certified courts, and train smarter.',
+ badge: 'Badminton Community',
  buttonText: 'Get Started',
  },
  {
  title: 'BOOK',
  tagline: 'INSTANT COURTSIDE ACCESS',
- subtitle: 'Zero phone calls. Live availability across Bangkok arenas. Fast PromptPay QR check-in and 2x EXP prime-time slots.',
- badge: 'BWF Certified Taraflex',
+ subtitle: 'Zero phone calls. Live slots across Bangkok with fast PromptPay check-in.',
+ badge: 'Certified Taraflex',
  buttonText: 'Explore Courts',
  },
  {
  title: 'WIN',
  tagline: 'TRACK EVERY POINT LIVE',
- subtitle: 'Courtside live scorekeeper, CV smash speed telemetry up to 342 km/h, and customized daily drills.',
- badge: 'AI Telemetry 342 km/h',
+ subtitle: 'Live courtside scorer, smash speed tracking, and custom daily drills.',
+ badge: 'Smart Telemetry',
  buttonText: 'Enter Arena',
  },
  ];
@@ -57,17 +82,17 @@ export const A1_WelcomeScreen: React.FC = () => {
  🏸
  </div>
  <span className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight uppercase">
- SMASH
+ {isThai ? 'สแมช' : 'SMASH'}
  </span>
  </div>
 
  <button
  onClick={() => setIsSwitcherOpen(true)}
  className="px-3 py-1.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-xs font-bold tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer hover:bg-[#e9e9e9]"
- title="App Navigation Directory (18 Screens)"
+ title={isThai ? 'สารบัญหน้าจอทั้งหมด' : 'Navigation Directory'}
  >
  <Compass className="w-3.5 h-3.5 text-[#15803d]" />
- <span>18 Screens</span>
+ <span>{isThai ? 'ทุกหน้า' : 'Screens'}</span>
  </button>
  </div>
 
@@ -80,7 +105,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  className="absolute top-3 left-4 z-20 px-3 py-1 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
  >
  <Flame className="w-3.5 h-3.5 fill-[#ffffff]" />
- <span>342 km/h Peak</span>
+ <span>{isThai ? 'ตบ 342 กม./ชม.' : '342 km/h Peak'}</span>
  </motion.div>
 
  <motion.div
@@ -89,7 +114,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  className="absolute top-5 right-4 z-20 px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
  >
  <span>🏸</span>
- <span>Taraflex BWF</span>
+ <span>{isThai ? 'พื้นยางมาตรฐาน' : 'Taraflex BWF'}</span>
  </motion.div>
 
  <motion.div
@@ -98,7 +123,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  className="absolute bottom-20 left-4 z-20 px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
  >
  <Trophy className="w-3.5 h-3.5 stroke-[2.4]" />
- <span>Lv.14 Rank</span>
+ <span>{isThai ? 'แรงก์ระดับ 14' : 'Lv.14 Rank'}</span>
  </motion.div>
 
  <motion.div
@@ -107,7 +132,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  className="absolute bottom-16 right-4 z-20 px-3 py-1 rounded-[1600px] bg-[#e8f7ee] text-[#000000] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
  >
  <Zap className="w-3.5 h-3.5 text-[#15803d] fill-current" />
- <span>+250 EXP</span>
+ <span>{isThai ? '+250 คะแนน' : '+250 EXP'}</span>
  </motion.div>
 
  {/* Central 3D Inflatable Electric Blue Ribbon Graphic (Signature Brand Sculpture) */}
@@ -188,7 +213,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  </div>
 
  <span className="text-[11px] font-bold tracking-[0.032em] text-[#000000]/60 uppercase">
- Step {activeSlide + 1} of 3
+ {isThai ? `ขั้นตอนที่ ${activeSlide + 1} / 3` : `Step ${activeSlide + 1} of 3`}
  </span>
  </div>
 
@@ -200,7 +225,7 @@ export const A1_WelcomeScreen: React.FC = () => {
  <span className="w-7 h-7 rounded-[1600px] bg-[#7cd7a0] text-[#000000] flex items-center justify-center font-black text-xs">
  ★
  </span>
- <span className="font-bold tracking-[0.032em] text-[#ffffff] uppercase text-xs">
+ <span className="font-bold tracking-[0.032em] text-[#ffffff] uppercase text-xs whitespace-nowrap">
  {slide.buttonText}
  </span>
  <span className="w-7 h-7 rounded-[1600px] bg-[#ffffff] text-[#000000] flex items-center justify-center group-hover:translate-x-1 transition-transform">
@@ -212,18 +237,18 @@ export const A1_WelcomeScreen: React.FC = () => {
  <div className="grid grid-cols-2 gap-2 pt-0.5">
  <button
  onClick={() => navigateTo('B1')}
- className="py-2.5 px-3 rounded-[1600px] bg-[#f4f8fb] hover:bg-[#cde5fd] border border-[#000000] text-xs font-bold tracking-[0.032em] text-[#000000] flex items-center justify-center gap-1 transition-transform active:scale-95 cursor-pointer"
+ className="py-2.5 px-3 rounded-[1600px] bg-[#f4f8fb] hover:bg-[#cde5fd] border border-[#000000] text-xs font-bold tracking-[0.032em] text-[#000000] flex items-center justify-center gap-1 transition-transform active:scale-95 cursor-pointer whitespace-nowrap"
  >
- <span>Book Courts</span>
- <ChevronRight className="w-3.5 h-3.5" />
+ <span>{isThai ? 'จองคอร์ท' : 'Book Courts'}</span>
+ <ChevronRight className="w-3.5 h-3.5 shrink-0" />
  </button>
 
  <button
  onClick={() => navigateTo('C1')}
- className="py-2.5 px-3 rounded-[1600px] bg-[#7cd7a0] hover:bg-[#ffe259] border border-[#000000] text-xs font-bold tracking-[0.032em] text-[#000000] flex items-center justify-center gap-1 transition-transform active:scale-95 cursor-pointer"
+ className="py-2.5 px-3 rounded-[1600px] bg-[#7cd7a0] hover:bg-[#ffe259] border border-[#000000] text-xs font-bold tracking-[0.032em] text-[#000000] flex items-center justify-center gap-1 transition-transform active:scale-95 cursor-pointer whitespace-nowrap"
  >
- <span>Live Score</span>
- <ChevronRight className="w-3.5 h-3.5" />
+ <span>{isThai ? 'บันทึกแต้มสด' : 'Live Score'}</span>
+ <ChevronRight className="w-3.5 h-3.5 shrink-0" />
  </button>
  </div>
  </div>

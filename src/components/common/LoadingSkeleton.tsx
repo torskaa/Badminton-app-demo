@@ -1,5 +1,6 @@
 import React from 'react';
 import { ScreenId } from '../../types';
+import { useApp } from '../../context/AppContext';
 
 export type SkeletonVariant = 'home' | 'profile' | 'map' | 'finance' | 'club_tools' | 'generic';
 
@@ -532,6 +533,9 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
  className = '',
  message,
 }) => {
+ const { language } = useApp();
+ const isThai = language === 'th';
+
  // Resolve variant from screen if variant not explicitly provided
  const resolvedVariant: SkeletonVariant =
  variant ||
@@ -559,8 +563,12 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
  {resolvedVariant === 'profile' && <ProfileSkeleton />}
  {resolvedVariant === 'map' && <MapSkeleton />}
  {resolvedVariant === 'finance' && <FinanceSkeleton />}
- {resolvedVariant === 'club_tools' && <GenericSkeleton message="กำลังโหลดกล่องเครื่องมือสโมสร..." />}
- {resolvedVariant === 'generic' && <GenericSkeleton message={message || 'กำลังโหลดข้อมูล...'} />}
+ {resolvedVariant === 'club_tools' && (
+ <GenericSkeleton message={isThai ? 'กำลังโหลดเครื่องมือ...' : 'Loading tools...'} />
+ )}
+ {resolvedVariant === 'generic' && (
+ <GenericSkeleton message={message || (isThai ? 'กำลังโหลด...' : 'Loading...')} />
+ )}
  </div>
  );
 };

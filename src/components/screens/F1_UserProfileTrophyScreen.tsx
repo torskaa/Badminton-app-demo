@@ -19,12 +19,14 @@ import {
  Clock,
  Sparkles,
  Settings,
+ Share2,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MobileHeader } from '../common/MobileHeader';
 import { SectionHeader } from '../common/SectionHeader';
 import { ProSubscriptionModal } from '../common/ProSubscriptionModal';
 import { AppSettingsModal } from '../common/AppSettingsModal';
+import { ShareAchievementModal } from '../common/ShareAchievementModal';
 import { DoodleAvatar, resolveDoodlePreset } from '../common/DoodleAvatar';
 import { playCoinSound, playSelectSound } from '../../utils/retroAudio';
 
@@ -437,6 +439,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  const [activeTab, setActiveTab] = useState<'card' | 'matches' | 'trophies' | 'gear'>('card');
  const [isProModalOpen, setIsProModalOpen] = useState(false);
  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+ const [isShareAchievementOpen, setIsShareAchievementOpen] = useState(false);
 
  // Local state for past match results
  const [matches, setMatches] = useState<PastMatchResult[]>(INITIAL_PAST_MATCHES);
@@ -466,8 +469,8 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  id: `match_${Date.now()}`,
  opponent: {
  name: isThai ? 'แชมป์ สแมชไฟเออร์' : 'Champ Smashfire',
- tier: 'Diamond League',
- club: 'Bangkok Clash Arena',
+ tier: isThai ? 'ลีกไดมอนด์' : 'Diamond League',
+ club: isThai ? 'สโมสรสแมชกรุงเทพ' : 'Bangkok Clash Arena',
  avatars: [AVATARS.ohm],
  },
  courtName: isThai ? 'สแมช อารีน่า พระราม 9 (คอร์ท 1)' : 'Smash Arena Rama 9 (Court 1)',
@@ -482,11 +485,11 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  durationMin: 38,
  expGained: 160,
  highestSmashKmh: 348,
- highlightShot: 'Clutch Deuce Winning Smash',
+ highlightShot: isThai ? 'ลูกตบปิดแต้มช่วงดิวซ์' : 'Clutch Deuce Winning Smash',
  };
  setMatches([newMatch, ...matches]);
  setExpandedMatchId(newMatch.id);
- gainExp(160, isThai ? 'บันทึกชัยชนะแมตช์ใหม่ลงประวัตินักกีฬา!' : 'Saved new match victory to athlete profile!');
+ gainExp(160, isThai ? 'บันทึกชัยชนะแมตช์ใหม่แล้ว' : 'Saved new match victory');
  };
 
  return (
@@ -647,6 +650,37 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  </div>
  </div>
+
+ {/* EXP Level, Trophy Summary & Share Achievement CTA */}
+ <div className="mt-3 p-3 rounded-[20px] bg-[#ffffff] shadow-xs flex items-center justify-between gap-2.5">
+ <div className="min-w-0">
+ <div className="flex items-center gap-1.5 text-[11px] font-black text-[#000000] tabular-nums">
+ <Zap className="w-3.5 h-3.5 text-[#e85729] shrink-0" />
+ <span>Lv.{player.level}</span>
+ <span className="text-[#000000]/35">·</span>
+ <span className="truncate">{player.currentExp.toLocaleString()} EXP</span>
+ </div>
+ <div className="text-[10px] font-bold text-[#000000]/65 mt-0.5 flex items-center gap-1">
+ <Trophy className="w-3 h-3 text-[#15803d] shrink-0" />
+ <span className="truncate">
+ {isThai
+ ? `ปลดล็อก ${player.badges.filter((b) => b.unlocked).length}/${player.badges.length} เหรียญรางวัล`
+ : `${player.badges.filter((b) => b.unlocked).length}/${player.badges.length} Trophies Unlocked`}
+ </span>
+ </div>
+ </div>
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ setIsShareAchievementOpen(true);
+ }}
+ className="px-3.5 py-2 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] text-[11px] font-bold flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0"
+ >
+ <Share2 className="w-3.5 h-3.5 text-[#7cd7a0] shrink-0" />
+ <span>{isThai ? 'แชร์ความสำเร็จ' : 'Share Achievement'}</span>
+ </button>
+ </div>
  </div>
  </div>
 
@@ -774,7 +808,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <div className="space-y-1.5 w-full">
  <SectionHeader
  title={isThai ? 'เชื่อมต่ออุปกรณ์สวมใส่' : 'SMART WEARABLE'}
- badge="164 BPM · 480 kcal"
+ badge={isThai ? '164 ครั้ง/นาที · 480 แคล' : '164 BPM · 480 kcal'}
  badgeVariant="soft"
  />
  <div
@@ -787,10 +821,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  <div className="min-w-0 flex-1">
  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
- APPLE WATCH & GARMIN SYNC
+ {isThai ? 'ซิงค์นาฬิกาและสุขภาพ' : 'APPLE WATCH & GARMIN SYNC'}
  </div>
  <div className="text-[10px] text-[#000000]/70 font-bold truncate">
- {isThai ? 'ซิงค์ชีพจรและเผาผลาญแคลอรี่เป็นแต้ม EXP' : 'Sync heart rate & calories to EXP'}
+ {isThai ? 'ซิงค์ชีพจรและแคลอรีเป็นคะแนน' : 'Sync heart rate & calories to EXP'}
  </div>
  </div>
  </div>
@@ -798,10 +832,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  </div>
 
- {/* Edit DNA & Settings Section */}
+ {/* Edit Style & Settings Section */}
  <div className="space-y-1.5 w-full">
  <SectionHeader
- title={isThai ? 'ตั้งค่าความถนัดนักกีฬา' : 'PLAYSTYLE DNA'}
+ title={isThai ? 'สไตล์การเล่นของฉัน' : 'MY PLAYSTYLE'}
  badge={isThai ? 'แก้ไขได้' : 'EDITABLE'}
  badgeVariant="soft"
  />
@@ -815,10 +849,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  <div className="min-w-0 flex-1">
  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
- {isThai ? 'แก้ไขสไตล์การเล่น & มือถนัด' : 'Edit Athlete DNA & Playstyle'}
+ {isThai ? 'แก้ไขสไตล์และมือถนัด' : 'Edit Playstyle & Dominant Hand'}
  </div>
  <div className="text-[10px] text-[#000000]/70 font-bold truncate">
- {isThai ? 'ปรับสายตบ, มือกุมแร็กเก็ต, และเป้าหมายฝึกฝน' : 'Customize playstyle, grip hand, and goals'}
+ {isThai ? 'ปรับสายตบ มือถนัด และเป้าหมาย' : 'Customize playstyle, grip hand & goals'}
  </div>
  </div>
  </div>
@@ -829,8 +863,8 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  {/* App Settings & Language Card */}
  <div className="space-y-1.5 w-full">
  <SectionHeader
- title={isThai ? 'ตั้งค่าแอป & ภาษา' : 'APP SETTINGS & LANGUAGE'}
- badge={language.toUpperCase()}
+ title={isThai ? 'ตั้งค่าแอปและภาษา' : 'APP SETTINGS & LANGUAGE'}
+ badge={isThai ? 'ไทย' : 'EN'}
  badgeVariant="dark"
  />
  <div
@@ -846,10 +880,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  <div className="min-w-0 flex-1">
  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
- {isThai ? 'เปลี่ยนภาษา TH/EN & เสียงเอฟเฟกต์' : 'Language TH/EN & Sound Settings'}
+ {isThai ? 'ภาษาและเสียงแจ้งเตือน' : 'Language & Sound Settings'}
  </div>
  <div className="text-[10px] text-[#000000]/70 font-bold truncate">
- {isThai ? 'สลับภาษาไทย-อังกฤษ ตั้งค่าเสียงและการซิงค์ออฟไลน์' : 'Switch language, retro audio & offline sync'}
+ {isThai ? 'สลับภาษาและตั้งค่าเสียง' : 'Switch language, audio & sync'}
  </div>
  </div>
  </div>
@@ -860,7 +894,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  {/* Pro Membership Section */}
  <div className="space-y-1.5 w-full">
  <SectionHeader
- title="SMASH PRO MEMBER"
+ title={isThai ? 'สมาชิกสแมชโปร' : 'SMASH PRO MEMBER'}
  badge={isThai ? '฿199 / เดือน' : '฿199 / MO'}
  badgeVariant="orange"
  />
@@ -877,10 +911,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  <div className="min-w-0 flex-1">
  <div className="font-['Antonio',sans-serif] text-sm font-black uppercase tracking-wider text-[#000000] truncate">
- {isThai ? 'สิทธิพิเศษสมาชิก PRO' : 'PRO ATHLETE PERKS'}
+ {isThai ? 'สิทธิพิเศษสมาชิกโปร' : 'PRO ATHLETE PERKS'}
  </div>
  <div className="text-[10px] text-[#000000]/80 font-bold truncate">
- {isThai ? 'ลดค่าคอร์ท 10% · สแกน AI ไม่จำกัด' : '10% off courts · Unlimited AI Scans'}
+ {isThai ? 'ลดค่าคอร์ท 10% · วิเคราะห์เกมไม่จำกัด' : '10% off courts · Unlimited analysis'}
  </div>
  </div>
  </div>
@@ -950,7 +984,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  </div>
  </div>
  <div className="p-2 rounded-[16px] bg-[#7cd7a0]">
- <div className="text-[8px] font-bold uppercase text-[#000000]/70 whitespace-nowrap">WIN RATE</div>
+ <div className="text-[8px] font-bold uppercase text-[#000000]/70 whitespace-nowrap">
+ {isThai ? 'อัตราชนะ' : 'WIN RATE'}
+ </div>
  <div className="font-['Antonio',sans-serif] text-xl font-black text-[#000000] tabular-nums">{winRatePercentage}%</div>
  </div>
  </div>
@@ -990,7 +1026,9 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <div className="space-y-3">
  {filteredMatches.length === 0 ? (
  <div className="p-8 text-center bg-[#ffffff] rounded-[28px] shadow-sm">
- <p className="text-xs font-bold text-[#000000]/60">ไม่พบข้อมูลแมตช์ในหมวดหมู่นี้</p>
+ <p className="text-xs font-bold text-[#000000]/60">
+ {isThai ? 'ไม่พบข้อมูลแมตช์ในหมวดหมู่นี้' : 'No matches found'}
+ </p>
  </div>
  ) : (
  filteredMatches.map((match) => (
@@ -1017,12 +1055,35 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  {activeTab === 'trophies' && (
  <div className="space-y-3">
  <SectionHeader
- title={isThai ? 'ตู้เหรียญรางวัลเกียรติยศ' : 'TROPHY & BADGE CASE'}
+ title={isThai ? 'ตู้เหรียญรางวัล' : 'TROPHY & BADGE CASE'}
  badge={`${player.badges.filter((b) => b.unlocked).length}/${player.badges.length}`}
  badgeVariant="green"
+ rightSlot={
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ setIsShareAchievementOpen(true);
+ }}
+ className="px-3 py-1.5 rounded-[1600px] bg-[#7cd7a0] hover:bg-[#6ecb93] text-[#000000] text-[10px] font-bold flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0"
+ >
+ <Share2 className="w-3 h-3 shrink-0" />
+ <span>{isThai ? 'แชร์ความสำเร็จ' : 'Share Achievement'}</span>
+ </button>
+ }
  />
  <div className="grid grid-cols-2 gap-3">
- {player.badges.map((b) => (
+ {player.badges.map((b) => {
+ const rarityText = isThai
+ ? b.rarity === 'Legendary'
+ ? 'ตำนาน'
+ : b.rarity === 'Epic'
+ ? 'มหากาพย์'
+ : b.rarity === 'Rare'
+ ? 'หายาก'
+ : 'ทั่วไป'
+ : b.rarity;
+ return (
  <div
  key={b.id}
  className={`p-4 rounded-[28px] shadow-sm transition-all flex flex-col justify-between ${
@@ -1035,7 +1096,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <Award className="w-5 h-5" />
  </div>
  <span className="text-[9px] font-bold uppercase tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] shadow-xs whitespace-nowrap shrink-0">
- {b.rarity}
+ {rarityText}
  </span>
  </div>
 
@@ -1049,11 +1110,12 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
 
  <div className="mt-3 pt-2 flex items-center justify-between text-[10px] font-bold">
  <span className={b.unlocked ? 'text-[#000000] whitespace-nowrap' : 'text-[#000000]/50 whitespace-nowrap'}>
- {b.unlocked ? (isThai ? '✓ ปลดล็อก (+100 EXP)' : '✓ Unlocked (+100 EXP)') : `${b.progress}/${b.maxProgress}`}
+ {b.unlocked ? (isThai ? '✓ ปลดล็อก (+100 คะแนน)' : '✓ Unlocked (+100 EXP)') : `${b.progress}/${b.maxProgress}`}
  </span>
  </div>
  </div>
- ))}
+ );
+ })}
  </div>
  </div>
  )}
@@ -1062,7 +1124,7 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <div className="space-y-1.5">
  <SectionHeader
  title={isThai ? 'สเปกอุปกรณ์ไม้แบด' : 'RACKET & STRING SPEC'}
- badge="PRO SETUP"
+ badge={isThai ? 'สเปกแนะนำ' : 'PRO SETUP'}
  badgeVariant="green"
  />
  <div className="p-5 rounded-[28px] bg-[#ffffff] shadow-sm space-y-2.5">
@@ -1095,6 +1157,10 @@ export const F1_UserProfileTrophyScreen: React.FC = () => {
  <AppSettingsModal
  isOpen={isSettingsOpen}
  onClose={() => setIsSettingsOpen(false)}
+ />
+ <ShareAchievementModal
+ isOpen={isShareAchievementOpen}
+ onClose={() => setIsShareAchievementOpen(false)}
  />
  </div>
  );

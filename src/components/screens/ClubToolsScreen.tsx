@@ -190,7 +190,7 @@ export const ClubToolsScreen: React.FC = () => {
 
  {/* Quick Sparring & RSVP Shortcuts */}
  <div className="space-y-1.5">
- <SectionHeader title={t.quickClubTitle} badge="Bangkok Hub" badgeVariant="soft" />
+ <SectionHeader title={t.quickClubTitle} badge={language === 'th' ? 'ก๊วนกรุงเทพฯ' : 'Bangkok Hub'} badgeVariant="soft" />
  <div className="bg-[#ffffff] rounded-[28px] p-4">
 
  <div className="grid grid-cols-2 gap-2">
@@ -354,7 +354,7 @@ export const ClubToolsScreen: React.FC = () => {
  {/* Team 1 */}
  <div className="p-3.5 rounded-[24px] bg-[#7cd7a0]/30 space-y-2">
  <div className="flex items-center justify-between text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
- <span>TEAM A (OVR 84)</span>
+ <span>{language === 'th' ? 'ทีม A (พลัง 84)' : 'TEAM A (OVR 84)'}</span>
  <span className="text-[10px]">{t.court1}</span>
  </div>
  <div className="space-y-1.5 text-xs font-bold text-[#000000]">
@@ -372,7 +372,7 @@ export const ClubToolsScreen: React.FC = () => {
  {/* Team 2 */}
  <div className="p-3.5 rounded-[24px] bg-[#7cd7a0]/30 space-y-2">
  <div className="flex items-center justify-between text-xs font-black text-[#000000] font-['Antonio',sans-serif]">
- <span>TEAM B (OVR 83)</span>
+ <span>{language === 'th' ? 'ทีม B (พลัง 83)' : 'TEAM B (OVR 83)'}</span>
  <span className="text-[10px]">{t.court1}</span>
  </div>
  <div className="space-y-1.5 text-xs font-bold text-[#000000]">

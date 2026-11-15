@@ -40,12 +40,12 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
  <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-12">
  {/* Booking Summary Card */}
  <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'รายละเอียดคอร์ท & วันเวลา' : 'COURT PASS DETAILS'}
- subtitle={language === 'th' ? 'ตรวจสอบสนาม วันที่ และหมายเลขคอร์ท' : 'Verify facility, date, and court number'}
- badge="Step 2/2"
- badgeVariant="soft"
- />
+          <SectionHeader
+            title={language === 'th' ? 'รายละเอียดคอร์ทและเวลา' : 'COURT PASS DETAILS'}
+            subtitle={language === 'th' ? 'ตรวจสอบสนามและหมายเลขคอร์ท' : 'Verify venue, date & court'}
+            badge={language === 'th' ? 'ขั้นตอน 2/2' : 'Step 2/2'}
+            badgeVariant="soft"
+          />
 
  <div className="rounded-[28px] p-4 space-y-3 bg-[#ffffff]">
 
@@ -148,47 +148,47 @@ export const B3_CheckoutPaymentScreen: React.FC = () => {
 
  {/* Upload Bank Slip Box */}
  <div className="space-y-2">
- <SectionHeader
- title={language === 'th' ? 'อัปโหลดสลิปโอนเงิน' : 'UPLOAD TRANSFER SLIP'}
- subtitle={language === 'th' ? 'ตรวจสอบความถูกต้องและออกบัตรเข้าสนาม' : 'Verify slip to unlock your digital court pass'}
- badge={language === 'th' ? 'ตรวจทันที' : 'INSTANT'}
- badgeVariant="green"
- />
+          <SectionHeader
+            title={language === 'th' ? 'อัปโหลดสลิปโอนเงิน' : 'UPLOAD TRANSFER SLIP'}
+            subtitle={language === 'th' ? 'ตรวจสอบสลิปเพื่อรับบัตรเข้าคอร์ท' : 'Verify slip to unlock pass'}
+            badge={language === 'th' ? 'ตรวจทันที' : 'INSTANT'}
+            badgeVariant="green"
+          />
 
- <div className="rounded-[28px] p-4 bg-[#ffffff]">
- <div
- onClick={handleSimulateSlipUpload}
- className={`border border-dashed rounded-[20px] p-4 text-center cursor-pointer transition-all ${
- verificationDone
- ? 'border-[#000000] bg-[#7cd7a0]'
- : 'border-[#000000] hover:bg-[#e9e9e9] bg-[#ffffff]'
- }`}
- >
- {isVerifying ? (
- <div className="flex flex-col items-center gap-2 py-2">
- <div className="w-6 h-6 border-2 border-[#000000] border-t-transparent rounded-full animate-spin" />
- <span className="text-xs font-bold text-[#000000]">
- {language === 'th' ? 'กำลังตรวจสอบความถูกต้องของสลิป...' : 'Verifying transfer slip...'}
- </span>
- </div>
- ) : verificationDone ? (
- <div className="flex items-center justify-center gap-2 py-1 text-[#000000]">
- <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
- <span className="text-xs font-bold tracking-[0.032em]">
- {language === 'th' ? 'สลิปถูกต้องเรียบร้อย ยืนยันแล้ว' : 'Slip Verified Successfully'}
- </span>
- </div>
- ) : (
- <div className="flex flex-col items-center gap-1.5 py-1">
- <UploadCloud className="w-6 h-6 text-[#000000]" />
- <span className="text-xs font-bold text-[#000000]">
- {language === 'th' ? 'คลิกเพื่ออัปโหลดสลิปธนาคาร' : 'Click to Upload Bank Slip'}
- </span>
- <span className="text-[10px] text-[#000000]/60 font-bold">
- {language === 'th' ? 'รองรับ K PLUS, SCB Easy, Krungthai NEXT' : 'Supports all major Thai banking apps'}
- </span>
- </div>
- )}
+          <div className="rounded-[28px] p-4 bg-[#ffffff]">
+            <div
+              onClick={handleSimulateSlipUpload}
+              className={`border border-dashed rounded-[20px] p-4 text-center cursor-pointer transition-all ${
+                verificationDone
+                  ? 'border-[#000000] bg-[#7cd7a0]'
+                  : 'border-[#000000] hover:bg-[#e9e9e9] bg-[#ffffff]'
+              }`}
+            >
+              {isVerifying ? (
+                <div className="flex flex-col items-center gap-2 py-2">
+                  <div className="w-6 h-6 border-2 border-[#000000] border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs font-bold text-[#000000]">
+                    {language === 'th' ? 'กำลังตรวจสอบสลิป...' : 'Verifying transfer slip...'}
+                  </span>
+                </div>
+              ) : verificationDone ? (
+                <div className="flex items-center justify-center gap-2 py-1 text-[#000000]">
+                  <CheckCircle2 className="w-5 h-5 stroke-[2.5]" />
+                  <span className="text-xs font-bold tracking-[0.032em]">
+                    {language === 'th' ? 'ยืนยันสลิปเรียบร้อย' : 'Slip Verified Successfully'}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex flex-col items-center gap-1.5 py-1">
+                  <UploadCloud className="w-6 h-6 text-[#000000]" />
+                  <span className="text-xs font-bold text-[#000000]">
+                    {language === 'th' ? 'แตะเพื่ออัปโหลดสลิปธนาคาร' : 'Click to Upload Bank Slip'}
+                  </span>
+                  <span className="text-[10px] text-[#000000]/60 font-bold">
+                    {language === 'th' ? 'รองรับแอปธนาคารชั้นนำทุกแห่ง' : 'Supports all major Thai banking apps'}
+                  </span>
+                </div>
+              )}
  </div>
  </div>
  </div>

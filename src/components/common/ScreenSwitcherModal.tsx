@@ -28,69 +28,184 @@ interface PathCategory {
 }
 
 export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen, onClose }) => {
- const { currentScreen, navigateTo, theme, dataMode, setDataMode } = useApp();
+ const { currentScreen, navigateTo, theme, dataMode, setDataMode, language } = useApp();
  const isDark = theme === 'dark';
+ const isThai = language === 'th';
 
  const PATH_GROUPS: PathCategory[] = [
  {
- title: 'PATH A: ONBOARDING & SETUP',
- code: 'PATH A',
- badge: 'Welcome',
+ title: isThai ? 'เริ่มต้นใช้งานและตั้งค่า' : 'ONBOARDING & SETUP',
+ code: isThai ? 'หมวด A' : 'PATH A',
+ badge: isThai ? 'เริ่มต้น' : 'Welcome',
  screens: [
- { id: 'A1', stepNo: 'A1', title: 'Welcome Hero & Value Prop', description: 'Hero visual, instant booking intro, start onboarding', actionTag: 'Get Started' },
- { id: 'A2', stepNo: 'A2', title: 'Athlete Playstyle Setup', description: 'Hand dominance, playstyle archetype, skill assessment', actionTag: 'Build Profile' },
+ {
+ id: 'A1',
+ stepNo: '1',
+ title: isThai ? 'หน้าต้อนรับและแนะนำแอป' : 'Welcome Hero & Value Prop',
+ description: isThai ? 'แนะนำฟีเจอร์เด่นและเริ่มต้นใช้งาน' : 'Hero visual, instant booking intro, start onboarding',
+ actionTag: isThai ? 'เริ่มต้น' : 'Get Started',
+ },
+ {
+ id: 'A2',
+ stepNo: '2',
+ title: isThai ? 'ตั้งค่าสไตล์การเล่น' : 'Athlete Playstyle Setup',
+ description: isThai ? 'เลือกมือที่ถนัด สไตล์และระดับฝีมือ' : 'Hand dominance, playstyle archetype, skill assessment',
+ actionTag: isThai ? 'สร้างโปรไฟล์' : 'Build Profile',
+ },
  ],
  },
  {
- title: 'PATH B: COURT DISCOVERY & BOOKING',
- code: 'PATH B',
- badge: 'Booking',
+ title: isThai ? 'ค้นหาสนามและจองคอร์ท' : 'COURT DISCOVERY & BOOKING',
+ code: isThai ? 'หมวด B' : 'PATH B',
+ badge: isThai ? 'จองสนาม' : 'Booking',
  screens: [
- { id: 'B1', stepNo: 'B1', title: 'Court Discovery & Arenas', description: 'Browse BWF Taraflex courts, search Rama 9 & Thonglor', actionTag: 'Find Court' },
- { id: 'B2', stepNo: 'B2', title: 'Court Slot & Schedule Picker', description: 'Select Court 1-4, prime time 2x EXP bonus slots', actionTag: 'Choose Time' },
- { id: 'B3', stepNo: 'B3', title: 'PromptPay Checkout & Slip Verify', description: 'Thai QR payment, simulated bank slip verification', actionTag: 'Pay Now' },
- { id: 'B4', stepNo: 'B4', title: 'Booking Confirmed & E-Ticket Pass', description: 'Digital check-in QR code pass + 100 EXP reward drop', actionTag: 'View Ticket' },
+ {
+ id: 'B1',
+ stepNo: '3',
+ title: isThai ? 'สำรวจสนามแบดใกล้บ้าน' : 'Court Discovery & Arenas',
+ description: isThai ? 'เลือกสนามมาตรฐานและดูคอร์ทว่าง' : 'Browse BWF Taraflex courts & open arenas',
+ actionTag: isThai ? 'หาสนาม' : 'Find Court',
+ },
+ {
+ id: 'B2',
+ stepNo: '4',
+ title: isThai ? 'เลือกคอร์ทและช่วงเวลา' : 'Court Slot & Schedule Picker',
+ description: isThai ? 'เลือกเลขคอร์ทและรอบชั่วโมงที่สะดวก' : 'Select Court 1-4 & prime time slots',
+ actionTag: isThai ? 'เลือกเวลา' : 'Choose Time',
+ },
+ {
+ id: 'B3',
+ stepNo: '5',
+ title: isThai ? 'ชำระเงินด้วยพร้อมเพย์' : 'PromptPay Checkout',
+ description: isThai ? 'สแกนจ่ายและยืนยันสลิปทันที' : 'QR payment & instant slip verification',
+ actionTag: isThai ? 'ชำระเงิน' : 'Pay Now',
+ },
+ {
+ id: 'B4',
+ stepNo: '6',
+ title: isThai ? 'บัตรเข้าสนามดิจิทัล' : 'Booking Confirmed & E-Ticket',
+ description: isThai ? 'สแกนเข้าสนามพร้อมรับคะแนนโบนัส' : 'Digital check-in QR pass + bonus XP',
+ actionTag: isThai ? 'ดูตั๋ว' : 'View Ticket',
+ },
  ],
  },
  {
- title: 'PATH C: IN-MATCH SCORING & ANALYTICS',
- code: 'PATH C',
- badge: 'Courtside',
+ title: isThai ? 'นับแต้มสดและวิเคราะห์เกม' : 'IN-MATCH SCORING & ANALYTICS',
+ code: isThai ? 'หมวด C' : 'PATH C',
+ badge: isThai ? 'ข้างสนาม' : 'Courtside',
  screens: [
- { id: 'C1', stepNo: 'C1', title: 'Courtside Live Score Tracker', description: 'Thumb-friendly scoring, audio commentary waves, shot tags', actionTag: 'Live Match' },
- { id: 'C2', stepNo: 'C2', title: 'Post-Match Summary & EXP Payout', description: 'Match breakdown, animated XP gains, streak boost', actionTag: 'EXP Payout' },
- { id: 'C3', stepNo: 'C3', title: 'AI Match Diagnostics & Heatmap', description: 'Shot win-rates, 2D weak zone interactive court heatmap', actionTag: 'AI Heatmap' },
- { id: 'C4', stepNo: 'C4', title: 'Athlete Recap Card (Shareable)', description: 'FUT / Wrapped gold athlete share card for Instagram', actionTag: 'Recap Card' },
+ {
+ id: 'C1',
+ stepNo: '7',
+ title: isThai ? 'บันทึกแต้มแมตช์สด' : 'Courtside Live Score Tracker',
+ description: isThai ? 'นับแต้มง่ายๆ บอกฝั่งเสิร์ฟและช็อตเด็ด' : 'Thumb-friendly scoring & shot tags',
+ actionTag: isThai ? 'นับแต้ม' : 'Live Match',
+ },
+ {
+ id: 'C2',
+ stepNo: '8',
+ title: isThai ? 'สรุปผลหลังจบเกม' : 'Post-Match Summary',
+ description: isThai ? 'ผลคะแนน รางวัลและบันทึกโน้ต' : 'Match breakdown, rewards & notes',
+ actionTag: isThai ? 'ดูสรุป' : 'Summary',
+ },
+ {
+ id: 'C3',
+ stepNo: '9',
+ title: isThai ? 'วิเคราะห์จุดอ่อน 4 โซน' : 'Match Diagnostics & Heatmap',
+ description: isThai ? 'เปอร์เซ็นต์ช็อตและจุดเสียบนคอร์ท' : 'Shot win-rates & interactive court heatmap',
+ actionTag: isThai ? 'วิเคราะห์' : 'Heatmap',
+ },
+ {
+ id: 'C4',
+ stepNo: '10',
+ title: isThai ? 'การ์ดสรุปผลงานพร้อมแชร์' : 'Athlete Recap Card',
+ description: isThai ? 'การ์ดทองสรุปสถิติสำหรับแชร์ลงโซเชียล' : 'Gold athlete recap card for social sharing',
+ actionTag: isThai ? 'การ์ดผล' : 'Recap Card',
+ },
  ],
  },
  {
- title: 'PATH D: AI COACH & SKILL-UP HUB',
- code: 'PATH D',
- badge: 'AI Coach',
+ title: isThai ? 'โค้ชส่วนตัวและแบบฝึก' : 'COACH & SKILL-UP HUB',
+ code: isThai ? 'หมวด D' : 'PATH D',
+ badge: isThai ? 'ฝึกซ้อม' : 'Coach',
  screens: [
- { id: 'D1', stepNo: 'D1', title: 'AI Coach Dashboard & 5-Axis Radar', description: 'Power, Speed, Control, Stamina, Tactics radar stats', actionTag: 'Coach Hub' },
- { id: 'D2', stepNo: 'D2', title: 'Daily Quests & Skill Drills', description: 'Quests: Smash King, Iron Lung, Early Bird + claim EXP', actionTag: 'Drill Quests' },
- { id: 'D3', stepNo: 'D3', title: 'Computer Vision Video Analysis', description: 'Replay scan, 342 km/h smash speed & joint angles', actionTag: 'Vision Scan' },
+ {
+ id: 'D1',
+ stepNo: '11',
+ title: isThai ? 'แดชบอร์ดทักษะ 5 มิติ' : 'Coach Dashboard & 5-Axis Radar',
+ description: isThai ? 'ติดตามพลังตบ ความไว คุมลูก ความอึด แท็กติก' : 'Power, Speed, Control, Stamina & Tactics stats',
+ actionTag: isThai ? 'หน้าโค้ช' : 'Coach Hub',
+ },
+ {
+ id: 'D2',
+ stepNo: '12',
+ title: isThai ? 'ภารกิจประจำวันและแบบฝึก' : 'Daily Quests & Skill Drills',
+ description: isThai ? 'ทำภารกิจและฝึกท่าแก้จุดอ่อนเพื่อรับคะแนน' : 'Complete quests & drills to claim XP',
+ actionTag: isThai ? 'ภารกิจ' : 'Quests',
+ },
+ {
+ id: 'D3',
+ stepNo: '13',
+ title: isThai ? 'วิเคราะห์วิดีโอด้วย AI' : 'Computer Vision Video Analysis',
+ description: isThai ? 'สแกนคลิปวัดสปีดลูกตบและองศาแขน' : 'Replay scan, smash speed & joint angles',
+ actionTag: isThai ? 'สแกนคลิป' : 'Vision Scan',
+ },
  ],
  },
  {
- title: 'PATH E: COMMUNITY & GUILD HUB',
- code: 'PATH E',
- badge: 'Guilds',
+ title: isThai ? 'ก๊วนแบดและจับคู่ดวล' : 'COMMUNITY & GUILD HUB',
+ code: isThai ? 'หมวด E' : 'PATH E',
+ badge: isThai ? 'ก๊วน' : 'Guilds',
  screens: [
- { id: 'E1', stepNo: 'E1', title: 'Bangkok Smashers Guild HQ', description: 'Guild roster, community chat, active court parties', actionTag: 'Guild Tavern' },
- { id: 'E2', stepNo: 'E2', title: 'Group Event & Court RSVP', description: '4-player court reservation, headcount, +50 EXP RSVP', actionTag: 'Event RSVP' },
- { id: 'E3', stepNo: 'E3', title: 'AI Smart Matchmaker (Duel)', description: '96% compatibility matchmaking with sparring partner', actionTag: 'Find Partner' },
- { id: 'E4', stepNo: 'E4', title: 'Guild & Arena Leaderboard', description: 'Rankings, top smashers, Master/Diamond league', actionTag: 'Leaderboard' },
+ {
+ id: 'E1',
+ stepNo: '14',
+ title: isThai ? 'ศูนย์รวมก๊วนตีแบด' : 'Badminton Guild Hub',
+ description: isThai ? 'ค้นหาก๊วน ชวนเพื่อนและดูนัดลงคอร์ท' : 'Guild roster, chat & active court sessions',
+ actionTag: isThai ? 'หน้าก๊วน' : 'Guilds',
+ },
+ {
+ id: 'E2',
+ stepNo: '15',
+ title: isThai ? 'รายละเอียดก๊วนและหารบิล' : 'Group Event & Court RSVP',
+ description: isThai ? 'ลงชื่อเข้าก๊วน เช็กรายชื่อและหารค่าคอร์ท' : 'Confirm RSVP, attendee list & split bill',
+ actionTag: isThai ? 'ลงชื่อ' : 'Event RSVP',
+ },
+ {
+ id: 'E3',
+ stepNo: '16',
+ title: isThai ? 'จับคู่ซ้อมสมดุล 50/50' : 'Smart Matchmaker (Duel)',
+ description: isThai ? 'จัดคู่ซ้อมที่ฝีมือสูสีและสมดุลที่สุด' : 'Balanced matchmaking with sparring rivals',
+ actionTag: isThai ? 'หาคู่ซ้อม' : 'Matchmaker',
+ },
+ {
+ id: 'E4',
+ stepNo: '17',
+ title: isThai ? 'ตารางอันดับประจำซีซัน' : 'Guild & Arena Leaderboard',
+ description: isThai ? 'เช็กอันดับอัตราชนะและลีกประจำซีซัน' : 'Rankings, top smashers & season leagues',
+ actionTag: isThai ? 'อันดับ' : 'Leaderboard',
+ },
  ],
  },
  {
- title: 'PATH F: PROFILE & WEARABLE SYNC',
- code: 'PATH F',
- badge: 'Athlete',
+ title: isThai ? 'โปรไฟล์และนาฬิกาสุขภาพ' : 'PROFILE & WEARABLE SYNC',
+ code: isThai ? 'หมวด F' : 'PATH F',
+ badge: isThai ? 'นักกีฬา' : 'Athlete',
  screens: [
- { id: 'F1', stepNo: 'F1', title: 'Athlete Profile & Trophy Cabinet', description: 'FIFA athlete card, Yonex Astrox 99 gear, trophy badges', actionTag: 'My Profile' },
- { id: 'F2', stepNo: 'F2', title: 'Smartwatch Health & Telemetry', description: 'Live heart rate BPM, convert 680 kcal to +136 EXP', actionTag: 'Watch Sync' },
+ {
+ id: 'F1',
+ stepNo: '18',
+ title: isThai ? 'โปรไฟล์และตู้เหรียญรางวัล' : 'Athlete Profile & Trophies',
+ description: isThai ? 'การ์ดพลังนักกีฬา อุปกรณ์คู่ใจและเหรียญรางวัล' : 'Athlete card, gear specs & trophy cabinet',
+ actionTag: isThai ? 'โปรไฟล์' : 'Profile',
+ },
+ {
+ id: 'F2',
+ stepNo: '19',
+ title: isThai ? 'ซิงค์นาฬิกาและชีพจร' : 'Smartwatch Health Sync',
+ description: isThai ? 'ดึงข้อมูลชีพจรและแปลงแคลอรี่เป็นคะแนน' : 'Live BPM, distance & calories-to-XP sync',
+ actionTag: isThai ? 'ซิงค์' : 'Watch Sync',
+ },
  ],
  },
  ];
@@ -124,10 +239,10 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  </div>
  <div>
  <h3 className="text-base font-black uppercase tracking-tight leading-none">
- ALL 18 SCREENS DIRECTORY
+ {isThai ? 'เมนูนำทางทั้งหมด' : 'ALL SCREENS DIRECTORY'}
  </h3>
  <p className={`text-xs mt-1 font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
- คลิกหน้าจอใดก็ได้เพื่อเข้าสู่ Interactive Journey ทันที
+ {isThai ? 'เลือกหน้าที่ต้องการเปิดใช้งาน' : 'Jump to any screen in the app'}
  </p>
  </div>
  </div>
@@ -142,30 +257,37 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  </button>
  </div>
 
-        {/* Break-UI / UI State Expander Selector (Demo / Worst Case / One / Empty) */}
-        <div className="px-4 py-2 border-b border-neutral-200 bg-neutral-50 flex flex-wrap items-center justify-between text-xs font-bold gap-2">
-          <span className="text-neutral-500 text-[10px] uppercase font-black tracking-wider">
-            Break-UI State:
-          </span>
-          <div className="flex items-center gap-1.5">
-            {(['demo', 'worst', 'one', 'empty'] as const).map((mode) => (
-              <button
-                key={mode}
-                type="button"
-                onClick={() => setDataMode(mode)}
-                className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase transition-transform active:scale-[0.96] cursor-pointer border ${
-                  dataMode === mode
-                    ? 'bg-black text-white border-black shadow-xs'
-                    : 'bg-white text-neutral-600 border-neutral-300 hover:bg-neutral-100'
-                }`}
-              >
-                {mode === 'worst' ? 'Worst Case' : mode.toUpperCase()}
-              </button>
-            ))}
-          </div>
-        </div>
+ {/* Data Preview Mode Selector */}
+ <div className="px-4 py-2 border-b border-neutral-200 bg-neutral-50 flex flex-wrap items-center justify-between text-xs font-bold gap-2">
+ <span className="text-neutral-500 text-[10px] uppercase font-black tracking-wider">
+ {isThai ? 'ข้อมูลตัวอย่าง:' : 'Data Mode:'}
+ </span>
+ <div className="flex items-center gap-1.5">
+ {(
+ [
+ { id: 'demo', th: 'ปกติ', en: 'DEMO' },
+ { id: 'worst', th: 'ข้อมูลยาว', en: 'STRESS' },
+ { id: 'one', th: 'รายการเดียว', en: 'ONE' },
+ { id: 'empty', th: 'ว่างเปล่า', en: 'EMPTY' },
+ ] as const
+ ).map((mode) => (
+ <button
+ key={mode.id}
+ type="button"
+ onClick={() => setDataMode(mode.id)}
+ className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase transition-transform active:scale-[0.96] cursor-pointer border ${
+ dataMode === mode.id
+ ? 'bg-black text-white border-black shadow-xs'
+ : 'bg-white text-neutral-600 border-neutral-300 hover:bg-neutral-100'
+ }`}
+ >
+ {isThai ? mode.th : mode.en}
+ </button>
+ ))}
+ </div>
+ </div>
 
- {/* List of 18 Screens in Groups */}
+ {/* List of Screens in Groups */}
  <div className="flex-1 overflow-y-auto p-4 space-y-3.5 no-scrollbar">
  {PATH_GROUPS.map((group) => (
  <div key={group.code} className={`rounded-3xl p-3.5 space-y-2 ${
@@ -176,7 +298,7 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  }`}>
  <div className="flex items-center gap-2">
  <span className="px-2 py-0.5 rounded-full text-[10px] font-black uppercase bg-emerald-500/15 text-emerald-500 -emerald-500/30">
- {group.code}
+ {group.badge}
  </span>
  <span className="text-xs font-black uppercase tracking-wide">
  {group.title}
@@ -205,7 +327,7 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  >
  <div className="flex items-start justify-between gap-1 mb-1">
  <span className="text-xs font-black">
- {screen.stepNo}. {screen.title}
+ {screen.title}
  </span>
  {isActive && (
  <span className="w-4 h-4 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shrink-0">
@@ -243,7 +365,7 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  isDark ? 'bg-[#161f30] -slate-700/80' : 'bg-white -slate-200/90'
  }`}>
  <span className={`text-xs font-medium ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
- 18 of 18 screens interactive & connected
+ {isThai ? 'พร้อมใช้งานทุกหน้าจอ' : 'All screens interactive'}
  </span>
  <button
  type="button"
@@ -252,7 +374,7 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  isDark ? 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700' : 'bg-slate-900 hover:bg-slate-800 text-white'
  }`}
  >
- Close Directory
+ {isThai ? 'ปิดหน้าต่าง' : 'Close Directory'}
  </button>
  </div>
  </motion.div>

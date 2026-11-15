@@ -115,12 +115,14 @@ export const CourtMapScreen: React.FC = () => {
  });
  }, [courts, selectedCourtId, activeFilter, searchQuery, onlyBookable, showPricePerHour, sheetState, pan, zoom, isOnline]);
 
- // Filter options matching user interface
+  const isThai = language === 'th';
+
+  // Filter options matching user interface
  const filterOptions = [
- { id: 'parking', label: t.filterParking || 'ที่จอดรถ' },
- { id: 'shower', label: t.filterShower || 'ห้องอาบน้ำ' },
- { id: 'ev', label: t.filterEv || 'EV charging ⚡' },
- { id: 'rental', label: t.filterRental || 'บริการเช่าแร็กเกต' },
+ { id: 'parking', label: t.filterParking || (isThai ? 'ที่จอดรถ' : 'Parking') },
+ { id: 'shower', label: t.filterShower || (isThai ? 'ห้องอาบน้ำ' : 'Shower') },
+ { id: 'ev', label: t.filterEv || (isThai ? 'จุดชาร์จ EV' : 'EV Charging') },
+ { id: 'rental', label: t.filterRental || (isThai ? 'เช่าไม้แบด' : 'Racket Rental') },
  ];
 
  // Comprehensive map pins linked to court facilities
@@ -128,15 +130,15 @@ export const CourtMapScreen: React.FC = () => {
  const baseList: MapPinData[] = [
  {
  id: 'court_1',
- name: 'สนามแบดอินฟินิตี้ หทัยราษฎร์ (Infinity)',
+ name: isThai ? 'สนามแบดอินฟินิตี้ หทัยราษฎร์' : 'Infinity Badminton Hathairat',
  x: 295,
  y: 390,
  price: 200,
  rating: 4.8,
  reviews: 342,
  distanceKm: 1.8,
- location: '116/9 หทัยราษฎร์ 39 แขวงสามวาตะวันตก',
- amenities: ['ที่จอดรถ', 'ห้องอาบน้ำ', 'EV charging ⚡', 'บริการเช่าแร็กเกต', 'ติดแอร์'],
+ location: isThai ? '116/9 หทัยราษฎร์ 39 สามวาตะวันตก' : '116/9 Hathairat 39, Bangkok',
+ amenities: ['ที่จอดรถ', 'ห้องอาบน้ำ', 'จุดชาร์จ EV', 'เช่าไม้แบด', 'ติดแอร์'],
  hasParking: true,
  hasShower: true,
  hasEvCharging: true,
@@ -389,7 +391,7 @@ export const CourtMapScreen: React.FC = () => {
  setUserLocationPulse(true);
  setPan({ x: 0, y: 0 });
  setZoom(1.15);
- setShowToast('📍 ตำแหน่งปัจจุบัน: ถนนรัชดาภิเษก (ใกล้ 42 สนาม)');
+ setShowToast(isThai ? '📍 ตำแหน่งปัจจุบัน: รัชดาภิเษก' : '📍 Current location: Ratchadaphisek');
  setTimeout(() => {
  setUserLocationPulse(false);
  }, 1800);
@@ -417,7 +419,7 @@ export const CourtMapScreen: React.FC = () => {
  y: 450 - cl.y,
  });
  setZoom((z) => Math.min(2.2, +(z + 0.4).toFixed(2)));
- setShowToast(`🔍 ขยายดูคลัสเตอร์ ${cl.count} สนาม`);
+ setShowToast(isThai ? `🔍 ดูสนามในโซนนี้ (${cl.count} สนาม)` : `🔍 Zoomed to ${cl.count} courts`);
  setTimeout(() => setShowToast(null), 1800);
  };
 
@@ -995,7 +997,7 @@ export const CourtMapScreen: React.FC = () => {
  {/* Smart Suggestion Chips */}
  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
  <span className="text-[9px] font-black uppercase text-[#000000] bg-[#e85729] px-2 py-0.5 rounded-full shrink-0">
- SUGGEST
+ {isThai ? 'แนะนำ' : 'SUGGEST'}
  </span>
  <button
  type="button"
@@ -1003,11 +1005,11 @@ export const CourtMapScreen: React.FC = () => {
  playSelectSound();
  const pin1 = allPins.find((p) => p.id === 'court_1') || allPins[0];
  handlePinClick(pin1);
- setShowToast('💡 แนะนำใกล้สุด: สนามแบดอินฟินิตี้ (1.8 km · ฿200/ชม.)');
+ setShowToast(isThai ? '💡 ใกล้สุด: อินฟินิตี้ หทัยราษฎร์ (1.8 กม.)' : '💡 Closest: Infinity Arena (1.8 km)');
  }}
  className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#f4f8fb] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
  >
- <span>⚡ แนะนำใกล้สุด (1.8 km)</span>
+ <span>{isThai ? '⚡ ใกล้สุด (1.8 กม.)' : '⚡ Closest (1.8 km)'}</span>
  </button>
  <button
  type="button"
@@ -1015,11 +1017,11 @@ export const CourtMapScreen: React.FC = () => {
  playSelectSound();
  const pinLam = allPins.find((p) => p.id === 'court_2') || allPins[0];
  handlePinClick(pinLam);
- setShowToast('🔥 แนะนำโปรเด็ด: Sport Refresh ลำลูกกา (ลด 20% รอบค่ำ)');
+ setShowToast(isThai ? '🔥 โปรคืนนี้: ลด 20% รอบค่ำ' : '🔥 Tonight Deal: 20% off night slots');
  }}
  className="px-2.5 py-1 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-[10px] font-black text-[#000000] hover:bg-[#e85729] transition-colors cursor-pointer whitespace-nowrap shrink-0 flex items-center gap-1 shadow-xs"
  >
- <span>🔥 ลด 20% คืนนี้ (Court 2)</span>
+ <span>{isThai ? '🔥 ลด 20% คืนนี้' : '🔥 20% Off Tonight'}</span>
  </button>
  <button
  type="button"
@@ -1031,7 +1033,7 @@ export const CourtMapScreen: React.FC = () => {
  activeFilter === 'parking' ? 'bg-[#000000] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000]'
  }`}
  >
- <span>🚗 มีที่จอดรถ</span>
+ <span>{isThai ? '🚗 มีที่จอดรถ' : '🚗 Parking'}</span>
  </button>
  </div>
 
@@ -1116,7 +1118,7 @@ export const CourtMapScreen: React.FC = () => {
  type="button"
  onClick={handleRecenter}
  className="w-10 h-10 rounded-[1600px] bg-[#ffffff] border border-[#000000] shadow-md flex items-center justify-center text-[#000000] hover:bg-[#e85729] transition-transform active:scale-90 cursor-pointer"
- title="ตำแหน่งปัจจุบัน (Recenter)"
+ title={isThai ? 'ตำแหน่งปัจจุบัน' : 'Recenter'}
  >
  <Navigation className="w-4 h-4 fill-current rotate-45 text-[#000000]" />
  </button>
@@ -1127,7 +1129,7 @@ export const CourtMapScreen: React.FC = () => {
  type="button"
  onClick={handleZoomIn}
  className="w-10 h-9 flex items-center justify-center text-[#000000] hover:bg-[#e85729] active:bg-[#f3f4f6] cursor-pointer transition-colors"
- title="ซูมเข้า (Zoom In)"
+ title={isThai ? 'ซูมเข้า' : 'Zoom In'}
  >
  <Plus className="w-4 h-4 stroke-[2.5]" />
  </button>
@@ -1136,7 +1138,7 @@ export const CourtMapScreen: React.FC = () => {
  type="button"
  onClick={handleZoomOut}
  className="w-10 h-9 flex items-center justify-center text-[#000000] hover:bg-[#e85729] active:bg-[#f3f4f6] cursor-pointer transition-colors"
- title="ซูมออก (Zoom Out)"
+ title={isThai ? 'ซูมออก' : 'Zoom Out'}
  >
  <Minus className="w-4 h-4 stroke-[2.5]" />
  </button>

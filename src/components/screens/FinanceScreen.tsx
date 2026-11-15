@@ -10,6 +10,8 @@ import {
  CheckCircle2,
  X,
  Wallet,
+ Sparkles,
+ ArrowRight,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { FINANCE_TRANSACTIONS } from '../../data/mockData';
@@ -17,12 +19,13 @@ import { playCoinSound, playSelectSound } from '../../utils/retroAudio';
 import { SectionHeader } from '../common/SectionHeader';
 
 export const FinanceScreen: React.FC = () => {
- const { gainExp, navigateTo, goBack, t, language } = useApp();
-  const isThai = language === 'th';
+ const { player, gainExp, navigateTo, goBack, t, language } = useApp();
+ const isThai = language === 'th';
  const [walletBalance, setWalletBalance] = useState(1250);
  const [payLaterBalance] = useState(0);
  const [transactions, setTransactions] = useState(FINANCE_TRANSACTIONS);
  const [isTopUpModalOpen, setIsTopUpModalOpen] = useState(false);
+ const [isPointsModalOpen, setIsPointsModalOpen] = useState(false);
  const [topUpAmount, setTopUpAmount] = useState(500);
  const [topUpSuccess, setTopUpSuccess] = useState(false);
 
@@ -30,8 +33,8 @@ export const FinanceScreen: React.FC = () => {
  setWalletBalance((prev) => prev + topUpAmount);
  const newTx = {
  id: `tx_${Date.now()}`,
- title: language === 'th' ? 'เติมเงินผ่าน PromptPay QR' : 'PromptPay QR Top-up',
- subtitle: language === 'th' ? 'กระเป๋าเงิน SmashPay สำเร็จ' : 'SmashPay Wallet Credited',
+ title: language === 'th' ? 'เติมเงินผ่านพร้อมเพย์' : 'PromptPay QR Top-up',
+ subtitle: language === 'th' ? 'เติมเครดิตกระเป๋าเงินสำเร็จ' : 'SmashPay Wallet Credited',
  amount: topUpAmount,
  type: 'credit' as const,
  date: language === 'th' ? 'เมื่อสักครู่' : 'Just now',
@@ -76,11 +79,12 @@ export const FinanceScreen: React.FC = () => {
  type="button"
  onClick={() => {
  playSelectSound();
- setIsTopUpModalOpen(true);
+ setIsPointsModalOpen(true);
  }}
- className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer hover:brightness-95"
+ className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 flex items-center gap-1 cursor-pointer hover:brightness-95"
  >
- {isThai ? '+ เติมเงิน' : '+ Top up'}
+ <Sparkles className="w-3.5 h-3.5 shrink-0" />
+ <span>{isThai ? 'แต้มของฉัน' : 'My Points'}</span>
  </button>
  </div>
  </div>
@@ -156,7 +160,7 @@ export const FinanceScreen: React.FC = () => {
  />
 
  <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 pt-1 snap-x scroll-smooth">
- {/* Promo Card 1: {isThai ? 'เริ่มต้นใช้งาน SmashPay Wallet' : 'Get started with SmashPay Wallet'} (Matches Grab reference image) */}
+ {/* Promo Card 1 */}
  <div
  onClick={() => {
  playCoinSound();
@@ -167,24 +171,24 @@ export const FinanceScreen: React.FC = () => {
  <div>
  <div className="flex items-center justify-between mb-1">
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-black uppercase">
- SMASHPAY
+ {isThai ? 'สแมชเพย์' : 'SMASHPAY'}
  </span>
  <span className="text-[10px] font-bold">{isThai ? 'เงินคืน 10%' : '10% CASHBACK'}</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- {isThai ? 'เริ่มต้นใช้งาน SmashPay Wallet' : 'Get started with SmashPay Wallet'}
+ {isThai ? 'เริ่มใช้กระเป๋าเงินสแมชเพย์' : 'Get started with SmashPay Wallet'}
  </h3>
  <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
- เติมเงินครั้งแรกรับเหรียญคืน 10% พร้อมสิทธิ์จองคอร์ทแบบด่วน
+ {isThai ? 'เติมเงินครั้งแรกรับคืน 10% พร้อมจองคอร์ทไว' : 'Get 10% cashback on first top-up & express booking'}
  </p>
  </div>
- <div className="flex items-center justify-between pt-1 ">
- <span className="text-xs font-bold underline">เติมเงินทันที →</span>
+ <div className="flex items-center justify-between pt-1">
+ <span className="text-xs font-bold underline">{isThai ? 'เติมเงินทันที →' : 'Top up now →'}</span>
  <span className="text-2xl">📱</span>
  </div>
  </div>
 
- {/* Promo Card 2: {isThai ? 'จ่ายง่ายรวดเร็วด้วย TrueMoney' : 'Pay easily with TrueMoney'} (Matches Grab reference image) */}
+ {/* Promo Card 2 */}
  <div
  onClick={() => {
  playCoinSound();
@@ -197,22 +201,22 @@ export const FinanceScreen: React.FC = () => {
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-black uppercase">
  {isThai ? 'พันธมิตร' : 'PARTNER'}
  </span>
- <span className="text-[10px] font-bold">0% ค่าธรรมเนียม</span>
+ <span className="text-[10px] font-bold">{isThai ? 'ฟรีค่าธรรมเนียม' : '0% FEE'}</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- {isThai ? 'จ่ายง่ายรวดเร็วด้วย TrueMoney' : 'Pay easily with TrueMoney'}
+ {isThai ? 'จ่ายง่ายด้วยทรูมันนี่' : 'Pay easily with TrueMoney'}
  </h3>
  <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
- สแกนจ่ายสะดวก รวดเร็ว ไร้สัมผัส ผ่าน TrueMoney และพร้อมเพย์ QR
+ {isThai ? 'สแกนจ่ายไวผ่านทรูมันนี่และพร้อมเพย์' : 'Fast contactless scan via TrueMoney & PromptPay'}
  </p>
  </div>
- <div className="flex items-center justify-between pt-1 ">
- <span className="text-xs font-bold underline">สแกนจ่าย →</span>
+ <div className="flex items-center justify-between pt-1">
+ <span className="text-xs font-bold underline">{isThai ? 'สแกนจ่าย →' : 'Scan & Pay →'}</span>
  <span className="text-2xl">⚡</span>
  </div>
  </div>
 
- {/* Promo Card 3: PayLater 0% Installment */}
+ {/* Promo Card 3 */}
  <div
  onClick={() => {
  playSelectSound();
@@ -223,24 +227,24 @@ export const FinanceScreen: React.FC = () => {
  <div>
  <div className="flex items-center justify-between mb-1">
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[9px] font-black uppercase">
- PAYLATER
+ {isThai ? 'จ่ายทีหลัง' : 'PAYLATER'}
  </span>
- <span className="text-[10px] font-bold">ดอกเบี้ย 0%</span>
+ <span className="text-[10px] font-bold">{isThai ? 'ดอกเบี้ย 0%' : '0% INTEREST'}</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- {isThai ? 'ตีแบดก่อน ผ่อน 0% นาน 3 เดือน' : 'Play First, PayLater 0% 3 Months'}
+ {isThai ? 'ตีแบดก่อน ผ่อน 0% 3 เดือน' : 'Play First, PayLater 0% 3 Months'}
  </h3>
  <p className="text-[10px] text-[#000000]/80 font-bold mt-1 line-clamp-2">
- ตีแบดก่อน ผ่อนค่าคอร์ทและอุปกรณ์สบายๆ 0% นาน 3 เดือน
+ {isThai ? 'ผ่อนค่าคอร์ทและอุปกรณ์สบายๆ นาน 3 เดือน' : 'Split court and gear costs 0% over 3 months'}
  </p>
  </div>
- <div className="flex items-center justify-between pt-1 ">
- <span className="text-xs font-bold underline">ดูวงเงิน →</span>
+ <div className="flex items-center justify-between pt-1">
+ <span className="text-xs font-bold underline">{isThai ? 'ดูวงเงิน →' : 'Check limit →'}</span>
  <span className="text-2xl">💳</span>
  </div>
  </div>
 
- {/* Promo Card 4: Pro Pass Subscription */}
+ {/* Promo Card 4 */}
  <div
  onClick={() => {
  playSelectSound();
@@ -251,19 +255,19 @@ export const FinanceScreen: React.FC = () => {
  <div>
  <div className="flex items-center justify-between mb-1">
  <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#e85729] text-[9px] font-black uppercase">
- PRO PASS
+ {isThai ? 'สแมชโปร' : 'PRO PASS'}
  </span>
- <span className="text-[10px] font-bold text-[#15803d]">฿199/เดือน</span>
+ <span className="text-[10px] font-bold text-[#15803d]">{isThai ? '฿199/เดือน' : '฿199/mo'}</span>
  </div>
  <h3 className="font-['Antonio',sans-serif] text-base font-black uppercase leading-tight mt-1 text-[#000000]">
- {isThai ? 'แพ็กเกจสมาชิก Smash Pro' : 'Smash Pro Member Pass'}
+ {isThai ? 'แพ็กเกจสมาชิกสแมชโปร' : 'Smash Pro Member Pass'}
  </h3>
  <p className="text-[10px] text-[#000000]/70 font-bold mt-1 line-clamp-2">
- ลดค่าสนาม 10% ทุกการจอง + สแกน AI วิเคราะห์ช็อตไม่จำกัด
+ {isThai ? 'ลดค่าสนาม 10% พร้อมวิเคราะห์เกมไม่จำกัด' : '10% off courts & unlimited game analysis'}
  </p>
  </div>
- <div className="flex items-center justify-between pt-1 ">
- <span className="text-xs font-bold underline">สมัครสมาชิก →</span>
+ <div className="flex items-center justify-between pt-1">
+ <span className="text-xs font-bold underline">{isThai ? 'สมัครสมาชิก →' : 'Join now →'}</span>
  <span className="text-2xl">👑</span>
  </div>
  </div>
@@ -310,7 +314,7 @@ export const FinanceScreen: React.FC = () => {
  {tx.type === 'credit' ? '+' : ''}฿{Math.abs(tx.amount).toLocaleString()}
  </div>
  <span className="text-[9px] font-bold text-[#000000]/60 block whitespace-nowrap">
- {tx.status === 'completed' ? t.completedStatus : 'Pending'}
+ {tx.status === 'completed' ? t.completedStatus : (isThai ? 'รอดำเนินการ' : 'Pending')}
  </span>
  </div>
  </div>
@@ -386,6 +390,82 @@ export const FinanceScreen: React.FC = () => {
  </button>
  </>
  )}
+ </div>
+ </div>
+ )}
+
+ {/* 6. My Points Overview Modal */}
+ {isPointsModalOpen && (
+ <div className="fixed inset-0 z-50 bg-[#000000]/75 backdrop-blur-xs flex items-center justify-center p-4 animate-in fade-in duration-150">
+ <div className="w-full max-w-[340px] rounded-[28px] bg-[#ffffff] border-2 border-[#000000] p-5 shadow-[4px_6px_0px_#000000] space-y-4">
+ <div className="flex items-center justify-between pb-3 border-b border-[#000000]/10">
+ <div className="flex items-center gap-2">
+ <div className="w-8 h-8 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center">
+ <Sparkles className="w-4 h-4 text-[#000000]" />
+ </div>
+ <h3 className="font-['Antonio',sans-serif] font-black text-base uppercase tracking-tight text-[#000000]">
+ {isThai ? 'แต้มของฉัน' : 'My Smash Points'}
+ </h3>
+ </div>
+ <button
+ type="button"
+ onClick={() => setIsPointsModalOpen(false)}
+ className="w-7 h-7 rounded-[1600px] bg-[#e5e7eb] flex items-center justify-center text-[#000000] hover:bg-[#e85729] hover:text-[#ffffff] cursor-pointer"
+ >
+ <X className="w-4 h-4 stroke-[2.5]" />
+ </button>
+ </div>
+
+ <div className="rounded-[20px] bg-[#e8f7ee] p-4 space-y-2">
+ <div className="flex items-center justify-between text-xs font-bold text-[#000000]/70">
+ <span>{isThai ? 'คะแนนสะสมปัจจุบัน' : 'Current Balance'}</span>
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#000000] text-[#ffffff] text-[10px]">
+ {isThai ? `เลเวล ${player.level}` : `Lv.${player.level} · ${player.tier}`}
+ </span>
+ </div>
+ <div className="font-['Antonio',sans-serif] text-3xl font-black text-[#000000] tabular-nums">
+ {player.currentExp.toLocaleString()} {isThai ? 'แต้ม' : 'PTS'}
+ </div>
+ <div className="w-full h-2 rounded-full bg-[#ffffff] overflow-hidden">
+ <div
+ className="h-full bg-[#7cd7a0] rounded-full transition-all"
+ style={{ width: `${Math.min(100, Math.round((player.currentExp / Math.max(1, player.nextLevelExp)) * 100))}%` }}
+ />
+ </div>
+ <p className="text-[11px] text-[#000000]/65 font-normal">
+ {isThai
+ ? `อีก ${Math.max(0, player.nextLevelExp - player.currentExp).toLocaleString()} แต้ม เพื่ออัปเลเวลถัดไปและรับคูปองลดค่าคอร์ท`
+ : `${Math.max(0, player.nextLevelExp - player.currentExp).toLocaleString()} pts to reach next level & unlock court vouchers.`}
+ </p>
+ </div>
+
+ <div className="space-y-2">
+ <div className="rounded-[16px] bg-[#f4f8fb] p-3 flex items-center justify-between text-xs">
+ <span className="font-bold text-[#000000]">{isThai ? 'ส่วนลดค่าคอร์ท ฿50' : '฿50 Court Discount'}</span>
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[10px] font-bold text-[#15803d]">
+ 500 {isThai ? 'แต้ม' : 'PTS'}
+ </span>
+ </div>
+ <div className="rounded-[16px] bg-[#f4f8fb] p-3 flex items-center justify-between text-xs">
+ <span className="font-bold text-[#000000]">{isThai ? 'ฟรีค่าธรรมเนียมก๊วน' : 'Free Squad Fee'}</span>
+ <span className="px-2 py-0.5 rounded-[1600px] bg-[#ffffff] text-[10px] font-bold text-[#15803d]">
+ 300 {isThai ? 'แต้ม' : 'PTS'}
+ </span>
+ </div>
+ </div>
+
+ <button
+ type="button"
+ onClick={() => {
+ playSelectSound();
+ setIsPointsModalOpen(false);
+ navigateTo('D2');
+ }}
+ className="w-full py-3 rounded-[1600px] bg-[#000000] text-[#ffffff] font-bold text-xs flex items-center justify-center gap-1.5 cursor-pointer"
+ >
+ <span>{isThai ? 'ไปเก็บแต้มเพิ่มในภารกิจ' : 'Earn More Points in Quests'}</span>
+ <ArrowRight className="w-4 h-4" />
+ </button>
  </div>
  </div>
  )}

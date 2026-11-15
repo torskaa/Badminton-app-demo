@@ -9,6 +9,9 @@ export const CACHE_KEYS = {
   COURT_MAP: 'smashai_v1_court_map_cache',
   QUESTS_DRILLS: 'smashai_v1_quests_drills_cache',
   PLAYER_MATCH: 'smashai_v1_player_match_cache',
+  DRILL_STREAK: 'smashai_v1_drill_streak_cache',
+  MATCH_NOTES: 'smashai_v1_match_notes_cache',
+  GEAR_CHECK: 'smashai_v1_gear_check_cache',
 } as const;
 
 export interface CourtMapCacheData {
@@ -85,6 +88,9 @@ export function clearAllOfflineCaches(): void {
   removeCache(CACHE_KEYS.COURT_MAP);
   removeCache(CACHE_KEYS.QUESTS_DRILLS);
   removeCache(CACHE_KEYS.PLAYER_MATCH);
+  removeCache(CACHE_KEYS.DRILL_STREAK);
+  removeCache(CACHE_KEYS.MATCH_NOTES);
+  removeCache(CACHE_KEYS.GEAR_CHECK);
 }
 
 export function formatCacheTimestamp(timestamp: number | null, lang: 'th' | 'en'): string {

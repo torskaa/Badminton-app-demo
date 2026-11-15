@@ -93,14 +93,12 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  <div className="px-5 pt-4 space-y-4 flex-1 min-h-0 overflow-y-auto overscroll-contain no-scrollbar pb-28">
  {activeTab === 'quests' ? (
  <>
- <SectionHeader
- title={language === 'th' ? 'ภารกิจสะสม EXP ประจำวัน' : 'DAILY MISSION BOARD'}
- subtitle={language === 'th'
- ? 'ทำภารกิจรายวันเพื่อรับ EXP และปลดล็อกเหรียญตรา'
- : 'Complete daily missions to earn EXP and badges'}
- badge={language === 'th' ? 'รีเซ็ต 24 ชม.' : 'RESETS 24H'}
- badgeVariant="green"
- />
+            <SectionHeader
+              title={language === 'th' ? 'ภารกิจประจำวัน' : 'DAILY MISSION BOARD'}
+              subtitle={language === 'th' ? 'ทำภารกิจเพื่อรับคะแนน' : 'Complete missions to earn EXP'}
+              badge={language === 'th' ? 'รีเซ็ต 24 ชม.' : 'RESETS 24H'}
+              badgeVariant="green"
+            />
 
  {/* Quest Items */}
  <div className="space-y-2.5">
@@ -171,43 +169,49 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </>
  ) : (
  <>
- <SectionHeader
- title={language === 'th' ? 'แบบฝึกซ้อมเฉพาะบุคคล' : 'PERSONALIZED PRACTICE DRILLS'}
- subtitle={language === 'th'
- ? 'ออกแบบตามจุดอ่อนบนคอร์ทเพื่ออัปเรดาร์ 5 ด้าน'
- : 'Tailored from telemetry to boost your 5-axis skill radar'}
- badge={language === 'th' ? 'สายแท็กติก' : 'TACTICAL'}
- badgeVariant="green"
- />
+            <SectionHeader
+              title={language === 'th' ? 'แบบฝึกซ้อมแนะนำ' : 'PRACTICE DRILLS'}
+              subtitle={language === 'th' ? 'ฝึกแก้จุดอ่อนบนคอร์ท' : 'Tailored to your radar'}
+              badge={language === 'th' ? 'สายแท็กติก' : 'TACTICAL'}
+              badgeVariant="green"
+            />
 
- <div className="space-y-3">
- {drills.map((drill) => (
- <div
- key={drill.id}
- className="rounded-[24px] p-4 space-y-3 bg-[#ffffff]"
- >
- <div className="flex items-start justify-between gap-2">
- <div className="min-w-0">
- <div className="flex items-center gap-2 mb-1">
- <span className="text-[11px] font-bold text-[#000000]/60 whitespace-nowrap">
- ⏱️ {drill.durationMin} {language === 'th' ? 'นาที' : 'mins'}
- </span>
- </div>
- <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
- {language === 'th' ? drill.thaiTitle : drill.title}
- </h4>
- <p className="text-xs text-[#000000]/70 mt-1 font-bold leading-relaxed">
- {drill.description}
- </p>
- </div>
- <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#7cd7a0] text-[#000000] shrink-0 whitespace-nowrap">
- {drill.focusArea}
- </span>
- </div>
+            <div className="space-y-3">
+              {drills.map((drill) => (
+                <div
+                  key={drill.id}
+                  className="rounded-[24px] p-4 space-y-3 bg-[#ffffff]"
+                >
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-[11px] font-bold text-[#000000]/60 whitespace-nowrap">
+                          ⏱️ {drill.durationMin} {language === 'th' ? 'นาที' : 'mins'}
+                        </span>
+                      </div>
+                      <h4 className="font-['Antonio',sans-serif] text-base font-black uppercase text-[#000000]">
+                        {language === 'th' ? drill.thaiTitle : drill.title}
+                      </h4>
+                      <p className="text-xs text-[#000000]/70 mt-1 font-bold leading-relaxed">
+                        {drill.description}
+                      </p>
+                    </div>
+                    <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#7cd7a0] text-[#000000] shrink-0 whitespace-nowrap">
+                      {language === 'th'
+                        ? drill.focusArea === 'Net Play'
+                          ? 'คุมหน้าเน็ต'
+                          : drill.focusArea === 'Smash'
+                            ? 'พลังตบ'
+                            : drill.focusArea === 'Footwork'
+                              ? 'ฟุตเวิร์ก'
+                              : 'เกมรับ'
+                        : drill.focusArea}
+                    </span>
+                  </div>
 
  <div className="flex items-center justify-between pt-2 ">
  <span className="text-xs font-black text-[#15803d]">
- +{drill.expReward} EXP
+ +{drill.expReward} {language === 'th' ? 'คะแนน' : 'XP'}
  </span>
  <button
  type="button"

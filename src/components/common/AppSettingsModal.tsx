@@ -75,7 +75,7 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  >
  <div className="flex items-center gap-2">
  <span className="text-base">🇹🇭</span>
- <span className="text-xs font-bold whitespace-nowrap">ภาษาไทย (TH)</span>
+ <span className="text-xs font-bold whitespace-nowrap">ภาษาไทย</span>
  </div>
  {language === 'th' && <Check className="w-4 h-4 stroke-[3]" />}
  </button>
@@ -91,7 +91,7 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  >
  <div className="flex items-center gap-2">
  <span className="text-base">🇬🇧</span>
- <span className="text-xs font-bold whitespace-nowrap">English (EN)</span>
+ <span className="text-xs font-bold whitespace-nowrap">English</span>
  </div>
  {language === 'en' && <Check className="w-4 h-4 stroke-[3]" />}
  </button>
@@ -115,7 +115,7 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  }`}
  >
  <Sun className="w-3.5 h-3.5" />
- <span>{language === 'th' ? 'ธีม Slush ดั้งเดิม' : 'Slush Original'}</span>
+ <span>{language === 'th' ? 'ธีมสว่าง' : 'Light Theme'}</span>
  </button>
 
  <button
@@ -137,7 +137,7 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  <div className="flex items-center gap-2">
  {isSoundEnabled ? <Volume2 className="w-4 h-4 text-[#000000]" /> : <VolumeX className="w-4 h-4 text-[#000000]/50" />}
  <span className="text-xs font-bold text-[#000000]">
- {language === 'th' ? 'เสียงเอฟเฟกต์ 8-Bit' : '8-Bit Retro Sound'}
+ {language === 'th' ? 'เสียงประกอบย้อนยุค' : 'Retro Sound FX'}
  </span>
  </div>
  <button
@@ -155,7 +155,7 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  <div className="flex items-center gap-2">
  <Tv className="w-4 h-4 text-[#000000]" />
  <span className="text-xs font-bold text-[#000000]">
- {language === 'th' ? 'เอฟเฟกต์หน้าจอ CRT' : 'CRT Retro Shader'}
+ {language === 'th' ? 'เอฟเฟกต์จอภาพย้อนยุค' : 'Retro Screen Filter'}
  </span>
  </div>
  <button
@@ -177,7 +177,7 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  <HardDrive className="w-4 h-4 text-[#000000] shrink-0" />
  <div className="min-w-0">
  <div className="text-xs font-bold text-[#000000] truncate">
- {language === 'th' ? 'แคชออฟไลน์ (แผนที่ & ภารกิจ)' : 'Offline Cache (Map & Quests)'}
+ {language === 'th' ? 'ข้อมูลออฟไลน์' : 'Offline Cache'}
  </div>
  <div className="text-[10px] font-bold text-[#000000]/60">
  {isOnline
