@@ -13,10 +13,10 @@ import {
  X,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { DoodleAvatar } from '../common/DoodleAvatar';
 import { CourtFacility } from '../../types';
 import { CourtDiscoveryEmptyState } from '../common/CourtDiscoveryEmptyState';
 import { SectionHeader } from '../common/SectionHeader';
+import { playSelectSound } from '../../utils/retroAudio';
 
 export const B1_CourtDiscoveryScreen: React.FC = () => {
   const {
@@ -106,61 +106,65 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       });
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f4f8fb] text-[#000000]">
-      {/* 1. Header */}
-      <div className="app-header-safe px-5 pb-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2.5 min-w-0 flex-1">
+    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f5f5f7] text-[#111111]">
+      {/* 1. Profile-style Sticky Centered Header */}
+      <div className="bg-gradient-to-b from-[#ffffff] via-[#fafafc] to-[#f5f5f7] pb-3">
+        <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#ffffff]/85 backdrop-blur-md shrink-0 select-none text-[#111111]">
           <button
             type="button"
-            onClick={goBack}
-            className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e9e9e9] active:scale-90 transition-transform shadow-xs"
+            onClick={() => {
+              playSelectSound();
+              goBack();
+            }}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
             aria-label={isThai ? 'ย้อนกลับ' : 'Back'}
             title={isThai ? 'ย้อนกลับ' : 'Back'}
           >
-            <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
+            <ArrowLeft className="w-4 h-4 stroke-[2]" />
           </button>
-          <div
-            onClick={() => navigateTo('F1')}
-            className="cursor-pointer hover:scale-105 active:scale-95 transition-transform shrink-0"
-          >
-            <DoodleAvatar preset="karn" size="sm" ringClass="border-2 border-[#000000] shadow-xs" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-[11px] text-[#000000]/70 font-bold tracking-[0.032em] flex items-center gap-1 truncate">
-              <MapPin className="w-3.5 h-3.5 text-[#e85729] shrink-0" />
+
+          <div className="min-w-0 flex-1 text-center px-1">
+            <h1 className="text-[15px] font-semibold text-[#111111] tracking-tight leading-tight truncate">
+              {isThai ? 'ค้นหาสนาม' : 'Courts'}
+            </h1>
+            <p className="text-[11px] font-normal text-[#71717a] leading-snug truncate mt-0.5 flex items-center justify-center gap-1">
+              <MapPin className="w-3 h-3 text-[#e85729] shrink-0" />
               <span className="truncate">{isThai ? 'กรุงเทพฯ · พระราม 9' : 'Bangkok · Rama 9'}</span>
-            </div>
-            <div className="font-['Antonio',sans-serif] text-lg font-black uppercase tracking-tight leading-none mt-0.5 truncate">
-              {isThai ? `สวัสดี ${player.name}` : `Hi, ${player.name}`}
-            </div>
+            </p>
           </div>
-        </div>
 
-        {/* Right Action Icons */}
-        <div className="flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => navigateTo('E1')}
-            className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center transition-all cursor-pointer hover:bg-[#e8f7ee] active:scale-95"
-            title={isThai ? 'แชทก๊วน' : 'Guild Chat'}
-          >
-            <MessageSquare className="w-4 h-4 text-[#000000]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => navigateTo('D2')}
-            className="w-9 h-9 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center transition-all cursor-pointer hover:bg-[#7cd7a0] active:scale-95 relative"
-            title={isThai ? 'แจ้งเตือนภารกิจ' : 'Quest Alerts'}
-          >
-            <Bell className="w-4 h-4 text-[#000000]" />
-            <span className="w-2 h-2 rounded-full bg-[#e85729] absolute top-1.5 right-1.5" />
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center gap-1.5 shrink-0">
+            <button
+              type="button"
+              onClick={() => {
+                playSelectSound();
+                navigateTo('E1');
+              }}
+              className="no-doodle w-10 h-10 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+              aria-label={isThai ? 'แชทก๊วน' : 'Guild Chat'}
+              title={isThai ? 'แชทก๊วน' : 'Guild Chat'}
+            >
+              <MessageSquare className="w-4 h-4 stroke-[1.9]" />
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playSelectSound();
+                navigateTo('D2');
+              }}
+              className="no-doodle w-10 h-10 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer relative shrink-0"
+              aria-label={isThai ? 'แจ้งเตือนภารกิจ' : 'Quest Alerts'}
+              title={isThai ? 'แจ้งเตือนภารกิจ' : 'Quest Alerts'}
+            >
+              <Bell className="w-4 h-4 stroke-[1.9]" />
+              <span className="w-2 h-2 rounded-full bg-[#e85729] absolute top-2 right-2" />
+            </button>
+          </div>
+        </header>
 
-      {/* 2. Search Pill Bar */}
-      <div className="px-4 mt-2">
-        <div className="w-full flex items-center gap-2.5 px-4 py-3 rounded-[1600px] bg-[#ffffff] focus-within:bg-[#ffffff]">
+        {/* 2. Search Pill Bar */}
+        <div className="px-5 mt-1">
+          <div className="w-full flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#ffffff] shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
           <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
           <input
             type="text"
@@ -177,16 +181,17 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
           <button
             type="button"
             onClick={() => navigateTo('B2')}
-            className="p-1 rounded-[1600px] text-[#000000]/70 hover:text-[#000000]"
+            className="no-doodle p-1.5 rounded-full text-[#71717a] hover:text-[#111111] hover:bg-[#f3f4f6] cursor-pointer"
           >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
+            <SlidersHorizontal className="w-4 h-4" />
           </button>
         </div>
+      </div>
       </div>
 
       {/* 3. Category Filter Horizontal Strip */}
       <div className="px-4 mt-3.5">
-        <div data-filter="true" className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        <div data-filter="true" className="bg-[#ececef] p-1 rounded-full flex items-center gap-1 overflow-x-auto no-scrollbar">
           {categories.map((cat) => {
             const isActive = activeCategory === cat.id;
             return (
@@ -194,10 +199,10 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
                 type="button"
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id as any)}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-[1600px] text-xs font-bold tracking-[0.032em] shrink-0 transition-transform active:scale-95 cursor-pointer border border-[#000000] whitespace-nowrap ${
+                className={`no-doodle min-h-[36px] flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[11px] font-medium shrink-0 transition-all cursor-pointer whitespace-nowrap ${
                   isActive
-                    ? 'bg-[#000000] text-[#ffffff]'
-                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                    : 'text-[#6b7280] hover:text-[#111111]'
                 }`}
               >
                 <span>{cat.icon}</span>

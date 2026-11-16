@@ -506,7 +506,7 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
 
               <div
                 data-filter="true"
-                className="flex items-center gap-1 p-1 rounded-[1600px] bg-[#f4f8fb] shrink-0"
+                className="bg-[#ececef] p-1 rounded-full flex items-center gap-1 shrink-0"
               >
                 <button
                   type="button"
@@ -514,10 +514,10 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
                     playSelectSound();
                     setTrendMetric('formScore');
                   }}
-                  className={`px-2.5 py-1 rounded-[1600px] text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`no-doodle min-h-[32px] px-2.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
                     trendMetric === 'formScore'
-                      ? 'bg-[#000000] text-[#ffffff]'
-                      : 'text-[#000000]/65 hover:text-[#000000]'
+                      ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                      : 'text-[#6b7280] hover:text-[#111111]'
                   }`}
                 >
                   {isThai ? 'ฟอร์ม' : 'Form'}
@@ -528,10 +528,10 @@ export const C2_PostMatchSummaryScreen: React.FC = () => {
                     playSelectSound();
                     setTrendMetric('smashKmh');
                   }}
-                  className={`px-2.5 py-1 rounded-[1600px] text-[10px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+                  className={`no-doodle min-h-[32px] px-2.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
                     trendMetric === 'smashKmh'
-                      ? 'bg-[#000000] text-[#ffffff]'
-                      : 'text-[#000000]/65 hover:text-[#000000]'
+                      ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                      : 'text-[#6b7280] hover:text-[#111111]'
                   }`}
                 >
                   {isThai ? 'ความเร็วตบ' : 'Smash'}

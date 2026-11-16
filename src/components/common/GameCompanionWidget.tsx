@@ -463,70 +463,75 @@ export const GameCompanionWidget: React.FC = () => {
               </div>
 
               {/* Navigation Tabs (Tutorial / Tips / Quests / Cheer) */}
-              <div className="flex border-b border-neutral-200 bg-white px-2 pt-2 gap-1 text-[11px] font-black uppercase tracking-wider">
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSelectSound();
-                    setActiveTab('tutorial');
-                  }}
-                  className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
-                    activeTab === 'tutorial'
-                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
-                      : 'text-neutral-600 hover:text-neutral-800'
-                  }`}
+              <div className="px-3 py-2 bg-white border-b border-neutral-100">
+                <div
+                  data-filter="true"
+                  className="bg-[#ececef] p-1 rounded-full grid grid-cols-4 gap-1"
                 >
-                  <BookOpen className="w-3 h-3" />
-                  <span>{isThai ? 'คู่มือแอป' : 'Tour'}</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSelectSound();
+                      setActiveTab('tutorial');
+                    }}
+                    className={`no-doodle min-h-[34px] px-1.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer flex items-center justify-center gap-1 whitespace-nowrap truncate ${
+                      activeTab === 'tutorial'
+                        ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                        : 'text-[#6b7280] hover:text-[#111111]'
+                    }`}
+                  >
+                    <BookOpen className="w-3 h-3 shrink-0" />
+                    <span className="truncate">{isThai ? 'คู่มือแอป' : 'Tour'}</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSelectSound();
-                    setActiveTab('tips');
-                  }}
-                  className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
-                    activeTab === 'tips'
-                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
-                      : 'text-neutral-600 hover:text-neutral-800'
-                  }`}
-                >
-                  <Flame className="w-3 h-3 text-[#e85729]" />
-                  <span>{isThai ? 'ทริคสแมช' : 'Tips'}</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSelectSound();
+                      setActiveTab('tips');
+                    }}
+                    className={`no-doodle min-h-[34px] px-1.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer flex items-center justify-center gap-1 whitespace-nowrap truncate ${
+                      activeTab === 'tips'
+                        ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                        : 'text-[#6b7280] hover:text-[#111111]'
+                    }`}
+                  >
+                    <Flame className="w-3 h-3 text-[#e85729] shrink-0" />
+                    <span className="truncate">{isThai ? 'ทริคสแมช' : 'Tips'}</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSelectSound();
-                    setActiveTab('quests');
-                  }}
-                  className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
-                    activeTab === 'quests'
-                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
-                      : 'text-neutral-600 hover:text-neutral-800'
-                  }`}
-                >
-                  <Trophy className="w-3 h-3 text-[#e85729]" />
-                  <span>{isThai ? 'เควสต์' : 'Quests'}</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSelectSound();
+                      setActiveTab('quests');
+                    }}
+                    className={`no-doodle min-h-[34px] px-1.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer flex items-center justify-center gap-1 whitespace-nowrap truncate ${
+                      activeTab === 'quests'
+                        ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                        : 'text-[#6b7280] hover:text-[#111111]'
+                    }`}
+                  >
+                    <Trophy className="w-3 h-3 text-[#e85729] shrink-0" />
+                    <span className="truncate">{isThai ? 'เควสต์' : 'Quests'}</span>
+                  </button>
 
-                <button
-                  type="button"
-                  onClick={() => {
-                    playSelectSound();
-                    setActiveTab('cheer');
-                  }}
-                  className={`flex-1 py-2 rounded-t-xl transition-colors cursor-pointer flex items-center justify-center gap-1 ${
-                    activeTab === 'cheer'
-                      ? 'bg-[#f8f9fa] text-[#7cd7a0] border-b-2 border-[#7cd7a0]'
-                      : 'text-neutral-600 hover:text-neutral-800'
-                  }`}
-                >
-                  <Smile className="w-3 h-3 text-[#15803d]" />
-                  <span>{isThai ? 'คุยเล่น' : 'Cheer'}</span>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playSelectSound();
+                      setActiveTab('cheer');
+                    }}
+                    className={`no-doodle min-h-[34px] px-1.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer flex items-center justify-center gap-1 whitespace-nowrap truncate ${
+                      activeTab === 'cheer'
+                        ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                        : 'text-[#6b7280] hover:text-[#111111]'
+                    }`}
+                  >
+                    <Smile className="w-3 h-3 text-[#15803d] shrink-0" />
+                    <span className="truncate">{isThai ? 'คุยเล่น' : 'Cheer'}</span>
+                  </button>
+                </div>
               </div>
 
               {/* Scrollable Tab Content Body */}

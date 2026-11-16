@@ -80,17 +80,17 @@ body {
   box-shadow: 1px 1px 0px #000000 !important;
 }
 
-#root .doodle-cta,
-#root button[class*="rounded-[22px]"],
-#root button[class*="rounded-[24px]"] {
+#root .doodle-cta:not(.no-doodle),
+#root button[class*="rounded-[22px]"]:not(.no-doodle),
+#root button[class*="rounded-[24px]"]:not(.no-doodle) {
   border: 2px solid #000000 !important;
   box-shadow: 3px 4px 0px #000000 !important;
   transition: transform 0.12s ease, box-shadow 0.12s ease !important;
 }
 
-#root .doodle-cta:active,
-#root button[class*="rounded-[22px]"]:active,
-#root button[class*="rounded-[24px]"]:active {
+#root .doodle-cta:not(.no-doodle):active,
+#root button[class*="rounded-[22px]"]:not(.no-doodle):active,
+#root button[class*="rounded-[24px]"]:not(.no-doodle):active {
   transform: translate(1.5px, 2px) !important;
   box-shadow: 1px 1.5px 0px #000000 !important;
 }

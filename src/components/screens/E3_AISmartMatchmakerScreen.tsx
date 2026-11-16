@@ -118,45 +118,45 @@ export const E3_AISmartMatchmakerScreen: React.FC = () => {
             badgeVariant="dark"
           />
 
-          {/* Clean Mode Filter Pills (exempt from heavy borders) */}
-          <div data-filter="true" className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          {/* Clean Mode Segmented Bar */}
+          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-3 gap-1">
             <button
               type="button"
               onClick={() => handleModeChange('balanced')}
-              className={`px-3 py-1.5 rounded-[1600px] text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-1.5 border border-[#000000]/20 cursor-pointer transition-colors ${
+              className={`no-doodle min-h-[38px] px-2 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap flex items-center justify-center gap-1 cursor-pointer transition-all truncate ${
                 matchMode === 'balanced'
-                  ? 'bg-[#000000] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e8f7ee]'
+                  ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                  : 'text-[#6b7280] hover:text-[#111111]'
               }`}
             >
               <Sparkles className="w-3.5 h-3.5 shrink-0" />
-              <span>{isThai ? 'สมดุล 50/50' : 'Balanced 50/50'}</span>
+              <span className="truncate">{isThai ? 'สมดุล 50/50' : 'Balanced 50/50'}</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleModeChange('weakness')}
-              className={`px-3 py-1.5 rounded-[1600px] text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-1.5 border border-[#000000]/20 cursor-pointer transition-colors ${
+              className={`no-doodle min-h-[38px] px-2 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap flex items-center justify-center gap-1 cursor-pointer transition-all truncate ${
                 matchMode === 'weakness'
-                  ? 'bg-[#000000] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e8f7ee]'
+                  ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                  : 'text-[#6b7280] hover:text-[#111111]'
               }`}
             >
               <Target className="w-3.5 h-3.5 shrink-0" />
-              <span>{isThai ? `ฝึก${weakestLabel}` : `Train ${weakestLabel}`}</span>
+              <span className="truncate">{isThai ? `ฝึก${weakestLabel}` : `Train ${weakestLabel}`}</span>
             </button>
 
             <button
               type="button"
               onClick={() => handleModeChange('challenge')}
-              className={`px-3 py-1.5 rounded-[1600px] text-xs font-bold whitespace-nowrap shrink-0 flex items-center gap-1.5 border border-[#000000]/20 cursor-pointer transition-colors ${
+              className={`no-doodle min-h-[38px] px-2 py-1.5 rounded-full text-[11px] font-medium whitespace-nowrap flex items-center justify-center gap-1 cursor-pointer transition-all truncate ${
                 matchMode === 'challenge'
-                  ? 'bg-[#000000] text-[#ffffff]'
-                  : 'bg-[#ffffff] text-[#000000] hover:bg-[#e8f7ee]'
+                  ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                  : 'text-[#6b7280] hover:text-[#111111]'
               }`}
             >
               <TrendingUp className="w-3.5 h-3.5 shrink-0" />
-              <span>{isThai ? 'ท้าไต่แรงก์' : 'Rank Push'}</span>
+              <span className="truncate">{isThai ? 'ท้าไต่แรงก์' : 'Rank Push'}</span>
             </button>
           </div>
         </div>

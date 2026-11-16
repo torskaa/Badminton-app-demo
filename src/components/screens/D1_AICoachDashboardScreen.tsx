@@ -55,30 +55,10 @@ export const D1_AICoachDashboardScreen: React.FC = () => {
   const isThai = language === 'th';
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f4f8fb] text-[#000000]">
+    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f5f5f7] text-[#111111]">
       <MobileHeader />
 
       <div className="px-5 pt-4 pb-6 space-y-4">
-        {/* Main Body Page Title & Short Description */}
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="px-2.5 py-0.5 rounded-[1600px] text-[10px] font-bold uppercase tracking-[0.032em] bg-[#15803d] text-[#ffffff]">
-              {isThai ? 'เรดาร์ทักษะและโค้ช' : 'COACHING & RADAR'}
-            </span>
-            <span className="text-[11px] font-bold text-[#000000]/60 uppercase tracking-[0.032em]">
-              {isThai ? 'ภาพรวมฟอร์ม' : 'OVERVIEW'}
-            </span>
-          </div>
-          <h1 className="font-['Antonio',sans-serif] text-3xl font-black uppercase tracking-tight leading-none text-[#000000]">
-            {isThai ? 'โค้ชและเรดาร์วัดทักษะ' : 'COACH & SKILL RADAR'}
-          </h1>
-          <p className="text-xs text-[#000000]/70 font-bold leading-relaxed">
-            {isThai
-              ? 'วิเคราะห์ทักษะ 5 ด้านพร้อมแนะนำแบบฝึกเฉพาะตัว'
-              : '5-axis performance analysis and personalized drills.'}
-          </p>
-        </div>
-
         {/* 1. Athlete Banner Profile Card */}
         <div className="space-y-2">
           <SectionHeader

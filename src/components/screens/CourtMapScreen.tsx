@@ -927,72 +927,86 @@ export const CourtMapScreen: React.FC = () => {
  )}
  </div>
 
- {/* 2. Top Search Bar & Filter Header */}
- <div className="relative z-20 app-header-safe px-5 space-y-2.5 pointer-events-auto">
- {/* Search Input Box with Back Navigation */}
- <div className="bg-[#ffffff] rounded-[1600px] p-2 shadow-sm flex items-center justify-between gap-2">
- <button
- type="button"
- onClick={goBack}
- className="w-8 h-8 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-transform active:scale-90 cursor-pointer shrink-0"
- aria-label="Back"
- title={language === 'th' ? 'ย้อนกลับ' : 'Back'}
- >
- <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
- </button>
- <div className="flex items-center gap-2 flex-1 min-w-0">
- <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
- <input
- type="text"
- value={searchQuery}
- onChange={(e) => setSearchQuery(e.target.value)}
- placeholder={t.searchMap || 'ค้นหาสนามแบดมินตัน...'}
- className="w-full bg-transparent text-xs font-bold text-[#000000] placeholder:text-[#000000]/50 outline-none truncate"
- />
- {searchQuery && (
- <button
- type="button"
- onClick={() => setSearchQuery('')}
- className="text-[#000000]/60 hover:text-[#000000] p-1 cursor-pointer"
- >
- <X className="w-3.5 h-3.5" />
- </button>
- )}
- </div>
- <button
- type="button"
- onClick={() => {
- playSelectSound();
- if (!isOnline) {
- setShowToast(
- language === 'th'
- ? `📦 กำลังใช้ข้อมูลแคชออฟไลน์ (อัปเดต ${formatCacheTimestamp(lastSyncedAt, 'th')})`
- : `📦 Using cached court map (Synced ${formatCacheTimestamp(lastSyncedAt, 'en')})`
- );
- setTimeout(() => setShowToast(null), 2400);
- return;
- }
- refreshOfflineCache();
- simulateDataFetch(500);
- }}
- className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-colors cursor-pointer"
- title={language === 'th' ? 'รีเฟรชและอัปเดตแคชสนาม' : 'Refresh & cache courts'}
- >
- <RotateCw className="w-3.5 h-3.5" />
- </button>
- <button
- type="button"
- onClick={toggleSheetState}
- className="w-7 h-7 rounded-[1600px] bg-[#ffffff] border border-[#000000] flex items-center justify-center text-[#000000] hover:bg-[#e9e9e9] transition-colors cursor-pointer"
- title="Expand / Collapse List"
- >
- <ChevronDown
- className={`w-3.5 h-3.5 transition-transform duration-300 ${
- sheetState !== 'peek' ? 'rotate-180' : ''
- }`}
- />
- </button>
- </div>
+      {/* 2. Top Profile-Style Bar & Floating Search Header */}
+      <div className="relative z-20 app-header-safe px-5 space-y-2.5 pointer-events-auto">
+        <div className="flex items-center justify-between gap-3">
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              goBack();
+            }}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff]/95 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.08)] flex items-center justify-center text-[#111111] hover:bg-[#ffffff] active:scale-95 transition-all cursor-pointer shrink-0"
+            aria-label={isThai ? 'ย้อนกลับ' : 'Back'}
+            title={isThai ? 'ย้อนกลับ' : 'Back'}
+          >
+            <ArrowLeft className="w-4 h-4 stroke-[2]" />
+          </button>
+
+          <div className="px-4 py-2 rounded-full bg-[#ffffff]/90 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.06)] min-w-0">
+            <h1 className="text-[14px] font-semibold text-[#111111] tracking-tight leading-tight truncate text-center">
+              {isThai ? 'แผนที่สนาม' : 'Court Map'}
+            </h1>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              if (!isOnline) {
+                setShowToast(
+                  language === 'th'
+                    ? `กำลังใช้ข้อมูลออฟไลน์ (อัปเดต ${formatCacheTimestamp(lastSyncedAt, 'th')})`
+                    : `Using cached court map (Synced ${formatCacheTimestamp(lastSyncedAt, 'en')})`
+                );
+                setTimeout(() => setShowToast(null), 2400);
+                return;
+              }
+              refreshOfflineCache();
+              simulateDataFetch(500);
+            }}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff]/95 backdrop-blur-md shadow-[0_2px_10px_rgba(0,0,0,0.08)] flex items-center justify-center text-[#111111] hover:bg-[#ffffff] active:scale-95 transition-all cursor-pointer shrink-0"
+            aria-label={isThai ? 'รีเฟรชสนาม' : 'Refresh courts'}
+            title={language === 'th' ? 'รีเฟรชและอัปเดตแคชสนาม' : 'Refresh & cache courts'}
+          >
+            <RotateCw className="w-4 h-4 stroke-[1.9]" />
+          </button>
+        </div>
+
+        {/* Search Input Box */}
+        <div className="bg-[#ffffff]/95 backdrop-blur-md rounded-full px-3.5 py-2 shadow-[0_4px_16px_rgba(0,0,0,0.08)] flex items-center justify-between gap-2">
+          <div className="flex items-center gap-2.5 flex-1 min-w-0">
+            <Search className="w-4 h-4 text-[#71717a] shrink-0" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder={t.searchMap || 'ค้นหาสนามแบดมินตัน...'}
+              className="w-full bg-transparent text-xs font-medium text-[#111111] placeholder:text-[#71717a] outline-none truncate"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="no-doodle text-[#71717a] hover:text-[#111111] p-1 cursor-pointer"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+          </div>
+          <button
+            type="button"
+            onClick={toggleSheetState}
+            className="no-doodle w-8 h-8 rounded-full bg-[#f3f4f6] flex items-center justify-center text-[#111111] hover:bg-[#e5e7eb] transition-colors cursor-pointer shrink-0"
+            title={isThai ? 'ย่อ/ขยายรายการสนาม' : 'Expand / Collapse List'}
+          >
+            <ChevronDown
+              className={`w-4 h-4 transition-transform duration-300 ${
+                sheetState !== 'peek' ? 'rotate-180' : ''
+              }`}
+            />
+          </button>
+        </div>
 
  {/* Smart Suggestion Chips */}
  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
@@ -1038,7 +1052,7 @@ export const CourtMapScreen: React.FC = () => {
  </div>
 
  {/* Filter Pills Strip */}
- <div data-filter="true" className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+ <div data-filter="true" className="bg-[#ececef]/95 backdrop-blur-sm p-1 rounded-full flex items-center gap-1 overflow-x-auto no-scrollbar shadow-xs">
  {filterOptions.map((f) => {
  const isSelected = activeFilter === f.id;
  return (
@@ -1049,10 +1063,10 @@ export const CourtMapScreen: React.FC = () => {
  playSelectSound();
  setActiveFilter(isSelected ? null : f.id);
  }}
- className={`px-3 py-1.5 rounded-[1600px] text-xs font-bold shrink-0 border border-[#000000] transition-all cursor-pointer whitespace-nowrap active:scale-95 shadow-xs ${
+ className={`no-doodle min-h-[34px] px-3 py-1 rounded-full text-[11px] font-medium shrink-0 transition-all cursor-pointer whitespace-nowrap ${
  isSelected
- ? 'bg-[#000000] text-[#ffffff]'
- : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  {f.label}

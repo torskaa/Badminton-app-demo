@@ -133,21 +133,21 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  </div>
 
  {/* Billing Cycle Selector */}
- <div className="grid grid-cols-2 gap-2 mt-4 p-1.5 rounded-[1600px] bg-[#dceeff] shadow-xs">
+ <div data-filter="true" className="grid grid-cols-2 gap-1 mt-4 p-1 rounded-full bg-[#ececef]">
  <button
  type="button"
  onClick={() => {
  setBillingCycle('yearly');
  playCoinSound();
  }}
- className={`py-2 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] uppercase transition-all cursor-pointer flex flex-col items-center ${
+ className={`no-doodle py-2 px-3 rounded-full text-[11px] font-medium transition-all cursor-pointer flex flex-col items-center justify-center ${
  billingCycle === 'yearly'
- ? 'bg-[#000000] text-[#ffffff] border border-[#000000] shadow-xs'
- : 'text-[#000000] hover:bg-[#ffffff]/60'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  <span>{isThai ? 'รายปี (฿1,990/ปี)' : 'Annual (฿1,990/yr)'}</span>
- <span className="text-[9px] text-[#55db9c] font-black">
+ <span className={`text-[9px] font-semibold ${billingCycle === 'yearly' ? 'text-[#15803d]' : 'text-[#6b7280]'}`}>
  {isThai ? 'ประหยัด 17% (฿165/ด.)' : 'Save 17% (฿165/mo)'}
  </span>
  </button>
@@ -158,14 +158,14 @@ export const ProSubscriptionModal: React.FC<ProSubscriptionModalProps> = ({ isOp
  setBillingCycle('monthly');
  playCoinSound();
  }}
- className={`py-2 px-3 rounded-[1600px] text-xs font-bold tracking-[0.032em] uppercase transition-all cursor-pointer flex flex-col items-center justify-center ${
+ className={`no-doodle py-2 px-3 rounded-full text-[11px] font-medium transition-all cursor-pointer flex flex-col items-center justify-center ${
  billingCycle === 'monthly'
- ? 'bg-[#000000] text-[#ffffff] border border-[#000000] shadow-xs'
- : 'text-[#000000] hover:bg-[#ffffff]/60'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  <span>{isThai ? 'รายเดือน' : 'Monthly'}</span>
- <span className="text-[9px] text-[#000000]/60 font-bold">
+ <span className={`text-[9px] font-medium ${billingCycle === 'monthly' ? 'text-[#71717a]' : 'text-[#6b7280]/80'}`}>
  {isThai ? '฿199 / เดือน' : '฿199 / month'}
  </span>
  </button>

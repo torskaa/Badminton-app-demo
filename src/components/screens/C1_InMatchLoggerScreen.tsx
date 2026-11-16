@@ -107,23 +107,19 @@ export const C1_InMatchLoggerScreen: React.FC = () => {
             type="button"
             onClick={handleToggleHaptics}
             aria-pressed={isHapticEnabled}
+            aria-label={isThai ? (isHapticEnabled ? 'ปิดสั่น' : 'เปิดสั่น') : (isHapticEnabled ? 'Haptics On' : 'Haptics Off')}
             title={
               hapticHardwareAvailable
                 ? (isThai ? 'เปิด/ปิดระบบสั่นตอบสนองตอนกดแต้ม' : 'Toggle scoring vibration feedback')
-                : (isThai ? 'ระบบตอบสนองการสัมผัส (เบราว์เซอร์นี้ไม่รองรับการสั่นฮาร์ดแวร์)' : 'Haptic toggle (device fallback visual pulse)')
+                : (isThai ? 'ระบบตอบสนองการสัมผัส' : 'Haptic feedback toggle')
             }
-            className={`px-3 py-1.5 rounded-[1600px] text-[11px] font-bold whitespace-nowrap shrink-0 flex items-center gap-1 cursor-pointer transition-colors ${
+            className={`no-doodle w-11 h-11 rounded-full shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center cursor-pointer active:scale-95 transition-all shrink-0 ${
               isHapticEnabled
-                ? 'bg-[#7cd7a0] hover:bg-[#6bc991] text-[#000000]'
-                : 'bg-[#ffffff] hover:bg-[#e9e9e9] text-[#000000]/65'
+                ? 'bg-[#e8f7ee] text-[#15803d] hover:bg-[#d8f2e3]'
+                : 'bg-[#ffffff] text-[#71717a] hover:bg-[#f3f4f6]'
             }`}
           >
-            <Vibrate className="w-3.5 h-3.5 shrink-0" />
-            <span>
-              {isThai
-                ? (isHapticEnabled ? 'สั่น: เปิด' : 'สั่น: ปิด')
-                : (isHapticEnabled ? 'Haptic On' : 'Haptic Off')}
-            </span>
+            <Vibrate className="w-4 h-4 stroke-[1.9]" />
           </button>
         }
       />

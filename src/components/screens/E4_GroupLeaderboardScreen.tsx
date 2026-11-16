@@ -79,16 +79,16 @@ export const E4_GroupLeaderboardScreen: React.FC = () => {
             badgeVariant="orange"
           />
           {/* Tier Filter Pills */}
-          <div data-filter="true" className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full flex items-center gap-1 overflow-x-auto no-scrollbar">
             {(['All', 'Diamond', 'Gold', 'Silver', 'Bronze'] as const).map((tier) => (
               <button
                 type="button"
                 key={tier}
                 onClick={() => setSelectedTierFilter(tier)}
-                className={`px-4 py-1.5 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] shrink-0 cursor-pointer transition-all border border-[#000000] whitespace-nowrap ${
+                className={`no-doodle min-h-[36px] px-3.5 py-1.5 rounded-full text-[11px] font-medium shrink-0 cursor-pointer transition-all whitespace-nowrap ${
                   selectedTierFilter === tier
-                    ? 'bg-[#000000] text-[#ffffff]'
-                    : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                    : 'text-[#6b7280] hover:text-[#111111]'
                 }`}
               >
                 {getTierLabel(tier)}

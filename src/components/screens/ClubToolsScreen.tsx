@@ -1,104 +1,111 @@
 import React, { useState } from 'react';
 import {
- RotateCcw,
- ArrowRight,
- ArrowLeft,
- Shuffle,
- Share2,
+  RotateCcw,
+  ArrowRight,
+  ArrowLeft,
+  Shuffle,
+  Share2,
+  Calendar,
+  LayoutGrid,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { SectionHeader } from '../common/SectionHeader';
 import { playSelectSound } from '../../utils/retroAudio';
 
 export const ClubToolsScreen: React.FC = () => {
- const { navigateTo, goBack, gainExp, t, language } = useApp();
- const [activeTool, setActiveTool] = useState<'menu' | 'scoreboard' | 'randomizer' | 'tactic' | 'calc'>('menu');
+  const { navigateTo, goBack, gainExp, t, language } = useApp();
+  const [activeTool, setActiveTool] = useState<'menu' | 'scoreboard' | 'randomizer' | 'tactic' | 'calc'>('menu');
 
- // 1. Scoreboard v2 State
- const [scoreA, setScoreA] = useState(19);
- const [scoreB, setScoreB] = useState(18);
- const [server, setServer] = useState<'A' | 'B'>('A');
- const [setNumber] = useState(2);
- const [setsWonA] = useState(1);
- const [setsWonB] = useState(0);
+  // 1. Scoreboard v2 State
+  const [scoreA, setScoreA] = useState(19);
+  const [scoreB, setScoreB] = useState(18);
+  const [server, setServer] = useState<'A' | 'B'>('A');
+  const [setNumber] = useState(2);
+  const [setsWonA] = useState(1);
+  const [setsWonB] = useState(0);
 
- // 2. Team Randomizer v2 State
- const [shuffleCount, setShuffleCount] = useState(1);
- const SQUAD_PLAYERS = [
- { name: language === 'th' ? 'กานต์ (คุณ)' : 'Karn (You)', ovr: 88, tier: 'Diamond' },
- { name: language === 'th' ? 'โอห์ม ปืนกล' : 'Ohm Machinegun', ovr: 84, tier: 'Diamond' },
- { name: language === 'th' ? 'แบงค์ กำแพง' : 'Bank The Wall', ovr: 81, tier: 'Gold' },
- { name: language === 'th' ? 'พลอย จอมหยอด' : 'Ploy Net Master', ovr: 80, tier: 'Gold' },
- { name: language === 'th' ? 'นัท เสิร์ฟพิฆาต' : 'Nat Ace Server', ovr: 76, tier: 'Silver' },
- { name: language === 'th' ? 'ท็อป ดรายฟ์' : 'Top Flat Drive', ovr: 82, tier: 'Gold' },
- { name: language === 'th' ? 'อาร์ท สปีด' : 'Art Speedster', ovr: 86, tier: 'Diamond' },
- { name: language === 'th' ? 'มีน แบ็กแฮนด์' : 'Meen Backhand', ovr: 77, tier: 'Silver' },
- ];
+  // 2. Team Randomizer v2 State
+  const [shuffleCount, setShuffleCount] = useState(1);
+  const SQUAD_PLAYERS = [
+    { name: language === 'th' ? 'กานต์ (คุณ)' : 'Karn (You)', ovr: 88, tier: 'Diamond' },
+    { name: language === 'th' ? 'โอห์ม ปืนกล' : 'Ohm Machinegun', ovr: 84, tier: 'Diamond' },
+    { name: language === 'th' ? 'แบงค์ กำแพง' : 'Bank The Wall', ovr: 81, tier: 'Gold' },
+    { name: language === 'th' ? 'พลอย จอมหยอด' : 'Ploy Net Master', ovr: 80, tier: 'Gold' },
+    { name: language === 'th' ? 'นัท เสิร์ฟพิฆาต' : 'Nat Ace Server', ovr: 76, tier: 'Silver' },
+    { name: language === 'th' ? 'ท็อป ดรายฟ์' : 'Top Flat Drive', ovr: 82, tier: 'Gold' },
+    { name: language === 'th' ? 'อาร์ท สปีด' : 'Art Speedster', ovr: 86, tier: 'Diamond' },
+    { name: language === 'th' ? 'มีน แบ็กแฮนด์' : 'Meen Backhand', ovr: 77, tier: 'Silver' },
+  ];
 
- // 3. Tactic Board State
- const [formation, setFormation] = useState<'attack' | 'defense'>('attack');
+  // 3. Tactic Board State
+  const [formation, setFormation] = useState<'attack' | 'defense'>('attack');
 
- // 4. Group Cost Calc State
- const [courtHours, setCourtHours] = useState(3);
- const [courtRate] = useState(280);
- const [shuttleTubes, setShuttleTubes] = useState(2);
- const [shuttlePrice] = useState(480);
- const [playerCount, setPlayerCount] = useState(8);
+  // 4. Group Cost Calc State
+  const [courtHours, setCourtHours] = useState(3);
+  const [courtRate] = useState(280);
+  const [shuttleTubes, setShuttleTubes] = useState(2);
+  const [shuttlePrice] = useState(480);
+  const [playerCount, setPlayerCount] = useState(8);
 
- const totalExpense = courtHours * courtRate + shuttleTubes * shuttlePrice;
- const costPerPerson = playerCount > 0 ? Math.ceil(totalExpense / playerCount) : 0;
+  const totalExpense = courtHours * courtRate + shuttleTubes * shuttlePrice;
+  const costPerPerson = playerCount > 0 ? Math.ceil(totalExpense / playerCount) : 0;
 
- return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
- {/* Header matching clean Image 2 style across all screens */}
- <div className="bg-[#ffffff] app-header-safe px-5 pb-4 border-b border-[#000000]/10 sticky top-0 z-20 select-none">
- <div className="flex items-start justify-between gap-2.5 min-w-0">
- <div className="flex items-start gap-3 min-w-0 flex-1">
- <button
- type="button"
- onClick={() => (activeTool !== 'menu' ? setActiveTool('menu') : goBack())}
- className="w-8 h-8 mt-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000]/20 shadow-xs flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e8f7ee] active:scale-90 transition-transform"
- aria-label="Back"
- title={language === 'th' ? 'ย้อนกลับ' : 'Back'}
- >
- <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
- </button>
- <div className="min-w-0 flex-1">
- <h1 className="text-xl font-black text-[#000000] font-['Antonio',sans-serif] uppercase tracking-wide leading-[1.1] truncate">
- {t.clubToolsHeader}
- </h1>
- <p className="text-xs text-[#000000]/70 font-normal leading-snug mt-0.5 max-w-[185px]">
- {t.clubToolsHeaderSub}
- </p>
- </div>
- </div>
- {activeTool === 'menu' ? (
- <button
- type="button"
- onClick={() => {
- playSelectSound();
- navigateTo('E2');
- }}
- className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer hover:brightness-95"
- >
- {language === 'th' ? 'นัดก๊วน →' : 'RSVP →'}
- </button>
- ) : (
- <button
- type="button"
- onClick={() => {
- playSelectSound();
- setActiveTool('menu');
- }}
- className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#ffffff] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 cursor-pointer hover:bg-[#f4f8fb]"
- >
- {language === 'th' ? 'เมนูรวม' : 'All Tools'}
- </button>
- )}
- </div>
- </div>
+  return (
+    <div className="flex-1 min-h-0 flex flex-col bg-[#f5f5f7] text-[#111111] overflow-y-auto overscroll-contain no-scrollbar pb-24">
+      <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#ffffff]/85 backdrop-blur-md shrink-0 select-none text-[#111111]">
+        <button
+          type="button"
+          onClick={() => {
+            playSelectSound();
+            if (activeTool !== 'menu') {
+              setActiveTool('menu');
+            } else {
+              goBack();
+            }
+          }}
+          className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+          aria-label={language === 'th' ? 'ย้อนกลับ' : 'Back'}
+          title={language === 'th' ? 'ย้อนกลับ' : 'Back'}
+        >
+          <ArrowLeft className="w-4 h-4 stroke-[2]" />
+        </button>
 
- <div className="px-5 pt-4 pb-6 space-y-4">
+        <div className="min-w-0 flex-1 text-center px-1">
+          <h1 className="text-[15px] font-semibold text-[#111111] tracking-tight leading-tight truncate">
+            {t.clubToolsHeader}
+          </h1>
+        </div>
+
+        {activeTool === 'menu' ? (
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              navigateTo('E2');
+            }}
+            aria-label={language === 'th' ? 'นัดก๊วน' : 'RSVP'}
+            title={language === 'th' ? 'นัดก๊วน' : 'RSVP'}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+          >
+            <Calendar className="w-4 h-4 stroke-[1.9]" />
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              setActiveTool('menu');
+            }}
+            aria-label={language === 'th' ? 'เมนูรวม' : 'All Tools'}
+            title={language === 'th' ? 'เมนูรวม' : 'All Tools'}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+          >
+            <LayoutGrid className="w-4 h-4 stroke-[1.9]" />
+          </button>
+        )}
+      </header>
+
+      <div className="px-5 pt-4 pb-6 space-y-4">
  {/* Menu View: 4 Symmetrical 1:1 Aspect Cards with 1px Solid Black Border */}
  {activeTool === 'menu' && (
  <>
@@ -405,12 +412,14 @@ export const ClubToolsScreen: React.FC = () => {
  {t.tacticHeader}
  </h2>
  </div>
- <div className="flex items-center gap-1.5">
+ <div data-filter="true" className="bg-[#ececef] p-1 rounded-full flex items-center gap-1">
  <button
  type="button"
  onClick={() => setFormation('attack')}
- className={`px-2.5 py-1 rounded-[1600px] text-xs font-bold border border-[#000000] cursor-pointer whitespace-nowrap ${
- formation === 'attack' ? 'bg-[#000000] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000]'
+ className={`no-doodle min-h-[30px] px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+ formation === 'attack'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  {t.formationAttack}
@@ -418,8 +427,10 @@ export const ClubToolsScreen: React.FC = () => {
  <button
  type="button"
  onClick={() => setFormation('defense')}
- className={`px-2.5 py-1 rounded-[1600px] text-xs font-bold border border-[#000000] cursor-pointer whitespace-nowrap ${
- formation === 'defense' ? 'bg-[#000000] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000]'
+ className={`no-doodle min-h-[30px] px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+ formation === 'defense'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  {t.formationDefense}

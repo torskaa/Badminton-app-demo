@@ -106,26 +106,30 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  {t.settingsTheme}
  </span>
  </div>
- <div className="grid grid-cols-2 gap-2">
+ <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-2 gap-1">
  <button
  type="button"
  onClick={() => theme === 'dark' && toggleTheme()}
- className={`p-2.5 rounded-[1600px] border border-[#000000] flex items-center justify-center gap-2 text-xs font-bold cursor-pointer ${
- theme === 'light' ? 'bg-[#000000] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000]'
+ className={`no-doodle min-h-[36px] px-2.5 py-1.5 rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+ theme === 'light'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
- <Sun className="w-3.5 h-3.5" />
+ <Sun className="w-3.5 h-3.5 shrink-0" />
  <span>{language === 'th' ? 'ธีมสว่าง' : 'Light Theme'}</span>
  </button>
 
  <button
  type="button"
  onClick={() => theme === 'light' && toggleTheme()}
- className={`p-2.5 rounded-[1600px] border border-[#000000] flex items-center justify-center gap-2 text-xs font-bold cursor-pointer ${
- theme === 'dark' ? 'bg-[#000000] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000]'
+ className={`no-doodle min-h-[36px] px-2.5 py-1.5 rounded-full flex items-center justify-center gap-1.5 text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+ theme === 'dark'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
- <Moon className="w-3.5 h-3.5" />
+ <Moon className="w-3.5 h-3.5 shrink-0" />
  <span>{language === 'th' ? 'โหมดมืด' : 'Dark Mode'}</span>
  </button>
  </div>

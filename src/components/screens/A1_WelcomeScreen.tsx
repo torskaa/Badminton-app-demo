@@ -88,7 +88,7 @@ export const A1_WelcomeScreen: React.FC = () => {
 
  <button
  onClick={() => setIsSwitcherOpen(true)}
- className="px-3 py-1.5 rounded-[1600px] bg-[#ffffff] border border-[#000000] text-xs font-bold tracking-[0.032em] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer hover:bg-[#e9e9e9]"
+ className="no-doodle min-h-[40px] px-3.5 py-2 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] text-xs font-medium text-[#111111] flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer hover:bg-[#f3f4f6]"
  title={isThai ? 'สารบัญหน้าจอทั้งหมด' : 'Navigation Directory'}
  >
  <Compass className="w-3.5 h-3.5 text-[#15803d]" />

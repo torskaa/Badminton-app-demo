@@ -194,7 +194,7 @@ export const ShareAchievementModal: React.FC<ShareAchievementModalProps> = ({
         </div>
 
         {/* Theme Switcher Pills */}
-        <div data-filter="true" className="flex items-center gap-1.5 bg-[#ffffff] p-1 rounded-[1600px]">
+        <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-3 gap-1">
           {(
             [
               { id: 'mint', labelTh: 'เขียวมินต์', labelEn: 'Mint' },
@@ -209,10 +209,10 @@ export const ShareAchievementModal: React.FC<ShareAchievementModalProps> = ({
                 playSelectSound();
                 setCardTheme(item.id);
               }}
-              className={`flex-1 py-1.5 px-2 rounded-[1600px] text-[11px] font-bold transition-all cursor-pointer whitespace-nowrap ${
+              className={`no-doodle min-h-[36px] px-2 py-1.5 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
                 cardTheme === item.id
-                  ? 'bg-[#000000] text-[#ffffff]'
-                  : 'text-[#000000]/65 hover:text-[#000000]'
+                  ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                  : 'text-[#6b7280] hover:text-[#111111]'
               }`}
             >
               {isThai ? item.labelTh : item.labelEn}

@@ -30,7 +30,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  }, [activeTab, quests, drills, isOnline]);
 
  return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-hidden">
+ <div className="flex-1 min-h-0 flex flex-col bg-[#f5f5f7] text-[#111111] overflow-hidden">
  <MobileHeader showBack />
 
  {/* Offline Cached Progress Notice */}
@@ -43,8 +43,8 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </span>
  <span className="truncate text-[#000000]">
  {language === 'th'
- ? `บันทึกความคืบหน้า EXP ในเครื่องอัตโนมัติ (แคช ${formatCacheTimestamp(lastSyncedAt, 'th')})`
- : `Quest EXP saved locally offline (Cached ${formatCacheTimestamp(lastSyncedAt, 'en')})`}
+ ? `บันทึกความคืบหน้าในเครื่องอัตโนมัติ (แคช ${formatCacheTimestamp(lastSyncedAt, 'th')})`
+ : `Quest progress saved locally offline (Cached ${formatCacheTimestamp(lastSyncedAt, 'en')})`}
  </span>
  </div>
  {hasPendingSync && (
@@ -56,15 +56,16 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  </div>
  )}
 
- {/* Pill Segmented Tabs */}
- <div data-filter="true" className="px-5 py-3 flex items-center gap-2 bg-[#ffffff] shrink-0">
+ {/* Clean Pill Segmented Tabs */}
+ <div className="px-5 pt-3 pb-1 shrink-0">
+ <div data-filter="true" className="bg-[#ececef] p-1 rounded-full flex items-center gap-1">
  <button
  type="button"
  onClick={() => setActiveTab('quests')}
- className={`flex-1 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 border border-[#000000] whitespace-nowrap ${
+ className={`no-doodle flex-1 min-h-[38px] py-1.5 px-3 rounded-full text-xs font-medium cursor-pointer transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
  activeTab === 'quests'
- ? 'bg-[#000000] text-[#ffffff]'
- : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  <Trophy className="w-3.5 h-3.5 shrink-0" />
@@ -76,10 +77,10 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  <button
  type="button"
  onClick={() => setActiveTab('drills')}
- className={`flex-1 py-2 rounded-[1600px] text-xs font-bold uppercase tracking-[0.032em] cursor-pointer transition-transform active:scale-95 flex items-center justify-center gap-1.5 border border-[#000000] whitespace-nowrap ${
+ className={`no-doodle flex-1 min-h-[38px] py-1.5 px-3 rounded-full text-xs font-medium cursor-pointer transition-all flex items-center justify-center gap-1.5 whitespace-nowrap ${
  activeTab === 'drills'
- ? 'bg-[#000000] text-[#ffffff]'
- : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
+ ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+ : 'text-[#6b7280] hover:text-[#111111]'
  }`}
  >
  <Dumbbell className="w-3.5 h-3.5 shrink-0" />
@@ -87,6 +88,7 @@ export const D2_AIQuestsDrillsScreen: React.FC = () => {
  {language === 'th' ? `แบบฝึกซ้อม (${drills.length})` : `Practice Drills (${drills.length})`}
  </span>
  </button>
+ </div>
  </div>
 
  {/* Single Scroll Container */}

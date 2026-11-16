@@ -51,46 +51,46 @@ export const FinanceScreen: React.FC = () => {
  }, 1200);
  };
 
- return (
- <div className="flex-1 min-h-0 flex flex-col bg-[#f4f8fb] text-[#000000]  overflow-y-auto overscroll-contain no-scrollbar pb-24">
- {/* 1. Clean Header Card with Back Navigation */}
- <div className="bg-[#ffffff] text-[#000000] app-header-safe px-5 pb-12 relative">
- <div className="flex items-start justify-between gap-2.5 min-w-0">
- <div className="flex items-start gap-3 min-w-0 flex-1">
- <button
- type="button"
- onClick={goBack}
- className="w-8 h-8 mt-0.5 rounded-[1600px] bg-[#ffffff] border border-[#000000]/20 shadow-xs flex items-center justify-center shrink-0 cursor-pointer hover:bg-[#e8f7ee] active:scale-90 transition-transform"
- aria-label="Back"
- title={isThai ? 'ย้อนกลับ' : 'Back'}
- >
- <ArrowLeft className="w-4 h-4 stroke-[2.5]" />
- </button>
- <div className="min-w-0 flex-1">
- <h1 className="text-xl font-black text-[#000000] font-['Antonio',sans-serif] tracking-wide uppercase leading-[1.1] truncate">
- {t.financeHeader}
- </h1>
- <p className="text-xs text-[#000000]/70 font-normal leading-snug mt-0.5 max-w-[185px]">
- {t.financeHeaderSub}
- </p>
- </div>
- </div>
- <button
- type="button"
- onClick={() => {
- playSelectSound();
- setIsPointsModalOpen(true);
- }}
- className="px-3 py-1.5 mt-0.5 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold whitespace-nowrap shrink-0 flex items-center gap-1 cursor-pointer hover:brightness-95"
- >
- <Sparkles className="w-3.5 h-3.5 shrink-0" />
- <span>{isThai ? 'แต้มของฉัน' : 'My Points'}</span>
- </button>
- </div>
- </div>
+  return (
+    <div className="flex-1 min-h-0 flex flex-col bg-[#f5f5f7] text-[#111111] overflow-y-auto overscroll-contain no-scrollbar pb-24">
+      <div className="bg-gradient-to-b from-[#ffffff] via-[#fafafc] to-[#f5f5f7] pb-12">
+        <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#ffffff]/85 backdrop-blur-md shrink-0 select-none text-[#111111]">
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              goBack();
+            }}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+            aria-label={isThai ? 'ย้อนกลับ' : 'Back'}
+            title={isThai ? 'ย้อนกลับ' : 'Back'}
+          >
+            <ArrowLeft className="w-4 h-4 stroke-[2]" />
+          </button>
 
- {/* 2. Floating Dual Cards: SmashPay Wallet & PayLater */}
- <div className="px-5 -mt-8 z-10">
+          <div className="min-w-0 flex-1 text-center px-1">
+            <h1 className="text-[15px] font-semibold text-[#111111] tracking-tight leading-tight truncate">
+              {t.financeHeader}
+            </h1>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              setIsPointsModalOpen(true);
+            }}
+            aria-label={isThai ? 'แต้มของฉัน' : 'My Points'}
+            title={isThai ? 'แต้มของฉัน' : 'My Points'}
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#15803d] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+          >
+            <Sparkles className="w-4 h-4 stroke-[1.9]" />
+          </button>
+        </header>
+      </div>
+
+      {/* 2. Floating Dual Cards: SmashPay Wallet & PayLater */}
+      <div className="px-5 -mt-8 z-10">
  <div className="grid grid-cols-2 gap-3">
  {/* Card 1: SmashPay Wallet */}
  <div className="bg-[#ffffff] rounded-[28px] p-4 shadow-sm flex flex-col justify-between h-34 relative overflow-hidden">
