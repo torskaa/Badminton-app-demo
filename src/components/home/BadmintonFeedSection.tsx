@@ -15,9 +15,12 @@ import {
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { DoodleAvatar, resolveDoodlePreset } from '../common/DoodleAvatar';
+import { INITIAL_PAST_MATCHES, PastMatchResult } from '../screens/F1_UserProfileTrophyScreen';
 import { playCoinSound, playSelectSound } from '../../utils/retroAudio';
 
-type FeedCategory = 'all' | 'friends' | 'match' | 'achievement' | 'milestone';
+type FeedScopeTab = 'my_results' | 'guild_updates' | 'friend_activity';
+type GuildFilterType = 'all' | 'match' | 'achievement' | 'milestone';
+type MyResultFilterType = 'all' | 'win' | 'loss';
 
 interface FriendOutcomeMeta {
   friendId: string;
@@ -213,7 +216,7 @@ interface BadmintonFeedItem {
   milestone?: FeedMilestonePayload;
 }
 
-const FEED_ITEMS: BadmintonFeedItem[] = [
+const GUILD_FEED_ITEMS: BadmintonFeedItem[] = [
   {
     id: 'feed_match_1',
     type: 'match',
@@ -376,6 +379,7 @@ const FEED_ITEMS: BadmintonFeedItem[] = [
 
 export const BadmintonFeedSection: React.FC = () => {
   const {
+    player,
     language,
     navigateTo,
     gainExp,
@@ -385,13 +389,33 @@ export const BadmintonFeedSection: React.FC = () => {
   } = useApp();
   const isThai = language === 'th';
 
-  const [activeFilter, setActiveFilter] = useState<FeedCategory>('all');
-  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({});
+  const [scopeTab, setScopeTab] = useState<FeedScopeTab>('guild_updates');
+  const [guildFilter, setGuildFilter] = useState<GuildFilterType>('all');
+  const [myFilter, setMyFilter] = useState<MyResultFilterType>('all');
+  const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({ match_01: true });
   const [expandedFriendId, setExpandedFriendId] = useState<string | null>('usr_art');
   const [cheeredIds, setCheeredIds] = useState<Record<string, boolean>>({});
-  const [showAllItems, setShowAllItems] = useState(false);
+  const [showAllGuildItems, setShowAllGuildItems] = useState(false);
 
-  // Derive top-ranked guild friends (exclude current user usr_karn_007)
+  const userDisplayName = isThai ? (player.nameTh || player.name) : (player.nameEn || player.name);
+  const userShortName = userDisplayName.split(' ')[0] || (isThai ? 'คุณ' : 'You');
+
+  // My Results list
+  const myMatches: PastMatchResult[] = useMemo(() => {
+    if (dataMode === 'empty') return [];
+    const base =
+      myFilter === 'all'
+        ? INITIAL_PAST_MATCHES
+        : INITIAL_PAST_MATCHES.filter((m) => m.result === myFilter);
+    return dataMode === 'one' ? base.slice(0, 1) : base;
+  }, [dataMode, myFilter]);
+
+  const myWinsCount = INITIAL_PAST_MATCHES.filter((m) => m.result === 'win').length;
+  const myWinRate = Math.round((myWinsCount / INITIAL_PAST_MATCHES.length) * 100);
+  const myExpEarned = INITIAL_PAST_MATCHES.reduce((sum, m) => sum + m.expGained, 0);
+  const myTopSmash = Math.max(...INITIAL_PAST_MATCHES.map((m) => m.highestSmashKmh));
+
+  // Top-ranked guild friends
   const topFriendsActivity = useMemo(() => {
     if (dataMode === 'empty') return [];
     const rankedFriends = leaderboard
@@ -401,25 +425,23 @@ export const BadmintonFeedSection: React.FC = () => {
         user: u,
         outcome: FRIEND_OUTCOMES_BY_ID[u.id],
       }));
+    return dataMode === 'one' ? rankedFriends.slice(0, 1) : rankedFriends;
+  }, [leaderboard, dataMode]);
 
-    if (dataMode === 'one') return rankedFriends.slice(0, 1);
-    return activeFilter === 'friends' ? rankedFriends : rankedFriends.slice(0, 4);
-  }, [leaderboard, dataMode, activeFilter]);
-
-  const filteredItems = useMemo(() => {
-    if (dataMode === 'empty' || activeFilter === 'friends') return [];
+  // Guild Updates feed
+  const filteredGuildItems = useMemo(() => {
+    if (dataMode === 'empty') return [];
     const base =
-      activeFilter === 'all'
-        ? FEED_ITEMS
-        : FEED_ITEMS.filter((item) => item.type === activeFilter);
-    if (dataMode === 'one') return base.slice(0, 1);
-    return base;
-  }, [activeFilter, dataMode]);
+      guildFilter === 'all'
+        ? GUILD_FEED_ITEMS
+        : GUILD_FEED_ITEMS.filter((item) => item.type === guildFilter);
+    return dataMode === 'one' ? base.slice(0, 1) : base;
+  }, [guildFilter, dataMode]);
 
-  const visibleItems =
-    activeFilter === 'all' && !showAllItems
-      ? filteredItems.slice(0, 4)
-      : filteredItems;
+  const visibleGuildItems =
+    guildFilter === 'all' && !showAllGuildItems
+      ? filteredGuildItems.slice(0, 4)
+      : filteredGuildItems;
 
   const toggleExpand = (id: string) => {
     playSelectSound();
@@ -442,23 +464,20 @@ export const BadmintonFeedSection: React.FC = () => {
     }
   };
 
-  const showFriendActivityBlock =
-    dataMode !== 'empty' &&
-    (activeFilter === 'all' || activeFilter === 'friends') &&
-    topFriendsActivity.length > 0;
-
   return (
-    <section className="space-y-4" aria-label={isThai ? 'ฟีดแบดมินตันก๊วน' : 'Badminton Feed'}>
+    <section className="space-y-3.5" aria-label={isThai ? 'ฟีดแบดมินตันก๊วน' : 'Badminton Feed'}>
       {/* Section Header matching ProfileSubHeader */}
       <div className="flex items-end justify-between gap-3 px-1">
         <div className="min-w-0 flex-1">
           <h2 className="text-[13px] font-semibold text-[#6b7280] leading-tight truncate">
-            {isThai ? 'ฟีดแบดมินตันก๊วน' : 'Badminton Feed'}
+            {isThai ? 'ฟีดแบดมินตัน' : 'Badminton Feed'}
           </h2>
           <p className="text-[11px] text-[#9ca3af] mt-0.5 truncate">
-            {isThai
-              ? 'กิจกรรมเพื่อน ผลแข่ง ความสำเร็จ และหลักชัยจากก๊วน'
-              : 'Friend activity, match results, badges & guild milestones'}
+            {scopeTab === 'my_results'
+              ? (isThai ? 'สรุปผลการแข่งขันและสถิติล่าสุดของคุณ' : 'Your recent match scores & telemetry')
+              : scopeTab === 'guild_updates'
+              ? (isThai ? 'ผลการแข่ง ความสำเร็จ และหลักชัยจากก๊วน' : 'Guild matches, badges & milestones')
+              : (isThai ? 'ผลการแข่งขันล่าสุดของเพื่อนอันดับต้นในก๊วน' : 'Match outcomes of top-ranked guild friends')}
           </p>
         </div>
 
@@ -466,39 +485,53 @@ export const BadmintonFeedSection: React.FC = () => {
           type="button"
           onClick={() => {
             playSelectSound();
-            navigateTo('E1');
+            if (scopeTab === 'my_results') {
+              navigateTo('F1');
+            } else if (scopeTab === 'friend_activity') {
+              navigateTo('E4');
+            } else {
+              navigateTo('E1');
+            }
           }}
           className="no-doodle min-h-[36px] px-2.5 py-1 rounded-full bg-[#ffffff] shadow-[0_1px_4px_rgba(0,0,0,0.06)] text-[11px] font-medium text-[#111111] flex items-center gap-1 hover:bg-[#f3f4f6] cursor-pointer whitespace-nowrap shrink-0"
         >
-          <span>{isThai ? 'ดูก๊วน' : 'Guilds'}</span>
+          <span>
+            {scopeTab === 'my_results'
+              ? (isThai ? 'โปรไฟล์' : 'Profile')
+              : scopeTab === 'friend_activity'
+              ? (isThai ? 'อันดับก๊วน' : 'Rankings')
+              : (isThai ? 'ดูก๊วน' : 'Guilds')}
+          </span>
           <ArrowRight className="w-3.5 h-3.5 stroke-[1.75] shrink-0" />
         </button>
       </div>
 
-      {/* Segmented Filter Tab Bar matching Profile UI (5-tab grid) */}
+      {/* TOP FILTERING COMPONENT: Toggle between My Results | Guild Updates | Friend Activity */}
       <div
         data-filter="true"
-        className="bg-[#ececef] p-1 rounded-full grid grid-cols-5 gap-1"
+        className="bg-[#ececef] p-1 rounded-full grid grid-cols-3 gap-1"
+        role="tablist"
+        aria-label={isThai ? 'ตัวกรองฟีดแบดมินตัน' : 'Badminton feed filter'}
       >
         {(
           [
-            { id: 'all', label: isThai ? 'ทั้งหมด' : 'All' },
-            { id: 'friends', label: isThai ? 'เพื่อน' : 'Friends' },
-            { id: 'match', label: isThai ? 'ผลแข่ง' : 'Matches' },
-            { id: 'achievement', label: isThai ? 'เหรียญ' : 'Badges' },
-            { id: 'milestone', label: isThai ? 'หลักชัย' : 'Milestones' },
+            { id: 'my_results', label: isThai ? 'ผลแข่งของฉัน' : 'My Results' },
+            { id: 'guild_updates', label: isThai ? 'อัปเดตก๊วน' : 'Guild Updates' },
+            { id: 'friend_activity', label: isThai ? 'กิจกรรมเพื่อน' : 'Friend Activity' },
           ] as const
         ).map((tab) => {
-          const isActive = activeFilter === tab.id;
+          const isActive = scopeTab === tab.id;
           return (
             <button
               key={tab.id}
               type="button"
+              role="tab"
+              aria-selected={isActive}
               onClick={() => {
                 playSelectSound();
-                setActiveFilter(tab.id);
+                setScopeTab(tab.id);
               }}
-              className={`no-doodle min-h-[38px] px-1 py-1.5 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
+              className={`no-doodle min-h-[38px] px-2 py-1.5 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
                 isActive
                   ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
                   : 'text-[#6b7280] hover:text-[#111111]'
@@ -510,239 +543,351 @@ export const BadmintonFeedSection: React.FC = () => {
         })}
       </div>
 
-      {/* FRIEND ACTIVITY SUB-SECTION (Profile Grouped Rows Layout) */}
-      {showFriendActivityBlock && (
-        <div className="space-y-2">
-          <div className="flex items-end justify-between gap-3 px-1">
-            <div className="min-w-0 flex-1">
-              <h3 className="text-[13px] font-semibold text-[#6b7280] leading-tight truncate">
-                {isThai ? 'กิจกรรมเพื่อนอันดับท็อป' : 'Friend Activity'}
-              </h3>
-              <p className="text-[11px] text-[#9ca3af] mt-0.5 truncate">
+      {/* ===================================================================== */}
+      {/* VIEW 1: MY RESULTS (Profile Quick Stats Summary + MatchFaceOffCards) */}
+      {/* ===================================================================== */}
+      {scopeTab === 'my_results' && (
+        <div className="space-y-3">
+          {/* Quick Stats Summary Card matching Profile */}
+          <div className="bg-[#ffffff] rounded-[24px] p-3 shadow-[0_2px_12px_rgba(0,0,0,0.03)] grid grid-cols-3 gap-2 text-center">
+            <div className="p-2.5 rounded-[16px] bg-[#f5f5f7]">
+              <div className="text-[10px] font-medium text-[#71717a] whitespace-nowrap">
+                {isThai ? 'อัตราชนะ' : 'Win Rate'}
+              </div>
+              <div className="text-lg font-bold text-[#111111] leading-tight tabular-nums mt-0.5 whitespace-nowrap">
+                {myWinRate}%
+              </div>
+              <div className="text-[10px] text-[#71717a] mt-0.5 whitespace-nowrap">
                 {isThai
-                  ? 'ผลการแข่งขันล่าสุดของเพื่อนอันดับต้นในก๊วนของคุณ'
-                  : 'Recent match outcomes of top-ranked friends in your guild'}
-              </p>
+                  ? `ชนะ ${myWinsCount} · แพ้ ${INITIAL_PAST_MATCHES.length - myWinsCount}`
+                  : `${myWinsCount}W · ${INITIAL_PAST_MATCHES.length - myWinsCount}L`}
+              </div>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                playSelectSound();
-                navigateTo('E4');
-              }}
-              className="no-doodle min-h-[34px] px-2.5 py-1 rounded-full bg-[#ffffff] shadow-[0_1px_4px_rgba(0,0,0,0.06)] text-[11px] font-medium text-[#111111] flex items-center gap-1 hover:bg-[#f3f4f6] cursor-pointer whitespace-nowrap shrink-0"
-            >
-              <span>{isThai ? 'อันดับก๊วน' : 'Rankings'}</span>
-              <ArrowRight className="w-3 h-3 stroke-[1.75] shrink-0" />
-            </button>
+
+            <div className="p-2.5 rounded-[16px] bg-[#e8f7ee]">
+              <div className="text-[10px] font-medium text-[#15803d] whitespace-nowrap">
+                {isThai ? 'คะแนนสะสม' : 'Points Earned'}
+              </div>
+              <div className="text-lg font-bold text-[#15803d] leading-tight tabular-nums mt-0.5 whitespace-nowrap">
+                +{myExpEarned}
+              </div>
+              <div className="text-[10px] text-[#15803d]/80 mt-0.5 whitespace-nowrap">
+                {INITIAL_PAST_MATCHES.length} {isThai ? 'แมตช์' : 'Matches'}
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-[16px] bg-[#f5f5f7]">
+              <div className="text-[10px] font-medium text-[#71717a] whitespace-nowrap">
+                {isThai ? 'ตบสูงสุด' : 'Top Smash'}
+              </div>
+              <div className="text-lg font-bold text-[#111111] leading-tight tabular-nums mt-0.5 whitespace-nowrap">
+                {myTopSmash}
+              </div>
+              <div className="text-[10px] text-[#71717a] mt-0.5 whitespace-nowrap">
+                {isThai ? 'กม./ชม.' : 'km/h'}
+              </div>
+            </div>
           </div>
 
-          <div className="bg-[#ffffff] rounded-[24px] shadow-[0_2px_12px_rgba(0,0,0,0.03)] divide-y divide-[#000000]/[0.06] overflow-hidden">
-            {topFriendsActivity.map(({ user, outcome }) => {
-              const isExpanded = expandedFriendId === user.id;
-              const isWin = outcome.result === 'win';
-              const cheerKey = `friend_${user.id}`;
-              const isCheered = Boolean(cheeredIds[cheerKey]);
-              const cheerCount = outcome.initialCheers + (isCheered ? 1 : 0);
-              const friendDisplayName = isThai ? user.name : outcome.nameEn;
-              const opponentName = isThai ? outcome.opponentTh : outcome.opponentEn;
+          {/* Sub-filter Strip (All | Won | Lost) */}
+          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-3 gap-1">
+            {(
+              [
+                { id: 'all', label: isThai ? `ทั้งหมด (${INITIAL_PAST_MATCHES.length})` : `All (${INITIAL_PAST_MATCHES.length})` },
+                { id: 'win', label: isThai ? `ชนะ (${myWinsCount})` : `Won (${myWinsCount})` },
+                { id: 'loss', label: isThai ? `แพ้ (${INITIAL_PAST_MATCHES.length - myWinsCount})` : `Lost (${INITIAL_PAST_MATCHES.length - myWinsCount})` },
+              ] as const
+            ).map((f) => (
+              <button
+                key={f.id}
+                type="button"
+                onClick={() => {
+                  playSelectSound();
+                  setMyFilter(f.id);
+                }}
+                className={`no-doodle min-h-[34px] px-2 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
+                  myFilter === f.id
+                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                    : 'text-[#6b7280] hover:text-[#111111]'
+                }`}
+              >
+                {f.label}
+              </button>
+            ))}
+          </div>
 
-              return (
-                <div key={user.id} className="transition-colors">
-                  <button
-                    type="button"
-                    onClick={() => {
-                      playSelectSound();
-                      setExpandedFriendId(isExpanded ? null : user.id);
-                    }}
-                    className="no-doodle w-full px-4 py-3.5 min-h-[64px] flex items-center justify-between gap-3 text-left hover:bg-[#f9fafb] active:bg-[#f3f4f6] transition-colors cursor-pointer"
+          {myMatches.length === 0 ? (
+            <div className="bg-[#ffffff] rounded-[24px] p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2">
+              <div className="text-2xl">🏸</div>
+              <div className="text-xs font-semibold text-[#111111]">
+                {isThai ? 'ไม่พบผลการแข่งขันของคุณ' : 'No personal match results found'}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {myMatches.map((match) => {
+                const isWin = match.result === 'win';
+                const isDoubles = match.matchType === 'Doubles';
+                const isExpanded = Boolean(expandedIds[match.id]);
+                const partnerShort = isThai
+                  ? (match.partnerNameTh || match.partnerName || 'คู่หู')
+                  : (match.partnerNameEn || match.partnerName || 'Partner');
+                const teamALabel = isDoubles ? `${userShortName} & ${partnerShort}` : userShortName;
+                const teamBLabel = isThai
+                  ? (match.opponent.nameTh || match.opponent.name)
+                  : (match.opponent.nameEn || match.opponent.name);
+                const scoreDisplay = match.finalScore.replace('-', ':');
+                const setSummary = match.scores
+                  .map((s) => `${s.userScore}-${s.opponentScore}`)
+                  .join(' · ');
+
+                return (
+                  <article
+                    key={match.id}
+                    className="bg-[#ffffff] rounded-[24px] p-4 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-3"
                   >
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="relative shrink-0">
-                        <DoodleAvatar
-                          preset={resolveDoodlePreset(user.name)}
-                          size="sm"
-                          className="w-10 h-10"
-                          ringClass={`border-2 border-[#ffffff] ring-1 ${
-                            user.rank <= 3 ? 'ring-[#7cd7a0]' : 'ring-[#e5e7eb]'
-                          }`}
-                        />
-                        <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#111111] text-[#ffffff] text-[9px] font-bold leading-none tabular-nums">
-                          #{user.rank}
+                    <div className="flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 text-[11px] font-medium text-[#71717a] min-w-0 truncate">
+                        <Calendar className="w-3.5 h-3.5 text-[#9ca3af] shrink-0" />
+                        <span className="truncate">
+                          {isThai ? (match.dateTh || match.date) : (match.dateEn || match.date)}
+                        </span>
+                        <span className="text-[#d4d4d8]">·</span>
+                        <span className="shrink-0">
+                          {isThai ? (isDoubles ? 'ประเภทคู่' : 'ประเภทเดี่ยว') : match.matchType}
                         </span>
                       </div>
-
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-1.5 min-w-0">
-                          <span className="text-[13px] font-semibold text-[#111111] truncate">
-                            {friendDisplayName}
-                          </span>
-                          <span className="text-[10px] font-medium text-[#71717a] shrink-0 tabular-nums">
-                            · {isThai ? `พลัง ${user.ovr}` : `OVR ${user.ovr}`}
-                          </span>
-                        </div>
-                        <div className="text-[11px] text-[#71717a] truncate mt-0.5 tabular-nums">
-                          vs {opponentName} · {outcome.setSummary} · {isThai ? outcome.timeTh : outcome.timeEn}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-2 shrink-0">
                       <span
-                        className={`px-2.5 py-1 rounded-full text-[11px] font-semibold tabular-nums whitespace-nowrap ${
-                          isWin
-                            ? 'bg-[#e8f7ee] text-[#15803d]'
-                            : 'bg-[#fef2f2] text-[#dc2626]'
+                        className={`px-2.5 py-0.5 rounded-full text-[11px] font-semibold shrink-0 whitespace-nowrap ${
+                          isWin ? 'bg-[#e8f7ee] text-[#15803d]' : 'bg-[#fef2f2] text-[#dc2626]'
                         }`}
                       >
-                        {isWin
-                          ? `${isThai ? 'ชนะ' : 'W'} ${outcome.scoreDisplay}`
-                          : `${isThai ? 'แพ้' : 'L'} ${outcome.scoreDisplay}`}
-                      </span>
-                      <span className="w-7 h-7 rounded-full bg-[#f3f4f6] flex items-center justify-center text-[#111111]/75 shrink-0">
-                        {isExpanded ? (
-                          <ChevronUp className="w-3.5 h-3.5 stroke-[1.75]" />
-                        ) : (
-                          <ChevronDown className="w-3.5 h-3.5 stroke-[1.75]" />
-                        )}
+                        {isWin ? (isThai ? 'ชนะ' : 'Won') : (isThai ? 'แพ้' : 'Lost')}
                       </span>
                     </div>
-                  </button>
 
-                  {isExpanded && (
-                    <div className="px-4 pb-3.5 pt-1 space-y-2.5 bg-[#fafafa]">
-                      <div className="grid grid-cols-3 gap-2 text-center tabular-nums">
-                        <div className="p-2 rounded-[14px] bg-[#ffffff]">
-                          <div className="text-[10px] font-medium text-[#71717a] whitespace-nowrap">
-                            {isThai ? 'สปีดตบสูงสุด' : 'Top Smash'}
+                    <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 py-1">
+                      <div className="flex flex-col items-center text-center min-w-0">
+                        {isDoubles ? (
+                          <div className="flex items-center justify-center -space-x-2.5">
+                            <DoodleAvatar
+                              preset={resolveDoodlePreset(player.avatarUrl || userShortName)}
+                              seed={userShortName}
+                              size="sm"
+                              className="w-10 h-10 z-10"
+                              ringClass="border-2 border-[#ffffff] ring-1 ring-[#7cd7a0]"
+                            />
+                            <DoodleAvatar
+                              preset={resolveDoodlePreset(match.partnerAvatar || partnerShort)}
+                              seed={partnerShort}
+                              size="sm"
+                              className="w-10 h-10"
+                              ringClass="border-2 border-[#ffffff] ring-1 ring-[#7cd7a0]"
+                            />
                           </div>
-                          <div className="text-xs font-bold text-[#111111] mt-0.5 whitespace-nowrap">
-                            {outcome.topSmashKmh} {isThai ? 'กม./ชม.' : 'km/h'}
-                          </div>
+                        ) : (
+                          <DoodleAvatar
+                            preset={resolveDoodlePreset(player.avatarUrl || userShortName)}
+                            seed={userShortName}
+                            size="md"
+                            className="w-11 h-11"
+                            ringClass="border-2 border-[#ffffff] ring-1 ring-[#7cd7a0]"
+                          />
+                        )}
+                        <span className="text-xs font-semibold text-[#111111] truncate w-full mt-1.5 leading-snug">
+                          {teamALabel}
+                        </span>
+                        <span className="text-[10px] text-[#71717a] truncate w-full">
+                          {isThai ? 'ทีมเรา' : 'You'}
+                        </span>
+                      </div>
+
+                      <div className="bg-[#f5f5f7] rounded-[18px] px-4 py-2 text-center min-w-[94px] flex flex-col items-center justify-center">
+                        <div className="text-[22px] font-bold text-[#111111] tabular-nums leading-tight whitespace-nowrap">
+                          {scoreDisplay}
                         </div>
-
-                        <div className="p-2 rounded-[14px] bg-[#ffffff]">
-                          <div className="text-[10px] font-medium text-[#71717a] whitespace-nowrap">
-                            {isThai ? 'ฟอร์ม 5 นัด' : 'Last 5 Form'}
-                          </div>
-                          <div className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold">
-                            {outcome.formStreak.map((res, idx) => (
-                              <span
-                                key={idx}
-                                className={res === 'W' ? 'text-[#15803d]' : 'text-[#dc2626]'}
-                              >
-                                {res}
-                              </span>
-                            ))}
-                          </div>
-                        </div>
-
-                        <div className="p-2 rounded-[14px] bg-[#e8f7ee]">
-                          <div className="text-[10px] font-medium text-[#15803d] whitespace-nowrap">
-                            {isThai ? 'อัตราชนะก๊วน' : 'Win Rate'}
-                          </div>
-                          <div className="text-xs font-bold text-[#15803d] mt-0.5 whitespace-nowrap">
-                            {user.winRate}%
-                          </div>
+                        <div className="text-[10px] font-medium text-[#71717a] tabular-nums whitespace-nowrap mt-0.5">
+                          {setSummary}
                         </div>
                       </div>
 
-                      <div className="flex items-center justify-between gap-2 pt-0.5">
-                        <span className="text-[11px] text-[#71717a] flex items-center gap-1 min-w-0 truncate">
-                          <MapPin className="w-3.5 h-3.5 text-[#9ca3af] shrink-0" />
-                          <span className="truncate">
-                            {isThai ? outcome.venueTh : outcome.venueEn}
-                          </span>
+                      <div className="flex flex-col items-center text-center min-w-0">
+                        {isDoubles && match.opponent.avatars.length > 1 ? (
+                          <div className="flex items-center justify-center -space-x-2.5">
+                            <DoodleAvatar
+                              preset={resolveDoodlePreset(match.opponent.avatars[0])}
+                              seed={teamBLabel}
+                              size="sm"
+                              className="w-10 h-10 z-10"
+                              ringClass="border-2 border-[#ffffff] ring-1 ring-[#e5e7eb]"
+                            />
+                            <DoodleAvatar
+                              preset={resolveDoodlePreset(match.opponent.avatars[1])}
+                              seed={teamBLabel}
+                              size="sm"
+                              className="w-10 h-10"
+                              ringClass="border-2 border-[#ffffff] ring-1 ring-[#e5e7eb]"
+                            />
+                          </div>
+                        ) : (
+                          <DoodleAvatar
+                            preset={resolveDoodlePreset(match.opponent.avatars[0])}
+                            seed={teamBLabel}
+                            size="md"
+                            className="w-11 h-11"
+                            ringClass="border-2 border-[#ffffff] ring-1 ring-[#e5e7eb]"
+                          />
+                        )}
+                        <span className="text-xs font-semibold text-[#111111] truncate w-full mt-1.5 leading-snug">
+                          {teamBLabel}
                         </span>
+                        <span className="text-[10px] text-[#71717a] truncate w-full">
+                          {match.opponent.tier}
+                        </span>
+                      </div>
+                    </div>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          <button
-                            type="button"
-                            onClick={() =>
-                              handleToggleCheer(
-                                cheerKey,
-                                isThai ? 'ก๊วนตบสนั่น พระราม 9' : 'Rama 9 Smashers'
-                              )
-                            }
-                            className={`no-doodle min-h-[34px] px-2.5 py-1 rounded-full text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-all whitespace-nowrap tabular-nums ${
-                              isCheered
-                                ? 'bg-[#e8f7ee] text-[#15803d]'
-                                : 'bg-[#ffffff] text-[#111111] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:bg-[#f3f4f6]'
-                            }`}
-                          >
-                            <Heart className={`w-3.5 h-3.5 shrink-0 ${isCheered ? 'fill-current' : ''}`} />
-                            <span>{cheerCount}</span>
-                          </button>
+                    {isExpanded && (
+                      <div className="p-3 rounded-[18px] bg-[#f5f5f7] space-y-2 text-[11px]">
+                        <div className="grid grid-cols-3 gap-2 text-center">
+                          <div className="p-2 rounded-[14px] bg-[#ffffff]">
+                            <span className="text-[10px] font-medium text-[#71717a] block whitespace-nowrap">
+                              {isThai ? 'สปีดตบ' : 'Top Smash'}
+                            </span>
+                            <span className="text-xs font-semibold text-[#111111] tabular-nums mt-0.5 block">
+                              {match.highestSmashKmh} {isThai ? 'กม./ชม.' : 'km/h'}
+                            </span>
+                          </div>
+                          <div className="p-2 rounded-[14px] bg-[#ffffff]">
+                            <span className="text-[10px] font-medium text-[#71717a] block whitespace-nowrap">
+                              {isThai ? 'เวลาแข่ง' : 'Duration'}
+                            </span>
+                            <span className="text-xs font-semibold text-[#111111] tabular-nums mt-0.5 block">
+                              {match.durationMin} {isThai ? 'นาที' : 'min'}
+                            </span>
+                          </div>
+                          <div className="p-2 rounded-[14px] bg-[#e8f7ee]">
+                            <span className="text-[10px] font-medium text-[#15803d] block whitespace-nowrap">
+                              {isThai ? 'คะแนนที่ได้' : 'Points'}
+                            </span>
+                            <span className="text-xs font-semibold text-[#15803d] tabular-nums mt-0.5 block">
+                              +{match.expGained}
+                            </span>
+                          </div>
+                        </div>
 
+                        <div className="p-2.5 rounded-[14px] bg-[#ffffff] flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 min-w-0 flex-1">
+                            <Sparkles className="w-3.5 h-3.5 text-[#15803d] shrink-0" />
+                            <span className="truncate text-[#3f3f46]">
+                              <strong className="font-semibold text-[#111111]">
+                                {isThai ? 'ไฮไลต์:' : 'Highlight:'}
+                              </strong>{' '}
+                              {isThai
+                                ? (match.highlightShotTh || match.highlightShot)
+                                : (match.highlightShotEn || match.highlightShot)}
+                            </span>
+                          </div>
                           <button
                             type="button"
                             onClick={() => {
                               playSelectSound();
-                              setSparringModalPlayer({
-                                name: friendDisplayName,
-                                ovr: user.ovr,
-                                tier: isThai ? `ลีก ${user.tier}` : `${user.tier} League`,
-                                role: user.guildTitle,
-                                status: isThai
-                                  ? `อันดับ #${user.rank} ก๊วนพระราม 9`
-                                  : `Rank #${user.rank} · Rama 9 Guild`,
-                                winRate: user.winRate,
-                              });
+                              navigateTo('C3');
                             }}
-                            className="no-doodle min-h-[34px] px-3 py-1 rounded-full bg-gradient-to-b from-[#2b2b2e] to-[#111111] text-[#ffffff] text-[11px] font-medium flex items-center gap-1 cursor-pointer hover:opacity-90 active:scale-95 transition-all whitespace-nowrap"
+                            className="no-doodle px-3 py-1.5 rounded-full bg-gradient-to-b from-[#2b2b2e] to-[#111111] text-[#ffffff] text-[11px] font-medium hover:opacity-90 cursor-pointer active:scale-95 transition-all whitespace-nowrap shrink-0"
                           >
-                            <Swords className="w-3 h-3 shrink-0" />
-                            <span>{isThai ? 'ชวนตีก๊วน' : 'Spar'}</span>
+                            {isThai ? 'วิเคราะห์ช็อต' : 'Analyze'}
                           </button>
                         </div>
                       </div>
+                    )}
+
+                    <div className="pt-2.5 border-t border-[#000000]/[0.06] flex items-center justify-between gap-2">
+                      <div className="flex items-center gap-1.5 text-[11px] text-[#71717a] min-w-0 truncate">
+                        <MapPin className="w-3.5 h-3.5 text-[#9ca3af] shrink-0" />
+                        <span className="truncate">
+                          {isThai
+                            ? (match.courtNameTh || match.courtName)
+                            : (match.courtNameEn || match.courtName)}
+                        </span>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={() => toggleExpand(match.id)}
+                        className="no-doodle min-h-[34px] px-2.5 py-1 rounded-full bg-[#f3f4f6] text-[11px] font-medium text-[#111111] flex items-center gap-1 cursor-pointer hover:bg-[#e5e7eb] transition-colors whitespace-nowrap shrink-0"
+                      >
+                        <span>{isExpanded ? (isThai ? 'ซ่อน' : 'Hide') : (isThai ? 'สถิติ' : 'Stats')}</span>
+                        {isExpanded ? (
+                          <ChevronUp className="w-3.5 h-3.5 shrink-0" />
+                        ) : (
+                          <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+                        )}
+                      </button>
                     </div>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+                  </article>
+                );
+              })}
+            </div>
+          )}
+
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              navigateTo('F1');
+            }}
+            className="no-doodle w-full min-h-[44px] py-2.5 px-4 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:bg-[#fafafa] text-[#111111] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.99]"
+          >
+            <span>{isThai ? 'ดูสถิติและแมตช์ทั้งหมดในโปรไฟล์' : 'View full history in Profile'}</span>
+            <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+          </button>
         </div>
       )}
 
-      {/* Empty State */}
-      {activeFilter !== 'friends' && visibleItems.length === 0 ? (
-        <div className="bg-[#ffffff] rounded-[24px] p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2">
-          <div className="text-2xl">🏸</div>
-          <div className="text-xs font-semibold text-[#111111]">
-            {isThai ? 'ยังไม่มีอัปเดตในหมวดหมู่นี้' : 'No feed updates yet'}
+      {/* ===================================================================== */}
+      {/* VIEW 2: GUILD UPDATES (Sub-filter + Matches, Achievements, Milestones) */}
+      {/* ===================================================================== */}
+      {scopeTab === 'guild_updates' && (
+        <div className="space-y-3">
+          {/* Category Sub-filter matching Profile Segmented Bar */}
+          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-4 gap-1">
+            {(
+              [
+                { id: 'all', label: isThai ? 'ทั้งหมด' : 'All' },
+                { id: 'match', label: isThai ? 'ผลแข่ง' : 'Matches' },
+                { id: 'achievement', label: isThai ? 'เหรียญ' : 'Badges' },
+                { id: 'milestone', label: isThai ? 'หลักชัย' : 'Milestones' },
+              ] as const
+            ).map((sub) => (
+              <button
+                key={sub.id}
+                type="button"
+                onClick={() => {
+                  playSelectSound();
+                  setGuildFilter(sub.id);
+                }}
+                className={`no-doodle min-h-[34px] px-1.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
+                  guildFilter === sub.id
+                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
+                    : 'text-[#6b7280] hover:text-[#111111]'
+                }`}
+              >
+                {sub.label}
+              </button>
+            ))}
           </div>
-          <p className="text-[11px] text-[#71717a]">
-            {isThai
-              ? 'เข้าร่วมก๊วนหรือลงแข่งเพื่อบันทึกอัปเดตแรกของวัน'
-              : 'Join a guild or log a match to share the first update'}
-          </p>
-        </div>
-      ) : activeFilter === 'friends' && topFriendsActivity.length === 0 ? (
-        <div className="bg-[#ffffff] rounded-[24px] p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2">
-          <div className="text-2xl">👥</div>
-          <div className="text-xs font-semibold text-[#111111]">
-            {isThai ? 'ยังไม่มีกิจกรรมเพื่อนในก๊วน' : 'No friend activity yet'}
-          </div>
-          <p className="text-[11px] text-[#71717a]">
-            {isThai
-              ? 'ชวนเพื่อนเข้าก๊วนเพื่อติดตามผลแมตช์ล่าสุด'
-              : 'Invite friends to your guild to follow their latest match results'}
-          </p>
-        </div>
-      ) : (
-        visibleItems.length > 0 && (
-          <div className="space-y-2.5">
-            {activeFilter === 'all' && (
-              <div className="px-1 pt-0.5">
-                <h3 className="text-[13px] font-semibold text-[#6b7280] leading-tight truncate">
-                  {isThai ? 'อัปเดตล่าสุดจากชุมชน' : 'Community Updates'}
-                </h3>
-              </div>
-            )}
 
+          {visibleGuildItems.length === 0 ? (
+            <div className="bg-[#ffffff] rounded-[24px] p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2">
+              <div className="text-2xl">🏸</div>
+              <div className="text-xs font-semibold text-[#111111]">
+                {isThai ? 'ยังไม่มีอัปเดตจากก๊วนในหมวดหมู่นี้' : 'No guild updates yet'}
+              </div>
+            </div>
+          ) : (
             <div className="space-y-3">
-              {visibleItems.map((item) => {
+              {visibleGuildItems.map((item) => {
                 const isCheered = Boolean(cheeredIds[item.id]);
                 const cheerCount = item.initialCheers + (isCheered ? 1 : 0);
                 const isExpanded = Boolean(expandedIds[item.id]);
@@ -1134,33 +1279,231 @@ export const BadmintonFeedSection: React.FC = () => {
                 return null;
               })}
             </div>
-          </div>
-        )
+          )}
+
+          {guildFilter === 'all' && filteredGuildItems.length > 4 && (
+            <button
+              type="button"
+              onClick={() => {
+                playSelectSound();
+                setShowAllGuildItems((prev) => !prev);
+              }}
+              className="no-doodle w-full min-h-[44px] py-2.5 px-4 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:bg-[#fafafa] text-[#111111] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.99]"
+            >
+              <span>
+                {showAllGuildItems
+                  ? (isThai ? 'แสดงน้อยลง' : 'Show fewer updates')
+                  : (isThai
+                      ? `ดูอัปเดตก๊วนทั้งหมด (${filteredGuildItems.length})`
+                      : `View all guild updates (${filteredGuildItems.length})`)}
+              </span>
+              {showAllGuildItems ? (
+                <ChevronUp className="w-3.5 h-3.5 shrink-0" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+              )}
+            </button>
+          )}
+        </div>
       )}
 
-      {/* Expand / Collapse Remaining Feed CTA (Profile-style clean button) */}
-      {activeFilter === 'all' && filteredItems.length > 4 && (
-        <button
-          type="button"
-          onClick={() => {
-            playSelectSound();
-            setShowAllItems((prev) => !prev);
-          }}
-          className="no-doodle w-full min-h-[44px] py-2.5 px-4 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:bg-[#fafafa] text-[#111111] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.99]"
-        >
-          <span>
-            {showAllItems
-              ? (isThai ? 'แสดงน้อยลง' : 'Show fewer updates')
-              : (isThai
-                  ? `ดูฟีดก๊วนทั้งหมด (${filteredItems.length})`
-                  : `View all feed updates (${filteredItems.length})`)}
-          </span>
-          {showAllItems ? (
-            <ChevronUp className="w-3.5 h-3.5 shrink-0" />
+      {/* ===================================================================== */}
+      {/* VIEW 3: FRIEND ACTIVITY (Top-Ranked Guild Friends Grouped Rows)       */}
+      {/* ===================================================================== */}
+      {scopeTab === 'friend_activity' && (
+        <div className="space-y-3">
+          {topFriendsActivity.length === 0 ? (
+            <div className="bg-[#ffffff] rounded-[24px] p-6 text-center shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-2">
+              <div className="text-2xl">👥</div>
+              <div className="text-xs font-semibold text-[#111111]">
+                {isThai ? 'ยังไม่มีกิจกรรมเพื่อนในก๊วน' : 'No friend activity yet'}
+              </div>
+              <p className="text-[11px] text-[#71717a]">
+                {isThai
+                  ? 'ชวนเพื่อนเข้าก๊วนเพื่อติดตามผลแมตช์ล่าสุด'
+                  : 'Invite friends to your guild to follow their latest match results'}
+              </p>
+            </div>
           ) : (
-            <ChevronDown className="w-3.5 h-3.5 shrink-0" />
+            <div className="bg-[#ffffff] rounded-[24px] shadow-[0_2px_12px_rgba(0,0,0,0.03)] divide-y divide-[#000000]/[0.06] overflow-hidden">
+              {topFriendsActivity.map(({ user, outcome }) => {
+                const isExpanded = expandedFriendId === user.id;
+                const isWin = outcome.result === 'win';
+                const cheerKey = `friend_${user.id}`;
+                const isCheered = Boolean(cheeredIds[cheerKey]);
+                const cheerCount = outcome.initialCheers + (isCheered ? 1 : 0);
+                const friendDisplayName = isThai ? user.name : outcome.nameEn;
+                const opponentName = isThai ? outcome.opponentTh : outcome.opponentEn;
+
+                return (
+                  <div key={user.id} className="transition-colors">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        playSelectSound();
+                        setExpandedFriendId(isExpanded ? null : user.id);
+                      }}
+                      className="no-doodle w-full px-4 py-3.5 min-h-[64px] flex items-center justify-between gap-3 text-left hover:bg-[#f9fafb] active:bg-[#f3f4f6] transition-colors cursor-pointer"
+                    >
+                      <div className="flex items-center gap-3 min-w-0 flex-1">
+                        <div className="relative shrink-0">
+                          <DoodleAvatar
+                            preset={resolveDoodlePreset(user.name)}
+                            size="sm"
+                            className="w-10 h-10"
+                            ringClass={`border-2 border-[#ffffff] ring-1 ${
+                              user.rank <= 3 ? 'ring-[#7cd7a0]' : 'ring-[#e5e7eb]'
+                            }`}
+                          />
+                          <span className="absolute -bottom-1 -right-1 px-1.5 py-0.5 rounded-full bg-[#111111] text-[#ffffff] text-[9px] font-bold leading-none tabular-nums">
+                            #{user.rank}
+                          </span>
+                        </div>
+
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-center gap-1.5 min-w-0">
+                            <span className="text-[13px] font-semibold text-[#111111] truncate">
+                              {friendDisplayName}
+                            </span>
+                            <span className="text-[10px] font-medium text-[#71717a] shrink-0 tabular-nums">
+                              · {isThai ? `พลัง ${user.ovr}` : `OVR ${user.ovr}`}
+                            </span>
+                          </div>
+                          <div className="text-[11px] text-[#71717a] truncate mt-0.5 tabular-nums">
+                            vs {opponentName} · {outcome.setSummary} · {isThai ? outcome.timeTh : outcome.timeEn}
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-2 shrink-0">
+                        <span
+                          className={`px-2.5 py-1 rounded-full text-[11px] font-semibold tabular-nums whitespace-nowrap ${
+                            isWin
+                              ? 'bg-[#e8f7ee] text-[#15803d]'
+                              : 'bg-[#fef2f2] text-[#dc2626]'
+                          }`}
+                        >
+                          {isWin
+                            ? `${isThai ? 'ชนะ' : 'W'} ${outcome.scoreDisplay}`
+                            : `${isThai ? 'แพ้' : 'L'} ${outcome.scoreDisplay}`}
+                        </span>
+                        <span className="w-7 h-7 rounded-full bg-[#f3f4f6] flex items-center justify-center text-[#111111]/75 shrink-0">
+                          {isExpanded ? (
+                            <ChevronUp className="w-3.5 h-3.5 stroke-[1.75]" />
+                          ) : (
+                            <ChevronDown className="w-3.5 h-3.5 stroke-[1.75]" />
+                          )}
+                        </span>
+                      </div>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="px-4 pb-3.5 pt-1 space-y-2.5 bg-[#fafafa]">
+                        <div className="grid grid-cols-3 gap-2 text-center tabular-nums">
+                          <div className="p-2 rounded-[14px] bg-[#ffffff]">
+                            <div className="text-[10px] font-medium text-[#71717a] whitespace-nowrap">
+                              {isThai ? 'สปีดตบสูงสุด' : 'Top Smash'}
+                            </div>
+                            <div className="text-xs font-bold text-[#111111] mt-0.5 whitespace-nowrap">
+                              {outcome.topSmashKmh} {isThai ? 'กม./ชม.' : 'km/h'}
+                            </div>
+                          </div>
+
+                          <div className="p-2 rounded-[14px] bg-[#ffffff]">
+                            <div className="text-[10px] font-medium text-[#71717a] whitespace-nowrap">
+                              {isThai ? 'ฟอร์ม 5 นัด' : 'Last 5 Form'}
+                            </div>
+                            <div className="mt-1 flex items-center justify-center gap-1 text-[10px] font-bold">
+                              {outcome.formStreak.map((res, idx) => (
+                                <span
+                                  key={idx}
+                                  className={res === 'W' ? 'text-[#15803d]' : 'text-[#dc2626]'}
+                                >
+                                  {res}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="p-2 rounded-[14px] bg-[#e8f7ee]">
+                            <div className="text-[10px] font-medium text-[#15803d] whitespace-nowrap">
+                              {isThai ? 'อัตราชนะก๊วน' : 'Win Rate'}
+                            </div>
+                            <div className="text-xs font-bold text-[#15803d] mt-0.5 whitespace-nowrap">
+                              {user.winRate}%
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="flex items-center justify-between gap-2 pt-0.5">
+                          <span className="text-[11px] text-[#71717a] flex items-center gap-1 min-w-0 truncate">
+                            <MapPin className="w-3.5 h-3.5 text-[#9ca3af] shrink-0" />
+                            <span className="truncate">
+                              {isThai ? outcome.venueTh : outcome.venueEn}
+                            </span>
+                          </span>
+
+                          <div className="flex items-center gap-1.5 shrink-0">
+                            <button
+                              type="button"
+                              onClick={() =>
+                                handleToggleCheer(
+                                  cheerKey,
+                                  isThai ? 'ก๊วนตบสนั่น พระราม 9' : 'Rama 9 Smashers'
+                                )
+                              }
+                              className={`no-doodle min-h-[34px] px-2.5 py-1 rounded-full text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-all whitespace-nowrap tabular-nums ${
+                                isCheered
+                                  ? 'bg-[#e8f7ee] text-[#15803d]'
+                                  : 'bg-[#ffffff] text-[#111111] shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:bg-[#f3f4f6]'
+                              }`}
+                            >
+                              <Heart className={`w-3.5 h-3.5 shrink-0 ${isCheered ? 'fill-current' : ''}`} />
+                              <span>{cheerCount}</span>
+                            </button>
+
+                            <button
+                              type="button"
+                              onClick={() => {
+                                playSelectSound();
+                                setSparringModalPlayer({
+                                  name: friendDisplayName,
+                                  ovr: user.ovr,
+                                  tier: isThai ? `ลีก ${user.tier}` : `${user.tier} League`,
+                                  role: user.guildTitle,
+                                  status: isThai
+                                    ? `อันดับ #${user.rank} ก๊วนพระราม 9`
+                                    : `Rank #${user.rank} · Rama 9 Guild`,
+                                  winRate: user.winRate,
+                                });
+                              }}
+                              className="no-doodle min-h-[34px] px-3 py-1 rounded-full bg-gradient-to-b from-[#2b2b2e] to-[#111111] text-[#ffffff] text-[11px] font-medium flex items-center gap-1 cursor-pointer hover:opacity-90 active:scale-95 transition-all whitespace-nowrap"
+                            >
+                              <Swords className="w-3 h-3 shrink-0" />
+                              <span>{isThai ? 'ชวนตีก๊วน' : 'Spar'}</span>
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           )}
-        </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              navigateTo('E4');
+            }}
+            className="no-doodle w-full min-h-[44px] py-2.5 px-4 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.04)] hover:bg-[#fafafa] text-[#111111] text-xs font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all active:scale-[0.99]"
+          >
+            <span>{isThai ? 'ดูตารางอันดับเพื่อนในก๊วนทั้งหมด' : 'View full guild leaderboard'}</span>
+            <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+          </button>
+        </div>
       )}
     </section>
   );

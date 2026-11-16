@@ -69,7 +69,7 @@ const AVATARS = {
   meen: 'meen',
 };
 
-const INITIAL_PAST_MATCHES: PastMatchResult[] = [
+export const INITIAL_PAST_MATCHES: PastMatchResult[] = [
   {
     id: 'match_01',
     opponent: {
