@@ -12,7 +12,8 @@ export default defineConfig(() => {
       VitePWA({
         registerType: 'autoUpdate',
         includeAssets: [
-          'icon.svg',
+          'favicon.ico',
+          'favicon.png',
           'apple-touch-icon.png',
           'pwa-192x192.png',
           'pwa-512x512.png',
@@ -24,7 +25,7 @@ export default defineConfig(() => {
           short_name: 'SmashAI',
           description:
             'Mobile-first badminton intelligence app with offline court map, daily quests, courtside scoring, and AI coaching.',
-          theme_color: '#ffffff',
+          theme_color: '#7cd7a0',
           background_color: '#f4f8fb',
           display: 'standalone',
           start_url: '/',

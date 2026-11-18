@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, Users, LayoutGrid, User } from 'lucide-react';
+import { Home, Users, Newspaper, User } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { MainTab } from '../../types';
 import { playSelectSound } from '../../utils/retroAudio';
@@ -24,8 +24,12 @@ export const BottomTabBar: React.FC = () => {
   const isHomeActive = currentScreen === 'HOME' || activeTab === 'home';
   const isClubActive = currentScreen === 'CLUB_TOOLS' || ['E1', 'E2', 'E3', 'E4'].includes(currentScreen);
   const isDiscoverActive = currentScreen === 'MAP' || ['B1', 'B2', 'B3', 'B4'].includes(currentScreen);
-  const isFinanceActive = currentScreen === 'FINANCE';
-  const isProfileActive = currentScreen === 'F1' || currentScreen === 'F2' || ['D1', 'D2', 'D3'].includes(currentScreen);
+  const isFeedActive = currentScreen === 'FEED';
+  const isProfileActive =
+    currentScreen === 'F1' ||
+    currentScreen === 'F2' ||
+    currentScreen === 'FINANCE' ||
+    ['D1', 'D2', 'D3'].includes(currentScreen);
 
   // Unified Signature Active Style: Primary Green (#7cd7a0) with Black Text
   const activeTabStyle = 'bg-[#7cd7a0] text-[#000000] font-black';
@@ -101,21 +105,21 @@ export const BottomTabBar: React.FC = () => {
           </span>
         </div>
 
-        {/* 4. More / Finance */}
+        {/* 4. Badminton Feed */}
         <button
           type="button"
           onClick={() => {
             playSelectSound();
-            setActiveTab('more');
-            navigateTo('FINANCE');
+            setActiveTab('feed');
+            navigateTo('FEED');
           }}
           className={`flex-1 py-2 px-1 rounded-[18px] flex flex-col items-center justify-center transition-transform duration-150 cursor-pointer active:scale-[0.96] ${
-            isFinanceActive ? activeTabStyle : inactiveTabStyle
+            isFeedActive ? activeTabStyle : inactiveTabStyle
           }`}
         >
-          <LayoutGrid className={`w-5 h-5 ${isFinanceActive ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
+          <Newspaper className={`w-5 h-5 ${isFeedActive ? 'stroke-[2.5]' : 'stroke-[1.8]'}`} />
           <span className="text-[9px] font-bold mt-1 leading-none whitespace-nowrap">
-            {t.tabMore}
+            {t.tabFeed}
           </span>
         </button>
 

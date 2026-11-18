@@ -1,0 +1,411 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net (Default Deny)
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Reusable Hardened Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerified() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isNonEmptyStr(val, maxLen) {
+      return val is string && val.size() >= 1 && val.size() <= maxLen;
+    }
+
+    function isSizedStr(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isOptionalStr(val, maxLen) {
+      return val is string && val.size() <= maxLen;
+    }
+
+    // Entity Validators (synchronized verbatim with firebase-blueprint.json)
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'tier', 'level', 'currentExp', 'nextLevelExp', 'walletBalance', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'photoUrl', 'tier', 'level', 'currentExp', 'nextLevelExp', 'dominantHand', 'playstyle', 'primaryGoal', 'streakWeeks', 'walletBalance', 'skillRadar', 'racket', 'stats', 'createdAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && isNonEmptyStr(data.displayName, 80)
+        && (!('email' in data) || isOptionalStr(data.email, 160))
+        && (!('photoUrl' in data) || isOptionalStr(data.photoUrl, 500))
+        && data.tier in ['Bronze', 'Silver', 'Gold', 'Diamond', 'Pro']
+        && data.level is int && data.level >= 1 && data.level <= 200
+        && data.currentExp is int && data.currentExp >= 0 && data.currentExp <= 10000000
+        && data.nextLevelExp is int && data.nextLevelExp >= 1 && data.nextLevelExp <= 10000000
+        && (!('dominantHand' in data) || data.dominantHand in ['Right', 'Left'])
+        && (!('playstyle' in data) || isOptionalStr(data.playstyle, 80))
+        && (!('primaryGoal' in data) || isOptionalStr(data.primaryGoal, 60))
+        && (!('streakWeeks' in data) || (data.streakWeeks is int && data.streakWeeks >= 0 && data.streakWeeks <= 1000))
+        && data.walletBalance is number && data.walletBalance >= 0 && data.walletBalance <= 1000000
+        && (!('skillRadar' in data) || data.skillRadar is map)
+        && (!('racket' in data) || data.racket is map)
+        && (!('stats' in data) || data.stats is map)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserBadge(data) {
+      return data.keys().hasAll(['ownerId', 'badgeId', 'name', 'thaiName', 'description', 'iconName', 'category', 'rarity', 'unlocked', 'progress', 'maxProgress', 'updatedAt'])
+        && data.keys().hasOnly(['ownerId', 'badgeId', 'name', 'thaiName', 'description', 'iconName', 'category', 'rarity', 'unlocked', 'unlockedAt', 'progress', 'maxProgress', 'updatedAt'])
+        && isValidId(data.ownerId)
+        && data.ownerId == request.auth.uid
+        && isValidId(data.badgeId)
+        && data.badgeId.size() <= 64
+        && isNonEmptyStr(data.name, 80)
+        && isNonEmptyStr(data.thaiName, 80)
+        && isNonEmptyStr(data.description, 240)
+        && isNonEmptyStr(data.iconName, 40)
+        && data.category in ['combat', 'endurance', 'social', 'special']
+        && data.rarity in ['Common', 'Rare', 'Epic', 'Legendary']
+        && data.unlocked is bool
+        && (!('unlockedAt' in data) || isOptionalStr(data.unlockedAt, 60))
+        && data.progress is int && data.progress >= 0 && data.progress <= data.maxProgress
+        && data.maxProgress is int && data.maxProgress >= 1 && data.maxProgress <= 1000000
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidLeaderboardEntry(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'tier', 'level', 'ovr', 'points', 'visibility', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'tier', 'level', 'ovr', 'points', 'winRate', 'avatarPreset', 'visibility', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && isNonEmptyStr(data.displayName, 80)
+        && data.tier in ['Bronze', 'Silver', 'Gold', 'Diamond', 'Pro']
+        && data.level is int && data.level >= 1 && data.level <= 200
+        && data.ovr is int && data.ovr >= 1 && data.ovr <= 99
+        && data.points is int && data.points >= 0 && data.points <= 10000000
+        && (!('winRate' in data) || (data.winRate is number && data.winRate >= 0 && data.winRate <= 100))
+        && (!('avatarPreset' in data) || isOptionalStr(data.avatarPreset, 40))
+        && data.visibility == 'community'
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidBooking(data) {
+      return data.keys().hasAll(['ownerId', 'courtId', 'courtName', 'courtNumber', 'date', 'totalAmount', 'paymentMethod', 'bookingRef', 'status', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['ownerId', 'courtId', 'courtName', 'courtNumber', 'date', 'slotsSummary', 'totalAmount', 'paymentMethod', 'bookingRef', 'status', 'createdAt', 'updatedAt'])
+        && isValidId(data.ownerId)
+        && data.ownerId == request.auth.uid
+        && isNonEmptyStr(data.courtId, 80)
+        && isNonEmptyStr(data.courtName, 120)
+        && data.courtNumber is int && data.courtNumber >= 1 && data.courtNumber <= 40
+        && isSizedStr(data.date, 4, 32)
+        && (!('slotsSummary' in data) || isOptionalStr(data.slotsSummary, 120))
+        && data.totalAmount is number && data.totalAmount >= 0 && data.totalAmount <= 100000
+        && data.paymentMethod in ['PromptPay', 'SmashPay', 'TrueMoney']
+        && isSizedStr(data.bookingRef, 4, 40)
+        && data.status in ['confirmed', 'completed', 'cancelled']
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidMatchRecord(data) {
+      return data.keys().hasAll(['ownerId', 'playerAName', 'playerBName', 'isDoubles', 'finalScore', 'result', 'expGained', 'isPublic', 'createdAt'])
+        && data.keys().hasOnly(['ownerId', 'playerAName', 'playerBName', 'isDoubles', 'finalScore', 'setSummary', 'result', 'courtName', 'highestSmashKmh', 'durationMin', 'expGained', 'highlightShot', 'isPublic', 'createdAt'])
+        && isValidId(data.ownerId)
+        && data.ownerId == request.auth.uid
+        && isNonEmptyStr(data.playerAName, 80)
+        && isNonEmptyStr(data.playerBName, 80)
+        && data.isDoubles is bool
+        && isNonEmptyStr(data.finalScore, 20)
+        && (!('setSummary' in data) || isOptionalStr(data.setSummary, 80))
+        && data.result in ['win', 'loss']
+        && (!('courtName' in data) || isOptionalStr(data.courtName, 120))
+        && (!('highestSmashKmh' in data) || (data.highestSmashKmh is int && data.highestSmashKmh >= 0 && data.highestSmashKmh <= 600))
+        && (!('durationMin' in data) || (data.durationMin is int && data.durationMin >= 0 && data.durationMin <= 600))
+        && data.expGained is int && data.expGained >= 0 && data.expGained <= 5000
+        && (!('highlightShot' in data) || isOptionalStr(data.highlightShot, 140))
+        && data.isPublic is bool
+        && data.createdAt is timestamp;
+    }
+
+    function isValidFeedPost(data) {
+      return data.keys().hasAll(['authorId', 'authorName', 'type', 'guildName', 'headline', 'summary', 'cheersCount', 'visibility', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['authorId', 'authorName', 'type', 'guildName', 'headline', 'summary', 'scoreDisplay', 'cheersCount', 'visibility', 'createdAt', 'updatedAt'])
+        && isValidId(data.authorId)
+        && isNonEmptyStr(data.authorName, 80)
+        && data.type in ['match', 'achievement', 'milestone']
+        && isNonEmptyStr(data.guildName, 100)
+        && isNonEmptyStr(data.headline, 140)
+        && isNonEmptyStr(data.summary, 400)
+        && (!('scoreDisplay' in data) || isOptionalStr(data.scoreDisplay, 40))
+        && data.cheersCount is int && data.cheersCount >= 0 && data.cheersCount <= 1000000
+        && data.visibility == 'community'
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidFeedCheer(data) {
+      return data.keys().hasAll(['userId', 'createdAt'])
+        && data.keys().hasOnly(['userId', 'createdAt'])
+        && isValidId(data.userId)
+        && data.userId == request.auth.uid
+        && data.createdAt is timestamp;
+    }
+
+    function isValidWalletTransaction(data) {
+      return data.keys().hasAll(['ownerId', 'title', 'subtitle', 'amount', 'type', 'status', 'createdAt'])
+        && data.keys().hasOnly(['ownerId', 'title', 'subtitle', 'amount', 'type', 'category', 'status', 'createdAt'])
+        && isValidId(data.ownerId)
+        && data.ownerId == request.auth.uid
+        && isNonEmptyStr(data.title, 100)
+        && isNonEmptyStr(data.subtitle, 140)
+        && data.amount is number && data.amount >= -1000000 && data.amount <= 1000000
+        && data.type in ['credit', 'debit']
+        && (!('category' in data) || isOptionalStr(data.category, 40))
+        && data.status in ['completed', 'pending']
+        && data.createdAt is timestamp;
+    }
+
+    function isValidGuildEvent(data) {
+      return data.keys().hasAll(['hostId', 'title', 'courtName', 'courtFeeTotal', 'shuttlecockFeeTotal', 'maxPlayers', 'visibility', 'updatedAt'])
+        && data.keys().hasOnly(['hostId', 'title', 'date', 'timeRange', 'courtName', 'courtFeeTotal', 'shuttlecockFeeTotal', 'maxPlayers', 'visibility', 'updatedAt'])
+        && isValidId(data.hostId)
+        && isNonEmptyStr(data.title, 120)
+        && (!('date' in data) || isOptionalStr(data.date, 40))
+        && (!('timeRange' in data) || isOptionalStr(data.timeRange, 40))
+        && isNonEmptyStr(data.courtName, 120)
+        && data.courtFeeTotal is number && data.courtFeeTotal >= 0 && data.courtFeeTotal <= 100000
+        && data.shuttlecockFeeTotal is number && data.shuttlecockFeeTotal >= 0 && data.shuttlecockFeeTotal <= 100000
+        && data.maxPlayers is int && data.maxPlayers >= 2 && data.maxPlayers <= 100
+        && data.visibility == 'community'
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidGuildAttendee(data) {
+      return data.keys().hasAll(['userId', 'name', 'tier', 'ovr', 'paid', 'joinedAt'])
+        && data.keys().hasOnly(['userId', 'name', 'tier', 'ovr', 'paid', 'joinedAt'])
+        && isValidId(data.userId)
+        && data.userId == request.auth.uid
+        && isNonEmptyStr(data.name, 80)
+        && isNonEmptyStr(data.tier, 20)
+        && data.ovr is int && data.ovr >= 1 && data.ovr <= 99
+        && data.paid is bool
+        && data.joinedAt is timestamp;
+    }
+
+    // Read-only boot connection probe
+    match /test/{docId} {
+      allow get: if docId == 'connection';
+    }
+
+    // Private User Profiles (PII isolated to owner only)
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isOwner(userId);
+      allow list: if false;
+      allow create: if isValidId(userId)
+        && isVerified()
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerified()
+        && isOwner(userId)
+        && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoUrl', 'tier', 'level', 'currentExp', 'nextLevelExp', 'dominantHand', 'playstyle', 'primaryGoal', 'streakWeeks', 'walletBalance', 'skillRadar', 'racket', 'stats', 'updatedAt']);
+      allow delete: if false;
+
+      // User Badges Subcollection (owner private, master-gated to parent user doc)
+      match /badges/{badgeId} {
+        allow get: if isValidId(userId) && isValidId(badgeId) && isOwner(userId);
+        allow list: if isOwner(userId) && existing().ownerId == request.auth.uid;
+        allow create: if isValidId(userId)
+          && isValidId(badgeId)
+          && isVerified()
+          && isOwner(userId)
+          && isValidUserBadge(incoming())
+          && incoming().badgeId == badgeId
+          && incoming().updatedAt == request.time
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow update: if isValidId(userId)
+          && isValidId(badgeId)
+          && isVerified()
+          && isOwner(userId)
+          && isValidUserBadge(incoming())
+          && incoming().ownerId == existing().ownerId
+          && incoming().badgeId == existing().badgeId
+          && incoming().updatedAt == request.time
+          && incoming().diff(existing()).affectedKeys().hasOnly(['name', 'thaiName', 'description', 'iconName', 'category', 'rarity', 'unlocked', 'unlockedAt', 'progress', 'maxProgress', 'updatedAt'])
+          && exists(/databases/$(database)/documents/users/$(userId));
+        allow delete: if false;
+      }
+    }
+
+    // Public Leaderboard (non-PII community ranking)
+    match /leaderboard/{userId} {
+      allow get: if isValidId(userId) && isSignedIn();
+      allow list: if isSignedIn() && existing().visibility == 'community';
+      allow create: if isValidId(userId)
+        && isVerified()
+        && isOwner(userId)
+        && isValidLeaderboardEntry(incoming())
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerified()
+        && isOwner(userId)
+        && isValidLeaderboardEntry(incoming())
+        && incoming().uid == existing().uid
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'tier', 'level', 'ovr', 'points', 'winRate', 'avatarPreset', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    // Court Bookings (strictly owner scoped, terminal states locked)
+    match /bookings/{bookingId} {
+      allow get: if isValidId(bookingId) && isSignedIn() && existing().ownerId == request.auth.uid;
+      allow list: if isSignedIn() && existing().ownerId == request.auth.uid;
+      allow create: if isValidId(bookingId)
+        && isVerified()
+        && isValidBooking(incoming())
+        && incoming().ownerId == request.auth.uid
+        && incoming().status == 'confirmed'
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(bookingId)
+        && isVerified()
+        && isValidBooking(incoming())
+        && existing().ownerId == request.auth.uid
+        && existing().status != 'cancelled'
+        && existing().status != 'completed'
+        && incoming().status in ['completed', 'cancelled']
+        && incoming().ownerId == existing().ownerId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    // Match Scorecards (immutable results)
+    match /matches/{matchId} {
+      allow get: if isValidId(matchId) && isSignedIn() && (existing().isPublic == true || existing().ownerId == request.auth.uid);
+      allow list: if isSignedIn() && (existing().isPublic == true || existing().ownerId == request.auth.uid);
+      allow create: if isValidId(matchId)
+        && isVerified()
+        && isValidMatchRecord(incoming())
+        && incoming().createdAt == request.time;
+      allow update: if false;
+      allow delete: if isValidId(matchId) && isVerified() && existing().ownerId == request.auth.uid;
+    }
+
+    // Community Badminton Feed
+    match /feedPosts/{postId} {
+      allow get: if isValidId(postId) && isSignedIn() && existing().visibility == 'community';
+      allow list: if isSignedIn() && existing().visibility == 'community';
+      allow create: if isValidId(postId)
+        && isVerified()
+        && isValidFeedPost(incoming())
+        && incoming().authorId == request.auth.uid
+        && incoming().cheersCount == 0
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(postId)
+        && isVerified()
+        && isValidFeedPost(incoming())
+        && incoming().authorId == existing().authorId
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && (
+          // Action 1: Author edits summary/headline
+          (existing().authorId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['headline', 'summary', 'updatedAt'])) ||
+          // Action 2: Community member cheers/uncheers
+          (incoming().diff(existing()).affectedKeys().hasOnly(['cheersCount', 'updatedAt'])
+            && incoming().cheersCount >= 0
+            && (incoming().cheersCount == existing().cheersCount + 1 || incoming().cheersCount == existing().cheersCount - 1))
+        );
+      allow delete: if isValidId(postId) && isVerified() && existing().authorId == request.auth.uid;
+
+      match /cheers/{userId} {
+        allow get: if isValidId(postId) && isValidId(userId) && isSignedIn() && isOwner(userId);
+        allow list: if false;
+        allow create: if isValidId(postId)
+          && isValidId(userId)
+          && isVerified()
+          && isOwner(userId)
+          && exists(/databases/$(database)/documents/feedPosts/$(postId))
+          && isValidFeedCheer(incoming())
+          && incoming().createdAt == request.time;
+        allow update: if false;
+        allow delete: if isValidId(postId) && isValidId(userId) && isVerified() && isOwner(userId);
+      }
+    }
+
+    // Wallet Transactions (strictly owner private, immutable)
+    match /walletTransactions/{txId} {
+      allow get: if isValidId(txId) && isSignedIn() && existing().ownerId == request.auth.uid;
+      allow list: if isSignedIn() && existing().ownerId == request.auth.uid;
+      allow create: if isValidId(txId)
+        && isVerified()
+        && isValidWalletTransaction(incoming())
+        && incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+
+    // Shared Guild Events & Subcollection Attendees
+    match /guildEvents/{eventId} {
+      allow get: if isValidId(eventId) && isSignedIn() && existing().visibility == 'community';
+      allow list: if isSignedIn() && existing().visibility == 'community';
+      allow create: if isValidId(eventId)
+        && isVerified()
+        && isValidGuildEvent(incoming())
+        && incoming().hostId == request.auth.uid
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(eventId)
+        && isVerified()
+        && isValidGuildEvent(incoming())
+        && existing().hostId == request.auth.uid
+        && incoming().hostId == existing().hostId
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['title', 'date', 'timeRange', 'courtName', 'courtFeeTotal', 'shuttlecockFeeTotal', 'maxPlayers', 'updatedAt']);
+      allow delete: if isValidId(eventId) && isVerified() && existing().hostId == request.auth.uid;
+
+      match /attendees/{userId} {
+        allow get: if isValidId(eventId) && isValidId(userId) && isSignedIn();
+        allow list: if isValidId(eventId) && isSignedIn() && existing().userId is string;
+        allow create: if isValidId(eventId)
+          && isValidId(userId)
+          && isVerified()
+          && isOwner(userId)
+          && exists(/databases/$(database)/documents/guildEvents/$(eventId))
+          && isValidGuildAttendee(incoming())
+          && incoming().joinedAt == request.time;
+        allow update: if isValidId(eventId)
+          && isValidId(userId)
+          && isVerified()
+          && isOwner(userId)
+          && exists(/databases/$(database)/documents/guildEvents/$(eventId))
+          && isValidGuildAttendee(incoming())
+          && incoming().userId == existing().userId
+          && incoming().joinedAt == existing().joinedAt
+          && incoming().diff(existing()).affectedKeys().hasOnly(['paid']);
+        allow delete: if isValidId(eventId) && isValidId(userId) && isVerified() && isOwner(userId);
+      }
+    }
+  }
+}

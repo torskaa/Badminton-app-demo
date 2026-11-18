@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import {
- Search,
- MapPin,
- Star,
- ChevronRight,
- MessageSquare,
- Bell,
- Zap,
- ArrowLeft,
- ArrowRight,
- SlidersHorizontal,
- X,
+  Search,
+  Star,
+  ChevronRight,
+  MessageSquare,
+  Bell,
+  Zap,
+  ArrowLeft,
+  ArrowRight,
+  SlidersHorizontal,
+  X,
+  Navigation,
 } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { CourtFacility } from '../../types';
@@ -25,10 +25,12 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
     updateBooking,
     navigateTo,
     goBack,
-    player,
     setSparringModalPlayer,
     gainExp,
     language,
+    userLocation,
+    gpsPermissionState,
+    requestLiveLocation,
   } = useApp();
   const isThai = language === 'th';
 
@@ -36,8 +38,15 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<
     'all' | 'badminton' | 'pickleball' | 'quickmatch' | 'tournaments'
   >('all');
-  const [simulateEmpty, setSimulateEmpty] = useState(false);
   const [suggestToast, setSuggestToast] = useState(false);
+  const [isLocating, setIsLocating] = useState(false);
+
+  const handleTapGps = async () => {
+    playSelectSound();
+    setIsLocating(true);
+    await requestLiveLocation();
+    setIsLocating(false);
+  };
 
   const categories = [
     { id: 'all', label: isThai ? 'ทั้งหมด' : 'All', icon: '⚡', color: '#7cd7a0' },
@@ -95,28 +104,26 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
     setTimeout(() => setSuggestToast(false), 3000);
   };
 
-  const filteredCourts = simulateEmpty
-    ? []
-    : courts.filter((c) => {
-        const matchesSearch =
-          c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          c.location.toLowerCase().includes(searchTerm.toLowerCase());
-        if (activeCategory === 'pickleball') return matchesSearch && c.surfaceType.includes('Synthetic');
-        return matchesSearch;
-      });
+  const filteredCourts = courts.filter((c) => {
+    const matchesSearch =
+      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      c.location.toLowerCase().includes(searchTerm.toLowerCase());
+    if (activeCategory === 'pickleball') return matchesSearch && c.surfaceType.includes('Synthetic');
+    return matchesSearch;
+  });
 
   return (
-    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f5f5f7] text-[#111111]">
-      {/* 1. Profile-style Sticky Centered Header */}
-      <div className="bg-gradient-to-b from-[#ffffff] via-[#fafafc] to-[#f5f5f7] pb-3">
-        <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#ffffff]/85 backdrop-blur-md shrink-0 select-none text-[#111111]">
+    <div className="flex-1 min-h-0 flex flex-col overflow-y-auto overscroll-contain no-scrollbar pb-28 bg-[#f8faf6] text-[#142608]">
+      {/* 1. Sticky Centered Header */}
+      <div className="bg-[#f8faf6] pb-3">
+        <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#f8faf6]/90 backdrop-blur-md shrink-0 select-none text-[#142608]">
           <button
             type="button"
             onClick={() => {
               playSelectSound();
               goBack();
             }}
-            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+            className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] border border-[#d4dfd0] hover:border-[#2d4d14] shadow-2xs flex items-center justify-center text-[#142608] active:scale-95 transition-all cursor-pointer shrink-0"
             aria-label={isThai ? 'ย้อนกลับ' : 'Back'}
             title={isThai ? 'ย้อนกลับ' : 'Back'}
           >
@@ -127,10 +134,40 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
             <h1 className="text-[15px] font-semibold text-[#111111] tracking-tight leading-tight truncate">
               {isThai ? 'ค้นหาสนาม' : 'Courts'}
             </h1>
-            <p className="text-[11px] font-normal text-[#71717a] leading-snug truncate mt-0.5 flex items-center justify-center gap-1">
-              <MapPin className="w-3 h-3 text-[#e85729] shrink-0" />
-              <span className="truncate">{isThai ? 'กรุงเทพฯ · พระราม 9' : 'Bangkok · Rama 9'}</span>
-            </p>
+            <button
+              type="button"
+              onClick={handleTapGps}
+              className="no-doodle mx-auto text-[11px] font-medium text-[#71717a] hover:text-[#111111] leading-snug truncate mt-0.5 flex items-center justify-center gap-1 cursor-pointer"
+              title={isThai ? 'อัปเดตพิกัด GPS ของฉัน' : 'Update live GPS'}
+            >
+              {userLocation.isLiveGps ? (
+                <>
+                  <span className="w-2 h-2 rounded-full bg-[#15803d] animate-pulse shrink-0" />
+                  <span className="truncate text-[#15803d] font-semibold">
+                    {isThai
+                      ? `GPS สด (${userLocation.lat.toFixed(3)}, ${userLocation.lng.toFixed(3)})`
+                      : `Live GPS (${userLocation.lat.toFixed(3)}, ${userLocation.lng.toFixed(3)})`}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <Navigation className="w-3 h-3 text-[#e85729] shrink-0" />
+                  <span className="truncate">
+                    {isLocating
+                      ? isThai
+                        ? 'กำลังจับพิกัด GPS...'
+                        : 'Locating GPS...'
+                      : gpsPermissionState === 'denied'
+                        ? isThai
+                          ? 'กรุงเทพฯ · แตะเพื่อลองเปิด GPS'
+                          : 'Bangkok · Tap to retry GPS'
+                        : isThai
+                          ? 'กรุงเทพฯ · แตะจับพิกัด GPS สด'
+                          : 'Bangkok · Tap for Live GPS'}
+                  </span>
+                </>
+              )}
+            </button>
           </div>
 
           <div className="flex items-center gap-1.5 shrink-0">
@@ -140,7 +177,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
                 playSelectSound();
                 navigateTo('E1');
               }}
-              className="no-doodle w-10 h-10 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+              className="no-doodle w-10 h-10 rounded-full bg-[#ffffff] border border-[#d4dfd0] hover:border-[#2d4d14] shadow-2xs flex items-center justify-center text-[#142608] active:scale-95 transition-all cursor-pointer shrink-0"
               aria-label={isThai ? 'แชทก๊วน' : 'Guild Chat'}
               title={isThai ? 'แชทก๊วน' : 'Guild Chat'}
             >
@@ -152,7 +189,7 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
                 playSelectSound();
                 navigateTo('D2');
               }}
-              className="no-doodle w-10 h-10 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer relative shrink-0"
+              className="no-doodle w-10 h-10 rounded-full bg-[#ffffff] border border-[#d4dfd0] hover:border-[#2d4d14] shadow-2xs flex items-center justify-center text-[#142608] active:scale-95 transition-all cursor-pointer relative shrink-0"
               aria-label={isThai ? 'แจ้งเตือนภารกิจ' : 'Quest Alerts'}
               title={isThai ? 'แจ้งเตือนภารกิจ' : 'Quest Alerts'}
             >
@@ -164,29 +201,29 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
 
         {/* 2. Search Pill Bar */}
         <div className="px-5 mt-1">
-          <div className="w-full flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#ffffff] shadow-[0_2px_12px_rgba(0,0,0,0.04)]">
-          <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
-          <input
-            type="text"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder={isThai ? 'ค้นหาสนาม คู่ซ้อม หรือคอร์ทว่าง...' : 'Search court, sparring partner, drills...'}
-            className="w-full bg-transparent text-xs font-bold tracking-[0.032em] focus:outline-none placeholder:text-[#000000]/40 text-[#000000]"
-          />
-          {searchTerm && (
-            <button type="button" onClick={() => setSearchTerm('')} className="text-[#000000]/60 hover:text-[#000000]">
-              <X className="w-3.5 h-3.5" />
+          <div className="w-full flex items-center gap-2.5 px-4 py-3 rounded-full bg-[#ffffff] border border-[#d4dfd0] focus-within:border-[#2d4d14] shadow-2xs transition-colors">
+            <Search className="w-4 h-4 text-[#000000]/60 shrink-0" />
+            <input
+              type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={isThai ? 'ค้นหาสนาม คู่ซ้อม หรือคอร์ทว่าง...' : 'Search court, sparring partner, drills...'}
+              className="w-full bg-transparent text-xs font-bold tracking-[0.032em] focus:outline-none placeholder:text-[#000000]/40 text-[#000000]"
+            />
+            {searchTerm && (
+              <button type="button" onClick={() => setSearchTerm('')} className="text-[#000000]/60 hover:text-[#000000]">
+                <X className="w-3.5 h-3.5" />
+              </button>
+            )}
+            <button
+              type="button"
+              onClick={() => navigateTo('B2')}
+              className="no-doodle p-1.5 rounded-full text-[#71717a] hover:text-[#111111] hover:bg-[#f3f4f6] cursor-pointer"
+            >
+              <SlidersHorizontal className="w-4 h-4" />
             </button>
-          )}
-          <button
-            type="button"
-            onClick={() => navigateTo('B2')}
-            className="no-doodle p-1.5 rounded-full text-[#71717a] hover:text-[#111111] hover:bg-[#f3f4f6] cursor-pointer"
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-          </button>
+          </div>
         </div>
-      </div>
       </div>
 
       {/* 3. Category Filter Horizontal Strip */}
@@ -214,64 +251,66 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
       </div>
 
       {/* 4. Hero Promo Banner */}
-      <div className="px-4 mt-4">
-        <div
-          onClick={() => handleSelectCourt(courts[0])}
-          className="rounded-[28px] p-5 bg-[#ffffff] relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
-        >
-          <div className="relative z-10 flex flex-col justify-between h-full">
-            <div className="flex items-center justify-between mb-2">
-              <span className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase flex items-center gap-1 whitespace-nowrap">
-                <Zap className="w-3 h-3 fill-current text-[#000000]" />
-                <span>{isThai ? 'ลด 20% ช่วงเวลาพิเศษ' : '20% OFF PRIME TIME'}</span>
-              </span>
-              <div className="flex items-center gap-1 text-xs font-black text-[#000000]">
-                <Star className="w-3.5 h-3.5 fill-[#e85729] stroke-[#000000]" />
-                <span>4.9 (128)</span>
-              </div>
-            </div>
-
-            <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight leading-tight text-[#000000]">
-              {courts[0].name}
-            </h3>
-            <p className="text-xs text-[#000000]/70 font-bold mt-0.5">
-              {courts[0].location} · {courts[0].surfaceType}
-            </p>
-
-            <div className="flex items-center justify-between mt-4 pt-3">
-              <div>
-                <span className="text-[10px] text-[#000000]/60 font-bold tracking-[0.032em] uppercase block">
-                  {isThai ? 'เริ่มต้น' : 'Starts from'}
+      {courts[0] && (
+        <div className="px-4 mt-4">
+          <div
+            onClick={() => handleSelectCourt(courts[0])}
+            className="rounded-[28px] p-5 bg-[#ffffff] border border-[#d4dfd0] relative overflow-hidden cursor-pointer transition-transform hover:scale-[1.01] active:scale-[0.99]"
+          >
+            <div className="relative z-10 flex flex-col justify-between h-full">
+              <div className="flex items-center justify-between mb-2">
+                <span className="px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[10px] font-bold tracking-[0.032em] uppercase flex items-center gap-1 whitespace-nowrap">
+                  <Zap className="w-3 h-3 fill-current text-[#000000]" />
+                  <span>{isThai ? 'ลด 20% ช่วงเวลาพิเศษ' : '20% OFF PRIME TIME'}</span>
                 </span>
-                <span className="text-lg font-black text-[#000000]">
-                  ฿{courts[0].pricePerHour}
-                  <span className="text-xs font-normal text-[#000000]/60">{isThai ? '/ชม.' : '/hr'}</span>
-                </span>
+                <div className="flex items-center gap-1 text-xs font-black text-[#000000]">
+                  <Star className="w-3.5 h-3.5 fill-[#e85729] stroke-[#000000]" />
+                  <span>{courts[0].rating} ({courts[0].reviewCount})</span>
+                </div>
               </div>
 
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleSelectCourt(courts[0]);
-                }}
-                className="px-5 py-2.5 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs tracking-[0.032em] uppercase border border-[#000000] flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
-              >
-                <span className="whitespace-nowrap">{isThai ? 'จองคอร์ท' : 'BOOK COURT'}</span>
-                <ArrowRight className="w-3.5 h-3.5 shrink-0" />
-              </button>
+              <h3 className="font-['Antonio',sans-serif] text-2xl font-black uppercase tracking-tight leading-tight text-[#000000]">
+                {courts[0].name}
+              </h3>
+              <p className="text-xs text-[#000000]/70 font-bold mt-0.5">
+                {courts[0].location} · {courts[0].surfaceType}
+              </p>
+
+              <div className="flex items-center justify-between mt-4 pt-3">
+                <div>
+                  <span className="text-[10px] text-[#000000]/60 font-bold tracking-[0.032em] uppercase block">
+                    {isThai ? 'เริ่มต้น' : 'Starts from'}
+                  </span>
+                  <span className="text-lg font-black text-[#000000]">
+                    ฿{courts[0].pricePerHour}
+                    <span className="text-xs font-normal text-[#000000]/60">{isThai ? '/ชม.' : '/hr'}</span>
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleSelectCourt(courts[0]);
+                  }}
+                  className="px-5 py-2.5 rounded-[1600px] bg-[#004d2c] hover:bg-[#003a21] text-[#ffffff] font-bold text-xs tracking-[0.032em] uppercase flex items-center gap-1.5 transition-transform active:scale-95 cursor-pointer whitespace-nowrap shrink-0"
+                >
+                  <span className="whitespace-nowrap">{isThai ? 'จองคอร์ท' : 'BOOK COURT'}</span>
+                  <ArrowRight className="w-3.5 h-3.5 shrink-0" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* 5. Quick Actions 4-Pill Strip */}
       <div className="px-4 mt-4">
         <div className="grid grid-cols-4 gap-2 text-center">
           <button
             type="button"
-            onClick={() => handleSelectCourt(courts[0])}
-            className="p-3 rounded-[24px] bg-[#ffffff] border border-[#000000] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
+            onClick={() => courts[0] && handleSelectCourt(courts[0])}
+            className="p-3 rounded-[24px] bg-[#ffffff] border border-[#d4dfd0] hover:border-[#2d4d14] transition-transform hover:scale-105 active:scale-95 cursor-pointer"
           >
             <div className="w-9 h-9 rounded-[1600px] bg-[#7cd7a0] mx-auto mb-1 flex items-center justify-center font-bold text-base">
               🏸
@@ -365,28 +404,15 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
         <SectionHeader
           title={isThai ? 'สนามแนะนำในกรุงเทพฯ' : 'AVAILABLE ARENAS'}
           rightSlot={
-            <div className="flex items-center gap-2 shrink-0">
-              <button
-                type="button"
-                onClick={() => setSimulateEmpty(!simulateEmpty)}
-                className={`text-[10px] font-bold tracking-[0.032em] px-2.5 py-0.5 rounded-[1600px] border border-[#000000] cursor-pointer transition-colors whitespace-nowrap shrink-0 ${
-                  simulateEmpty ? 'bg-[#e85729] text-[#ffffff]' : 'bg-[#ffffff] text-[#000000] hover:bg-[#e9e9e9]'
-                }`}
-              >
-                {simulateEmpty ? (isThai ? '✕ ปิดจำลอง' : '✕ Reset') : isThai ? 'จำลองว่าง' : 'Test Empty'}
-              </button>
-              <span className="text-xs text-[#000000]/60 font-bold whitespace-nowrap">
-                {isThai ? `${filteredCourts.length} สนาม` : `${filteredCourts.length} Arenas`}
-              </span>
-            </div>
+            <span className="text-xs text-[#000000]/60 font-bold whitespace-nowrap">
+              {isThai ? `${filteredCourts.length} สนาม` : `${filteredCourts.length} Arenas`}
+            </span>
           }
         />
 
         {suggestToast && (
           <div className="p-3 rounded-[20px] bg-[#7cd7a0] text-xs font-bold text-[#000000] text-center animate-bounce">
-            {isThai
-              ? '🎉 ส่งข้อมูลสนามใหม่สำเร็จ (+30 EXP)'
-              : '🎉 Venue suggested! +30 EXP added'}
+            {isThai ? '🎉 ส่งข้อมูลสนามใหม่สำเร็จ (+30 EXP)' : '🎉 Venue suggested! +30 EXP added'}
           </div>
         )}
 
@@ -396,7 +422,6 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
             onResetFilters={() => {
               setSearchTerm('');
               setActiveCategory('all');
-              setSimulateEmpty(false);
             }}
             onSuggestCourt={handleSuggestCourt}
           />
@@ -422,7 +447,10 @@ export const B1_CourtDiscoveryScreen: React.FC = () => {
                   {court.name}
                 </h4>
                 <p className="text-[11px] text-[#000000]/70 font-medium mt-0.5 truncate">
-                  {court.location} · {isThai ? `${court.courtCount} คอร์ท · ${court.distanceKm} กม.` : `${court.courtCount} Courts · ${court.distanceKm} km`}
+                  {court.location} ·{' '}
+                  {isThai
+                    ? `${court.courtCount} คอร์ท · ${court.distanceKm} กม. · ว่าง ${court.slotsAvailableToday} รอบ`
+                    : `${court.courtCount} Courts · ${court.distanceKm} km · ${court.slotsAvailableToday} open`}
                 </p>
               </div>
 

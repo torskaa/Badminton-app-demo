@@ -28,7 +28,7 @@ interface PathCategory {
 }
 
 export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen, onClose }) => {
- const { currentScreen, navigateTo, theme, dataMode, setDataMode, language } = useApp();
+ const { currentScreen, navigateTo, theme, language } = useApp();
  const isDark = theme === 'dark';
  const isThai = language === 'th';
 
@@ -255,36 +255,6 @@ export const ScreenSwitcherModal: React.FC<ScreenSwitcherModalProps> = ({ isOpen
  >
  <X className="w-4 h-4 stroke-[2.5]" />
  </button>
- </div>
-
- {/* Data Preview Mode Selector */}
- <div className="px-4 py-2 border-b border-neutral-200 bg-neutral-50 flex flex-wrap items-center justify-between text-xs font-bold gap-2">
- <span className="text-neutral-500 text-[10px] uppercase font-black tracking-wider">
- {isThai ? 'ข้อมูลตัวอย่าง:' : 'Data Mode:'}
- </span>
- <div className="flex items-center gap-1.5">
- {(
- [
- { id: 'demo', th: 'ปกติ', en: 'DEMO' },
- { id: 'worst', th: 'ข้อมูลยาว', en: 'STRESS' },
- { id: 'one', th: 'รายการเดียว', en: 'ONE' },
- { id: 'empty', th: 'ว่างเปล่า', en: 'EMPTY' },
- ] as const
- ).map((mode) => (
- <button
- key={mode.id}
- type="button"
- onClick={() => setDataMode(mode.id)}
- className={`px-2.5 py-1 rounded-full text-[10px] font-black uppercase transition-transform active:scale-[0.96] cursor-pointer border ${
- dataMode === mode.id
- ? 'bg-black text-white border-black shadow-xs'
- : 'bg-white text-neutral-600 border-neutral-300 hover:bg-neutral-100'
- }`}
- >
- {isThai ? mode.th : mode.en}
- </button>
- ))}
- </div>
  </div>
 
  {/* List of Screens in Groups */}

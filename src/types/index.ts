@@ -7,7 +7,8 @@ export type ScreenId =
   | 'HOME' // Superapp Home Screen (Grab style)
   | 'MAP' // Discover / Court Map Screen with Bottom Sheet
   | 'CLUB_TOOLS' // Club Assistant Tools Screen (Scoreboard, Randomizer, Tactic Board, Split Calc)
-  | 'FINANCE' // Finance & Wallet Screen (Purple Theme)
+  | 'FEED' // Dedicated Badminton Feed Screen (My Results, Guild Updates, Friend Activity)
+  | 'FINANCE' // Finance & Wallet Screen (accessible inside Profile & Wallet quick actions)
   | 'A1' // Welcome
   | 'A2' // Player Avatar & Playstyle Setup
   | 'B1' // Court Discovery
@@ -28,7 +29,7 @@ export type ScreenId =
   | 'F1' // User Profile & Trophy Room
   | 'F2'; // Wearable Companion Sync
 
-export type MainTab = 'home' | 'club' | 'discover' | 'more' | 'profile';
+export type MainTab = 'home' | 'club' | 'discover' | 'feed' | 'profile';
 
 export type AppViewMode = 'single' | 'showcase';
 
@@ -135,14 +136,29 @@ export interface CourtSlot {
   isSelected?: boolean;
 }
 
+export interface RedeemedVoucher {
+  id: string;
+  code: string;
+  titleTh: string;
+  titleEn: string;
+  discountAmount: number;
+  target: 'court' | 'squad';
+  used: boolean;
+  createdAtMs: number;
+}
+
 export interface BookingState {
   court?: CourtFacility;
   selectedCourtNumber: number;
   selectedSlots: CourtSlot[];
   date: string;
   totalAmount: number;
-  paymentMethod: 'PromptPay' | 'CreditCard';
+  discountAmount?: number;
+  appliedVoucherId?: string;
+  paymentMethod: 'PromptPay' | 'SmashPay' | 'TrueMoney';
   slipUploaded: boolean;
+  slipPreviewUrl?: string;
+  slipFileName?: string;
   bookingRef: string;
 }
 

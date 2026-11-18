@@ -1,0 +1,230 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Private player account, skill radar, stats, racket setup, and wallet balance owned by a single authenticated user.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "email": { "type": "string", "format": "email", "maxLength": 160 },
+        "photoUrl": { "type": "string", "maxLength": 500 },
+        "tier": { "type": "string", "enum": ["Bronze", "Silver", "Gold", "Diamond", "Pro"] },
+        "level": { "type": "integer" },
+        "currentExp": { "type": "integer" },
+        "nextLevelExp": { "type": "integer" },
+        "dominantHand": { "type": "string", "enum": ["Right", "Left"] },
+        "playstyle": { "type": "string", "maxLength": 80 },
+        "primaryGoal": { "type": "string", "maxLength": 60 },
+        "streakWeeks": { "type": "integer" },
+        "walletBalance": { "type": "number" },
+        "skillRadar": { "type": "object" },
+        "racket": { "type": "object" },
+        "stats": { "type": "object" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "tier", "level", "currentExp", "nextLevelExp", "walletBalance", "createdAt", "updatedAt"]
+    },
+    "LeaderboardEntry": {
+      "title": "LeaderboardEntry",
+      "description": "Publicly readable non-PII player ranking entry for guild leaderboard and friend activity.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "displayName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "tier": { "type": "string", "enum": ["Bronze", "Silver", "Gold", "Diamond", "Pro"] },
+        "level": { "type": "integer" },
+        "ovr": { "type": "integer" },
+        "points": { "type": "integer" },
+        "winRate": { "type": "number" },
+        "avatarPreset": { "type": "string", "maxLength": 40 },
+        "visibility": { "type": "string", "enum": ["community"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["uid", "displayName", "tier", "level", "ovr", "points", "visibility", "updatedAt"]
+    },
+    "CourtBooking": {
+      "title": "CourtBooking",
+      "description": "User court reservation created from checkout with PromptPay or SmashPay.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "courtId": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "courtName": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "courtNumber": { "type": "integer" },
+        "date": { "type": "string", "minLength": 4, "maxLength": 32 },
+        "slotsSummary": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "totalAmount": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["PromptPay", "SmashPay", "TrueMoney"] },
+        "bookingRef": { "type": "string", "minLength": 4, "maxLength": 40 },
+        "status": { "type": "string", "enum": ["confirmed", "completed", "cancelled"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "courtId", "courtName", "courtNumber", "date", "totalAmount", "paymentMethod", "bookingRef", "status", "createdAt", "updatedAt"]
+    },
+    "MatchRecord": {
+      "title": "MatchRecord",
+      "description": "Completed badminton match score, smash telemetry, and highlight logged by a player.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "playerAName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "playerBName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "isDoubles": { "type": "boolean" },
+        "finalScore": { "type": "string", "minLength": 1, "maxLength": 20 },
+        "setSummary": { "type": "string", "maxLength": 80 },
+        "result": { "type": "string", "enum": ["win", "loss"] },
+        "courtName": { "type": "string", "maxLength": 120 },
+        "highestSmashKmh": { "type": "integer" },
+        "durationMin": { "type": "integer" },
+        "expGained": { "type": "integer" },
+        "highlightShot": { "type": "string", "maxLength": 140 },
+        "isPublic": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "playerAName", "playerBName", "isDoubles", "finalScore", "result", "expGained", "isPublic", "createdAt"]
+    },
+    "FeedPost": {
+      "title": "FeedPost",
+      "description": "Community badminton feed post showing match results, milestones, or guild announcements.",
+      "type": "object",
+      "properties": {
+        "authorId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "authorName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "type": { "type": "string", "enum": ["match", "achievement", "milestone"] },
+        "guildName": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "headline": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "summary": { "type": "string", "minLength": 1, "maxLength": 400 },
+        "scoreDisplay": { "type": "string", "maxLength": 40 },
+        "cheersCount": { "type": "integer" },
+        "visibility": { "type": "string", "enum": ["community"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "type", "guildName", "headline", "summary", "cheersCount", "visibility", "createdAt", "updatedAt"]
+    },
+    "FeedCheer": {
+      "title": "FeedCheer",
+      "description": "Single user cheer marker on a feed post.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "createdAt"]
+    },
+    "WalletTransaction": {
+      "title": "WalletTransaction",
+      "description": "Private SmashPay wallet top-up or court payment transaction owned by user.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "subtitle": { "type": "string", "minLength": 1, "maxLength": 140 },
+        "amount": { "type": "number" },
+        "type": { "type": "string", "enum": ["credit", "debit"] },
+        "category": { "type": "string", "maxLength": 40 },
+        "status": { "type": "string", "enum": ["completed", "pending"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "title", "subtitle", "amount", "type", "status", "createdAt"]
+    },
+    "GuildEventDoc": {
+      "title": "GuildEventDoc",
+      "description": "Shared badminton squad match event supporting RSVP subcollection.",
+      "type": "object",
+      "properties": {
+        "hostId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+        "date": { "type": "string", "maxLength": 40 },
+        "timeRange": { "type": "string", "maxLength": 40 },
+        "courtName": { "type": "string", "maxLength": 120 },
+        "courtFeeTotal": { "type": "number" },
+        "shuttlecockFeeTotal": { "type": "number" },
+        "maxPlayers": { "type": "integer" },
+        "visibility": { "type": "string", "enum": ["community"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["hostId", "title", "courtName", "courtFeeTotal", "shuttlecockFeeTotal", "maxPlayers", "visibility", "updatedAt"]
+    },
+    "GuildAttendee": {
+      "title": "GuildAttendee",
+      "description": "Confirmed attendee RSVP under a guild event.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "tier": { "type": "string", "maxLength": 20 },
+        "ovr": { "type": "integer" },
+        "paid": { "type": "boolean" },
+        "joinedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "name", "tier", "ovr", "paid", "joinedAt"]
+    },
+    "UserBadge": {
+      "title": "UserBadge",
+      "description": "Earned or in-progress player achievement badge stored under a user profile.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string", "minLength": 1, "maxLength": 128, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "badgeId": { "type": "string", "minLength": 1, "maxLength": 64, "pattern": "^[a-zA-Z0-9_\\-]+$" },
+        "name": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "thaiName": { "type": "string", "minLength": 1, "maxLength": 80 },
+        "description": { "type": "string", "minLength": 1, "maxLength": 240 },
+        "iconName": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "category": { "type": "string", "enum": ["combat", "endurance", "social", "special"] },
+        "rarity": { "type": "string", "enum": ["Common", "Rare", "Epic", "Legendary"] },
+        "unlocked": { "type": "boolean" },
+        "unlockedAt": { "type": "string", "maxLength": 60 },
+        "progress": { "type": "integer" },
+        "maxProgress": { "type": "integer" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "badgeId", "name", "thaiName", "description", "iconName", "category", "rarity", "unlocked", "progress", "maxProgress", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Private user player profile, skill radar, racket specs, and wallet balance."
+    },
+    "/users/{userId}/badges/{badgeId}": {
+      "schema": { "$ref": "#/entities/UserBadge" },
+      "description": "Private user earned badges and achievement progress subcollection."
+    },
+    "/leaderboard/{userId}": {
+      "schema": { "$ref": "#/entities/LeaderboardEntry" },
+      "description": "Public non-PII leaderboard summary for community rankings."
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/CourtBooking" },
+      "description": "User court bookings created through Checkout."
+    },
+    "/matches/{matchId}": {
+      "schema": { "$ref": "#/entities/MatchRecord" },
+      "description": "Saved badminton match scorecards and telemetry."
+    },
+    "/feedPosts/{postId}": {
+      "schema": { "$ref": "#/entities/FeedPost" },
+      "description": "Community Badminton Feed posts."
+    },
+    "/feedPosts/{postId}/cheers/{userId}": {
+      "schema": { "$ref": "#/entities/FeedCheer" },
+      "description": "Per-user cheers on a feed post."
+    },
+    "/walletTransactions/{txId}": {
+      "schema": { "$ref": "#/entities/WalletTransaction" },
+      "description": "Private user SmashPay transaction history."
+    },
+    "/guildEvents/{eventId}": {
+      "schema": { "$ref": "#/entities/GuildEventDoc" },
+      "description": "Guild badminton match events."
+    },
+    "/guildEvents/{eventId}/attendees/{userId}": {
+      "schema": { "$ref": "#/entities/GuildAttendee" },
+      "description": "Confirmed attendees for a guild event."
+    }
+  }
+}

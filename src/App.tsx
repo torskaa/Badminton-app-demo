@@ -5,6 +5,7 @@
 
 import React from 'react';
 import { motion, AnimatePresence, type Variants } from 'framer-motion';
+import firebaseConfig from '../firebase-applet-config.json';
 import { AppProvider, useApp } from './context/AppContext';
 import { DeviceFrame } from './components/common/DeviceFrame';
 import { BottomTabBar } from './components/common/BottomTabBar';
@@ -18,6 +19,7 @@ import { OfflineIndicator } from './components/common/OfflineIndicator';
 import { HomeScreen } from './components/screens/HomeScreen';
 import { CourtMapScreen } from './components/screens/CourtMapScreen';
 import { ClubToolsScreen } from './components/screens/ClubToolsScreen';
+import { BadmintonFeedScreen } from './components/screens/BadmintonFeedScreen';
 import { FinanceScreen } from './components/screens/FinanceScreen';
 
 // Sub-flow Screens
@@ -56,6 +58,8 @@ const ScreenRenderer: React.FC = () => {
       return <CourtMapScreen />;
     case 'CLUB_TOOLS':
       return <ClubToolsScreen />;
+    case 'FEED':
+      return <BadmintonFeedScreen />;
     case 'FINANCE':
       return <FinanceScreen />;
 
@@ -174,12 +178,128 @@ function MainViewport() {
   );
 }
 
+class AppErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; message: string }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, message: '' };
+  }
+
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, message: error?.message || 'Unexpected application error' };
+  }
+
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error('SmashAI ErrorBoundary:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      const msg = this.state.message || '';
+      const isQuotaExceeded = msg.includes('Quota exceeded');
+      const isFreeReadUnitsQuota = msg.includes(
+        "Free daily read units per project (free tier database)"
+      );
+      const upgradeUrl = `https://console.firebase.google.com/project/${firebaseConfig.projectId}/firestore/databases/${firebaseConfig.firestoreDatabaseId}/data?openUpgradeDialog=true`;
+
+      return (
+        <div className="min-h-screen bg-[#f8faf6] flex items-center justify-center p-6">
+          <div className="max-w-sm w-full bg-white rounded-3xl p-6 shadow-xl border border-[#d4dfd0] text-center space-y-4">
+            <img
+              src="/apple-touch-icon.png"
+              alt="SmashAI"
+              className="w-16 h-16 rounded-2xl mx-auto shadow-md"
+            />
+            {isQuotaExceeded ? (
+              <div className="space-y-2">
+                <h2 className="text-lg font-extrabold text-[#004d2c]">
+                  Firestore Daily Quota Reached
+                </h2>
+                <p className="text-xs text-[#5c6f5e] leading-relaxed">
+                  Your free-tier Firestore usage limit has been reached for today. Daily quota
+                  resets tomorrow. See the Spark plan limits under the Enterprise edition section on{' '}
+                  <a
+                    href="https://firebase.google.com/pricing#cloud-firestore"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="underline font-semibold text-[#004d2c]"
+                  >
+                    Firebase Firestore Pricing
+                  </a>
+                  .
+                </p>
+                {isFreeReadUnitsQuota && (
+                  <a
+                    href={upgradeUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-block w-full py-2.5 px-4 rounded-2xl bg-[#e8f7ee] border border-[#7cd7a0] text-[#004d2c] font-bold text-xs"
+                  >
+                    Open Firestore Database Upgrade Settings
+                  </a>
+                )}
+              </div>
+            ) : (
+              <div className="space-y-1.5">
+                <h2 className="text-lg font-extrabold text-[#004d2c]">
+                  เกิดข้อผิดพลาดชั่วคราว
+                </h2>
+                <p className="text-xs text-[#5c6f5e] leading-relaxed">
+                  แอปพบปัญหาเล็กน้อยระหว่างทำงาน กดโหลดใหม่เพื่อกลับมาใช้งานต่อได้ทันที
+                </p>
+              </div>
+            )}
+            <button
+              type="button"
+              onClick={() => window.location.reload()}
+              className="w-full py-3 rounded-2xl bg-[#004d2c] hover:bg-[#003b22] text-white font-bold text-sm transition cursor-pointer"
+            >
+              รีเฟรชแอป (Reload)
+            </button>
+          </div>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export default function App() {
+  const [isMapsQuotaExceeded, setIsMapsQuotaExceeded] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleQuotaExceeded = () => {
+      setIsMapsQuotaExceeded(true);
+    };
+    window.addEventListener('gmp-quota-exceeded', handleQuotaExceeded);
+    return () => window.removeEventListener('gmp-quota-exceeded', handleQuotaExceeded);
+  }, []);
+
   return (
-    <AppProvider>
-      <DeviceFrame>
-        <MainViewport />
-      </DeviceFrame>
-    </AppProvider>
+    <AppErrorBoundary>
+      {isMapsQuotaExceeded && (
+        <div className="bg-amber-50 border-b border-amber-200 text-amber-900 px-4 py-2.5 text-xs md:text-sm text-center sticky top-0 z-50 shadow-sm">
+          <span>
+            Google Maps Platform quota reached. If you are the app owner, visit{' '}
+            <a
+              href="https://developers.google.com/maps/ai/ai-studio?utm_campaign=gmp_mcp_codeassist_v1_aistudio#quota_exceeded_errors"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline font-semibold text-amber-950 hover:text-amber-800"
+            >
+              maps developer site
+            </a>{' '}
+            for instructions to update your account.
+          </span>
+        </div>
+      )}
+      <AppProvider>
+        <DeviceFrame>
+          <MainViewport />
+        </DeviceFrame>
+      </AppProvider>
+    </AppErrorBoundary>
   );
 }

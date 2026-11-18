@@ -1,7 +1,20 @@
-import React, { useMemo, useState } from 'react';
+import React, { useId, useMemo, useState } from 'react';
 import { ArrowRight, TrendingUp } from 'lucide-react';
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+} from 'recharts';
 import { useApp } from '../../context/AppContext';
 import { playSelectSound } from '../../utils/retroAudio';
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from '../ui/radar-chart';
 
 type SkillKey = 'power' | 'speed' | 'control' | 'stamina' | 'tactics';
 
@@ -66,135 +79,99 @@ export const PlayerSkillRadarCard: React.FC<PlayerSkillRadarCardProps> = ({
 }) => {
   const { player, language } = useApp();
   const isThai = language === 'th';
+  const rawId = useId().replace(/:/g, '');
+  const glowFilterId = `smash-radar-glow-${rawId}`;
+  const pastGlowFilterId = `smash-radar-past-glow-${rawId}`;
 
-  const [chartMode, setChartMode] = useState<'range' | 'compare'>('range');
+  const [chartMode, setChartMode] = useState<'glow' | 'compare'>('glow');
   const [selectedAxis, setSelectedAxis] = useState<SkillKey>('power');
 
-  const cx = 180;
-  const cy = 158;
-  const maxR = 96;
-  const levels = [20, 40, 60, 80, 100];
-
-  const polarPoint = (value: number, index: number, total: number = AXES.length) => {
-    const angle = (Math.PI * 2 * index) / total - Math.PI / 2;
-    const clamped = Math.max(0, Math.min(100, value));
-    const r = (clamped / 100) * maxR;
-    return {
-      x: cx + r * Math.cos(angle),
-      y: cy + r * Math.sin(angle),
-      angle,
-    };
-  };
-
   const metrics = useMemo(() => {
-    return AXES.map((axis, idx) => {
+    return AXES.map((axis) => {
       const current = player.skillRadar[axis.key];
       const past = player.pastRadar[axis.key];
       const delta = current - past;
-      // In 'range' mode, build a balanced confidence range around current;
-      // in 'compare' mode, highlight the band between past 30D and current score.
-      const lower =
-        chartMode === 'range'
-          ? Math.max(12, Math.min(current, past) - 4)
-          : Math.max(12, Math.min(current, past));
-      const upper =
-        chartMode === 'range'
-          ? Math.min(100, Math.max(current, past) + 7)
-          : Math.min(100, Math.max(current, past));
-
       return {
         ...axis,
-        idx,
+        axis: isThai ? axis.labelTh : axis.labelEn,
         current,
         past,
         delta,
-        lower,
-        upper,
-        currentPt: polarPoint(current, idx),
-        pastPt: polarPoint(past, idx),
-        outerEdgePt: polarPoint(100, idx),
       };
     });
-  }, [player.skillRadar, player.pastRadar, chartMode]);
+  }, [player.skillRadar, player.pastRadar, isThai]);
 
-  const bandPath = useMemo(() => {
-    const outerPts = metrics.map((m) => polarPoint(m.upper, m.idx));
-    const innerPts = [...metrics].reverse().map((m) => polarPoint(m.lower, m.idx));
-    const outerD = outerPts
-      .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
-      .join(' ') + ' Z';
-    const innerD = innerPts
-      .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
-      .join(' ') + ' Z';
-    return `${outerD} ${innerD}`;
-  }, [metrics]);
+  const ovrAvg =
+    AXES.reduce((sum, a) => sum + player.skillRadar[a.key], 0) / AXES.length;
+  const pastAvg =
+    AXES.reduce((sum, a) => sum + player.pastRadar[a.key], 0) / AXES.length;
+  const ovrScore = Math.round(ovrAvg);
+  const growthPercent =
+    pastAvg > 0 ? Number((((ovrAvg - pastAvg) / pastAvg) * 100).toFixed(1)) : 0;
 
-  const currentLinePoints = useMemo(() => {
-    return metrics
-      .map((m) => `${m.currentPt.x.toFixed(2)},${m.currentPt.y.toFixed(2)}`)
-      .join(' ');
-  }, [metrics]);
-
-  const pastLinePoints = useMemo(() => {
-    return metrics
-      .map((m) => `${m.pastPt.x.toFixed(2)},${m.pastPt.y.toFixed(2)}`)
-      .join(' ');
-  }, [metrics]);
-
-  const ovrScore = Math.round(
-    AXES.reduce((sum, a) => sum + player.skillRadar[a.key], 0) / AXES.length
+  const chartConfig = useMemo<ChartConfig>(
+    () => ({
+      current: {
+        label: isThai ? 'ฟอร์มปัจจุบัน' : 'Current Form',
+        color: '#15803d',
+      },
+      past: {
+        label: isThai ? '30 วันก่อน' : 'Past 30D',
+        color: '#e85729',
+      },
+    }),
+    [isThai]
   );
-  const pastOvr = Math.round(
-    AXES.reduce((sum, a) => sum + player.pastRadar[a.key], 0) / AXES.length
-  );
-  const ovrDelta = ovrScore - pastOvr;
 
   const activeAxis = metrics.find((m) => m.key === selectedAxis) || metrics[0];
 
-  // Angle for subtle ring level labels matching the reference radial annotations
-  const scaleAngle = -Math.PI / 2 + Math.PI / 5;
-
   return (
-    <div className="bg-[#ffffff] rounded-[24px] p-4 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-3">
-      {/* Header Row */}
-      <div className="flex items-start justify-between gap-2">
+    <div className="bg-[#ffffff] border border-[#d4dfd0] rounded-[24px] p-4 shadow-2xs space-y-3">
+      {/* Header Row: Centered/Clean Editorial Title + Trend Growth Badge + Mode Toggle */}
+      <div className="flex items-start justify-between gap-2.5">
         <div className="min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h3 className="text-[15px] font-bold text-[#111111] leading-tight">
-              {isThai ? 'เรดาร์ทักษะ 5 มิติ' : '5-Axis Skill Profile'}
+            <h3 className="text-[15px] font-bold text-[#142608] leading-tight">
+              {isThai ? 'เรดาร์ทักษะ 5 มิติ' : '5-Axis Skill Radar'}
             </h3>
-            <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#15803d] tabular-nums">
-              <TrendingUp className="w-3.5 h-3.5" />
+            <span
+              className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold tabular-nums whitespace-nowrap ${
+                growthPercent >= 0
+                  ? 'bg-[#e8f7ee] text-[#004d2c]'
+                  : 'bg-[#fff1ec] text-[#e85729]'
+              }`}
+            >
+              <TrendingUp className="w-3.5 h-3.5 shrink-0" />
               <span>
-                {isThai ? `พลังรวม ${ovrScore}` : `OVR ${ovrScore}`} ({ovrDelta >= 0 ? `+${ovrDelta}` : ovrDelta})
+                {growthPercent >= 0 ? `+${growthPercent}%` : `${growthPercent}%`}
               </span>
             </span>
           </div>
-          <p className="text-[11px] text-[#71717a] mt-0.5 leading-snug">
+          <p className="text-[11px] text-[#5c6f5e] mt-0.5 leading-snug">
             {isThai
-              ? 'เทียบค่าพลังปัจจุบันกับเกณฑ์เฉลี่ยและฟอร์ม 30 วัน'
-              : 'Current levels vs benchmark ring & 30-day range'}
+              ? `ค่าพลังเฉลี่ย OVR ${ovrScore} เทียบกับสถิติ 30 วันก่อน`
+              : `Overall skill OVR ${ovrScore} compared against 30-day baseline`}
           </p>
         </div>
 
-        {/* Segmented Control matching Profile style */}
+        {/* Outlined Hairline Chart Mode Chips */}
         <div
           data-filter="true"
-          className="bg-[#ececef] p-1 rounded-full grid grid-cols-2 gap-1 shrink-0"
+          className="inline-flex items-center gap-1.5 shrink-0"
         >
           <button
             type="button"
             onClick={() => {
               playSelectSound();
-              setChartMode('range');
+              setChartMode('glow');
             }}
-            className={`no-doodle min-h-[30px] px-2.5 py-1 rounded-full text-[10px] font-medium transition-all cursor-pointer whitespace-nowrap ${
-              chartMode === 'range'
-                ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                : 'text-[#6b7280] hover:text-[#111111]'
+            className={`no-doodle filter-pill min-h-[30px] px-2.5 py-1 rounded-full text-[10px] transition-all cursor-pointer whitespace-nowrap border ${
+              chartMode === 'glow'
+                ? 'bg-[#e8f7ee] text-[#004d2c] border-[#004d2c] font-semibold'
+                : 'bg-[#ffffff] text-[#5c6f5e] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
             }`}
           >
-            {isThai ? 'ช่วงฟอร์ม' : 'Range'}
+            {isThai ? 'ปัจจุบัน' : 'Current'}
           </button>
           <button
             type="button"
@@ -202,10 +179,10 @@ export const PlayerSkillRadarCard: React.FC<PlayerSkillRadarCardProps> = ({
               playSelectSound();
               setChartMode('compare');
             }}
-            className={`no-doodle min-h-[30px] px-2.5 py-1 rounded-full text-[10px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+            className={`no-doodle filter-pill min-h-[30px] px-2.5 py-1 rounded-full text-[10px] transition-all cursor-pointer whitespace-nowrap border ${
               chartMode === 'compare'
-                ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                : 'text-[#6b7280] hover:text-[#111111]'
+                ? 'bg-[#e8f7ee] text-[#004d2c] border-[#004d2c] font-semibold'
+                : 'bg-[#ffffff] text-[#5c6f5e] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
             }`}
           >
             {isThai ? 'เทียบ 30 วัน' : '30D Diff'}
@@ -213,193 +190,113 @@ export const PlayerSkillRadarCard: React.FC<PlayerSkillRadarCardProps> = ({
         </div>
       </div>
 
-      {/* Circular Concentric Radar SVG (Inspired by reference circular circumplex chart) */}
+      {/* Glowing Stroke Recharts Radar Chart */}
       <div className="w-full flex justify-center">
-        <svg
-          viewBox="0 0 360 316"
-          className="w-full max-w-[332px] h-auto overflow-visible select-none"
-          role="img"
-          aria-label={isThai ? 'กราฟเรดาร์ทักษะแบดมินตัน 5 มิติ' : '5-axis badminton skill radar chart'}
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square w-full max-w-[300px] h-[250px]"
         >
-          {/* Subtle Concentric Circles (20, 40, 60 bold average, 80, 100 bold outer rim) */}
-          {levels.map((lvl) => {
-            const r = (lvl / 100) * maxR;
-            const isOuter = lvl === 100;
-            const isMidBenchmark = lvl === 60;
-            return (
-              <circle
-                key={lvl}
-                cx={cx}
-                cy={cy}
-                r={r}
+          <RadarChart data={metrics} outerRadius="70%">
+            <defs>
+              <filter
+                id={glowFilterId}
+                x="-35%"
+                y="-35%"
+                width="170%"
+                height="170%"
+              >
+                <feGaussianBlur stdDeviation="5.5" result="blur" />
+                <feComponentTransfer in="blur" result="vividBlur">
+                  <feFuncA type="linear" slope="1.9" />
+                </feComponentTransfer>
+                <feComposite in="SourceGraphic" in2="vividBlur" operator="over" />
+              </filter>
+              <filter
+                id={pastGlowFilterId}
+                x="-35%"
+                y="-35%"
+                width="170%"
+                height="170%"
+              >
+                <feGaussianBlur stdDeviation="4" result="blur" />
+                <feComponentTransfer in="blur" result="softBlur">
+                  <feFuncA type="linear" slope="1.35" />
+                </feComponentTransfer>
+                <feComposite in="SourceGraphic" in2="softBlur" operator="over" />
+              </filter>
+            </defs>
+
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent indicator="dot" valueSuffix=" / 100" />}
+            />
+            <PolarGrid strokeDasharray="3 3" stroke="#cad7c5" />
+            <PolarAngleAxis
+              dataKey="axis"
+              tick={{
+                fill: '#142608',
+                fontSize: 12,
+                fontWeight: 600,
+              }}
+              tickLine={false}
+            />
+            <PolarRadiusAxis
+              domain={[0, 100]}
+              tick={false}
+              axisLine={false}
+            />
+
+            {chartMode === 'compare' && (
+              <Radar
+                name="past"
+                dataKey="past"
+                stroke="var(--color-past)"
+                strokeWidth={2}
+                strokeDasharray="4 3"
                 fill="none"
-                stroke={isOuter || isMidBenchmark ? '#111111' : '#d4d4d8'}
-                strokeWidth={isOuter ? 2.4 : isMidBenchmark ? 1.5 : 1}
+                dot={false}
+                activeDot={{
+                  r: 4,
+                  fill: '#e85729',
+                  stroke: '#ffffff',
+                  strokeWidth: 2,
+                }}
+                filter={`url(#${pastGlowFilterId})`}
               />
-            );
-          })}
+            )}
 
-          {/* Radial Spokes */}
-          {metrics.map((m) => (
-            <line
-              key={m.key}
-              x1={cx}
-              y1={cy}
-              x2={m.outerEdgePt.x}
-              y2={m.outerEdgePt.y}
-              stroke="#52525b"
-              strokeWidth={1.1}
-            />
-          ))}
-
-          {/* Scale Annotations along upper-right gap (matches reference low/average/high ticks) */}
-          {[
-            { lvl: 40, text: isThai ? '40 · ต่ำ' : '40 · Low' },
-            { lvl: 60, text: isThai ? '60 · เฉลี่ย' : '60 · Avg' },
-            { lvl: 80, text: isThai ? '80 · สูง' : '80 · High' },
-          ].map((tick) => {
-            const r = (tick.lvl / 100) * maxR + 4;
-            const tx = cx + r * Math.cos(scaleAngle);
-            const ty = cy + r * Math.sin(scaleAngle);
-            return (
-              <text
-                key={tick.lvl}
-                x={tx}
-                y={ty}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                fontSize={7.5}
-                fontWeight={600}
-                fill="#52525b"
-                transform={`rotate(20, ${tx}, ${ty})`}
-              >
-                {tick.text}
-              </text>
-            );
-          })}
-
-          {/* Translucent Sky-Blue Shaded Band Polygon (hollow band via evenodd) */}
-          <path
-            d={bandPath}
-            fill="rgba(59, 130, 246, 0.32)"
-            fillRule="evenodd"
-            stroke="none"
-          />
-
-          {/* Past 30D Dashed Reference Line in compare mode */}
-          {chartMode === 'compare' && (
-            <polygon
-              points={pastLinePoints}
+            <Radar
+              name="current"
+              dataKey="current"
+              stroke="var(--color-current)"
+              strokeWidth={2.6}
               fill="none"
-              stroke="#64748b"
-              strokeWidth={1.5}
-              strokeDasharray="4 3"
+              dot={false}
+              activeDot={{
+                r: 5,
+                fill: '#004d2c',
+                stroke: '#7cd7a0',
+                strokeWidth: 2.5,
+              }}
+              filter={`url(#${glowFilterId})`}
             />
-          )}
-
-          {/* Crisp Solid Blue Current Skill Line */}
-          <polygon
-            points={currentLinePoints}
-            fill="none"
-            stroke="#2563eb"
-            strokeWidth={2.3}
-            strokeLinejoin="round"
-          />
-
-          {/* Interactive Vertex Nodes */}
-          {metrics.map((m) => {
-            const isSelected = m.key === selectedAxis;
-            return (
-              <g
-                key={m.key}
-                onClick={() => {
-                  playSelectSound();
-                  setSelectedAxis(m.key);
-                }}
-                className="cursor-pointer"
-              >
-                <circle
-                  cx={m.currentPt.x}
-                  cy={m.currentPt.y}
-                  r={12}
-                  fill="transparent"
-                />
-                <circle
-                  cx={m.currentPt.x}
-                  cy={m.currentPt.y}
-                  r={isSelected ? 5 : 3.5}
-                  fill={isSelected ? '#2563eb' : '#ffffff'}
-                  stroke="#2563eb"
-                  strokeWidth={2}
-                />
-              </g>
-            );
-          })}
-
-          {/* Axis Dimension Labels around the outer rim */}
-          {metrics.map((m) => {
-            const labelR = maxR + 28;
-            const lx = cx + labelR * Math.cos(m.outerEdgePt.angle);
-            const ly = cy + labelR * Math.sin(m.outerEdgePt.angle);
-            const cos = Math.cos(m.outerEdgePt.angle);
-            const anchor =
-              Math.abs(cos) < 0.25 ? 'middle' : cos > 0 ? 'start' : 'end';
-            const isSelected = m.key === selectedAxis;
-
-            return (
-              <g
-                key={`label_${m.key}`}
-                onClick={() => {
-                  playSelectSound();
-                  setSelectedAxis(m.key);
-                }}
-                className="cursor-pointer"
-              >
-                <text
-                  x={lx}
-                  y={ly - 6}
-                  textAnchor={anchor}
-                  dominantBaseline="middle"
-                  fontSize={11.5}
-                  fontWeight={isSelected ? 800 : 700}
-                  fill={isSelected ? '#1d4ed8' : '#111111'}
-                >
-                  {isThai ? m.labelTh : m.labelEn}
-                </text>
-                <text
-                  x={lx}
-                  y={ly + 8}
-                  textAnchor={anchor}
-                  dominantBaseline="middle"
-                  fontSize={10}
-                  fontWeight={700}
-                  fill={isSelected ? '#2563eb' : '#6b7280'}
-                >
-                  {m.code} {m.current} ({m.delta >= 0 ? `+${m.delta}` : m.delta})
-                </text>
-              </g>
-            );
-          })}
-        </svg>
+          </RadarChart>
+        </ChartContainer>
       </div>
 
-      {/* Compact Legend Row matching reference bottom-left legend */}
-      <div className="flex items-center justify-between gap-2 pt-1 border-t border-[#000000]/[0.06] flex-wrap">
-        <div className="flex items-center gap-3 text-[11px] text-[#52525b]">
-          <span className="inline-flex items-center gap-1.5 font-medium text-[#111111]">
-            <span className="relative inline-flex items-center justify-center w-4 h-3 rounded-[3px] bg-[#3b82f6]/35">
-              <span className="w-3.5 h-[2px] bg-[#2563eb] rounded-full" />
-            </span>
-            <span>
-              {chartMode === 'range'
-                ? (isThai ? 'ระดับทักษะ & ช่วงฟอร์ม' : 'Skill & Form Range')
-                : (isThai ? 'ปัจจุบัน vs 30 วันก่อน' : 'Current vs 30D')}
-            </span>
+      {/* Compact Legend Row + Coach Deep-Dive CTA */}
+      <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#e6eee2] flex-wrap">
+        <div className="flex items-center gap-3.5 text-[11px] text-[#5c6f5e]">
+          <span className="inline-flex items-center gap-1.5 font-semibold text-[#142608]">
+            <span className="w-3.5 h-[2.5px] rounded-full bg-[#15803d] shadow-[0_0_6px_rgba(21,128,61,0.65)]" />
+            <span>{isThai ? 'ฟอร์มปัจจุบัน' : 'Current Form'}</span>
           </span>
-          <span className="inline-flex items-center gap-1 text-[10px] text-[#71717a]">
-            <span className="w-2.5 h-[2px] bg-[#111111] rounded-full" />
-            <span>{isThai ? 'เกณฑ์เฉลี่ย (60)' : 'Avg (60)'}</span>
-          </span>
+          {chartMode === 'compare' && (
+            <span className="inline-flex items-center gap-1.5 font-medium text-[#5c6f5e]">
+              <span className="w-3.5 h-0 border-t-2 border-dashed border-[#e85729]" />
+              <span>{isThai ? '30 วันก่อน' : 'Past 30D'}</span>
+            </span>
+          )}
         </div>
 
         {onOpenCoachRadar && (
@@ -409,7 +306,7 @@ export const PlayerSkillRadarCard: React.FC<PlayerSkillRadarCardProps> = ({
               playSelectSound();
               onOpenCoachRadar();
             }}
-            className="no-doodle text-[11px] font-medium text-[#2563eb] hover:text-[#1d4ed8] flex items-center gap-1 cursor-pointer whitespace-nowrap"
+            className="no-doodle text-[11px] font-semibold text-[#004d2c] hover:text-[#15803d] flex items-center gap-1 cursor-pointer whitespace-nowrap"
           >
             <span>{isThai ? 'เจาะลึกโค้ช' : 'Coach Insights'}</span>
             <ArrowRight className="w-3 h-3 shrink-0" />
@@ -430,25 +327,25 @@ export const PlayerSkillRadarCard: React.FC<PlayerSkillRadarCardProps> = ({
                   playSelectSound();
                   setSelectedAxis(m.key);
                 }}
-                className={`no-doodle py-1.5 px-1 rounded-[12px] transition-all cursor-pointer tabular-nums ${
+                className={`no-doodle py-1.5 px-1 rounded-[14px] border transition-all cursor-pointer tabular-nums ${
                   isSelected
-                    ? 'bg-[#eff6ff] ring-1 ring-[#3b82f6]/40'
-                    : 'bg-[#f5f5f7] hover:bg-[#ececef]'
+                    ? 'bg-[#e8f7ee] border-[#004d2c]/60'
+                    : 'bg-[#f8faf6] border-[#e6eee2] hover:border-[#7cd7a0]'
                 }`}
               >
                 <div
-                  className={`text-[9px] font-semibold uppercase ${
-                    isSelected ? 'text-[#2563eb]' : 'text-[#71717a]'
+                  className={`text-[9px] font-bold uppercase ${
+                    isSelected ? 'text-[#004d2c]' : 'text-[#5c6f5e]'
                   }`}
                 >
                   {m.code}
                 </div>
-                <div className="text-[13px] font-bold text-[#111111] leading-tight mt-0.5">
+                <div className="text-[13px] font-bold text-[#142608] leading-tight mt-0.5">
                   {m.current}
                 </div>
                 <div
                   className={`text-[9px] font-semibold ${
-                    m.delta >= 0 ? 'text-[#15803d]' : 'text-[#dc2626]'
+                    m.delta >= 0 ? 'text-[#15803d]' : 'text-[#e85729]'
                   }`}
                 >
                   {m.delta >= 0 ? `+${m.delta}` : m.delta}
@@ -458,16 +355,16 @@ export const PlayerSkillRadarCard: React.FC<PlayerSkillRadarCardProps> = ({
           })}
         </div>
 
-        <div className="px-3 py-2 rounded-[14px] bg-[#f5f5f7] flex items-center justify-between gap-2 text-[11px]">
+        <div className="px-3 py-2 rounded-[14px] bg-[#f8faf6] border border-[#e6eee2] flex items-center justify-between gap-2 text-[11px]">
           <div className="min-w-0">
-            <span className="font-semibold text-[#111111]">
+            <span className="font-semibold text-[#142608]">
               {isThai ? activeAxis.labelTh : activeAxis.labelEn} ({activeAxis.code}):{' '}
             </span>
-            <span className="text-[#52525b]">
+            <span className="text-[#5c6f5e]">
               {isThai ? activeAxis.tipTh : activeAxis.tipEn}
             </span>
           </div>
-          <span className="font-bold text-[#2563eb] tabular-nums shrink-0 whitespace-nowrap">
+          <span className="font-bold text-[#004d2c] tabular-nums shrink-0 whitespace-nowrap">
             {activeAxis.current}/100
           </span>
         </div>

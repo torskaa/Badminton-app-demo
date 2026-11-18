@@ -207,12 +207,12 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
   };
 
   return (
-    <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#ffffff]/85 backdrop-blur-md shrink-0 select-none text-[#111111]">
+    <header className="sticky top-0 z-30 app-header-safe px-5 pb-3 flex items-center justify-between gap-3 bg-[#ffffff]/90 backdrop-blur-md border-b border-[#d4dfd0]/60 shrink-0 select-none text-[#142608]">
       {shouldShowBack ? (
         <button
           type="button"
           onClick={handleBack}
-          className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+          className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] border border-[#d4dfd0] hover:border-[#2d4d14] shadow-2xs flex items-center justify-center text-[#142608] active:scale-95 transition-all cursor-pointer shrink-0"
           aria-label={isThai ? 'ย้อนกลับ' : 'Back'}
           title={isThai ? 'ย้อนกลับ' : 'Back'}
         >
@@ -246,7 +246,7 @@ export const MobileHeader: React.FC<MobileHeaderProps> = ({
           }}
           aria-label={isThai ? defaultAction.thLabel : defaultAction.enLabel}
           title={isThai ? defaultAction.thLabel : defaultAction.enLabel}
-          className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] flex items-center justify-center text-[#111111] hover:bg-[#f3f4f6] active:scale-95 transition-all cursor-pointer shrink-0"
+          className="no-doodle w-11 h-11 rounded-full bg-[#ffffff] border border-[#d4dfd0] hover:border-[#2d4d14] shadow-2xs flex items-center justify-center text-[#142608] active:scale-95 transition-all cursor-pointer shrink-0"
         >
           {renderActionIcon(defaultAction.icon)}
         </button>

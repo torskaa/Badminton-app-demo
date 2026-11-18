@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
-import { ChevronDown, ChevronUp, Check } from 'lucide-react';
+import React, { useMemo, useState } from 'react';
+import { ChevronDown, ChevronUp, Check, Cloud } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { DoodleAvatar } from '../common/DoodleAvatar';
+import { computeHistoricalMatchStats } from '../../utils/matchHistoryUtils';
 import { playSelectSound } from '../../utils/retroAudio';
 
 type WindowRange = 'last10' | 'last20';
@@ -340,7 +341,7 @@ const WindowToggle: React.FC<{
 }> = ({ value, onChange, isThai }) => (
   <div
     data-filter="true"
-    className="bg-[#ececef] p-1 rounded-full inline-flex items-center gap-0.5"
+    className="inline-flex items-center gap-1.5"
   >
     <button
       type="button"
@@ -348,10 +349,10 @@ const WindowToggle: React.FC<{
         playSelectSound();
         onChange('last10');
       }}
-      className={`no-doodle px-2.5 py-1 rounded-full text-[10px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+      className={`no-doodle filter-pill px-2.5 py-1 rounded-full text-[10px] transition-all cursor-pointer whitespace-nowrap border ${
         value === 'last10'
-          ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-          : 'text-[#6b7280] hover:text-[#111111]'
+          ? 'bg-[#e8f7ee] text-[#004d2c] border-[#2d4d14] font-semibold'
+          : 'bg-[#ffffff] text-[#6b7280] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
       }`}
     >
       {isThai ? '10นัดล่าสุด' : 'Last 10'}
@@ -362,10 +363,10 @@ const WindowToggle: React.FC<{
         playSelectSound();
         onChange('last20');
       }}
-      className={`no-doodle px-2.5 py-1 rounded-full text-[10px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+      className={`no-doodle filter-pill px-2.5 py-1 rounded-full text-[10px] transition-all cursor-pointer whitespace-nowrap border ${
         value === 'last20'
-          ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-          : 'text-[#6b7280] hover:text-[#111111]'
+          ? 'bg-[#e8f7ee] text-[#004d2c] border-[#2d4d14] font-semibold'
+          : 'bg-[#ffffff] text-[#6b7280] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
       }`}
     >
       {isThai ? '20นัดล่าสุด' : 'Last 20'}
@@ -506,8 +507,12 @@ const MatchTableRows: React.FC<{
 );
 
 export const PlayerStatsPanel: React.FC = () => {
-  const { player, language } = useApp();
+  const { player, language, authUser, userCloudMatches } = useApp();
   const isThai = language === 'th';
+  const firebaseMatchStats = useMemo(
+    () => computeHistoricalMatchStats(userCloudMatches),
+    [userCloudMatches]
+  );
 
   const [selectedOpponentId, setSelectedOpponentId] = useState<'ohm' | 'art'>('ohm');
 
@@ -556,13 +561,89 @@ export const PlayerStatsPanel: React.FC = () => {
 
   return (
     <div className="space-y-4">
+      {/* Live Firebase Career & Match Summary */}
+      <div className="bg-[#ffffff] border border-[#d4dfd0] rounded-[24px] p-4 shadow-2xs space-y-3">
+        <div className="flex items-center justify-between gap-2">
+          <div className="min-w-0">
+            <h3 className="text-[14px] font-bold text-[#142608] leading-tight">
+              {isThai ? 'สรุปสถิติจริงจาก Firebase' : 'Live Firebase Career Stats'}
+            </h3>
+            <p className="text-[11px] text-[#5c6f5e] mt-0.5">
+              {authUser
+                ? isThai
+                  ? `คำนวณจาก ${firebaseMatchStats.totalMatches} แมตช์ในบัญชีของคุณ`
+                  : `Aggregated from ${firebaseMatchStats.totalMatches} recorded matches`
+                : isThai
+                  ? 'เข้าสู่ระบบ Google ในหน้าหลักเพื่อดึงข้อมูลสถิติจริงจากคลาวด์'
+                  : 'Sign in with Google on Overview to pull live Firebase records'}
+            </p>
+          </div>
+          <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#004d2c] shrink-0">
+            <Cloud className="w-3.5 h-3.5" />
+            <span>{authUser ? (isThai ? 'ซิงค์แล้ว' : 'Live') : isThai ? 'ออฟไลน์' : 'Offline'}</span>
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 tabular-nums">
+          <div className="p-2.5 rounded-[14px] bg-[#f8faf6] border border-[#e6eee2]">
+            <div className="text-[10px] font-semibold text-[#5c6f5e]">
+              {isThai ? 'ชนะ / แพ้' : 'Record'}
+            </div>
+            <div className="text-base font-bold text-[#142608] mt-0.5">
+              {firebaseMatchStats.wins}W - {firebaseMatchStats.losses}L
+            </div>
+            <div className="text-[10px] text-[#15803d] font-semibold">
+              {firebaseMatchStats.winRate}% {isThai ? 'ชนะ' : 'Win'}
+            </div>
+          </div>
+
+          <div className="p-2.5 rounded-[14px] bg-[#f8faf6] border border-[#e6eee2]">
+            <div className="text-[10px] font-semibold text-[#5c6f5e]">
+              {isThai ? 'คะแนนเฉลี่ยต่อนัด' : 'Avg Points / Match'}
+            </div>
+            <div className="text-base font-bold text-[#142608] mt-0.5">
+              {firebaseMatchStats.avgPointsFor} : {firebaseMatchStats.avgPointsAgainst}
+            </div>
+            <div className="text-[10px] text-[#5c6f5e]">
+              {isThai ? 'ได้ : เสีย' : 'For : Against'}
+            </div>
+          </div>
+
+          <div className="p-2.5 rounded-[14px] bg-[#f8faf6] border border-[#e6eee2]">
+            <div className="text-[10px] font-semibold text-[#5c6f5e]">
+              {isThai ? 'ความเร็วตบสูงสุด' : 'Peak Smash'}
+            </div>
+            <div className="text-base font-bold text-[#004d2c] mt-0.5">
+              {firebaseMatchStats.peakSmashKmh || player.stats.highestSmashSpeedKmh} km/h
+            </div>
+            <div className="text-[10px] text-[#5c6f5e]">
+              {isThai
+                ? `เฉลี่ย ${firebaseMatchStats.avgSmashKmh || 0} กม./ชม.`
+                : `Avg ${firebaseMatchStats.avgSmashKmh || 0} km/h`}
+            </div>
+          </div>
+
+          <div className="p-2.5 rounded-[14px] bg-[#e8f7ee] border border-[#7cd7a0]/45">
+            <div className="text-[10px] font-semibold text-[#004d2c]">
+              {isThai ? 'เดี่ยว / คู่' : 'Singles / Doubles'}
+            </div>
+            <div className="text-base font-bold text-[#004d2c] mt-0.5">
+              {firebaseMatchStats.singlesMatches} / {firebaseMatchStats.doublesMatches}
+            </div>
+            <div className="text-[10px] text-[#15803d] font-semibold">
+              +{firebaseMatchStats.totalExpGained.toLocaleString()} EXP
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Head-to-Head Matchup Banner & Opponent Switcher */}
-      <div className="bg-[#ffffff] rounded-[24px] p-4 shadow-[0_2px_12px_rgba(0,0,0,0.03)] space-y-3">
+      <div className="bg-[#ffffff] border border-[#d4dfd0] rounded-[24px] p-4 shadow-2xs space-y-3">
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs font-semibold text-[#6b7280]">
             {isThai ? 'เปรียบเทียบสถิติผู้เล่น' : 'Player Matchup Comparison'}
           </span>
-          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full inline-flex items-center gap-1">
+          <div data-filter="true" className="inline-flex items-center gap-1.5">
             {COMPARISON_PROFILES.map((item) => (
               <button
                 key={item.id}
@@ -571,10 +652,10 @@ export const PlayerStatsPanel: React.FC = () => {
                   playSelectSound();
                   setSelectedOpponentId(item.id as 'ohm' | 'art');
                 }}
-                className={`no-doodle min-h-[30px] px-3 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap ${
+                className={`no-doodle filter-pill min-h-[32px] px-3 py-1 rounded-full text-[11px] transition-all cursor-pointer whitespace-nowrap border ${
                   selectedOpponentId === item.id
-                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                    : 'text-[#6b7280] hover:text-[#111111]'
+                    ? 'bg-[#004d2c] text-[#ffffff] border-[#004d2c] font-semibold shadow-2xs'
+                    : 'bg-[#f8faf6] text-[#52525b] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
                 }`}
               >
                 {isThai ? item.nameTh.split(' ')[0] : item.nameEn.split(' ')[0]}
@@ -800,11 +881,11 @@ export const PlayerStatsPanel: React.FC = () => {
         />
         {openRecent && (
           <div>
-            {/* Segmented Player Switcher */}
+            {/* Outlined Player Switcher Chips */}
             <div className="px-3 pb-2.5">
               <div
                 data-filter="true"
-                className="bg-[#ececef] p-1 rounded-full grid grid-cols-2 gap-1"
+                className="grid grid-cols-2 gap-2"
               >
                 <button
                   type="button"
@@ -812,10 +893,10 @@ export const PlayerStatsPanel: React.FC = () => {
                     playSelectSound();
                     setRecentSide('user');
                   }}
-                  className={`no-doodle min-h-[34px] py-1 px-2 rounded-full text-[11px] font-medium transition-all cursor-pointer truncate ${
+                  className={`no-doodle filter-pill min-h-[34px] py-1 px-3 rounded-full text-[11px] transition-all cursor-pointer truncate border ${
                     recentSide === 'user'
-                      ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                      : 'text-[#6b7280] hover:text-[#111111]'
+                      ? 'bg-[#004d2c] text-[#ffffff] border-[#004d2c] font-semibold shadow-2xs'
+                      : 'bg-[#f8faf6] text-[#52525b] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
                   }`}
                 >
                   {userName}
@@ -826,10 +907,10 @@ export const PlayerStatsPanel: React.FC = () => {
                     playSelectSound();
                     setRecentSide('opponent');
                   }}
-                  className={`no-doodle min-h-[34px] py-1 px-2 rounded-full text-[11px] font-medium transition-all cursor-pointer truncate ${
+                  className={`no-doodle filter-pill min-h-[34px] py-1 px-3 rounded-full text-[11px] transition-all cursor-pointer truncate border ${
                     recentSide === 'opponent'
-                      ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                      : 'text-[#6b7280] hover:text-[#111111]'
+                      ? 'bg-[#004d2c] text-[#ffffff] border-[#004d2c] font-semibold shadow-2xs'
+                      : 'bg-[#f8faf6] text-[#52525b] border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
                   }`}
                 >
                   {compName}

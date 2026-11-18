@@ -1,30 +1,31 @@
 import React from 'react';
-import { X, Globe, Moon, Sun, Volume2, VolumeX, Tv, Check, HardDrive, RefreshCw } from 'lucide-react';
+import { X, Globe, Moon, Sun, Volume2, VolumeX, Tv, Check, HardDrive, RefreshCw, Sparkles } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
 import { PWAInstallButton } from './PWAInstallButton';
 import { formatCacheTimestamp } from '../../utils/offlineCache';
 
 interface AppSettingsModalProps {
- isOpen: boolean;
- onClose: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onClose }) => {
- const {
- language,
- setLanguage,
- t,
- theme,
- toggleTheme,
- isSoundEnabled,
- toggleSound,
- isCrtEnabled,
- toggleCrt,
- isOnline,
- lastSyncedAt,
- refreshOfflineCache,
- resetOfflineCache,
- } = useApp();
+  const {
+    language,
+    setLanguage,
+    t,
+    theme,
+    toggleTheme,
+    isSoundEnabled,
+    toggleSound,
+    isCrtEnabled,
+    toggleCrt,
+    isOnline,
+    lastSyncedAt,
+    refreshOfflineCache,
+    resetOfflineCache,
+    replayOnboarding,
+  } = useApp();
 
  if (!isOpen) return null;
 
@@ -209,18 +210,32 @@ export const AppSettingsModal: React.FC<AppSettingsModalProps> = ({ isOpen, onCl
  </div>
  </div>
 
- <PWAInstallButton />
- </div>
+          <PWAInstallButton />
 
- {/* Close Button */}
- <button
- type="button"
- onClick={onClose}
- className="w-full py-3 rounded-[1600px] bg-[#000000] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] hover:bg-[#1a1a1a] transition-all cursor-pointer border border-[#000000]"
- >
- {t.close}
- </button>
- </div>
- </div>
- );
+          <button
+            type="button"
+            onClick={() => {
+              onClose();
+              replayOnboarding();
+            }}
+            className="w-full py-2.5 px-3 rounded-[1600px] bg-[#f4f8fb] hover:bg-[#e8f7ee] text-[#000000] font-bold text-xs flex items-center justify-center gap-1.5 border border-[#000000]/20 cursor-pointer transition-colors"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-[#15803d]" />
+            <span>
+              {language === 'th' ? 'ดูหน้าแนะนำแอปเริ่มต้น (Onboarding)' : 'Replay Welcome Onboarding'}
+            </span>
+          </button>
+        </div>
+
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="w-full py-3 rounded-[1600px] bg-[#000000] text-[#ffffff] font-bold text-xs uppercase tracking-[0.032em] hover:bg-[#1a1a1a] transition-all cursor-pointer border border-[#000000]"
+        >
+          {t.close}
+        </button>
+      </div>
+    </div>
+  );
 };

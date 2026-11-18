@@ -544,6 +544,7 @@ export const LoadingSkeleton: React.FC<LoadingSkeletonProps> = ({
  case 'HOME':
  return 'home';
  case 'F1':
+ case 'FEED':
  return 'profile';
  case 'MAP':
  case 'B1':

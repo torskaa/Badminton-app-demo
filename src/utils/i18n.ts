@@ -6,7 +6,8 @@ export const TRANSLATIONS = {
     tabHome: 'หน้าแรก',
     tabClub: 'สโมสร',
     tabDiscover: 'ค้นหา',
-    tabMore: 'การเงิน',
+    tabMore: 'ฟีด',
+    tabFeed: 'ฟีด',
     tabProfile: 'โปรไฟล์',
 
     // Global
@@ -158,7 +159,8 @@ export const TRANSLATIONS = {
     tabHome: 'Home',
     tabClub: 'Club',
     tabDiscover: 'Discover',
-    tabMore: 'Finance',
+    tabMore: 'Feed',
+    tabFeed: 'Feed',
     tabProfile: 'Profile',
 
     // Global

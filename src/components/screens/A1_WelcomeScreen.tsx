@@ -5,255 +5,459 @@
 
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Compass, Sparkles, Trophy, Zap, Shield, ChevronRight, Award, Flame, Heart } from 'lucide-react';
+import { ArrowRight, MapPin, Trophy, Users } from 'lucide-react';
 import { useApp } from '../../context/AppContext';
-import { ScreenSwitcherModal } from '../common/ScreenSwitcherModal';
+import athleteHeroImg from '../../assets/images/onboarding_player_hero_1794910127129.jpg';
+import courtHallImg from '../../assets/images/onboarding_court_aerial_1794910127319.jpg';
+
+type OnboardingStep = 0 | 1 | 2;
 
 export const A1_WelcomeScreen: React.FC = () => {
- const { navigateTo, language } = useApp();
- const isThai = language === 'th';
- const [activeSlide, setActiveSlide] = useState<0 | 1 | 2>(0);
- const [isSwitcherOpen, setIsSwitcherOpen] = useState(false);
+  const {
+    navigateTo,
+    completeOnboarding,
+    authUser,
+    signInWithGoogle,
+    isAuthBusy,
+    language,
+    setLanguage,
+  } = useApp();
 
- const slides = isThai
- ? [
- {
- title: 'สแมช',
- tagline: 'ตีแบดได้ทุกวัน ไม่ต้องรอก๊วน',
- subtitle: 'จับคู่คนตีแบดระดับเดียวกัน จองสนามมาตรฐาน และพัฒนาฝีมือกับโค้ชอัจฉริยะ',
- badge: 'คอมมูนิตี้ตีแบด',
- buttonText: 'เริ่มต้นใช้งาน',
- },
- {
- title: 'จองคอร์ท',
- tagline: 'เช็กคอร์ทว่างและจองได้ทันที',
- subtitle: 'ไม่ต้องโทรถาม จองสนามทั่วกรุงเทพฯ จ่ายผ่านพร้อมเพย์และรับคะแนนเพิ่ม',
- badge: 'สนามพื้นยางมาตรฐาน',
- buttonText: 'สำรวจสนาม',
- },
- {
- title: 'คว้าชัย',
- tagline: 'บันทึกทุกแต้มแบบเรียลไทม์',
- subtitle: 'สกอร์บอร์ดข้างสนาม วัดสปีดลูกตบ พร้อมโปรแกรมซ้อมเฉพาะตัว',
- badge: 'วิเคราะห์เกมอัจฉริยะ',
- buttonText: 'เข้าสู่สนาม',
- },
- ]
- : [
- {
- title: 'SMASH',
- tagline: 'YOUR GAME. UNSTUCK.',
- subtitle: 'Match with players at your level, book certified courts, and train smarter.',
- badge: 'Badminton Community',
- buttonText: 'Get Started',
- },
- {
- title: 'BOOK',
- tagline: 'INSTANT COURTSIDE ACCESS',
- subtitle: 'Zero phone calls. Live slots across Bangkok with fast PromptPay check-in.',
- badge: 'Certified Taraflex',
- buttonText: 'Explore Courts',
- },
- {
- title: 'WIN',
- tagline: 'TRACK EVERY POINT LIVE',
- subtitle: 'Live courtside scorer, smash speed tracking, and custom daily drills.',
- badge: 'Smart Telemetry',
- buttonText: 'Enter Arena',
- },
- ];
+  const isThai = language === 'th';
+  const [activeSlide, setActiveSlide] = useState<OnboardingStep>(0);
+  const [direction, setDirection] = useState<1 | -1>(1);
+  const [courtImgFailed, setCourtImgFailed] = useState(false);
+  const [heroImgFailed, setHeroImgFailed] = useState(false);
 
- const slide = slides[activeSlide];
+  const goToSlide = (nextIdx: OnboardingStep) => {
+    setDirection(nextIdx >= activeSlide ? 1 : -1);
+    setActiveSlide(nextIdx);
+  };
 
- const handleNext = () => {
- if (activeSlide < 2) {
- setActiveSlide((prev) => (prev + 1) as 0 | 1 | 2);
- } else {
- navigateTo('A2');
- }
- };
+  const handleNext = () => {
+    if (activeSlide < 2) {
+      goToSlide((activeSlide + 1) as OnboardingStep);
+    } else {
+      completeOnboarding('HOME');
+    }
+  };
 
- return (
- <div className="flex-1 min-h-0 flex flex-col justify-between relative bg-[#f4f8fb] overflow-y-auto overscroll-contain no-scrollbar text-[#000000] ">
- {/* Top Header Bar */}
- <div className="app-header-safe px-5 pb-3 flex items-center justify-between z-30">
- <div className="flex items-center gap-2">
- <div className="w-8 h-8 rounded-[1600px] bg-[#7cd7a0] flex items-center justify-center font-black text-sm">
- 🏸
- </div>
- <span className="font-['Antonio',sans-serif] text-2xl font-black tracking-tight uppercase">
- {isThai ? 'สแมช' : 'SMASH'}
- </span>
- </div>
+  const handlePrev = () => {
+    if (activeSlide > 0) {
+      goToSlide((activeSlide - 1) as OnboardingStep);
+    }
+  };
 
- <button
- onClick={() => setIsSwitcherOpen(true)}
- className="no-doodle min-h-[40px] px-3.5 py-2 rounded-full bg-[#ffffff] shadow-[0_2px_10px_rgba(0,0,0,0.06)] text-xs font-medium text-[#111111] flex items-center gap-1.5 transition-all active:scale-95 cursor-pointer hover:bg-[#f3f4f6]"
- title={isThai ? 'สารบัญหน้าจอทั้งหมด' : 'Navigation Directory'}
- >
- <Compass className="w-3.5 h-3.5 text-[#15803d]" />
- <span>{isThai ? 'ทุกหน้า' : 'Screens'}</span>
- </button>
- </div>
+  return (
+    <div className="flex-1 min-h-0 flex flex-col justify-between bg-gradient-to-b from-[#f7f8fa] via-[#f5f7f6] to-[#e4f5eb] text-[#111827] relative overflow-hidden select-none">
+      {/* Subtle Minimal Top Controls */}
+      <header className="app-header-safe px-6 pb-2 flex items-center justify-between z-30 shrink-0">
+        <div className="flex items-center gap-2">
+          <img
+            src="/apple-touch-icon.png"
+            alt="SmashAI"
+            className="w-7 h-7 rounded-full object-cover shadow-xs"
+          />
+          <span className="font-['Antonio',sans-serif] text-[17px] font-bold tracking-tight text-[#004d2c] whitespace-nowrap">
+            SmashAI
+          </span>
+        </div>
 
- {/* Hero Visual Area with 3D Blue Inflatable Ribbon Sculpture & Sticker Clusters */}
- <div className="relative flex-1 flex flex-col items-center justify-center px-4 py-2 overflow-hidden">
- {/* Floating Sticker Cluster (Six-color sticker palette applied as a shared set) */}
- <motion.div
- animate={{ y: [0, -8, 0], rotate: [-8, -4, -8] }}
- transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
- className="absolute top-3 left-4 z-20 px-3 py-1 rounded-[1600px] bg-[#e85729] text-[#ffffff] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
- >
- <Flame className="w-3.5 h-3.5 fill-[#ffffff]" />
- <span>{isThai ? 'ตบ 342 กม./ชม.' : '342 km/h Peak'}</span>
- </motion.div>
+        <div className="flex items-center bg-[#e9ecef]/85 p-0.5 rounded-full">
+          <button
+            type="button"
+            onClick={() => setLanguage('th')}
+            className={`no-doodle min-h-[34px] px-2.5 rounded-full text-[11px] font-semibold transition-colors cursor-pointer ${
+              isThai ? 'bg-[#ffffff] text-[#111827] shadow-xs' : 'text-[#6b7280]'
+            }`}
+          >
+            TH
+          </button>
+          <button
+            type="button"
+            onClick={() => setLanguage('en')}
+            className={`no-doodle min-h-[34px] px-2.5 rounded-full text-[11px] font-semibold transition-colors cursor-pointer ${
+              !isThai ? 'bg-[#ffffff] text-[#111827] shadow-xs' : 'text-[#6b7280]'
+            }`}
+          >
+            EN
+          </button>
+        </div>
+      </header>
 
- <motion.div
- animate={{ y: [0, 8, 0], rotate: [8, 12, 8] }}
- transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
- className="absolute top-5 right-4 z-20 px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
- >
- <span>🏸</span>
- <span>{isThai ? 'พื้นยางมาตรฐาน' : 'Taraflex BWF'}</span>
- </motion.div>
+      {/* Main Editorial Onboarding Stage */}
+      <div className="flex-1 min-h-0 relative overflow-hidden flex flex-col">
+        <AnimatePresence mode="wait" custom={direction}>
+          <motion.div
+            key={activeSlide}
+            custom={direction}
+            initial={{ opacity: 0, x: direction * 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction * -24 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.18}
+            onDragEnd={(_, info) => {
+              if (info.offset.x < -50 && activeSlide < 2) {
+                handleNext();
+              } else if (info.offset.x > 50 && activeSlide > 0) {
+                handlePrev();
+              }
+            }}
+            className="flex-1 min-h-0 flex flex-col justify-between relative"
+          >
+            {/* SLIDE 1: Editorial Stacked Headline + Top CTA + Bottom-Right Ribbon Art */}
+            {activeSlide === 0 && (
+              <div className="flex-1 min-h-0 flex flex-col justify-start px-7 pt-8 sm:pt-12 relative">
+                <div className="relative z-20 max-w-[300px]">
+                  {isThai ? (
+                    <h1 className="text-[34px] sm:text-[38px] leading-[1.16] text-[#111827]">
+                      <span className="font-semibold block">ยกระดับ</span>
+                      <span className="font-normal text-[#374151] block">เกมแบดของคุณ</span>
+                      <span className="font-normal text-[#374151] block">ด้วย </span>
+                      <span className="font-bold text-[#004d2c]">โค้ช AI ส่วนตัว</span>
+                    </h1>
+                  ) : (
+                    <h1 className="text-[36px] sm:text-[40px] leading-[1.08] tracking-tight text-[#111827]">
+                      <span className="font-semibold block">Empower</span>
+                      <span className="font-normal text-[#1f2937] block">Your Game With</span>
+                      <span className="font-bold text-[#004d2c] block">Smart AI</span>
+                      <span className="font-normal text-[#1f2937] block">Coaching</span>
+                    </h1>
+                  )}
 
- <motion.div
- animate={{ y: [0, -6, 0], rotate: [-10, -6, -10] }}
- transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut' }}
- className="absolute bottom-20 left-4 z-20 px-3 py-1 rounded-[1600px] bg-[#7cd7a0] text-[#000000] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
- >
- <Trophy className="w-3.5 h-3.5 stroke-[2.4]" />
- <span>{isThai ? 'แรงก์ระดับ 14' : 'Lv.14 Rank'}</span>
- </motion.div>
+                  <p className="mt-4 text-[13.5px] leading-relaxed text-[#6b7280] max-w-[260px]">
+                    {isThai
+                      ? 'วิเคราะห์ลูกตบ ฟุตเวิร์ก 6 มุม และแผนซ้อมรายวันที่ออกแบบเพื่อคุณโดยเฉพาะ'
+                      : 'Decode peak smash velocity, net accuracy, and personalized drills after every match.'}
+                  </p>
 
- <motion.div
- animate={{ y: [0, 7, 0], rotate: [6, 10, 6] }}
- transition={{ duration: 4.2, repeat: Infinity, ease: 'easeInOut' }}
- className="absolute bottom-16 right-4 z-20 px-3 py-1 rounded-[1600px] bg-[#e8f7ee] text-[#000000] text-[11px] font-bold tracking-[0.032em] flex items-center gap-1.5 cursor-pointer"
- >
- <Zap className="w-3.5 h-3.5 text-[#15803d] fill-current" />
- <span>{isThai ? '+250 คะแนน' : '+250 EXP'}</span>
- </motion.div>
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    aria-label={isThai ? 'ถัดไป' : 'Next'}
+                    className="no-doodle mt-7 w-14 h-14 rounded-full bg-[#004d2c] hover:bg-[#003b22] text-[#ffffff] shadow-[0_12px_28px_rgba(0,77,44,0.28)] flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+                  >
+                    <ArrowRight className="w-5 h-5 stroke-[2.2]" />
+                  </button>
+                </div>
 
- {/* Central 3D Inflatable Electric Blue Ribbon Graphic (Signature Brand Sculpture) */}
- <div className="relative w-full max-w-xs flex items-center justify-center my-1">
- <svg viewBox="0 0 320 180" className="w-full h-auto">
- {/* Inflatable 3D Ribbon Base with Electric Blue (#7cd7a0) and 1px solid black handcut outline */}
- <path
- d="M 25,115 C 55,30 120,25 180,75 C 240,125 285,85 295,45 C 305,115 225,165 145,140 C 70,115 40,165 25,115 Z"
- fill="#7cd7a0"
- stroke="#000000"
- strokeWidth="1.5"
- />
- {/* Glossy specular highlight curves */}
- <path
- d="M 45,95 C 70,45 120,40 165,75"
- fill="none"
- stroke="#ffffff"
- strokeWidth="5"
- strokeLinecap="round"
- opacity="0.75"
- />
- <path
- d="M 180,130 C 220,145 260,120 275,75"
- fill="none"
- stroke="#ffffff"
- strokeWidth="4"
- strokeLinecap="round"
- opacity="0.5"
- />
- </svg>
+                {/* Large Soft Architectural SmashAI Ribbon Monogram (Bottom-Right Anchor) */}
+                <svg
+                  viewBox="0 0 320 320"
+                  className="pointer-events-none select-none absolute -bottom-12 -right-10 w-[290px] h-[290px] sm:w-[320px] sm:h-[320px] z-10"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M118 295 C72 250, 70 184, 122 146 C158 120, 222 148, 250 110 C276 74, 240 24, 192 48 C144 72, 160 144, 212 184 C264 224, 260 288, 200 310"
+                    fill="none"
+                    stroke="#bcecd0"
+                    strokeWidth="44"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    opacity="0.72"
+                  />
+                  <path
+                    d="M118 295 C72 250, 70 184, 122 146 C158 120, 222 148, 250 110"
+                    fill="none"
+                    stroke="#86dfb0"
+                    strokeWidth="44"
+                    strokeLinecap="round"
+                    opacity="0.45"
+                  />
+                </svg>
+              </div>
+            )}
 
- {/* Central Playful Badminton Shuttlecock inside Ribbon loop */}
- <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
- <div className="w-16 h-16 rounded-[1600px] bg-[#ffffff] flex items-center justify-center">
- <span className="text-3xl">🏸</span>
- </div>
- </div>
- </div>
+            {/* SLIDE 2: Tilted Layered 3-Card Collage + Mixed-Weight Headline */}
+            {activeSlide === 1 && (
+              <div className="flex-1 min-h-0 flex flex-col justify-between px-7 pt-2 pb-2">
+                {/* Floating Overlapping Collage Stage */}
+                <div className="relative flex-1 min-h-[250px] flex items-center justify-center my-auto">
+                  {/* Back-Left Court Photo Card */}
+                  <div
+                    className="absolute w-[164px] h-[205px] rounded-[22px] overflow-hidden bg-[#1a3a2a] shadow-[0_16px_34px_rgba(15,23,42,0.16)] transform -translate-x-[58px] -translate-y-[8px] -rotate-[9deg]"
+                  >
+                    {!courtImgFailed ? (
+                      <img
+                        src={courtHallImg}
+                        alt={isThai ? 'สนามแบดมินตันในร่ม' : 'Indoor badminton hall'}
+                        referrerPolicy="no-referrer"
+                        onError={() => setCourtImgFailed(true)}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-[#004d2c] to-[#15803d]" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                    <div className="absolute bottom-3 left-3 right-3 text-[#ffffff]">
+                      <div className="text-[10px] font-medium opacity-90">
+                        {isThai ? 'สนามมาตรฐาน BWF' : 'Pro Floor Mats'}
+                      </div>
+                      <div className="text-xs font-bold tabular-nums">
+                        {isThai ? '24 สนามใกล้คุณ' : '24 Nearby Halls'}
+                      </div>
+                    </div>
+                  </div>
 
- {/* Lateral Crushed Sculptural Display Headline (0.75–0.80 line height non-negotiable) */}
- <AnimatePresence mode="wait">
- <motion.div
- key={activeSlide}
- initial={{ opacity: 0, y: 10 }}
- animate={{ opacity: 1, y: 0 }}
- exit={{ opacity: 0, y: -10 }}
- transition={{ duration: 0.2 }}
- className="text-center z-20 mt-1 max-w-xs"
- >
- <h1 className="lateral-display text-7xl font-extrabold tracking-tight text-[#000000]">
- {slide.title}
- </h1>
- <p className="font-['Antonio',sans-serif] text-2xl font-black text-[#15803d] uppercase tracking-normal mt-1 leading-none">
- {slide.tagline}
- </p>
- <p className="text-xs text-[#000000]/80 mt-2.5 max-w-[270px] mx-auto leading-relaxed font-medium">
- {slide.subtitle}
- </p>
- </motion.div>
- </AnimatePresence>
- </div>
+                  {/* Back-Right Real-Time Slot Card */}
+                  <div className="absolute w-[170px] h-[212px] rounded-[22px] bg-[#ffffff] p-3.5 shadow-[0_18px_38px_rgba(15,23,42,0.12)] border border-[#000000]/5 transform translate-x-[54px] translate-y-[16px] rotate-[7deg] flex flex-col justify-between">
+                    <div>
+                      <div className="flex items-center justify-between text-[10px] font-semibold text-[#6b7280]">
+                        <span>{isThai ? 'รอบวันนี้' : 'Today'}</span>
+                        <span className="text-[#004d2c] tabular-nums">1.8 {isThai ? 'กม.' : 'km'}</span>
+                      </div>
+                      <div className="text-sm font-bold text-[#111827] mt-1 leading-snug">
+                        {isThai ? 'วินเนอร์ อารีน่า พระราม 9' : 'Winner Arena Rama 9'}
+                      </div>
+                    </div>
 
- {/* Bottom Action Card (Paper White Canvas #ffffff alternating rhythm with 1px black outline) */}
- <div className="bg-[#ffffff] rounded-t-[36px] p-4 pb-6 flex flex-col gap-3.5 z-30">
- {/* Step Indicator Pill & Category Tag */}
- <div className="flex items-center justify-between">
- <div className="flex items-center gap-1.5">
- {[0, 1, 2].map((idx) => (
- <button
- key={idx}
- type="button"
- onClick={() => setActiveSlide(idx as 0 | 1 | 2)}
- className={`h-2.5 rounded-[1600px] border border-[#000000] transition-all duration-300 cursor-pointer ${
- activeSlide === idx ? 'w-8 bg-[#000000]' : 'w-2.5 bg-[#cccccc]'
- }`}
- />
- ))}
- </div>
+                    <div className="space-y-1.5">
+                      <div className="flex items-center justify-between px-2.5 py-1.5 rounded-xl bg-[#f3f6f4] text-[11px]">
+                        <span className="font-semibold text-[#111827] tabular-nums">19:00</span>
+                        <span className="font-bold text-[#15803d]">{isThai ? 'ว่าง' : 'Open'}</span>
+                      </div>
+                      <div className="flex items-center justify-between px-2.5 py-1.5 rounded-xl bg-[#e8f7ee] text-[11px]">
+                        <span className="font-semibold text-[#111827] tabular-nums">20:00</span>
+                        <span className="font-bold text-[#004d2c] tabular-nums">฿280</span>
+                      </div>
+                    </div>
 
- <span className="text-[11px] font-bold tracking-[0.032em] text-[#000000]/60 uppercase">
- {isThai ? `ขั้นตอนที่ ${activeSlide + 1} / 3` : `Step ${activeSlide + 1} of 3`}
- </span>
- </div>
+                    <div className="self-end w-11 h-11 rounded-full bg-[#e85729] text-[#ffffff] flex items-center justify-center text-center text-[9px] font-bold leading-tight shadow-md rotate-[8deg] shrink-0">
+                      {isThai ? 'จองสด\nGPS' : 'LIVE\nSLOTS'}
+                    </div>
+                  </div>
 
- {/* Primary CTA (Rule: Black fill only, NEVER blue #7cd7a0, 1600px radius, 1px solid black) */}
- <button
- onClick={handleNext}
- className="w-full py-3.5 rounded-[1600px] bg-[#000000] hover:bg-[#1a1a1a] text-[#ffffff] font-bold text-xs tracking-[0.032em] border border-[#000000] flex items-center justify-between px-4 transition-transform active:scale-98 cursor-pointer group"
- >
- <span className="w-7 h-7 rounded-[1600px] bg-[#7cd7a0] text-[#000000] flex items-center justify-center font-black text-xs">
- ★
- </span>
- <span className="font-bold tracking-[0.032em] text-[#ffffff] uppercase text-xs whitespace-nowrap">
- {slide.buttonText}
- </span>
- <span className="w-7 h-7 rounded-[1600px] bg-[#ffffff] text-[#000000] flex items-center justify-center group-hover:translate-x-1 transition-transform">
- <ArrowRight className="w-4 h-4 stroke-[2.5]" />
- </span>
- </button>
+                  {/* Front Signature Dark Forest Green Card */}
+                  <div className="relative z-10 w-[184px] h-[228px] rounded-[24px] bg-gradient-to-br from-[#06291b] via-[#004d2c] to-[#0a633e] text-[#ffffff] p-4 shadow-[0_24px_48px_rgba(0,45,25,0.28)] transform -translate-x-[6px] -translate-y-[14px] -rotate-[3deg] flex flex-col justify-between overflow-hidden">
+                    <svg
+                      viewBox="0 0 120 120"
+                      className="absolute -right-5 top-8 w-28 h-28 opacity-20 pointer-events-none"
+                      aria-hidden="true"
+                    >
+                      <rect x="10" y="10" width="90" height="100" fill="none" stroke="#7cd7a0" strokeWidth="2.5" />
+                      <line x1="10" y1="60" x2="100" y2="60" stroke="#7cd7a0" strokeWidth="2" />
+                      <line x1="55" y1="10" x2="55" y2="110" stroke="#7cd7a0" strokeWidth="1.5" />
+                    </svg>
 
- {/* Quick Shortcut Buttons (Concrete gray / Sky wash alternates with 1px black borders) */}
- <div className="grid grid-cols-2 gap-2 pt-0.5">
- <button
- onClick={() => navigateTo('B1')}
- className="py-2.5 px-3 rounded-[1600px] bg-[#f4f8fb] hover:bg-[#cde5fd] border border-[#000000] text-xs font-bold tracking-[0.032em] text-[#000000] flex items-center justify-center gap-1 transition-transform active:scale-95 cursor-pointer whitespace-nowrap"
- >
- <span>{isThai ? 'จองคอร์ท' : 'Book Courts'}</span>
- <ChevronRight className="w-3.5 h-3.5 shrink-0" />
- </button>
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-semibold tracking-wide text-[#7cd7a0] uppercase">
+                        {isThai ? 'แผนที่สนามสด' : 'Live Court Map'}
+                      </span>
+                      <MapPin className="w-4 h-4 text-[#7cd7a0]" />
+                    </div>
 
- <button
- onClick={() => navigateTo('C1')}
- className="py-2.5 px-3 rounded-[1600px] bg-[#7cd7a0] hover:bg-[#ffe259] border border-[#000000] text-xs font-bold tracking-[0.032em] text-[#000000] flex items-center justify-center gap-1 transition-transform active:scale-95 cursor-pointer whitespace-nowrap"
- >
- <span>{isThai ? 'บันทึกแต้มสด' : 'Live Score'}</span>
- <ChevronRight className="w-3.5 h-3.5 shrink-0" />
- </button>
- </div>
- </div>
+                    <div>
+                      <div className="text-[22px] font-bold leading-[1.12] tracking-tight">
+                        {isThai ? 'เช็กคอร์ทว่าง\nแบบเรียลไทม์' : 'REAL-TIME\nBOOKING'}
+                      </div>
+                      <div className="mt-2 h-0.5 w-10 bg-[#7cd7a0] rounded-full" />
+                    </div>
 
- <ScreenSwitcherModal isOpen={isSwitcherOpen} onClose={() => setIsSwitcherOpen(false)} />
- </div>
- );
+                    <div className="text-[11px] text-[#d1fae5] leading-snug">
+                      {isThai
+                        ? 'Google Maps · QR E-Ticket ทันที'
+                        : 'Google Maps · Instant QR E-Ticket'}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Lower Left-Aligned Headline & Subtitle */}
+                <div className="pt-3 pb-1 max-w-[310px]">
+                  {isThai ? (
+                    <h1 className="text-[26px] sm:text-[29px] leading-[1.18] text-[#111827]">
+                      <span className="font-bold">จองคอร์ท</span>{' '}
+                      <span className="font-normal text-[#374151]">ใกล้คุณ</span>
+                      <br />
+                      <span className="font-normal text-[#374151]">พร้อม </span>
+                      <span className="font-bold text-[#004d2c]">รอบว่างเรียลไทม์</span>
+                    </h1>
+                  ) : (
+                    <h1 className="text-[27px] sm:text-[30px] leading-[1.15] tracking-tight text-[#111827]">
+                      <span className="font-bold">Elevate</span>{' '}
+                      <span className="font-normal text-[#374151]">Your Court</span>
+                      <br />
+                      <span className="font-normal text-[#374151]">With </span>
+                      <span className="font-bold text-[#004d2c]">Live Availability</span>
+                    </h1>
+                  )}
+                  <p className="mt-2.5 text-[13px] text-[#6b7280] leading-relaxed">
+                    {isThai
+                      ? 'ค้นหาสนามบน Google Maps คำนวณระยะทาง GPS จริง และล็อกเวลาเล่นผ่านพร้อมเพย์ในไม่กี่วินาที'
+                      : 'Browse real courts on Google Maps, sort by live GPS distance, and lock open hourly slots instantly.'}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* SLIDE 3: Centered Portrait Cutout + Floating Accents + Centered Goal Headline */}
+            {activeSlide === 2 && (
+              <div className="flex-1 min-h-0 flex flex-col justify-between px-6 pt-1 pb-2 relative">
+                {/* Centered Player Composition Blending Softly Into Canvas */}
+                <div className="relative flex-1 min-h-[255px] flex items-end justify-center overflow-hidden">
+                  <div className="relative w-[245px] sm:w-[270px] h-full max-h-[340px] flex items-end justify-center">
+                    {!heroImgFailed ? (
+                      <img
+                        src={athleteHeroImg}
+                        alt={isThai ? 'นักแบดมินตัน SmashAI' : 'SmashAI badminton athlete'}
+                        referrerPolicy="no-referrer"
+                        onError={() => setHeroImgFailed(true)}
+                        className="w-full h-full object-cover object-top rounded-t-[140px] mix-blend-multiply"
+                      />
+                    ) : (
+                      <div className="w-48 h-64 rounded-t-full bg-gradient-to-b from-[#7cd7a0]/40 to-transparent flex items-center justify-center">
+                        <Users className="w-16 h-16 text-[#004d2c]" />
+                      </div>
+                    )}
+
+                    {/* Smooth Seamless Bottom Dissolve into Canvas Mint Glow */}
+                    <div
+                      className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#eaf6ef] via-[#eaf6ef]/80 to-transparent"
+                      aria-hidden="true"
+                    />
+
+                    {/* Floating Right Badminton Squad Mini-Card */}
+                    <div
+                      className="absolute right-0 top-[44%] w-12 h-14 rounded-2xl bg-[#004d2c] text-[#ffffff] shadow-[0_12px_24px_rgba(0,77,44,0.28)] flex flex-col items-center justify-center gap-0.5 rotate-[10deg]"
+                      aria-hidden="true"
+                    >
+                      <Users className="w-4 h-4 text-[#7cd7a0]" />
+                      <span className="text-[10px] font-bold tabular-nums">2v2</span>
+                    </div>
+
+                    {/* Floating Left Trophy / Achievement Mini-Card */}
+                    <div
+                      className="absolute left-0 bottom-7 w-13 h-12 rounded-2xl bg-[#ffffff] border border-[#000000]/5 shadow-[0_12px_26px_rgba(15,23,42,0.12)] flex items-center justify-center -rotate-[12deg]"
+                      aria-hidden="true"
+                    >
+                      <Trophy className="w-5 h-5 text-[#e85729]" />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Centered Lower Headline + Concise Action Strip */}
+                <div className="pt-2 text-center relative z-10">
+                  {isThai ? (
+                    <h1 className="text-[25px] sm:text-[28px] leading-[1.2] text-[#111827] mx-auto">
+                      <span className="font-normal text-[#374151]">หาก๊วน</span>{' '}
+                      <span className="font-bold text-[#111827]">จัดคู่สมดุล</span>
+                      <br />
+                      <span className="font-normal text-[#374151]">และพิชิต</span>{' '}
+                      <span className="font-bold text-[#004d2c]">เป้าหมายไปด้วยกัน</span>
+                    </h1>
+                  ) : (
+                    <h1 className="text-[26px] sm:text-[29px] leading-[1.18] tracking-tight text-[#111827] mx-auto">
+                      <span className="font-normal text-[#374151]">Stay</span>{' '}
+                      <span className="font-bold text-[#111827]">Connected</span>{' '}
+                      <span className="font-normal text-[#374151]">And</span>
+                      <br />
+                      <span className="font-normal text-[#374151]">Achieve</span>{' '}
+                      <span className="font-bold text-[#004d2c]">Goals Together</span>
+                    </h1>
+                  )}
+
+                  <p className="mt-1.5 text-[12.5px] text-[#6b7280]">
+                    {isThai
+                      ? 'จับคู่ 2v2 ตาม OVR · เช็กชื่อก๊วน · หารค่าสนามอัตโนมัติ'
+                      : 'AI 2v2 matchmaking · Weekly RSVPs · Auto court bill split'}
+                  </p>
+
+                  {/* Optional Quiet Setup / Google Auth Links */}
+                  <div className="mt-2 flex items-center justify-center gap-4">
+                    <button
+                      type="button"
+                      onClick={() => navigateTo('A2')}
+                      className="no-doodle min-h-[36px] px-1 text-xs font-semibold text-[#004d2c] hover:underline cursor-pointer whitespace-nowrap"
+                    >
+                      {isThai ? 'ตั้งค่าสไตล์ผู้เล่น (+150 EXP)' : 'Set playstyle (+150 EXP)'}
+                    </button>
+
+                    {!authUser && (
+                      <>
+                        <span className="text-[#d1d5db]" aria-hidden="true">
+                          ·
+                        </span>
+                        <button
+                          type="button"
+                          disabled={isAuthBusy}
+                          onClick={async () => {
+                            const ok = await signInWithGoogle();
+                            if (ok) {
+                              completeOnboarding('HOME');
+                            }
+                          }}
+                          className="no-doodle min-h-[36px] px-1 text-xs font-semibold text-[#e85729] hover:underline cursor-pointer disabled:opacity-50 whitespace-nowrap"
+                        >
+                          {isAuthBusy
+                            ? isThai
+                              ? 'กำลังเชื่อมต่อ...'
+                              : 'Signing in...'
+                            : isThai
+                              ? 'เข้าสู่ระบบ Google'
+                              : 'Google Sign In'}
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </div>
+
+      {/* Clean Editorial Bottom Bar: Bottom-Left Skip + Center Minimal Dots + Bottom-Right Circular CTA */}
+      <footer className="px-7 pt-2 pb-[max(1.5rem,env(safe-area-inset-bottom,1.5rem))] flex items-center justify-between z-30 shrink-0">
+        <button
+          type="button"
+          onClick={() => completeOnboarding('HOME')}
+          className="no-doodle min-h-[44px] min-w-[44px] px-1 text-left text-[14px] font-medium text-[#4b5563] hover:text-[#111827] transition-colors cursor-pointer whitespace-nowrap"
+        >
+          {isThai ? 'ข้าม' : 'Skip'}
+        </button>
+
+        {/* Minimal Progress Dots */}
+        <div className="flex items-center gap-1.5" role="tablist" aria-label="Onboarding steps">
+          {[0, 1, 2].map((idx) => (
+            <button
+              key={idx}
+              type="button"
+              role="tab"
+              aria-selected={activeSlide === idx}
+              aria-label={isThai ? `หน้า ${idx + 1}` : `Slide ${idx + 1}`}
+              onClick={() => goToSlide(idx as OnboardingStep)}
+              className={`no-doodle h-1.5 rounded-full transition-all duration-200 cursor-pointer ${
+                activeSlide === idx
+                  ? 'w-6 bg-[#004d2c]'
+                  : 'w-1.5 bg-[#cbd5e1] hover:bg-[#94a3b8]'
+              }`}
+            />
+          ))}
+        </div>
+
+        {/* Bottom-Right Circular Next / Finish Button (On Slide 1 CTA sits under Headline just like reference) */}
+        <div className="w-14 h-14 flex items-center justify-end shrink-0">
+          {activeSlide > 0 && (
+            <button
+              type="button"
+              onClick={handleNext}
+              aria-label={
+                activeSlide === 2
+                  ? isThai
+                    ? 'เข้าสู่หน้าหลัก'
+                    : 'Get started'
+                  : isThai
+                    ? 'ถัดไป'
+                    : 'Next'
+              }
+              className="no-doodle w-14 h-14 rounded-full bg-[#004d2c] hover:bg-[#003b22] text-[#ffffff] shadow-[0_12px_28px_rgba(0,77,44,0.28)] flex items-center justify-center active:scale-95 transition-transform cursor-pointer"
+            >
+              <ArrowRight className="w-5 h-5 stroke-[2.2]" />
+            </button>
+          )}
+        </div>
+      </footer>
+    </div>
+  );
 };

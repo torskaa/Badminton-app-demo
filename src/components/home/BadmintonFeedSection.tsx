@@ -8,6 +8,8 @@ import {
   Flame,
   Heart,
   MapPin,
+  Plus,
+  Send,
   Sparkles,
   Swords,
   Trophy,
@@ -205,6 +207,7 @@ interface FeedMilestonePayload {
 
 interface BadmintonFeedItem {
   id: string;
+  isCloudPost?: boolean;
   type: 'match' | 'achievement' | 'milestone';
   guildTh: string;
   guildEn: string;
@@ -377,7 +380,13 @@ const GUILD_FEED_ITEMS: BadmintonFeedItem[] = [
   },
 ];
 
-export const BadmintonFeedSection: React.FC = () => {
+export interface BadmintonFeedSectionProps {
+  compactHeader?: boolean;
+}
+
+export const BadmintonFeedSection: React.FC<BadmintonFeedSectionProps> = ({
+  compactHeader = false,
+}) => {
   const {
     player,
     language,
@@ -386,6 +395,13 @@ export const BadmintonFeedSection: React.FC = () => {
     dataMode,
     leaderboard,
     setSparringModalPlayer,
+    cloudMatches,
+    cloudFeedPosts,
+    publishFeedPost,
+    cheeredCloudIds,
+    toggleCloudFeedCheer,
+    authUser,
+    isAuthBusy,
   } = useApp();
   const isThai = language === 'th';
 
@@ -397,23 +413,78 @@ export const BadmintonFeedSection: React.FC = () => {
   const [cheeredIds, setCheeredIds] = useState<Record<string, boolean>>({});
   const [showAllGuildItems, setShowAllGuildItems] = useState(false);
 
+  // Composer state for live community updates
+  const [isComposerOpen, setIsComposerOpen] = useState(false);
+  const [postType, setPostType] = useState<'match' | 'achievement' | 'milestone'>('milestone');
+  const [postHeadline, setPostHeadline] = useState('');
+  const [postSummary, setPostSummary] = useState('');
+  const [postScore, setPostScore] = useState('2:0');
+  const [isPosting, setIsPosting] = useState(false);
+
   const userDisplayName = isThai ? (player.nameTh || player.name) : (player.nameEn || player.name);
   const userShortName = userDisplayName.split(' ')[0] || (isThai ? 'คุณ' : 'You');
+
+  // Merge cloud matches with sample matches
+  const allMyMatches: PastMatchResult[] = useMemo(() => {
+    const mappedCloud: PastMatchResult[] = cloudMatches.map((cm) => ({
+      id: cm.id,
+      date: new Date(cm.createdAtMs || Date.now()).toLocaleDateString('th-TH', {
+        day: 'numeric',
+        month: 'short',
+      }),
+      dateTh: new Date(cm.createdAtMs || Date.now()).toLocaleDateString('th-TH', {
+        day: 'numeric',
+        month: 'short',
+      }),
+      dateEn: new Date(cm.createdAtMs || Date.now()).toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'short',
+      }),
+      matchType: cm.isDoubles ? 'Doubles' : 'Singles',
+      opponent: {
+        name: cm.playerBName,
+        nameTh: cm.playerBName,
+        nameEn: cm.playerBName,
+        avatars: ['art', 'ohm'],
+        tier: 'Club Match',
+        club: cm.courtName || 'Rama 9 Smashers',
+      },
+      scores: cm.setSummary
+        ? cm.setSummary.split('·').map((pair, idx) => {
+            const [a, b] = pair.trim().split('-').map((n) => Number(n) || 0);
+            return { set: idx + 1, userScore: a || 21, opponentScore: b || 18 };
+          })
+        : [{ set: 1, userScore: 21, opponentScore: 17 }],
+      finalScore: cm.finalScore || '2-0',
+      result: cm.result,
+      courtName: cm.courtName || 'Winner Arena',
+      courtNameTh: cm.courtName || 'วินเนอร์ อารีน่า',
+      courtNameEn: cm.courtName || 'Winner Arena',
+      highestSmashKmh: cm.highestSmashKmh || 320,
+      durationMin: cm.durationMin || 35,
+      expGained: cm.expGained || 150,
+      highlightShot: cm.highlightShot || 'Live Court Scorecard',
+      highlightShotTh: cm.highlightShot || 'บันทึกสกอร์สดข้างสนาม',
+      highlightShotEn: cm.highlightShot || 'Live Court Scorecard',
+      createdAtMs: cm.createdAtMs || Date.now(),
+    }));
+    return [...mappedCloud, ...INITIAL_PAST_MATCHES];
+  }, [cloudMatches]);
 
   // My Results list
   const myMatches: PastMatchResult[] = useMemo(() => {
     if (dataMode === 'empty') return [];
     const base =
       myFilter === 'all'
-        ? INITIAL_PAST_MATCHES
-        : INITIAL_PAST_MATCHES.filter((m) => m.result === myFilter);
+        ? allMyMatches
+        : allMyMatches.filter((m) => m.result === myFilter);
     return dataMode === 'one' ? base.slice(0, 1) : base;
-  }, [dataMode, myFilter]);
+  }, [allMyMatches, dataMode, myFilter]);
 
-  const myWinsCount = INITIAL_PAST_MATCHES.filter((m) => m.result === 'win').length;
-  const myWinRate = Math.round((myWinsCount / INITIAL_PAST_MATCHES.length) * 100);
-  const myExpEarned = INITIAL_PAST_MATCHES.reduce((sum, m) => sum + m.expGained, 0);
-  const myTopSmash = Math.max(...INITIAL_PAST_MATCHES.map((m) => m.highestSmashKmh));
+  const myWinsCount = allMyMatches.filter((m) => m.result === 'win').length;
+  const myWinRate = allMyMatches.length > 0 ? Math.round((myWinsCount / allMyMatches.length) * 100) : 0;
+  const myExpEarned = allMyMatches.reduce((sum, m) => sum + m.expGained, 0);
+  const myTopSmash = allMyMatches.length > 0 ? Math.max(...allMyMatches.map((m) => m.highestSmashKmh)) : 0;
 
   // Top-ranked guild friends
   const topFriendsActivity = useMemo(() => {
@@ -428,15 +499,113 @@ export const BadmintonFeedSection: React.FC = () => {
     return dataMode === 'one' ? rankedFriends.slice(0, 1) : rankedFriends;
   }, [leaderboard, dataMode]);
 
+  // Merge Firestore live feed posts + curated guild updates
+  const mergedGuildFeedItems: BadmintonFeedItem[] = useMemo(() => {
+    const mappedCloud: BadmintonFeedItem[] = cloudFeedPosts.map((cp) => {
+      const timeLabel = cp.createdAtMs
+        ? new Date(cp.createdAtMs).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        : isThai ? 'เมื่อสักครู่' : 'Just now';
+
+      if (cp.type === 'match') {
+        return {
+          id: cp.id,
+          isCloudPost: true,
+          type: 'match',
+          guildTh: cp.guildName,
+          guildEn: cp.guildName,
+          timeTh: timeLabel,
+          timeEn: timeLabel,
+          initialCheers: cp.cheersCount || 0,
+          match: {
+            leftNameTh: cp.authorName,
+            leftNameEn: cp.authorName,
+            leftTierTh: isThai ? 'โพสต์จริงจากสมาชิก' : 'Live Member Post',
+            leftTierEn: 'Live Member Post',
+            rightNameTh: cp.headline,
+            rightNameEn: cp.headline,
+            rightTierTh: isThai ? 'ก๊วนพระราม 9' : 'Club Rival',
+            rightTierEn: 'Club Rival',
+            matchType: 'Singles',
+            scoreDisplay: cp.scoreDisplay || '2:0',
+            setSummary: '21-17 · 21-16',
+            venueTh: cp.guildName,
+            venueEn: cp.guildName,
+            topSmashKmh: 335,
+            durationMin: 38,
+            expBonus: 180,
+            highlightTh: cp.summary,
+            highlightEn: cp.summary,
+          },
+        };
+      }
+
+      if (cp.type === 'achievement') {
+        return {
+          id: cp.id,
+          isCloudPost: true,
+          type: 'achievement',
+          guildTh: cp.guildName,
+          guildEn: cp.guildName,
+          timeTh: timeLabel,
+          timeEn: timeLabel,
+          initialCheers: cp.cheersCount || 0,
+          achievement: {
+            memberNameTh: cp.authorName,
+            memberNameEn: cp.authorName,
+            memberRankTh: isThai ? 'สมาชิกซิงค์คลาวด์' : 'Synced Athlete',
+            memberRankEn: 'Synced Athlete',
+            badgeTitleTh: cp.headline,
+            badgeTitleEn: cp.headline,
+            badgeDescTh: cp.summary,
+            badgeDescEn: cp.summary,
+            rarityLabelTh: isThai ? 'อัปเดตสด' : 'Live Post',
+            rarityLabelEn: 'Live Post',
+            progressText: '1/1',
+            expReward: 200,
+            icon: 'trophy',
+          },
+        };
+      }
+
+      return {
+        id: cp.id,
+        isCloudPost: true,
+        type: 'milestone',
+        guildTh: cp.guildName,
+        guildEn: cp.guildName,
+        timeTh: timeLabel,
+        timeEn: timeLabel,
+        initialCheers: cp.cheersCount || 0,
+        milestone: {
+          memberNameTh: cp.authorName,
+          memberNameEn: cp.authorName,
+          memberSubTh: isThai ? 'อัปเดตสดจากคอร์ท' : 'Live Court Update',
+          memberSubEn: 'Live Court Update',
+          headlineTh: cp.headline,
+          headlineEn: cp.headline,
+          summaryTh: cp.summary,
+          summaryEn: cp.summary,
+          metrics: [
+            { labelTh: 'สถานะ', labelEn: 'Status', value: 'LIVE' },
+            { labelTh: 'สกอร์', labelEn: 'Score', value: cp.scoreDisplay || '21-16' },
+            { labelTh: 'กำลังใจ', labelEn: 'Cheers', value: `${cp.cheersCount}`, highlight: true },
+          ],
+        },
+      };
+    });
+
+    return [...mappedCloud, ...GUILD_FEED_ITEMS];
+  }, [cloudFeedPosts, isThai]);
+
   // Guild Updates feed
   const filteredGuildItems = useMemo(() => {
     if (dataMode === 'empty') return [];
     const base =
       guildFilter === 'all'
-        ? GUILD_FEED_ITEMS
-        : GUILD_FEED_ITEMS.filter((item) => item.type === guildFilter);
+        ? mergedGuildFeedItems
+        : mergedGuildFeedItems.filter((item) => item.type === guildFilter);
     return dataMode === 'one' ? base.slice(0, 1) : base;
-  }, [guildFilter, dataMode]);
+  }, [guildFilter, dataMode, mergedGuildFeedItems]);
 
   const visibleGuildItems =
     guildFilter === 'all' && !showAllGuildItems
@@ -448,7 +617,11 @@ export const BadmintonFeedSection: React.FC = () => {
     setExpandedIds((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleToggleCheer = (id: string, guildName: string) => {
+  const handleToggleCheer = (id: string, guildName: string, isCloudPost?: boolean) => {
+    if (isCloudPost) {
+      toggleCloudFeedCheer(id, guildName).catch((err) => console.error('Cheer failed:', err));
+      return;
+    }
     const alreadyCheered = Boolean(cheeredIds[id]);
     setCheeredIds((prev) => ({ ...prev, [id]: !alreadyCheered }));
     if (!alreadyCheered) {
@@ -464,52 +637,76 @@ export const BadmintonFeedSection: React.FC = () => {
     }
   };
 
+  const handleSubmitPost = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!postHeadline.trim() || !postSummary.trim() || isPosting) return;
+    setIsPosting(true);
+    try {
+      await publishFeedPost({
+        type: postType,
+        guildName: isThai ? 'ก๊วนตบสนั่น พระราม 9' : 'Rama 9 Smashers',
+        headline: postHeadline.trim(),
+        summary: postSummary.trim(),
+        scoreDisplay: postType === 'match' ? postScore.trim() || '2:0' : undefined,
+      });
+      setPostHeadline('');
+      setPostSummary('');
+      setIsComposerOpen(false);
+    } catch (err) {
+      console.error('Publish post failed:', err);
+    } finally {
+      setIsPosting(false);
+    }
+  };
+
   return (
     <section className="space-y-3.5" aria-label={isThai ? 'ฟีดแบดมินตันก๊วน' : 'Badminton Feed'}>
-      {/* Section Header matching ProfileSubHeader */}
-      <div className="flex items-end justify-between gap-3 px-1">
-        <div className="min-w-0 flex-1">
-          <h2 className="text-[13px] font-semibold text-[#6b7280] leading-tight truncate">
-            {isThai ? 'ฟีดแบดมินตัน' : 'Badminton Feed'}
-          </h2>
-          <p className="text-[11px] text-[#9ca3af] mt-0.5 truncate">
-            {scopeTab === 'my_results'
-              ? (isThai ? 'สรุปผลการแข่งขันและสถิติล่าสุดของคุณ' : 'Your recent match scores & telemetry')
-              : scopeTab === 'guild_updates'
-              ? (isThai ? 'ผลการแข่ง ความสำเร็จ และหลักชัยจากก๊วน' : 'Guild matches, badges & milestones')
-              : (isThai ? 'ผลการแข่งขันล่าสุดของเพื่อนอันดับต้นในก๊วน' : 'Match outcomes of top-ranked guild friends')}
-          </p>
+      {/* Section Header matching ProfileSubHeader (hidden when rendered on dedicated Feed screen) */}
+      {!compactHeader && (
+        <div className="flex items-end justify-between gap-3 px-1">
+          <div className="min-w-0 flex-1">
+            <h2 className="text-[13px] font-semibold text-[#6b7280] leading-tight truncate">
+              {isThai ? 'ฟีดแบดมินตัน' : 'Badminton Feed'}
+            </h2>
+            <p className="text-[11px] text-[#9ca3af] mt-0.5 truncate">
+              {scopeTab === 'my_results'
+                ? (isThai ? 'สรุปผลการแข่งขันและสถิติล่าสุดของคุณ' : 'Your recent match scores & telemetry')
+                : scopeTab === 'guild_updates'
+                ? (isThai ? 'ผลการแข่ง ความสำเร็จ และหลักชัยจากก๊วน' : 'Guild matches, badges & milestones')
+                : (isThai ? 'ผลการแข่งขันล่าสุดของเพื่อนอันดับต้นในก๊วน' : 'Match outcomes of top-ranked guild friends')}
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              playSelectSound();
+              if (scopeTab === 'my_results') {
+                navigateTo('F1');
+              } else if (scopeTab === 'friend_activity') {
+                navigateTo('E4');
+              } else {
+                navigateTo('E1');
+              }
+            }}
+            className="no-doodle min-h-[36px] px-2.5 py-1 rounded-full bg-[#ffffff] shadow-[0_1px_4px_rgba(0,0,0,0.06)] text-[11px] font-medium text-[#111111] flex items-center gap-1 hover:bg-[#f3f4f6] cursor-pointer whitespace-nowrap shrink-0"
+          >
+            <span>
+              {scopeTab === 'my_results'
+                ? (isThai ? 'โปรไฟล์' : 'Profile')
+                : scopeTab === 'friend_activity'
+                ? (isThai ? 'อันดับก๊วน' : 'Rankings')
+                : (isThai ? 'ดูก๊วน' : 'Guilds')}
+            </span>
+            <ArrowRight className="w-3.5 h-3.5 stroke-[1.75] shrink-0" />
+          </button>
         </div>
+      )}
 
-        <button
-          type="button"
-          onClick={() => {
-            playSelectSound();
-            if (scopeTab === 'my_results') {
-              navigateTo('F1');
-            } else if (scopeTab === 'friend_activity') {
-              navigateTo('E4');
-            } else {
-              navigateTo('E1');
-            }
-          }}
-          className="no-doodle min-h-[36px] px-2.5 py-1 rounded-full bg-[#ffffff] shadow-[0_1px_4px_rgba(0,0,0,0.06)] text-[11px] font-medium text-[#111111] flex items-center gap-1 hover:bg-[#f3f4f6] cursor-pointer whitespace-nowrap shrink-0"
-        >
-          <span>
-            {scopeTab === 'my_results'
-              ? (isThai ? 'โปรไฟล์' : 'Profile')
-              : scopeTab === 'friend_activity'
-              ? (isThai ? 'อันดับก๊วน' : 'Rankings')
-              : (isThai ? 'ดูก๊วน' : 'Guilds')}
-          </span>
-          <ArrowRight className="w-3.5 h-3.5 stroke-[1.75] shrink-0" />
-        </button>
-      </div>
-
-      {/* TOP FILTERING COMPONENT: Toggle between My Results | Guild Updates | Friend Activity */}
+      {/* LEVEL 1 PRIMARY TABS: Editorial Underline Tab Bar (My Results | Guild Updates | Friend Activity) */}
       <div
         data-filter="true"
-        className="bg-[#ececef] p-1 rounded-full grid grid-cols-3 gap-1"
+        className="border-b border-[#d4dfd0] grid grid-cols-3"
         role="tablist"
         aria-label={isThai ? 'ตัวกรองฟีดแบดมินตัน' : 'Badminton feed filter'}
       >
@@ -531,13 +728,19 @@ export const BadmintonFeedSection: React.FC = () => {
                 playSelectSound();
                 setScopeTab(tab.id);
               }}
-              className={`no-doodle min-h-[38px] px-2 py-1.5 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
+              className={`no-doodle relative min-h-[44px] px-2 pb-2.5 pt-1.5 flex items-center justify-center text-[13px] transition-colors cursor-pointer whitespace-nowrap truncate ${
                 isActive
-                  ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                  : 'text-[#6b7280] hover:text-[#111111]'
+                  ? 'font-bold text-[#004d2c]'
+                  : 'font-medium text-[#6b7280] hover:text-[#142608]'
               }`}
             >
-              {tab.label}
+              <span className="truncate">{tab.label}</span>
+              {isActive && (
+                <span
+                  aria-hidden="true"
+                  className="absolute bottom-0 inset-x-4 h-[2.5px] rounded-full bg-[#004d2c]"
+                />
+              )}
             </button>
           );
         })}
@@ -559,8 +762,8 @@ export const BadmintonFeedSection: React.FC = () => {
               </div>
               <div className="text-[10px] text-[#71717a] mt-0.5 whitespace-nowrap">
                 {isThai
-                  ? `ชนะ ${myWinsCount} · แพ้ ${INITIAL_PAST_MATCHES.length - myWinsCount}`
-                  : `${myWinsCount}W · ${INITIAL_PAST_MATCHES.length - myWinsCount}L`}
+                  ? `ชนะ ${myWinsCount} · แพ้ ${allMyMatches.length - myWinsCount}`
+                  : `${myWinsCount}W · ${allMyMatches.length - myWinsCount}L`}
               </div>
             </div>
 
@@ -572,7 +775,7 @@ export const BadmintonFeedSection: React.FC = () => {
                 +{myExpEarned}
               </div>
               <div className="text-[10px] text-[#15803d]/80 mt-0.5 whitespace-nowrap">
-                {INITIAL_PAST_MATCHES.length} {isThai ? 'แมตช์' : 'Matches'}
+                {allMyMatches.length} {isThai ? 'แมตช์' : 'Matches'}
               </div>
             </div>
 
@@ -589,13 +792,13 @@ export const BadmintonFeedSection: React.FC = () => {
             </div>
           </div>
 
-          {/* Sub-filter Strip (All | Won | Lost) */}
-          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-3 gap-1">
+          {/* LEVEL 2 SUB-FILTER CHIPS (All | Won | Lost) */}
+          <div data-filter="true" className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
             {(
               [
-                { id: 'all', label: isThai ? `ทั้งหมด (${INITIAL_PAST_MATCHES.length})` : `All (${INITIAL_PAST_MATCHES.length})` },
+                { id: 'all', label: isThai ? `ทั้งหมด (${allMyMatches.length})` : `All (${allMyMatches.length})` },
                 { id: 'win', label: isThai ? `ชนะ (${myWinsCount})` : `Won (${myWinsCount})` },
-                { id: 'loss', label: isThai ? `แพ้ (${INITIAL_PAST_MATCHES.length - myWinsCount})` : `Lost (${INITIAL_PAST_MATCHES.length - myWinsCount})` },
+                { id: 'loss', label: isThai ? `แพ้ (${allMyMatches.length - myWinsCount})` : `Lost (${allMyMatches.length - myWinsCount})` },
               ] as const
             ).map((f) => (
               <button
@@ -605,10 +808,10 @@ export const BadmintonFeedSection: React.FC = () => {
                   playSelectSound();
                   setMyFilter(f.id);
                 }}
-                className={`no-doodle min-h-[34px] px-2 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
+                className={`no-doodle filter-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-[12px] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   myFilter === f.id
-                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                    : 'text-[#6b7280] hover:text-[#111111]'
+                    ? 'bg-[#004d2c] text-[#ffffff] border border-[#004d2c] font-semibold shadow-2xs'
+                    : 'bg-[#ffffff] text-[#52525b] border border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
                 }`}
               >
                 {f.label}
@@ -850,8 +1053,8 @@ export const BadmintonFeedSection: React.FC = () => {
       {/* ===================================================================== */}
       {scopeTab === 'guild_updates' && (
         <div className="space-y-3">
-          {/* Category Sub-filter matching Profile Segmented Bar */}
-          <div data-filter="true" className="bg-[#ececef] p-1 rounded-full grid grid-cols-4 gap-1">
+          {/* LEVEL 2 SUB-FILTER CHIPS (All | Matches | Badges | Milestones) */}
+          <div data-filter="true" className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
             {(
               [
                 { id: 'all', label: isThai ? 'ทั้งหมด' : 'All' },
@@ -867,15 +1070,124 @@ export const BadmintonFeedSection: React.FC = () => {
                   playSelectSound();
                   setGuildFilter(sub.id);
                 }}
-                className={`no-doodle min-h-[34px] px-1.5 py-1 rounded-full text-[11px] font-medium transition-all cursor-pointer whitespace-nowrap truncate ${
+                className={`no-doodle filter-pill min-h-[36px] px-3.5 py-1.5 rounded-full text-[12px] transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                   guildFilter === sub.id
-                    ? 'bg-[#ffffff] text-[#111111] shadow-[0_1px_4px_rgba(0,0,0,0.08)]'
-                    : 'text-[#6b7280] hover:text-[#111111]'
+                    ? 'bg-[#004d2c] text-[#ffffff] border border-[#004d2c] font-semibold shadow-2xs'
+                    : 'bg-[#ffffff] text-[#52525b] border border-[#d4dfd0] hover:border-[#2d4d14] hover:text-[#142608] font-medium'
                 }`}
               >
                 {sub.label}
               </button>
             ))}
+          </div>
+
+          {/* Compact Live Guild Post Composer */}
+          <div className="bg-[#ffffff] rounded-[22px] p-3 shadow-[0_2px_10px_rgba(0,0,0,0.03)] space-y-2.5">
+            <div className="flex items-center justify-between gap-2">
+              <div className="min-w-0">
+                <div className="text-xs font-semibold text-[#111111] truncate">
+                  {isThai ? 'แชร์ข่าวสารหรือผลแข่งลงก๊วน' : 'Share update with your club'}
+                </div>
+                <div className="text-[10px] text-[#71717a] truncate">
+                  {authUser
+                    ? isThai
+                      ? `โพสต์จริงในชื่อ ${player.name}`
+                      : `Posting live as ${player.name}`
+                    : isThai
+                    ? 'ล็อกอิน Google เพื่อโพสต์และเก็บแต้ม +30 EXP'
+                    : 'Sign in with Google to publish live (+30 EXP)'}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  playSelectSound();
+                  setIsComposerOpen((p) => !p);
+                }}
+                className="no-doodle px-3 py-1.5 rounded-full bg-[#111111] text-[#ffffff] text-[11px] font-semibold flex items-center gap-1 cursor-pointer whitespace-nowrap shrink-0 active:scale-95"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{isComposerOpen ? (isThai ? 'ปิด' : 'Close') : (isThai ? 'โพสต์ใหม่' : 'New Post')}</span>
+              </button>
+            </div>
+
+            {isComposerOpen && (
+              <form onSubmit={handleSubmitPost} className="space-y-2 pt-2 border-t border-[#000000]/[0.06]">
+                <div className="flex items-center gap-1.5">
+                  {(
+                    [
+                      { id: 'match', label: isThai ? 'ผลแข่ง' : 'Match' },
+                      { id: 'milestone', label: isThai ? 'หลักชัย' : 'Milestone' },
+                      { id: 'achievement', label: isThai ? 'ปลดล็อก' : 'Badge' },
+                    ] as const
+                  ).map((opt) => (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setPostType(opt.id)}
+                      className={`no-doodle flex-1 py-1.5 px-2.5 rounded-full text-[11px] font-semibold cursor-pointer transition-colors border ${
+                        postType === opt.id
+                          ? 'bg-[#e8f7ee] text-[#004d2c] border-[#2d4d14]'
+                          : 'bg-[#f8faf6] text-[#6b7280] border-[#d4dfd0] hover:border-[#2d4d14]'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+
+                <input
+                  type="text"
+                  required
+                  maxLength={100}
+                  value={postHeadline}
+                  onChange={(e) => setPostHeadline(e.target.value)}
+                  placeholder={
+                    postType === 'match'
+                      ? isThai ? 'ชื่อคู่แข่ง หรือคู่ที่ชนะ...' : 'Opponent or pair...'
+                      : isThai ? 'หัวข้ออัปเดต (เช่น ครบ 50 แมตช์แล้ว!)' : 'Headline...'
+                  }
+                  className="w-full px-3.5 py-2 rounded-[14px] bg-[#ffffff] border border-[#d4dfd0] focus:border-[#2d4d14] text-xs font-medium text-[#142608] outline-none transition-colors"
+                />
+
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    required
+                    maxLength={240}
+                    value={postSummary}
+                    onChange={(e) => setPostSummary(e.target.value)}
+                    placeholder={isThai ? 'รายละเอียดหรือไฮไลต์เกม...' : 'Match highlight or summary...'}
+                    className="flex-1 min-w-0 px-3 py-2 rounded-[14px] bg-[#f5f5f7] text-xs font-medium text-[#111111] outline-none"
+                  />
+                  {postType === 'match' && (
+                    <input
+                      type="text"
+                      maxLength={12}
+                      value={postScore}
+                      onChange={(e) => setPostScore(e.target.value)}
+                      placeholder="2:0"
+                      className="w-16 px-2 py-2 rounded-[14px] bg-[#f5f5f7] text-xs font-bold text-center text-[#111111] outline-none"
+                    />
+                  )}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isPosting || isAuthBusy}
+                  className="no-doodle w-full py-2.5 rounded-full bg-[#15803d] hover:bg-[#166534] text-[#ffffff] text-xs font-semibold flex items-center justify-center gap-1.5 cursor-pointer active:scale-95 disabled:opacity-60"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>
+                    {isPosting
+                      ? isThai ? 'กำลังโพสต์ลงคลาวด์...' : 'Publishing...'
+                      : authUser
+                      ? isThai ? 'ส่งโพสต์ลงฟีดก๊วน (+30 EXP)' : 'Publish to Guild Feed (+30 EXP)'
+                      : isThai ? 'เข้าสู่ระบบ Google และโพสต์' : 'Sign in & Publish'}
+                  </span>
+                </button>
+              </form>
+            )}
           </div>
 
           {visibleGuildItems.length === 0 ? (
@@ -888,8 +1200,12 @@ export const BadmintonFeedSection: React.FC = () => {
           ) : (
             <div className="space-y-3">
               {visibleGuildItems.map((item) => {
-                const isCheered = Boolean(cheeredIds[item.id]);
-                const cheerCount = item.initialCheers + (isCheered ? 1 : 0);
+                const isCheered = item.isCloudPost
+                  ? Boolean(cheeredCloudIds[item.id])
+                  : Boolean(cheeredIds[item.id]);
+                const cheerCount = item.isCloudPost
+                  ? item.initialCheers
+                  : item.initialCheers + (isCheered ? 1 : 0);
                 const isExpanded = Boolean(expandedIds[item.id]);
 
                 if (item.type === 'match' && item.match) {
@@ -1049,7 +1365,7 @@ export const BadmintonFeedSection: React.FC = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              handleToggleCheer(item.id, isThai ? item.guildTh : item.guildEn)
+                              handleToggleCheer(item.id, isThai ? item.guildTh : item.guildEn, item.isCloudPost)
                             }
                             className={`no-doodle min-h-[34px] px-2.5 py-1 rounded-full text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-all whitespace-nowrap tabular-nums ${
                               isCheered
@@ -1143,7 +1459,7 @@ export const BadmintonFeedSection: React.FC = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              handleToggleCheer(item.id, isThai ? item.guildTh : item.guildEn)
+                              handleToggleCheer(item.id, isThai ? item.guildTh : item.guildEn, item.isCloudPost)
                             }
                             className={`no-doodle min-h-[34px] px-2.5 py-1 rounded-full text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-all whitespace-nowrap tabular-nums ${
                               isCheered
@@ -1247,7 +1563,7 @@ export const BadmintonFeedSection: React.FC = () => {
                           <button
                             type="button"
                             onClick={() =>
-                              handleToggleCheer(item.id, isThai ? item.guildTh : item.guildEn)
+                              handleToggleCheer(item.id, isThai ? item.guildTh : item.guildEn, item.isCloudPost)
                             }
                             className={`no-doodle min-h-[34px] px-2.5 py-1 rounded-full text-[11px] font-medium flex items-center gap-1 cursor-pointer transition-all whitespace-nowrap tabular-nums ${
                               isCheered
